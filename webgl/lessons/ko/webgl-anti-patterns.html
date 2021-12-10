@@ -322,7 +322,7 @@ perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
 </p>
 </li>
 <li><p><a id="innerwidth"></a><code class="notranslate" translate="no">window.innerWidth</code>와 <code class="notranslate" translate="no">window.innerHeight</code>를 사용하여 무엇이든 계산</p>
-<p>많은 WebGL program이 여러 곳에서 <code class="notranslate" translate="no">window.innerWidth</code>와 <code class="notranslate" translate="no">window.innerHeight</code>를 사용합니다.
+<p>많은 WebGL 프로그램이 여러 곳에서 <code class="notranslate" translate="no">window.innerWidth</code>와 <code class="notranslate" translate="no">window.innerHeight</code>를 사용합니다.
 예를 들어:</p>
 <pre class="prettyprint">
 canvas.width = window.innerWidth;                    // 나쁨!!
@@ -444,7 +444,7 @@ program.u_matrixLoc = gl.getUniformLocation(program, "u_matrix");  // 나쁨!!
 <p><strong>나쁜 이유:</strong></p>
 <p>이게 나쁜 이유는 WebGL이 &quot;컨텍스트&quot;를 잃을 수 있기 때문입니다.
 어떤 이유로든 발생할 수 있지만 가장 일반적인 원인으로 브라우저가 너무 많은 GPU 리소스를 사용하고 있다고 판단하면 여유 공간 확보를 위해 일부 <code class="notranslate" translate="no">WebGLRenderingContext</code>의 컨텍스트를 의도적으로 없앨 수 있습니다.
-항상 작동하길 바라는 WebGL program은 이를 처리해야 하는데요.
+항상 작동하길 바라는 WebGL 프로그램은 이를 처리해야 하는데요.
 이를 처리하는 예시로는 구글 지도가 있습니다.</p>
 <p>위 코드의 문제점은 컨텍스트가 없어졌을 때 위의 <code class="notranslate" translate="no">gl.createBuffer()</code>같은 WebGL 생성 함수는 <code class="notranslate" translate="no">null</code>을 반환한다는 겁니다.
 그러면 사실상 코드가 이렇게 됩니다.</p>
@@ -461,7 +461,7 @@ TypeError: Cannot set property 'itemSize' of null
 
 <p>많은 앱들이 컨텍스트가 없어졌을 때 죽어도 상관하지 않는데, 개발자가 컨텍스트 손실 이벤트를 처리하기 위해 앱을 업데이트하기로 결정했다면, 나중에 수정해야 할 코드를 작성하는 건 안 좋은 생각으로 보입니다.</p>
 <p><strong>대신 할 일:</strong></p>
-<p><code class="notranslate" translate="no">WebGLObjects</code>와 이에 관한 정보를 함께 유지하고 싶다면 한 가지 방법은 JavaScript 객체를 사용하는 겁니다.
+<p><code class="notranslate" translate="no">WebGLObjects</code>와 이에 관한 정보를 함께 유지하고 싶다면 한 가지 방법은 자바스크립트 객체를 사용하는 겁니다.
 예시:</p>
 <pre class="prettyprint">
 var bufferInfo = {
@@ -519,7 +519,7 @@ GPU가 2048의 제한을 가지고 있지만 2개의 1920x1080 모니터가 있�
 이게 WebGL이 사용하는 해결책입니다.
 코드가 올바르게 작성되었다면 사용자가 알아차릴 수 있는 유일한 것은 캔버스의 이미지가 약간 조정된다는 겁니다.
 그렇지 않으면 그냥 동작합니다.
-최악의 경우 제대로 작업을 수행하지 않는 대다수 WebGL program은 화면이 약간 표시되지 않지만, 사용자가 창의 크기를 조정하면 정상으로 돌아올 겁니다. 
+최악의 경우 제대로 작업을 수행하지 않는 대다수 WebGL 프로그램은 화면이 약간 표시되지 않지만, 사용자가 창의 크기를 조정하면 정상으로 돌아올 겁니다. 
 </p>
 </li>
 </ol>
@@ -568,7 +568,7 @@ drawingBuffer의 실제 크기를 알아야 하는 계산을 수행한다면 이
           <li><a href="/webgl/lessons/ko/webgl-image-processing.html">이미지 처리</a></li>
 <li><a href="/webgl/lessons/ko/webgl-image-processing-continued.html">이미지 처리 심화</a></li>
         </ul>
-  <li>2D Translation, Rotation, Scale, 행렬 수학</li>
+  <li>2D 평행 이동, 회전, 스케일링, 행렬 수학</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-2d-translation.html">2D Translation</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-rotation.html">2D Rotation</a></li>
@@ -593,7 +593,7 @@ drawingBuffer의 실제 크기를 알아야 하는 계산을 수행한다면 이
 <li><a href="/webgl/lessons/ko/webgl-drawing-multiple-things.html">여러 물체 그리기</a></li>
 <li><a href="/webgl/lessons/ko/webgl-scene-graph.html">장면 그래프</a></li>
         </ul>
-  <li>Geometry</li>
+  <li>지오메트리</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">지오메트리 - Lathe</a></li>
 <li><a href="/webgl/lessons/ko/webgl-load-obj.html">.obj 파일 로딩</a></li>
@@ -633,7 +633,7 @@ drawingBuffer의 실제 크기를 알아야 하는 계산을 수행한다면 이
 <li><a href="/webgl/lessons/ko/webgl-fog.html">안개</a></li>
 <li><a href="/webgl/lessons/ko/webgl-picking.html">피킹 (물체 클릭)</a></li>
         </ul>
-  <li>Text</li>
+  <li>텍스트</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-text-html.html">텍스트 - HTML</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-canvas2d.html">텍스트 - Canvas 2D</a></li>
@@ -649,7 +649,7 @@ drawingBuffer의 실제 크기를 알아야 하는 계산을 수행한다면 이
           <li><a href="/webgl/lessons/ko/webgl-gpgpu.html">GPGPU</a></li>
         </ul>
         </ul>
-  <li>Tip</li>
+  <li>팁</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-smallest-programs.html">최소 프로그램</a></li>
 <li><a href="/webgl/lessons/ko/webgl-drawing-without-data.html">데이터 없이 그리기</a></li>
@@ -668,7 +668,7 @@ drawingBuffer의 실제 크기를 알아야 하는 계산을 수행한다면 이
 <li><a href="/webgl/lessons/ko/webgl-resizing-the-canvas.html">캔버스 크기 조정</a></li>
 <li><a href="/webgl/lessons/ko/webgl-animation.html">애니메이션</a></li>
 <li><a href="/webgl/lessons/ko/webgl-points-lines-triangles.html">점, 선, 삼각형</a></li>
-<li><a href="/webgl/lessons/ko/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
+<li><a href="/webgl/lessons/ko/webgl-multiple-views.html">다중 뷰, 다중 캔버스</a></li>
 <li><a href="/webgl/lessons/ko/webgl-visualizing-the-camera.html">카메라 시각화</a></li>
 <li><a href="/webgl/lessons/ko/webgl-and-alpha.html">WebGL Alpha</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-vs-3d-library.html">2D vs 3D 라이브러리</a></li>

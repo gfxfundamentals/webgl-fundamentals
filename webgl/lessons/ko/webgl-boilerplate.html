@@ -37,14 +37,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="모든 WebGL program에 필요한 일부 코드">
+<meta name="description" content="모든 WebGL 프로그램에 필요한 일부 코드">
 <meta name="keywords" content="webgl graphics">
 <meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-boilerplate_ko.jpg">
 
 <meta property="og:title" content="WebGL 상용구">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-boilerplate_ko.jpg">
-<meta property="og:description" content="모든 WebGL program에 필요한 일부 코드">
+<meta property="og:description" content="모든 WebGL 프로그램에 필요한 일부 코드">
 <meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-boilerplate.html">
 
 <meta name="twitter:card" content="summary_large_image">
@@ -53,7 +53,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <meta name="twitter:domain" content="webglfundamentals.org">
 <meta name="twitter:title" content="WebGL 상용구">
 <meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-boilerplate.html">
-<meta name="twitter:description" content="모든 WebGL program에 필요한 일부 코드">
+<meta name="twitter:description" content="모든 WebGL 프로그램에 필요한 일부 코드">
 <meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-boilerplate_ko.jpg">
 
 <script type="application/ld+json">
@@ -247,7 +247,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 이 두 함수는 일반적으로 최대 속도가 나오는 GPU에서 실행되는데요.
 그렇기 때문에 GPU에서 수행할 수 있는 언어, 커스텀 언어로 작성됩니다.
 이 두 함수는 컴파일되고 연결되어야 하는데요.
-해당 처리는 모든 WebGL program에서 99% 동일합니다.</p>
+해당 처리는 모든 WebGL 프로그램에서 99% 동일합니다.</p>
 <p>다음은 셰이더를 컴파일 하는 상용구 코드입니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">/**
  * 셰이더 생성 및 컴파일
@@ -278,22 +278,22 @@ function compileShader(gl, shaderSource, shaderType) {
 }
 </code></pre><p>그리고 프로그램에 두 셰이더를 연결하는 상용구 코드입니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">/**
- * 두 셰이더로 program 생성합니다.
+ * 두 셰이더로 프로그램 생성합니다.
  *
  * @param {!WebGLRenderingContext) gl은 WebGL Context
  * @param {!WebGLShader} vertexShader는 정점 셰이더
  * @param {!WebGLShader} fragmentShader는 프래그먼트 셰이더
- * @return {!WebGLProgram} program
+ * @return {!WebGLProgram} 프로그램
  */
 function createProgram(gl, vertexShader, fragmentShader) {
-  // program 생성
+  // 프로그램 생성
   var program = gl.createProgram();
 
   // 셰이더 할당
   gl.attachShader(program, vertexShader);
   gl.attachShader(program, fragmentShader);
 
-  // program 연결
+  // 프로그램 연결
   gl.linkProgram(program);
 
   // 연결 여부 확인
@@ -307,8 +307,8 @@ function createProgram(gl, vertexShader, fragmentShader) {
 };
 </code></pre><p>물론 오류를 처리하는 방법은 다를 수 있습니다.
 예외를 던지는 것이 오류를 처리하는 최고의 방법은 아니죠.
-그럼에도 불구하고 거의 모든 WebGL program에서 이 코드는 거의 비슷합니다.</p>
-<p>저는 셰이더를 javascript가 아닌 &lt;script&gt; tag에 저장하는 걸 좋아하는데요.
+그럼에도 불구하고 거의 모든 WebGL 프로그램에서 이 코드는 거의 비슷합니다.</p>
+<p>저는 셰이더를 자바스크립트가 아닌 &lt;script&gt; tag에 저장하는 걸 좋아하는데요.
 이 방식은 코드를 수정하기 쉽게 만들주기 때문에 저는 이렇게 코드를 작성합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">/**
  * 스크립트 태그의 내용으로 셰이더 생성
@@ -345,21 +345,21 @@ function createShaderFromScript(gl, scriptId, opt_shaderType) {
 };
 </code></pre><p>이제 셰이더를 컴파일할 수 있는데</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var shader = compileShaderFromScript(gl, &quot;someScriptTagId&quot;);
-</code></pre><p>한 걸음 더 나아가서 script tag에서 두 셰이더를 컴파일하며, program에 첨부하고 연결하는 함수를 만들겁니다.</p>
+</code></pre><p>한 걸음 더 나아가서 스크립트 태그에서 두 셰이더를 컴파일하며, 프로그램에 첨부하고 연결하는 함수를 만들겁니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">/**
- * 두 script tag에서 program 생성
+ * 두 스크립트 태그에서 프로그램 생성
  *
  * @param {!WebGLRenderingContext} gl은 WebGL Context
  * @param {string[]} shaderScriptId는 shader용 스크립트 태그의 id 배열입니다.
  *                   첫 번째는 정점 셰이더, 두 번째는 프래그먼트 셰이더라고 가정합니다.
- * @return {!WebGLProgram} program
+ * @return {!WebGLProgram} 프로그램
  */
 function createProgramFromScripts(gl, shaderScriptIds) {
   var vertexShader = createShaderFromScript(gl, shaderScriptIds[0], gl.VERTEX_SHADER);
   var fragmentShader = createShaderFromScript(gl, shaderScriptIds[1], gl.FRAGMENT_SHADER);
   return createProgram(gl, vertexShader, fragmentShader);
 }
-</code></pre><p>거의 모든 WebGL program에서 사용하는 다른 코드는 캔버스의 크기를 조정하는 코드입니다.
+</code></pre><p>거의 모든 WebGL 프로그램에서 사용하는 다른 코드는 캔버스의 크기를 조정하는 코드입니다.
 <a href="webgl-resizing-the-canvas.html">여기</a>에서 해당 함수가 어떻게 구현됐는지 볼 수 있습니다.</p>
 <p>모든 예제는 이 두 가지 함수를 있고</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script src=&quot;resources/webgl-utils.js&quot;&gt;&lt;/script&gt;
@@ -423,7 +423,7 @@ live editor 내부에서 사용될 때 화면에 에러 메세지 출력하는 �
           <li><a href="/webgl/lessons/ko/webgl-image-processing.html">이미지 처리</a></li>
 <li><a href="/webgl/lessons/ko/webgl-image-processing-continued.html">이미지 처리 심화</a></li>
         </ul>
-  <li>2D Translation, Rotation, Scale, 행렬 수학</li>
+  <li>2D 평행 이동, 회전, 스케일링, 행렬 수학</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-2d-translation.html">2D Translation</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-rotation.html">2D Rotation</a></li>
@@ -448,7 +448,7 @@ live editor 내부에서 사용될 때 화면에 에러 메세지 출력하는 �
 <li><a href="/webgl/lessons/ko/webgl-drawing-multiple-things.html">여러 물체 그리기</a></li>
 <li><a href="/webgl/lessons/ko/webgl-scene-graph.html">장면 그래프</a></li>
         </ul>
-  <li>Geometry</li>
+  <li>지오메트리</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">지오메트리 - Lathe</a></li>
 <li><a href="/webgl/lessons/ko/webgl-load-obj.html">.obj 파일 로딩</a></li>
@@ -488,7 +488,7 @@ live editor 내부에서 사용될 때 화면에 에러 메세지 출력하는 �
 <li><a href="/webgl/lessons/ko/webgl-fog.html">안개</a></li>
 <li><a href="/webgl/lessons/ko/webgl-picking.html">피킹 (물체 클릭)</a></li>
         </ul>
-  <li>Text</li>
+  <li>텍스트</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-text-html.html">텍스트 - HTML</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-canvas2d.html">텍스트 - Canvas 2D</a></li>
@@ -504,7 +504,7 @@ live editor 내부에서 사용될 때 화면에 에러 메세지 출력하는 �
           <li><a href="/webgl/lessons/ko/webgl-gpgpu.html">GPGPU</a></li>
         </ul>
         </ul>
-  <li>Tip</li>
+  <li>팁</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-smallest-programs.html">최소 프로그램</a></li>
 <li><a href="/webgl/lessons/ko/webgl-drawing-without-data.html">데이터 없이 그리기</a></li>
@@ -523,7 +523,7 @@ live editor 내부에서 사용될 때 화면에 에러 메세지 출력하는 �
 <li><a href="/webgl/lessons/ko/webgl-resizing-the-canvas.html">캔버스 크기 조정</a></li>
 <li><a href="/webgl/lessons/ko/webgl-animation.html">애니메이션</a></li>
 <li><a href="/webgl/lessons/ko/webgl-points-lines-triangles.html">점, 선, 삼각형</a></li>
-<li><a href="/webgl/lessons/ko/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
+<li><a href="/webgl/lessons/ko/webgl-multiple-views.html">다중 뷰, 다중 캔버스</a></li>
 <li><a href="/webgl/lessons/ko/webgl-visualizing-the-camera.html">카메라 시각화</a></li>
 <li><a href="/webgl/lessons/ko/webgl-and-alpha.html">WebGL Alpha</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-vs-3d-library.html">2D vs 3D 라이브러리</a></li>

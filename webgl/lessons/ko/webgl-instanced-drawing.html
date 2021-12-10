@@ -315,7 +315,7 @@ const colors = [
   [ 0, 1, 1, 1, ],  // 청록색
 ];
 </code></pre>
-<p>그리기 위해서는 먼저 shader program을 사용해서, attribute를 설정하고, 5개의 instance를 반복한 다음, 각각에 대한 새로운 행렬을 계산하고, 행렬의 uniform과 색상을 설정 후 그립니다.</p>
+<p>그리기 위해서는 먼저 셰이더 프로그램을 사용해서, 속성을 설정하고, 5개의 instance를 반복한 다음, 각각에 대한 새로운 행렬을 계산하고, 행렬의 uniform과 색상을 설정 후 그립니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">function render(time) {
   time *= 0.001; // 초 단위
 
@@ -564,10 +564,10 @@ ext.vertexAttribDivisorANGLE(colorLoc, 1);
 <a href="webgl-attributes.html#vaos">Vertex array object</a>를 사용하여 해당 설정을 렌더링 시점에서 초기화 시점으로 옮길 수 있습니다.</p>
 <p>말할 필요도 없다고 느껴지지만 하긴 저는 너무 많이 했기 때문에 당연한 것일 수도 있습니다.
 위 코드는 캔버스적인 측면을 고려하지 않았는데요.
-<a href="webgl-3d-orthographic.html">Projection matrix</a>이나 <a href="webgl-3d-camera.html">view matrix</a>를 사용하지 않습니다.
+<a href="webgl-3d-orthographic.html">투영 행렬</a>이나 <a href="webgl-3d-camera.html">뷰 행렬</a>을 사용하지 않습니다.
 오로지 instanced drawing을 보여주기 위한 것입니다.
-Projection matrix나 view matrix를 원한다면 JavaScript에 계산을 추가할 수 있습니다.
-이는 JavaScript의 작업이 더 많아짐을 의미합니다.
+투영 행렬이나 뷰 행렬을 원한다면 자바스크립트에 계산을 추가할 수 있습니다.
+이는 자바스크립트의 작업이 더 많아짐을 의미합니다.
 좀 더 확실한 방법은 1개 혹은 2개 이상의 uniform을 정점 셰이더에 추가하는 겁니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;!-- 정점 셰이더 --&gt;
 &lt;script id=&quot;vertex-shader-3d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
@@ -638,7 +638,7 @@ const matrixLoc = gl.getAttribLocation(program, &#39;matrix&#39;);
           <li><a href="/webgl/lessons/ko/webgl-image-processing.html">이미지 처리</a></li>
 <li><a href="/webgl/lessons/ko/webgl-image-processing-continued.html">이미지 처리 심화</a></li>
         </ul>
-  <li>2D Translation, Rotation, Scale, 행렬 수학</li>
+  <li>2D 평행 이동, 회전, 스케일링, 행렬 수학</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-2d-translation.html">2D Translation</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-rotation.html">2D Rotation</a></li>
@@ -663,7 +663,7 @@ const matrixLoc = gl.getAttribLocation(program, &#39;matrix&#39;);
 <li><a href="/webgl/lessons/ko/webgl-drawing-multiple-things.html">여러 물체 그리기</a></li>
 <li><a href="/webgl/lessons/ko/webgl-scene-graph.html">장면 그래프</a></li>
         </ul>
-  <li>Geometry</li>
+  <li>지오메트리</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">지오메트리 - Lathe</a></li>
 <li><a href="/webgl/lessons/ko/webgl-load-obj.html">.obj 파일 로딩</a></li>
@@ -703,7 +703,7 @@ const matrixLoc = gl.getAttribLocation(program, &#39;matrix&#39;);
 <li><a href="/webgl/lessons/ko/webgl-fog.html">안개</a></li>
 <li><a href="/webgl/lessons/ko/webgl-picking.html">피킹 (물체 클릭)</a></li>
         </ul>
-  <li>Text</li>
+  <li>텍스트</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-text-html.html">텍스트 - HTML</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-canvas2d.html">텍스트 - Canvas 2D</a></li>
@@ -719,7 +719,7 @@ const matrixLoc = gl.getAttribLocation(program, &#39;matrix&#39;);
           <li><a href="/webgl/lessons/ko/webgl-gpgpu.html">GPGPU</a></li>
         </ul>
         </ul>
-  <li>Tip</li>
+  <li>팁</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-smallest-programs.html">최소 프로그램</a></li>
 <li><a href="/webgl/lessons/ko/webgl-drawing-without-data.html">데이터 없이 그리기</a></li>
@@ -738,7 +738,7 @@ const matrixLoc = gl.getAttribLocation(program, &#39;matrix&#39;);
 <li><a href="/webgl/lessons/ko/webgl-resizing-the-canvas.html">캔버스 크기 조정</a></li>
 <li><a href="/webgl/lessons/ko/webgl-animation.html">애니메이션</a></li>
 <li><a href="/webgl/lessons/ko/webgl-points-lines-triangles.html">점, 선, 삼각형</a></li>
-<li><a href="/webgl/lessons/ko/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
+<li><a href="/webgl/lessons/ko/webgl-multiple-views.html">다중 뷰, 다중 캔버스</a></li>
 <li><a href="/webgl/lessons/ko/webgl-visualizing-the-camera.html">카메라 시각화</a></li>
 <li><a href="/webgl/lessons/ko/webgl-and-alpha.html">WebGL Alpha</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-vs-3d-library.html">2D vs 3D 라이브러리</a></li>

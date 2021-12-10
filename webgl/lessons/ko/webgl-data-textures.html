@@ -244,8 +244,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 첫 번째는 <a href="webgl-fundamentals.html">기초</a>로 시작했고, 이전에는 <a href="webgl-3d-textures.html">텍스처</a>에 관한 것이었습니다.</p>
 <p>지난 포스트에서 텍스처가 작동하는 방법과 이를 적용하는 방법에 대해 살펴봤습니다.
 다운로드된 이미지로 텍스처를 생성했는데요.
-이번 글에서는 이미지 대신 JavaScript에서 직접 데이터를 생성할 겁니다.</p>
-<p>JavaScript에서 텍스처 데이터를 생성하는 것은 굉장히 간단합니다.
+이번 글에서는 이미지 대신 자바스크립트에서 직접 데이터를 생성할 겁니다.</p>
+<p>자바스크립트에서 텍스처 데이터를 생성하는 것은 굉장히 간단합니다.
 기본적으로 WebGL1은 텍스처의 몇 가지 type만 지원하는데</p>
 <div class="webgl_center">
   <table class="tabular-data tabular-data1">
@@ -340,13 +340,13 @@ gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 
 </p>
 <p>이런! 왜 작동하지 않죠?!?!?</p>
-<p>JavaScript console을 확인하면 이런 오류가 표시됩니다.</p>
+<p>자바스크립트 콘솔을 확인하면 이런 오류가 표시됩니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">WebGL: INVALID_OPERATION: texImage2D: ArrayBufferView not big enough for request
 </code></pre><p>WebGL에는 OpenGL이 처음 만들어졌을 때의 모호한 설정들이 남아있는데요.
 데이터가 어떤 크기일 때 가끔씩 컴퓨터가 더 빨라집니다.
-예를 들어 한 번에 1byte가 아닌 2, 4, 8 byte를 복사하는 것이 더 빠를 수 있습니다.
-WebGL은 기본적으로 한 번에 4byte를 사용하므로 각 데이터 행을 4byte의 배수로 생각합니다.</p>
-<p>위의 데이터는 행마다 3byte, 총 6byte에 불과하지만, WebGL은 첫 번째 행에 대해 4byte, 두 번째 행에 대해 3byte, 총 7byte를 읽습니다.</p>
+예를 들어 한 번에 1바이트가 아닌 2, 4, 8바이트를 복사하는 것이 더 빠를 수 있습니다.
+WebGL은 기본적으로 한 번에 4바이트를 사용하므로 각 데이터 행을 4바이트의 배수로 생각합니다.</p>
+<p>위의 데이터는 행마다 3바이트, 총 6바이트에 불과하지만, WebGL은 첫 번째 행에 대해 4바이트, 두 번째 행에 대해 3바이트, 총 7바이트를 읽습니다.</p>
 <p>다음과 같이 한 번에 1byte를 처리하도록 WebGL에 지시할 수 있습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">const alignment = 1;
 gl.pixelStorei(gl.UNPACK_ALIGNMENT, alignment);
@@ -403,7 +403,7 @@ Texel은 Texture Element의 줄임말이죠.
           <li><a href="/webgl/lessons/ko/webgl-image-processing.html">이미지 처리</a></li>
 <li><a href="/webgl/lessons/ko/webgl-image-processing-continued.html">이미지 처리 심화</a></li>
         </ul>
-  <li>2D Translation, Rotation, Scale, 행렬 수학</li>
+  <li>2D 평행 이동, 회전, 스케일링, 행렬 수학</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-2d-translation.html">2D Translation</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-rotation.html">2D Rotation</a></li>
@@ -428,7 +428,7 @@ Texel은 Texture Element의 줄임말이죠.
 <li><a href="/webgl/lessons/ko/webgl-drawing-multiple-things.html">여러 물체 그리기</a></li>
 <li><a href="/webgl/lessons/ko/webgl-scene-graph.html">장면 그래프</a></li>
         </ul>
-  <li>Geometry</li>
+  <li>지오메트리</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">지오메트리 - Lathe</a></li>
 <li><a href="/webgl/lessons/ko/webgl-load-obj.html">.obj 파일 로딩</a></li>
@@ -468,7 +468,7 @@ Texel은 Texture Element의 줄임말이죠.
 <li><a href="/webgl/lessons/ko/webgl-fog.html">안개</a></li>
 <li><a href="/webgl/lessons/ko/webgl-picking.html">피킹 (물체 클릭)</a></li>
         </ul>
-  <li>Text</li>
+  <li>텍스트</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-text-html.html">텍스트 - HTML</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-canvas2d.html">텍스트 - Canvas 2D</a></li>
@@ -484,7 +484,7 @@ Texel은 Texture Element의 줄임말이죠.
           <li><a href="/webgl/lessons/ko/webgl-gpgpu.html">GPGPU</a></li>
         </ul>
         </ul>
-  <li>Tip</li>
+  <li>팁</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-smallest-programs.html">최소 프로그램</a></li>
 <li><a href="/webgl/lessons/ko/webgl-drawing-without-data.html">데이터 없이 그리기</a></li>
@@ -503,7 +503,7 @@ Texel은 Texture Element의 줄임말이죠.
 <li><a href="/webgl/lessons/ko/webgl-resizing-the-canvas.html">캔버스 크기 조정</a></li>
 <li><a href="/webgl/lessons/ko/webgl-animation.html">애니메이션</a></li>
 <li><a href="/webgl/lessons/ko/webgl-points-lines-triangles.html">점, 선, 삼각형</a></li>
-<li><a href="/webgl/lessons/ko/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
+<li><a href="/webgl/lessons/ko/webgl-multiple-views.html">다중 뷰, 다중 캔버스</a></li>
 <li><a href="/webgl/lessons/ko/webgl-visualizing-the-camera.html">카메라 시각화</a></li>
 <li><a href="/webgl/lessons/ko/webgl-and-alpha.html">WebGL Alpha</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-vs-3d-library.html">2D vs 3D 라이브러리</a></li>

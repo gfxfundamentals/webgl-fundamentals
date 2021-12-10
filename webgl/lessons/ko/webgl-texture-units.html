@@ -252,7 +252,7 @@ attribute에 관한 <a href="webgl-attributes.html">비슷한 글</a>이 있습�
 <p>하지만 셰이더는 <code class="notranslate" translate="no">someTexture</code>에 사용할 텍스처를 어떻게 아는 걸까요?</p>
 <p>그게 텍스처 유닛이 관여하는 부분입니다.
 텍스처 유닛은 텍스처에 대한 레퍼런스 <strong>전역 배열</strong>입니다.
-WebGL이 javascript로 작성되었다면 다음과 같은 전역 상태를 가질 것이라 상상할 수 있는데</p>
+WebGL이 자바스크립트로 작성되었다면 다음과 같은 전역 상태를 가질 것이라 상상할 수 있는데</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">const gl = {
   activeTextureUnit: 0,
   textureUnits: [
@@ -285,7 +285,7 @@ gl.bindTexture(gl.TEXTURE_2D, ourTexture);
 <p>그런 다음 아래와 같이 호출하여 텍스처를 바인딩한 텍스처 유닛을 셰이더에 알리는데</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">gl.uniform1i(someTextureUniformLocation, indexOfTextureUnit);
 </code></pre>
-<p><code class="notranslate" translate="no">activeTexture</code> 및 <code class="notranslate" translate="no">bindTexture</code> WebGL 함수가 javascript로 구현된다면 </p>
+<p><code class="notranslate" translate="no">activeTexture</code> 및 <code class="notranslate" translate="no">bindTexture</code> WebGL 함수가 자바스크립트로 구현된다면 </p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 의사 코드!!!
 gl.activeTexture = function(unit) {
   gl.activeTextureUnit = unit - gl.TEXTURE0;  // 0 기반 index로 변환
@@ -313,7 +313,7 @@ gl.texParameteri = function(target, pname, value) {
 }
 </code></pre>
 <p>위 예제 의사 코드에서 <code class="notranslate" translate="no">gl.activeTexture</code>가 WebGL 안에 있는 내부 전역 변수를 텍스처 유닛 배열 인덱스로 설정해야 하는 건 명확합니다.
-해당 시점부터, 다른 모든 텍스처 함수는 <code class="notranslate" translate="no">target</code>을 받고, 모든 텍스처 함수의 첫 매개 변수이며, 현재 텍스처 유닛의 바인딩 포인트를 참조합니다.</p>
+해당 시점부터, 다른 모든 텍스처 함수는 <code class="notranslate" translate="no">target</code>을 받고, 모든 텍스처 함수의 첫 매개변수이며, 현재 텍스처 유닛의 바인딩 포인트를 참조합니다.</p>
 <h2 id="-">최대 텍스처 유닛</h2>
 <p>WebGL은 적어도 8개의 텍스처 유닛을 지원하는 구현이 필요합니다.
 얼마나 많이 지원되는지 쿼리할 수 있는데</p>
@@ -361,7 +361,7 @@ maxFragmentShaderTextureUnits = 8
           <li><a href="/webgl/lessons/ko/webgl-image-processing.html">이미지 처리</a></li>
 <li><a href="/webgl/lessons/ko/webgl-image-processing-continued.html">이미지 처리 심화</a></li>
         </ul>
-  <li>2D Translation, Rotation, Scale, 행렬 수학</li>
+  <li>2D 평행 이동, 회전, 스케일링, 행렬 수학</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-2d-translation.html">2D Translation</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-rotation.html">2D Rotation</a></li>
@@ -386,7 +386,7 @@ maxFragmentShaderTextureUnits = 8
 <li><a href="/webgl/lessons/ko/webgl-drawing-multiple-things.html">여러 물체 그리기</a></li>
 <li><a href="/webgl/lessons/ko/webgl-scene-graph.html">장면 그래프</a></li>
         </ul>
-  <li>Geometry</li>
+  <li>지오메트리</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">지오메트리 - Lathe</a></li>
 <li><a href="/webgl/lessons/ko/webgl-load-obj.html">.obj 파일 로딩</a></li>
@@ -426,7 +426,7 @@ maxFragmentShaderTextureUnits = 8
 <li><a href="/webgl/lessons/ko/webgl-fog.html">안개</a></li>
 <li><a href="/webgl/lessons/ko/webgl-picking.html">피킹 (물체 클릭)</a></li>
         </ul>
-  <li>Text</li>
+  <li>텍스트</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-text-html.html">텍스트 - HTML</a></li>
 <li><a href="/webgl/lessons/ko/webgl-text-canvas2d.html">텍스트 - Canvas 2D</a></li>
@@ -442,7 +442,7 @@ maxFragmentShaderTextureUnits = 8
           <li><a href="/webgl/lessons/ko/webgl-gpgpu.html">GPGPU</a></li>
         </ul>
         </ul>
-  <li>Tip</li>
+  <li>팁</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-smallest-programs.html">최소 프로그램</a></li>
 <li><a href="/webgl/lessons/ko/webgl-drawing-without-data.html">데이터 없이 그리기</a></li>
@@ -461,7 +461,7 @@ maxFragmentShaderTextureUnits = 8
 <li><a href="/webgl/lessons/ko/webgl-resizing-the-canvas.html">캔버스 크기 조정</a></li>
 <li><a href="/webgl/lessons/ko/webgl-animation.html">애니메이션</a></li>
 <li><a href="/webgl/lessons/ko/webgl-points-lines-triangles.html">점, 선, 삼각형</a></li>
-<li><a href="/webgl/lessons/ko/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
+<li><a href="/webgl/lessons/ko/webgl-multiple-views.html">다중 뷰, 다중 캔버스</a></li>
 <li><a href="/webgl/lessons/ko/webgl-visualizing-the-camera.html">카메라 시각화</a></li>
 <li><a href="/webgl/lessons/ko/webgl-and-alpha.html">WebGL Alpha</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-vs-3d-library.html">2D vs 3D 라이브러리</a></li>
