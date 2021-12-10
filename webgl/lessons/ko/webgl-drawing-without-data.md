@@ -92,7 +92,7 @@ void main() {
 초기화할 때 자바스크립트에서 셰이더를 컴파일하고 속성과 유니폼을 찾고,
 
 ```js
-// setup GLSL program
+// GLSL 프로그램 설정
 const program = webglUtils.createProgramFromSources(gl, [vs, fs]);
 const vertexIdLoc = gl.getAttribLocation(program, 'vertexId');
 const numVertsLoc = gl.getUniformLocation(program, 'numVerts');

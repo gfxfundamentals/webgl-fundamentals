@@ -9,7 +9,7 @@ TOC: 애니메이션
 
 WebGL에서 무언가에 애니메이션을 적용하려면 어떻게 해야 할까요?
 
-사실 이건 WebGL에 국한되지 않지만 일반적으로 JavaScript로 무언가에 애니메이션을 적용하고 싶다면 시간이 지남에 따라 무언가를 수정하고 다시 그려야 합니다.
+사실 이건 WebGL에 국한되지 않지만 일반적으로 자바스크립트로 무언가에 애니메이션을 적용하고 싶다면 시간이 지남에 따라 무언가를 수정하고 다시 그려야 합니다.
 
 이전 샘플들 중 하나를 가져와 다음과 같이 애니메이션을 적용할 수 있습니다.
 
@@ -97,7 +97,7 @@ WebGL에서 무언가에 애니메이션을 적용하려면 어떻게 해야 할
 <div class="webgl_bottombar">
 <h3>setInterval나 setTimeout을 사용하지 마세요!</h3>
 <p>
-과거에 javascript로 애니메이션을 프로그래밍한 적이 있다면 <code>setInterval</code>나 <code>setTimeout</code>을 사용하여 그리기 함수를 호출했을 겁니다.
+과거에 자바스크립트로 애니메이션을 프로그래밍한 적이 있다면 <code>setInterval</code>나 <code>setTimeout</code>을 사용하여 그리기 함수를 호출했을 겁니다.
 </p>
 <p>
 <code>setInterval</code>와 <code>setTimeout</code>을 사용한 애니메이션 수행에 따른 문제는 두 가지입니다.

@@ -14,7 +14,7 @@ WebGL의 attribute는 버퍼에서 데이터를 가져오는 정점 셰이더에
 WebGL은 `gl.drawArrays`나 `gl.drawElements`가 호출될 때 사용자가 제공한 정점 셰이더를 N번 실행하는데요.
 각 반복마다 attribute는 바인딩된 버퍼에서 데이터를 가져와 정점 셰이더 내부의 attribute에 제공하는 방법을 정의합니다.
 
-javascript로 구현되었다면 이런식으로
+자바스크립트로 구현되었다면 이런식으로
 
 ```js
 // 의사 코드
@@ -119,7 +119,7 @@ const normalLoc = gl.getAttribLocation(program, 'normal');
 `positionLoc` = `5`라고 해봅시다.
 이건 정점 셰이더가 실행될 때(`gl.drawArrays`나 `gl.drawElements`를 호출할 때) 정점 셰이더는 여러분이 알맞은 type, size, offset, stride, buffer 등으로 attribute 5를 설정할 것이라 예상한다는 걸 의미합니다.
 
-참고로 program을 연결하기 전에는 `gl.bindAttribLocation(program, location, nameOfAttribute)`을 호출하여 location을 선택할 수 있습니다.
+참고로 프로그램을 연결하기 전에는 `gl.bindAttribLocation(program, location, nameOfAttribute)`을 호출하여 location을 선택할 수 있습니다.
 예제:
 
 ```js

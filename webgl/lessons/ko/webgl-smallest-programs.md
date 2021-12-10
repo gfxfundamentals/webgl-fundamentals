@@ -49,14 +49,14 @@ gl.clear(gl.COLOR_BUFFER_BIT);
 ## `SCISSOR_TEST` 그리고 `gl.clear` 사용
 
 `SCISSOR_TEST`는 그리기와 지우기 모두 캔버스(혹은 현재 프레임 버퍼)의 하위 사각형으로 자릅니다.
-다음과 같이 작성하여 scissor test를 활성화합니다.
+다음과 같이 작성하여 시저 테스트를 활성화합니다.
 
 ```js
 gl.enable(gl.SCISSOR_TEST);
 ```
 
 그런 다음 왼쪽 하단 모서리를 기준으로 scissor rectangle을 픽셀 단위로 설정합니다.
-이는 `gl.viewport`와 같은 매개 변수를 사용합니다.
+이는 `gl.viewport`와 같은 매개변수를 사용합니다.
 
 ```js
 gl.scissor(x, y, width, height);

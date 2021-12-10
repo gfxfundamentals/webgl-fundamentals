@@ -47,7 +47,7 @@ WebGL 관련 주제에 대한 무작위 질문 및 답변 링크 모음
 ---
 
 * [gl.finish()를 사용하여 webgl에서 렌더링 시간을 측정하는 게 가능한가요?](webgl-qna-is-it-possible-to-measure-rendering-time-in-webgl-using-gl-finish---.html)
-* [javascript에서 효율적인 particle 시스템은? (WebGL)](webgl-qna-efficient-particle-system-in-javascript---webgl-.html)
+* [자바스크립트에서 효율적인 particle 시스템은? (WebGL)](webgl-qna-efficient-particle-system-in-javascript---webgl-.html)
 * [JS에서 GLSL로 struct 배열의 값 설정하기](webgl-qna-setting-the-values-of-a-struct-array-from-js-to-glsl.html)
 * [drawing buffer를 fade하는 방법](webgl-qna-how-to-fade-the-drawing-buffer.html)
 * [pseudo-3D 효과를 만들기 위해 depth map으로 2D 이미지 그리기](webgl-qna-drawing-2d-image-with-depth-map-to-achieve-pseudo-3d-effect.html)

@@ -8,9 +8,9 @@ TOC: 데이터 텍스처
 
 지난 포스트에서 텍스처가 작동하는 방법과 이를 적용하는 방법에 대해 살펴봤습니다.
 다운로드된 이미지로 텍스처를 생성했는데요.
-이번 글에서는 이미지 대신 JavaScript에서 직접 데이터를 생성할 겁니다.
+이번 글에서는 이미지 대신 자바스크립트에서 직접 데이터를 생성할 겁니다.
 
-JavaScript에서 텍스처 데이터를 생성하는 것은 굉장히 간단합니다.
+자바스크립트에서 텍스처 데이터를 생성하는 것은 굉장히 간단합니다.
 기본적으로 WebGL1은 텍스처의 몇 가지 type만 지원하는데
 
 <div class="webgl_center">
@@ -113,7 +113,7 @@ gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 
 이런! 왜 작동하지 않죠?!?!?
 
-JavaScript console을 확인하면 이런 오류가 표시됩니다.
+자바스크립트 콘솔을 확인하면 이런 오류가 표시됩니다.
 
 ```
 WebGL: INVALID_OPERATION: texImage2D: ArrayBufferView not big enough for request
@@ -121,10 +121,10 @@ WebGL: INVALID_OPERATION: texImage2D: ArrayBufferView not big enough for request
 
 WebGL에는 OpenGL이 처음 만들어졌을 때의 모호한 설정들이 남아있는데요.
 데이터가 어떤 크기일 때 가끔씩 컴퓨터가 더 빨라집니다.
-예를 들어 한 번에 1byte가 아닌 2, 4, 8 byte를 복사하는 것이 더 빠를 수 있습니다.
-WebGL은 기본적으로 한 번에 4byte를 사용하므로 각 데이터 행을 4byte의 배수로 생각합니다.
+예를 들어 한 번에 1바이트가 아닌 2, 4, 8바이트를 복사하는 것이 더 빠를 수 있습니다.
+WebGL은 기본적으로 한 번에 4바이트를 사용하므로 각 데이터 행을 4바이트의 배수로 생각합니다.
 
-위의 데이터는 행마다 3byte, 총 6byte에 불과하지만, WebGL은 첫 번째 행에 대해 4byte, 두 번째 행에 대해 3byte, 총 7byte를 읽습니다.
+위의 데이터는 행마다 3바이트, 총 6바이트에 불과하지만, WebGL은 첫 번째 행에 대해 4바이트, 두 번째 행에 대해 3바이트, 총 7바이트를 읽습니다.
 
 다음과 같이 한 번에 1byte를 처리하도록 WebGL에 지시할 수 있습니다.
 

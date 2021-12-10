@@ -112,7 +112,7 @@ Lock 체크 박스를 해제한 다음 `P3`나 `P5`를 드래그해보면 별개
       return cpoints;
     }
 
-참고: `v2.mult`와 `v2.add`는 점으로 수식을 수행하는 데 유용하여 포함시킨 JavaScript 함수입니다.
+참고: `v2.mult`와 `v2.add`는 점으로 수식을 수행하는 데 유용하여 포함시킨 자바스크립트 함수입니다.
 
 {{{diagram url="resources/bezier-curve-diagram.html?maxDepth=0&showCurve=true&showPoints=true" }}}
 

@@ -22,7 +22,7 @@ uniform sampler2D someTexture;
 
 그게 텍스처 유닛이 관여하는 부분입니다.
 텍스처 유닛은 텍스처에 대한 레퍼런스 **전역 배열**입니다.
-WebGL이 javascript로 작성되었다면 다음과 같은 전역 상태를 가질 것이라 상상할 수 있는데
+WebGL이 자바스크립트로 작성되었다면 다음과 같은 전역 상태를 가질 것이라 상상할 수 있는데
 
 ```js
 const gl = {
@@ -64,7 +64,7 @@ gl.bindTexture(gl.TEXTURE_2D, ourTexture);
 gl.uniform1i(someTextureUniformLocation, indexOfTextureUnit);
 ```
 
-`activeTexture` 및 `bindTexture` WebGL 함수가 javascript로 구현된다면 
+`activeTexture` 및 `bindTexture` WebGL 함수가 자바스크립트로 구현된다면 
 
 ```js
 // 의사 코드!!!
@@ -98,7 +98,7 @@ gl.texParameteri = function(target, pname, value) {
 ```
 
 위 예제 의사 코드에서 `gl.activeTexture`가 WebGL 안에 있는 내부 전역 변수를 텍스처 유닛 배열 인덱스로 설정해야 하는 건 명확합니다.
-해당 시점부터, 다른 모든 텍스처 함수는 `target`을 받고, 모든 텍스처 함수의 첫 매개 변수이며, 현재 텍스처 유닛의 바인딩 포인트를 참조합니다.
+해당 시점부터, 다른 모든 텍스처 함수는 `target`을 받고, 모든 텍스처 함수의 첫 매개변수이며, 현재 텍스처 유닛의 바인딩 포인트를 참조합니다.
 
 ## 최대 텍스처 유닛
 

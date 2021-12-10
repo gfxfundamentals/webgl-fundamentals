@@ -33,7 +33,7 @@ void main() {
   vec2 position = rotatedPosition + u_translation;
 ```
 
-그리고 그릴 때 scale하기 위해 필요한 javascript를 추가합니다.
+그리고 그릴 때 scale하기 위해 필요한 자바스크립트를 추가합니다.
 
 ```
   ...

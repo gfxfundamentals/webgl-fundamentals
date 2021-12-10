@@ -59,7 +59,7 @@ WebGL은 브라우저에서 실행되기 때문에 Canvas 2D API를 활용하여
 
 다음으로 2개의 셰이더를 생성합니다.
 
-    // GLSL program 설정
+    // GLSL 프로그램 설정
     var fProgramInfo = createProgramInfo(gl, ["vertex-shader-3d", "fragment-shader-3d"]);
     var textProgramInfo = createProgramInfo(gl, ["text-vertex-shader", "text-fragment-shader"]);
 
@@ -240,7 +240,7 @@ GPU에서 3D 렌더링할 때 겪는 가장 어려운 문제 중 하나에 직�
       gl.drawElements(gl.TRIANGLES, textBufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
     +});
 
-Current program과 attribute의 설정을 루프 외부로 옮겼는데, 동일한 것을 여러 번 그리기 때문에 각 반복마다 설정할 이유가 없습니다.
+현재 프로그램과 속성의 설정을 루프 외부로 옮겼는데, 동일한 것을 여러 번 그리기 때문에 각 반복마다 설정할 이유가 없습니다.
 
 그리고 이제 대부분 작동합니다.
 

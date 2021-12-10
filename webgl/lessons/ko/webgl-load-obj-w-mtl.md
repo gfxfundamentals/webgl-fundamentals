@@ -456,7 +456,7 @@ for (const material of Object.values(materials)) {
 +};
 ```
 
-누락된 머티리얼 매개 변수에 대한 기본값도 지정해봅시다.
+누락된 머티리얼 매개변수에 대한 기본값도 지정해봅시다.
 
 ```
 +const defaultMaterial = {
@@ -825,7 +825,7 @@ void main () {
 
 지원할 수 있는 .MTL 파일의 기능이 훨씬 더 많다고 확신합니다.
 예를 들어 `refl` 키워드는 [환경 맵](webgl-environment-maps.html)의 또 다른 말인 반사 맵을 지정합니다.
-또한 여러 선택적 매개 변수를 가지는 다양한 `map_` 키워드도 있습니다.
+또한 여러 선택적 매개변수를 가지는 다양한 `map_` 키워드도 있습니다.
 
 * `-clamp on | off`는 텍스처 반복 여부를 지정합니다.
 * `-mm base gain`은 텍스처 값에 대한 오프셋과 승수를 지정합니다.

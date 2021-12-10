@@ -65,7 +65,7 @@ OS X를 사용한다면
 Chrome 문서는 [여기](https://developers.google.com/web/tools/chrome-devtools/)에 있고, Firefox는 [여기](https://developer.mozilla.org/en-US/docs/Tools)에 있습니다.
 
 그것들을 어떻게 사용하는지 배워보세요.
-별 다른 게 없다면 javascript 콘솔을 항상 확인하세요.
+별 다른 게 없다면 자바스크립트 콘솔을 항상 확인하세요.
 문제가 있는 경우 종종 에러 메세지가 표시되는데요.
 에러 메세지를 자세히 읽으면 어디에 문제가 있는지 단서를 얻을 수 있습니다.
 
@@ -80,7 +80,7 @@ Chrome 문서는 [여기](https://developers.google.com/web/tools/chrome-devtool
 <script src="https://greggman.github.io/webgl-helpers/webgl-gl-error-check.js"></script>
 ```
 
-그리고 WebGL 에러를 발생하면 program은 예외를 던지고 운이 좋으면 더 많은 정보가 출력됩니다.
+그리고 WebGL 에러를 발생하면 프로그램은 예외를 던지고 운이 좋으면 더 많은 정보가 출력됩니다.
 
 다양한 WebGL Inspector가 있는데요.
 다음은 [Chrome 및 Firefox 전용](https://spector.babylonjs.com/)입니다.

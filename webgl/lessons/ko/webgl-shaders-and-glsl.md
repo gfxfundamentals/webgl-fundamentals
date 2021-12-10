@@ -12,8 +12,8 @@ TOC: 셰이더와 GLSL
 [작동 원리](webgl-how-it-works.html)에서 언급했듯이 WebGL은 뭔가를 그릴 때마다 2개의 셰이더를 필요로 합니다.
 바로 *정점 셰이더*와 *프래그먼트 셰이더*죠.
 각각의 셰이더는 *함수*인데요.
-정점 셰이더와 프래그먼트 셰이더는 함께 shader program(또는 그냥 program)으로 연결됩니다.
-일반적인 WebGL 앱은 많은 shader program을 가집니다.
+정점 셰이더와 프래그먼트 셰이더는 함께 셰이더 프로그램(또는 그냥 프로그램)으로 연결됩니다.
+일반적인 WebGL 앱은 많은 셰이더 프로그램을 가집니다.
 
 ## 정점 셰이더
 
@@ -47,7 +47,7 @@ TOC: 셰이더와 GLSL
     gl.bindBuffer(gl.ARRAY_BUFFER, buf);
     gl.bufferData(gl.ARRAY_BUFFER, someData, gl.STATIC_DRAW);
 
-만든 shader program을 통해 초기화 시 attribute의 location을 찾고
+만든 셰이더 프로그램을 통해 초기화 시 attribute의 location을 찾고
 
     var positionLoc = gl.getAttribLocation(someShaderProgram, "a_position");
 
@@ -90,21 +90,21 @@ TOC: 셰이더와 GLSL
     }
 
 그리고 이제 모든 정점을 일정량만큼 offset 할 수 있습니다.
-먼저 초기화 시 uniform의 location을 찾아야 합니다.
+먼저 초기화 시 유니폼의 위치를 찾아야 합니다.
 
     var offsetLoc = gl.getUniformLocation(someProgram, "u_offset");
 
-그런 다음 그리기 전에 uniform을 설정합니다.
+그런 다음 그리기 전에 유니폼을 설정합니다.
 
-    gl.uniform4fv(offsetLoc, [1, 0, 0, 0]);  // 화면 오른쪽 절반으로 offset
+    gl.uniform4fv(offsetLoc, [1, 0, 0, 0]);  // 화면 오른쪽 절반으로 오프셋
 
-참고로 uniform은 개별 shader program에 속합니다.
-만약 이름이 같은 uniform을 가진 shader program이 여러 개 있다면, 두 uniform 모두 고유한 location과 값을 가지는데요.
-`gl.uniform???`을 호출하면 *current program*의 uniform만 설정합니다.
-Current program은 `gl.useProgram`에 전달한 마지막 program 입니다.
+참고로 유니폼은 개별 셰이더 프로그램에 속합니다.
+만약 이름이 같은 유니폼을 가진 셰이더 프로그램이 여러 개 있다면, 두 유니폼 모두 고유한 위치와 값을 가지는데요.
+`gl.uniform???`을 호출하면 *현재 프로그램*의 유니폼만 설정합니다.
+현재 프로그램은 `gl.useProgram`에 전달한 마지막 프로그램입니다.
 
-uniform은 여러 type을 가질 수 있는데요.
-각 type마다 설정을 위해 해당하는 함수를 호출해야 합니다.
+유니폼은 여러 타입을 가질 수 있는데요.
+각 타입마다 설정을 위해 해당하는 함수를 호출해야 합니다.
 
     gl.uniform1f (floatUniformLoc, v);                 // float
     gl.uniform1fv(floatUniformLoc, [v]);               // float 또는 float 배열
@@ -142,7 +142,7 @@ uniform은 여러 type을 가질 수 있는데요.
     // 셰이더
     uniform vec2 u_someVec2[3];
 
-    // 초기화 시 javascript
+    // 초기화 시 자바스크립트
     var someVec2Loc = gl.getUniformLocation(someProgram, "u_someVec2");
 
     // 렌더링할 때
@@ -150,7 +150,7 @@ uniform은 여러 type을 가질 수 있는데요.
 
 하지만 배열의 개별 요소를 설정하고 싶다면 각 요소의 location을 개별적으로 찾아야 합니다.
 
-    // 초기화 시 javascript
+    // 초기화 시 자바스크립트
     var someVec2Element0Loc = gl.getUniformLocation(someProgram, "u_someVec2[0]");
     var someVec2Element1Loc = gl.getUniformLocation(someProgram, "u_someVec2[1]");
     var someVec2Element2Loc = gl.getUniformLocation(someProgram, "u_someVec2[2]");
@@ -230,7 +230,7 @@ uniform은 여러 type을 가질 수 있는데요.
     gl.texImage2D(gl.TEXTURE_2D, level, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, data);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 
-초기화 시 shader program의 uniform location을 찾으며
+초기화 시 셰이더 프로그램의 유니폼 위치를 찾으며
 
     var someSamplerLoc = gl.getUniformLocation(someProgram, "u_texture");
 
@@ -285,7 +285,7 @@ WebGL이 픽셀을 그릴 때 이 값들 사이를 보간하고 프래그먼트 
 
 GLSL은 Graphics Library Shader Language의 약자인데요.
 셰이더가 작성되는 언어입니다.
-이건 javascript에서 흔하지 않은 특별한 준 고유 기능을 가지고 있는데요.
+이건 자바스크립트에서 흔하지 않은 특별한 준 고유 기능을 가지고 있는데요.
 그래픽을 래스터화하기 위한 계산을 하는데 일반적으로 필요한 수학적 계산을 하도록 설계되었습니다.
 예를 들어 각각 2개의 값, 3개의 값, 4개의 값을 나타내는 `vec2`, `vec3`, `vec4` 같은 type들이 내장되어 있습니다.
 마찬가지로 2x2, 3x3, 4x4 행렬을 나타내는 `mat2`, `mat3`, `mat4`가 있습니다.
@@ -398,7 +398,7 @@ T는 `float`, `vec2`, `vec3` 또는 `vec4`가 될 수 있음을 뜻합니다.
 WebGL은 다양한 셰이더를 생성하고, 데이터를 이 셰이더에 제공한 다음, `gl.drawArrays`나 `gl.drawElements`를 호출하여 WebGL이 정점을 처리하도록 각 정점에 대한 현재 정점 셰이더를 호출한 뒤, 각 픽셀에 대한 현재 프래그먼트 셰이더를 호출하여 픽셀을 렌더링하는 것에 관한 모든 것입니다.
 
 실제로 셰이더를 생성하려면 여러 줄의 코드가 필요합니다.
-이 코드들은 대부분의 WebGL program에서 똑같기 때문에 한 번 작성한 후에는 거의 생략할 수 있습니다.
+이 코드들은 대부분의 WebGL 프로그램에서 똑같기 때문에 한 번 작성한 후에는 거의 생략할 수 있습니다.
 GLSL 셰이더를 컴파일하고 셰이더 프로그램에 연결하는 방법은 [여기](webgl-boilerplate.html)에서 다룹니다.
 
 여기에서 막 시작했다면 두 가지 방향으로 갈 수 있는데요.

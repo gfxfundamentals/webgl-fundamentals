@@ -26,7 +26,7 @@ TOC: 평면 및 원근 투영 매핑
 먼저 평면과 구체를 그리는 간단한 장면을 만들어 보겠습니다.
 양쪽 모두 간단한 8x8 체커 보드 텍스처를 사용할 겁니다.
 
-셰이더는 다양한 행렬이 분리되어 있으므로 JavaScript에서 함께 곱할 필요가 없다는 걸 제외하면 [텍스처에 대한 글](webgl-3d-textures.html)의 셰이더와 유사합니다.
+셰이더는 다양한 행렬이 분리되어 있으므로 자바스크립트에서 함께 곱할 필요가 없다는 걸 제외하면 [텍스처에 대한 글](webgl-3d-textures.html)의 셰이더와 유사합니다.
 
 ```glsl
 // 정점 셰이더
@@ -65,11 +65,11 @@ void main() {
 }
 ```
 
-다음은 program, sphere buffer, plane buffer를 설정하는 코드입니다.
+다음은 프로그램, 구체 버퍼, 평면 버퍼를 설정하는 코드입니다.
 
 ```js
-// GLSL program 설정
-// 셰이더 컴파일, program 연결, location 탐색
+// GLSL 프로그램 설정
+// 셰이더 컴파일, 프로그램 연결, 위치 탐색
 const textureProgramInfo = webglUtils.createProgramInfo(gl, ['vertex-shader-3d', 'fragment-shader-3d']);
 
 const sphereBufferInfo = primitives.createSphereBufferInfo(
@@ -439,7 +439,7 @@ void main() {
 그런 다음 이 셰이더도 컴파일하고 연결해야 합니다.
 
 ```js
-// GLSL program 설정
+// GLSL 프로그램 설정
 const textureProgramInfo = webglUtils.createProgramInfo(gl, ['vertex-shader-3d', 'fragment-shader-3d']);
 +const colorProgramInfo = webglUtils.createProgramInfo(gl, ['color-vertex-shader', 'color-fragment-shader']);
 ```
@@ -701,7 +701,7 @@ const textureProjectionMatrix = settings.perspective
 Decal은 표면에 페인트 얼룩이나 폭발 흔적을 붙이는 방법입니다.
 일반적으로 decal은 위와 같은 셰이더를 통해 작동하지 않습니다.
 대신에 decal을 적용하려는 모델의 geometry를 검토하는 함수를 작성하는데요.
-JavaScript의 셰이더 예제에 있는 `inRange` 확인과 동일하게, 각 삼각형에 대해 decal이 적용될 영역의 내부에 있는지 확인합니다.
+자바스크립트의 셰이더 예제에 있는 `inRange` 확인과 동일하게, 각 삼각형에 대해 decal이 적용될 영역의 내부에 있는지 확인합니다.
 범위 내에 있는 각 삼각형에 대해 투영된 텍스처 좌표를 사용하여 새로운 geometry에 추가합니다.
 그런 다음 해당 decal을 그려야 하는 목록에 추가하면 되죠.
 

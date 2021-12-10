@@ -323,7 +323,7 @@ mipmap은 점진적으로 작아지는 이미지의 모음으로, 각각은 이�
 키보드 텍스처는 320x240입니다.
 둘 다 2의 거듭 제곱이 아니므로 텍스처 표시에 실패합니다.
 셰이더에서 `texture2D`이 호출되고 참조된 텍스처가 제대로 설정되지 않은 경우 WebGL은 검은색(0, 0, 0, 1)을 사용합니다.
-JavaScript console이나 Web Console을 열어보면, 브라우저에 따라 이렇게 문제를 지적하는 오류가 나타날 수 있습니다.
+자바스크립트 콘솔이나 웹 콘솔을 열어보면, 브라우저에 따라 이렇게 문제를 지적하는 오류가 나타날 수 있습니다.
 
     WebGL: INVALID_OPERATION: generateMipmap: level 0 not power of 2 or not all the same size.
     WebGL: drawArrays: texture bound to texture unit 0 is not renderable.
@@ -465,7 +465,7 @@ WebGL이 "texture complete"여야 하는데요.
 또 다른 것은 [다른 도메인의 이미지를 사용하는 방법](webgl-cors-permission.html)이 있습니다.
 마지막으로 어찌보면 사소하지만 알아두면 좋은 [원근 교정 텍스처 매핑](webgl-3d-perspective-correct-texturemapping.html)입니다.
 
-다음은 [JavaScript에서 텍스처에 데이터를 제공하는 방법](webgl-data-textures.html)입니다.
+다음은 [자바스크립트에서 텍스처에 데이터를 제공하는 방법](webgl-data-textures.html)입니다.
 또는 WebGL 단순화에 대한 [less code more fun](webgl-less-code-more-fun.html)을 확인할 수도 있습니다.
 
 <div class="webgl_bottombar">

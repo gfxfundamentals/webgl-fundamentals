@@ -38,19 +38,19 @@ Translation을 업데이트한 후에 이 함수를 호출할 수 있습니다.
     // 캔버스 지우기
     gl.clear(gl.COLOR_BUFFER_BIT);
 
-    // program(셰이더 쌍) 사용 지시
+    // 프로그램(셰이더 쌍) 사용 지시
     gl.useProgram(program);
 
-    // position attribute 활성화
+    // 위치 속성 활성화
     gl.enableVertexAttribArray(positionLocation);
 
-    // position buffer 할당
+    // 위치 버퍼 할당
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
     // 사각형 설정
     setRectangle(gl, translation[0], translation[1], width, height);
 
-    // positionBuffer(ARRAY_BUFFER)에서 데이터 가져오는 방법을 attribute에 지시
+    // positionBuffer(ARRAY_BUFFER)에서 데이터 가져오는 방법을 속성에 지시
     var size = 2;          // 반복마다 2개의 컴포넌트
     var type = gl.FLOAT;   // 데이터는 32비트 부동 소수점
     var normalize = false; // 데이터 정규화 안 함
@@ -125,8 +125,8 @@ function setGeometry(gl, x, y) {
 ```
 
 확장하기에 좋지 않겠다는 걸 눈치채셨을 겁니다.
-수백 수천 개의 선으로 이루어진 아주 복잡한 geometry를 그리려면 꽤 복잡한 코드를 작성해야 합니다.
-또한 javascript는 그릴 때마다 모든 점들을 업데이트해야 하는데요.
+수백 수천 개의 선으로 이루어진 아주 복잡한 지오메트리를 그리려면 꽤 복잡한 코드를 작성해야 합니다.
+또한 자바스크립트는 그릴 때마다 모든 점들을 업데이트해야 하는데요.
 
 더 간단한 방법이 있습니다.
 지오메트리를 업로드하고 셰이더에서 translation을 수행하면 됩니다.
@@ -233,7 +233,7 @@ function setGeometry(gl) {
 Translation을 설정하고 그려달라고 요청하는 게 우리가 하는 전부죠.
 심지어 geometry에 수만 개의 점들이 있더라도 주요 코드는 그대로 유지됩니다.
 
-원한다면 모든 점들을 업데이트하는 위의 [복잡한 javascript를 사용한 버전](../webgl-2d-geometry-translate.html)과 비교할 수 있습니다.
+원한다면 모든 점들을 업데이트하는 위의 [복잡한 자바스크립트를 사용한 버전](../webgl-2d-geometry-translate.html)과 비교할 수 있습니다.
 
 너무 뻔한 예제가 아니었기를 바랍니다.
 다른 한편으로 이걸 수행하는 훨씬 더 좋은 방법을 다룰 것이므로 계속 읽어주세요.

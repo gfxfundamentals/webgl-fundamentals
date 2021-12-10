@@ -146,7 +146,7 @@ WebGL은 0.0에서 1.0까지인 텍스처 좌표에서 텍스처를 참조하기
     }
     </script>
 
-그런 다음 javascript에서 텍스처의 크기를 전달해야 합니다.
+그런 다음 자바스크립트에서 텍스처의 크기를 전달해야 합니다.
 
     ...
 
@@ -203,7 +203,7 @@ Convolution kernel은 행렬의 각 항목이 렌더링하는 픽셀 주변에 �
     }
     </script>
 
-Javascript에서 convolution kernel과 가중치를 제공해줘야 합니다.
+자바스크립트에서 convolution kernel과 가중치를 제공해줘야 합니다.
 
      function computeKernelWeight(kernel) {
        var weight = kernel.reduce(function(prev, curr) {

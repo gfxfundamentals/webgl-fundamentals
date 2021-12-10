@@ -162,10 +162,10 @@ gl.uniform1i(skyboxLocation, 0);
 ...
 ```
 
-그런 다음 셰이더를 컴파일하고 모든 attribute과 uniform location을 찾습니다.
+그런 다음 셰이더를 컴파일하고 모든 속성과 유니폼 위치를 찾습니다.
 
 ```js
-// GLSL program을 설정하고 location 탐색
+// GLSL 프로그램을 설정하고 위치 탐색
 const envmapProgramInfo = webglUtils.createProgramInfo(
     gl, ["envmap-vertex-shader", "envmap-fragment-shader"]);
 const skyboxProgramInfo = webglUtils.createProgramInfo(

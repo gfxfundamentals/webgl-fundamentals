@@ -1,5 +1,5 @@
 Title: WebGL 상용구
-Description: 모든 WebGL program에 필요한 일부 코드
+Description: 모든 WebGL 프로그램에 필요한 일부 코드
 TOC: 상용구
 
 
@@ -11,7 +11,7 @@ WebGL을 복잡해 보이도록 만드는 것들 중 하나는 정점 셰이더�
 이 두 함수는 일반적으로 최대 속도가 나오는 GPU에서 실행되는데요.
 그렇기 때문에 GPU에서 수행할 수 있는 언어, 커스텀 언어로 작성됩니다.
 이 두 함수는 컴파일되고 연결되어야 하는데요.
-해당 처리는 모든 WebGL program에서 99% 동일합니다.
+해당 처리는 모든 WebGL 프로그램에서 99% 동일합니다.
 
 다음은 셰이더를 컴파일 하는 상용구 코드입니다.
 
@@ -46,22 +46,22 @@ WebGL을 복잡해 보이도록 만드는 것들 중 하나는 정점 셰이더�
 그리고 프로그램에 두 셰이더를 연결하는 상용구 코드입니다.
 
     /**
-     * 두 셰이더로 program 생성합니다.
+     * 두 셰이더로 프로그램 생성합니다.
      *
      * @param {!WebGLRenderingContext) gl은 WebGL Context
      * @param {!WebGLShader} vertexShader는 정점 셰이더
      * @param {!WebGLShader} fragmentShader는 프래그먼트 셰이더
-     * @return {!WebGLProgram} program
+     * @return {!WebGLProgram} 프로그램
      */
     function createProgram(gl, vertexShader, fragmentShader) {
-      // program 생성
+      // 프로그램 생성
       var program = gl.createProgram();
 
       // 셰이더 할당
       gl.attachShader(program, vertexShader);
       gl.attachShader(program, fragmentShader);
 
-      // program 연결
+      // 프로그램 연결
       gl.linkProgram(program);
 
       // 연결 여부 확인
@@ -76,9 +76,9 @@ WebGL을 복잡해 보이도록 만드는 것들 중 하나는 정점 셰이더�
 
 물론 오류를 처리하는 방법은 다를 수 있습니다.
 예외를 던지는 것이 오류를 처리하는 최고의 방법은 아니죠.
-그럼에도 불구하고 거의 모든 WebGL program에서 이 코드는 거의 비슷합니다.
+그럼에도 불구하고 거의 모든 WebGL 프로그램에서 이 코드는 거의 비슷합니다.
 
-저는 셰이더를 javascript가 아닌 &lt;script&gt; tag에 저장하는 걸 좋아하는데요.
+저는 셰이더를 자바스크립트가 아닌 &lt;script&gt; tag에 저장하는 걸 좋아하는데요.
 이 방식은 코드를 수정하기 쉽게 만들주기 때문에 저는 이렇게 코드를 작성합니다.
 
     /**
@@ -119,15 +119,15 @@ WebGL을 복잡해 보이도록 만드는 것들 중 하나는 정점 셰이더�
 
     var shader = compileShaderFromScript(gl, "someScriptTagId");
 
-한 걸음 더 나아가서 script tag에서 두 셰이더를 컴파일하며, program에 첨부하고 연결하는 함수를 만들겁니다.
+한 걸음 더 나아가서 스크립트 태그에서 두 셰이더를 컴파일하며, 프로그램에 첨부하고 연결하는 함수를 만들겁니다.
 
     /**
-     * 두 script tag에서 program 생성
+     * 두 스크립트 태그에서 프로그램 생성
      *
      * @param {!WebGLRenderingContext} gl은 WebGL Context
      * @param {string[]} shaderScriptId는 shader용 스크립트 태그의 id 배열입니다.
      *                   첫 번째는 정점 셰이더, 두 번째는 프래그먼트 셰이더라고 가정합니다.
-     * @return {!WebGLProgram} program
+     * @return {!WebGLProgram} 프로그램
      */
     function createProgramFromScripts(gl, shaderScriptIds) {
       var vertexShader = createShaderFromScript(gl, shaderScriptIds[0], gl.VERTEX_SHADER);
@@ -135,7 +135,7 @@ WebGL을 복잡해 보이도록 만드는 것들 중 하나는 정점 셰이더�
       return createProgram(gl, vertexShader, fragmentShader);
     }
 
-거의 모든 WebGL program에서 사용하는 다른 코드는 캔버스의 크기를 조정하는 코드입니다.
+거의 모든 WebGL 프로그램에서 사용하는 다른 코드는 캔버스의 크기를 조정하는 코드입니다.
 [여기](webgl-resizing-the-canvas.html)에서 해당 함수가 어떻게 구현됐는지 볼 수 있습니다.
 
 모든 예제는 이 두 가지 함수를 있고

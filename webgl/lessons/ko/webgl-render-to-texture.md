@@ -7,7 +7,7 @@ TOC: 텍스처 렌더링
 첫 번째는 [기초](webgl-fundamentals.html)로 시작했고, 이전에는 [텍스처 데이터 제공](webgl-data-textures.html)에 관한 것이었습니다.
 아직 읽지 않으셨다면 해당 글들을 먼저 읽어주세요.
 
-지난 포스트에서 우리는 JavaScript에서 텍스처에 데이터를 제공하는 방법을 살펴봤는데요.
+지난 포스트에서 우리는 자바스크립트에서 텍스처에 데이터를 제공하는 방법을 살펴봤는데요.
 이번 글에서는 WebGL을 사용하여 텍스처에 렌더링할 겁니다.
 참고로 이 주제는 [이미지 처리](webgl-image-processing-continued.html)에서 간단히 다루었지만 더 자세히 다뤄봅시다.
 
@@ -78,16 +78,16 @@ Renderbuffer는 텍스처와 매우 유사하지만 텍스처가 지원하지 �
 
 ```
 function drawCube(aspect) {
-  // program(셰이더 쌍) 사용 지시
+  // 프로그램(셰이더 쌍) 사용 지시
   gl.useProgram(program);
 
-  // position attribute 활성화
+  // 위치 속성 활성화
   gl.enableVertexAttribArray(positionLocation);
 
-  // position buffer 바인딩
+  // 위치 버퍼 바인딩
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
-  // positionBuffer(ARRAY_BUFFER)에서 데이터 가져오는 방법을 position attribute에 지시
+  // positionBuffer(ARRAY_BUFFER)에서 데이터 가져오는 방법을 위치 속성에 지시
   var size = 3;          // 반복마다 3개의 컴포넌트
   var type = gl.FLOAT;   // 데이터는 32비트 부동 소수점
   var normalize = false; // 데이터 정규화 안 함

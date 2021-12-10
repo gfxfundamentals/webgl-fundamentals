@@ -7,7 +7,7 @@ TOC: 2D 행렬
 첫 번째는 [기초](webgl-fundamentals.html)로 시작했고, 이전에는 [2D geometry scale](webgl-2d-scale.html)에 관한 것이었습니다.
 
 <div class="webgl_bottombar">
-<h3>Math vs Programming vs WebGL</h3>
+<h3>수학 vs 프로그래밍 vs WebGL</h3>
 <p>선형 대수나 행렬로 작업한 경험이 있다면 시작하기 전에 <a href="webgl-matrix-vs-math.html"><b>이 글</b></a>을 먼저 읽어주세요.</p>
 <p>행렬에 대한 경험이 없다면 위의 링크를 건너뛰고 계속 읽으셔도 됩니다.</p>
 </div>
@@ -431,7 +431,7 @@ void main() {
 </script>
 ```
 
-그리고 javascript에서는 projection matrix로 곱해야 합니다.
+그리고 자바스크립트에서는 투영 행렬로 곱해야 합니다.
 
 ```js
 // 장면 그리기

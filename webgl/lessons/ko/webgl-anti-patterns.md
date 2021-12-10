@@ -88,7 +88,7 @@ TOC: 안티 패턴
 
 3.  <a id="innerwidth"></a>`window.innerWidth`와 `window.innerHeight`를 사용하여 무엇이든 계산
 
-    많은 WebGL program이 여러 곳에서 `window.innerWidth`와 `window.innerHeight`를 사용합니다.
+    많은 WebGL 프로그램이 여러 곳에서 `window.innerWidth`와 `window.innerHeight`를 사용합니다.
     예를 들어:
 
     <pre class="prettyprint">
@@ -235,7 +235,7 @@ TOC: 안티 패턴
 
     이게 나쁜 이유는 WebGL이 "컨텍스트"를 잃을 수 있기 때문입니다.
     어떤 이유로든 발생할 수 있지만 가장 일반적인 원인으로 브라우저가 너무 많은 GPU 리소스를 사용하고 있다고 판단하면 여유 공간 확보를 위해 일부 `WebGLRenderingContext`의 컨텍스트를 의도적으로 없앨 수 있습니다.
-    항상 작동하길 바라는 WebGL program은 이를 처리해야 하는데요.
+    항상 작동하길 바라는 WebGL 프로그램은 이를 처리해야 하는데요.
     이를 처리하는 예시로는 구글 지도가 있습니다.
 
     위 코드의 문제점은 컨텍스트가 없어졌을 때 위의 `gl.createBuffer()`같은 WebGL 생성 함수는 `null`을 반환한다는 겁니다.
@@ -257,7 +257,7 @@ TOC: 안티 패턴
 
     **대신 할 일:**
 
-    `WebGLObjects`와 이에 관한 정보를 함께 유지하고 싶다면 한 가지 방법은 JavaScript 객체를 사용하는 겁니다.
+    `WebGLObjects`와 이에 관한 정보를 함께 유지하고 싶다면 한 가지 방법은 자바스크립트 객체를 사용하는 겁니다.
     예시:
 
     <pre class="prettyprint">
@@ -316,7 +316,7 @@ GPU가 2048의 제한을 가지고 있지만 2개의 1920x1080 모니터가 있�
 이게 WebGL이 사용하는 해결책입니다.
 코드가 올바르게 작성되었다면 사용자가 알아차릴 수 있는 유일한 것은 캔버스의 이미지가 약간 조정된다는 겁니다.
 그렇지 않으면 그냥 동작합니다.
-최악의 경우 제대로 작업을 수행하지 않는 대다수 WebGL program은 화면이 약간 표시되지 않지만, 사용자가 창의 크기를 조정하면 정상으로 돌아올 겁니다. 
+최악의 경우 제대로 작업을 수행하지 않는 대다수 WebGL 프로그램은 화면이 약간 표시되지 않지만, 사용자가 창의 크기를 조정하면 정상으로 돌아올 겁니다. 
 </p>
 </li>
 </ol>

@@ -97,7 +97,7 @@ const colors = [
 ];
 ```
 
-그리기 위해서는 먼저 shader program을 사용해서, attribute를 설정하고, 5개의 instance를 반복한 다음, 각각에 대한 새로운 행렬을 계산하고, 행렬의 uniform과 색상을 설정 후 그립니다.
+그리기 위해서는 먼저 셰이더 프로그램을 사용해서, 속성을 설정하고, 5개의 instance를 반복한 다음, 각각에 대한 새로운 행렬을 계산하고, 행렬의 uniform과 색상을 설정 후 그립니다.
 
 ```js
 function render(time) {
@@ -392,10 +392,10 @@ ext.drawArraysInstancedANGLE(
 
 말할 필요도 없다고 느껴지지만 하긴 저는 너무 많이 했기 때문에 당연한 것일 수도 있습니다.
 위 코드는 캔버스적인 측면을 고려하지 않았는데요.
-[Projection matrix](webgl-3d-orthographic.html)이나 [view matrix](webgl-3d-camera.html)를 사용하지 않습니다.
+[투영 행렬](webgl-3d-orthographic.html)이나 [뷰 행렬](webgl-3d-camera.html)을 사용하지 않습니다.
 오로지 instanced drawing을 보여주기 위한 것입니다.
-Projection matrix나 view matrix를 원한다면 JavaScript에 계산을 추가할 수 있습니다.
-이는 JavaScript의 작업이 더 많아짐을 의미합니다.
+투영 행렬이나 뷰 행렬을 원한다면 자바스크립트에 계산을 추가할 수 있습니다.
+이는 자바스크립트의 작업이 더 많아짐을 의미합니다.
 좀 더 확실한 방법은 1개 혹은 2개 이상의 uniform을 정점 셰이더에 추가하는 겁니다.
 
 ```html

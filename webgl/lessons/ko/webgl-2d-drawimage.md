@@ -68,7 +68,7 @@ Canvas 2D API는 `drawImage`라는 이미지를 그리는 용도의 굉장히 �
     function drawImage(tex, texWidth, texHeight, dstX, dstY) {
       gl.bindTexture(gl.TEXTURE_2D, tex);
 
-      // Shader program 쌍을 사용하도록 WebGL에 지시
+      // 셰이더 프로그램 쌍을 사용하도록 WebGL에 지시
       gl.useProgram(program);
 
       // 버퍼에서 데이터를 가져오기 위한 attribute 설정

@@ -5,7 +5,7 @@ TOC: 기초
 
 WebGL은 종종 3D API로 치부됩니다.
 사람들은 "WebGL을 사용해서 멋진 3D를 만들어야지"라고 생각하는데요.
-사실 WebGL은 [Rasterization 엔진](webgl-2d-vs-3d-library.html)에 불과합니다.
+사실 WebGL은 [래스터화 엔진](webgl-2d-vs-3d-library.html)에 불과합니다.
 여러분이 제공한 코드를 기반으로 점, 선, 삼각형 등을 그리죠.
 WebGL로 원하는 작업을 수행하려면 [점, 선, 삼각형](webgl-points-lines-triangles.html)을 사용하는 코드를 작성해야 합니다.
 
@@ -13,7 +13,7 @@ WebGL은 컴퓨터에 있는 GPU에서 실행됩니다.
 따라서 GPU에서 실행되는 코드를 제공해야 하는데요.
 해당 코드는 함수 쌍 형태로 제공해야 합니다.
 이 두 함수는 정점 셰이더와 프래그먼트 셰이더로 불리고 C/C++처럼 엄격한 Type을 가지는 [GLSL](webgl-shaders-and-glsl.html)로 작성되어 있습니다.
-이 두 개를 합쳐서 *program*이라고 부르죠.
+이 두 개를 합쳐서 *프로그램*이라고 부르죠.
 
 정점 셰이더의 역할은 정점 위치를 계산하는 겁니다.
 WebGL은 함수가 출력하는 위치를 기반으로 [점, 선, 삼각형](webgl-points-lines-triangles.html)을 포함한 다양한 종류의 primitive를 래스터화할 수 있는데요.
@@ -40,13 +40,13 @@ WebGL은 함수가 출력하는 위치를 기반으로 [점, 선, 삼각형](web
    대신에 정점 셰이더가 지정한 횟수만큼 실행되는데요.
    실행될 때마다 지정된 버퍼에서 다음 값을 가져와 attribute에 할당합니다.
 
-2. Uniform
+2. 유니폼
 
-   Uniform은 shader program을 실행하기 전에 설정하는 사실상 전역 변수입니다.
+   유니폼은 셰이더 프로그램을 실행하기 전에 설정하는 사실상 전역 변수입니다.
 
-3. Texture
+3. 텍스처
 
-   텍스처는 shader program에서 무작위로 접근할 수 있는 데이터 배열입니다.
+   텍스처는 셰이더 프로그램에서 무작위로 접근할 수 있는 데이터 배열입니다.
    텍스처에 넣는 대부분은 이미지 데이터지만 텍스처는 데이터일 뿐이며 색상 이외의 것도 쉽게 담을 수 있습니다.
 
 4. Varying
@@ -79,7 +79,7 @@ WebGL은 클립 공간의 좌표와 색상, 오직 2가지만을 다루는데요
       gl_Position = a_position;
     }
 
-실행될 때, 모든 게 GLSL 대신에 javascript로 작성된다면 이렇게 사용될 것이라 상상할 수 있습니다.
+실행될 때, 모든 게 GLSL 대신에 자바스크립트로 작성된다면 이렇게 사용될 것이라 상상할 수 있습니다.
 
     // *** 의사 코드!! ***
 
@@ -126,7 +126,7 @@ WebGL에서 색상은 0에서 1까지입니다.
 
      <canvas id="c"></canvas>
 
-그런 다음 javascript에서 찾을 수 있습니다.
+그런 다음 자바스크립트에서 찾을 수 있습니다.
 
      var canvas = document.querySelector("#c");
 
@@ -139,9 +139,9 @@ WebGL에서 색상은 0에서 1까지입니다.
      }
 
 이제 셰이더를 컴파일해서 GPU에 할당해야 하는데 먼저 문자열로 가져와야 합니다.
-일반적으로 javascript에서 문자열을 만드는 어떤 방법으로도 GLSL 문자열을 만들 수 있는데요.
+일반적으로 자바스크립트에서 문자열을 만드는 어떤 방법으로도 GLSL 문자열을 만들 수 있는데요.
 문자열을 연결할 수도, AJAX를 이용해 다운로드할 수도, 여러 줄의 템플릿 문자열을 사용할 수도 있죠.
-혹은 이 경우처럼 javascript type이 아닌 script 태그 안에 넣을 수도 있습니다.
+혹은 이 경우처럼 자바스크립트 타입이 아닌 스크립트 태그 안에 넣을 수도 있습니다.
 
     <script id="vertex-shader-2d" type="notjs">
 
@@ -198,7 +198,7 @@ WebGL에서 색상은 0에서 1까지입니다.
     var vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
     var fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
 
-다음으로 두 셰이더를 *program*으로 *link*해야 합니다.
+다음으로 두 셰이더를 *프로그램*으로 *연결*해야 합니다.
 
     function createProgram(gl, vertexShader, fragmentShader) {
       var program = gl.createProgram();
@@ -232,10 +232,10 @@ WebGL의 주요 API는 GLSL 프로그램에 데이터를 제공하기 위한 상
 
     var positionBuffer = gl.createBuffer();
 
-WebGL은 global bind point에 있는 많은 WebGL 자원을 조작하게 해줍니다.
+WebGL은 global bind point에 있는 많은 WebGL 리소스를 조작하게 해줍니다.
 bind point는 WebGL 안에 있는 내부 전역 변수라고 생각하시면 되는데요.
-먼저 bind point에 자원을 할당합시다.
-그러면 모든 함수가 bind point를 통해 자원을 참조합니다.
+먼저 bind point에 리소스를 할당합시다.
+그러면 모든 함수가 bind point를 통해 리소스를 참조합니다.
 그럼 position buffer를 할당해봅시다.
 
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
@@ -255,8 +255,8 @@ bind point는 WebGL 안에 있는 내부 전역 변수라고 생각하시면 되
     );
 
 여기까지 많은 것들이 있었는데요.
-먼저 javascript 배열인 `positions`가 있습니다.
-Javascript와 다르게 WebGL은 강력한 type을 가지는 데이터가 필요하므로, `new Float32Array(positions)`는 새로운 32비트 부동 소수점 배열을 생성하고 `positions`에서 값을 복사합니다.
+먼저 자바스크립트 배열인 `positions`가 있습니다.
+자바스크립트와 다르게 WebGL은 강력한 타입을 가지는 데이터가 필요하므로, `new Float32Array(positions)`는 새로운 32비트 부동 소수점 배열을 생성하고 `positions`에서 값을 복사합니다.
 그런 다음 `gl.bufferData`는 데이터를 GPU의 `positionBuffer`로 복사합니다.
 위에서 `ARRAY_BUFFER` bind point로 할당했기 때문에 position buffer를 사용하고 있습니다.
 
@@ -297,9 +297,9 @@ CSS로 크기를 결정한 다음 일치하도록 조정함으로써 이러한 �
     gl.clearColor(0, 0, 0, 0);
     gl.clear(gl.COLOR_BUFFER_BIT);
 
-실행할 shader program을 WebGL에 알려줍니다.
+실행할 셰이더 프로그램을 WebGL에 알려줍니다.
 
-    // program(셰이더 쌍) 사용 지시
+    // 프로그램(셰이더 쌍) 사용 지시
     gl.useProgram(program);
 
 다음으로 위에서 설정한 버퍼에서 데이터를 가져와 셰이더의 attribute에 제공하는 방법을 WebGL에 알려줘야 하는데요.
@@ -337,12 +337,12 @@ CSS로 크기를 결정한 다음 일치하도록 조정함으로써 이러한 �
     attribute vec4 a_position;
 
 `vec4`는 4개의 float 값입니다.
-Javascript에서 `a_position = {x: 0, y: 0, z: 0, w: 0}`와 같이 생각할 수 있습니다.
+자바스크립트에서 `a_position = {x: 0, y: 0, z: 0, w: 0}`와 같이 생각할 수 있습니다.
 위에서 `size = 2`로 설정했는데요.
-속성의 기본값은 `0, 0, 0, 1`이므로 이 attribute는 buffer에서 처음 2개의 값(x 및 y)을 가져옵니다.
+속성의 기본값은 `0, 0, 0, 1`이므로 이 속성은 버퍼에서 처음 2개의 값(x 및 y)을 가져옵니다.
 z와 w는 기본값으로 각각 0과 1이 될 겁니다.
 
-드디어 GLSL program을 실행하도록 WebGL에 요청할 수 있습니다.
+드디어 GLSL 프로그램을 실행하도록 WebGL에 요청할 수 있습니다.
 
     var primitiveType = gl.TRIANGLES;
     var offset = 0;
@@ -381,7 +381,7 @@ WebGL은 이제 삼각형을 렌더링할 겁니다.
 
 위 경우 정점 셰이더가 데이터를 직접 전달하는 것 외에는 아무것도 하지 않는 걸 볼 수 있는데요.
 위치 데이터가 이미 클립 공간에 있으므로 할 일이 없습니다.
-*WebGL은 rasterization API에 불과하기 때문에 3D를 원한다면 3D를 클립 공간로 변환하는 셰이더를 작성해야 합니다.*
+*WebGL은 래스터화 API에 불과하기 때문에 3D를 원한다면 3D를 클립 공간로 변환하는 셰이더를 작성해야 합니다.*
 
 아마 삼각형이 중앙에서 시작해서 오른쪽 상단으로 가는 이유가 궁금하실텐데요.
 `x`의 클립 공간은 -1부터 +1까지 입니다.
@@ -440,9 +440,9 @@ WebGL은 이제 삼각형을 렌더링할 겁니다.
     ];
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
-사용할 program을 설정한 뒤 우리가 만든 uniform의 값을 설정할 수 있습니다.
-`gl.useProgram`은 위의 `gl.bindBuffer`처럼 current program을 설정하는데요.
-이후 모든 `gl.uniformXXX` 함수는 현재 설정된 program의 uniform을 설정합니다.
+사용할 프로그램을 설정한 뒤 우리가 만든 유니폼의 값을 설정할 수 있습니다.
+`gl.useProgram`은 위의 `gl.bindBuffer`처럼 현재 프로그램을 설정하는데요.
+이후 모든 `gl.uniformXXX` 함수는 현재 설정된 프로그램의 유니폼을 설정합니다.
 
     gl.useProgram(program);
 
@@ -556,7 +556,7 @@ WebGL이 사실은 아주 단순한 API였다고 보셨기를 바랍니다.
 네, 단순하다는 말은 아마 틀릴지도 모르지만 하는 일은 단순합니다.
 그저 사용자가 제공한 두 함수 정점 셰이더와 프래그먼트 셰이더를 실행시키고 점, 선, 삼각형을 그릴 뿐입니다.
 3D를 작업하면서 더 복잡해질 수 있지만, 그 복잡함은 프로그래머에 의해 더 복잡한 셰이더의 형태로 추가됩니다.
-WebGL API 자체는 rasterization 엔진에 불과하며 개념적으로는 꽤 단순합니다.
+WebGL API 자체는 래스터화 엔진에 불과하며 개념적으로는 꽤 단순합니다.
 
 속성과 유니폼 2개에 데이터를 제공하는 방법을 보여주는 예제를 다뤘는데요.
 일반적으로는 여러 속성과 많은 유니폼을 가집니다.
@@ -582,8 +582,8 @@ translation, rotation, scale 그리고 궁극적으로 3D에 대해 배우고 �
 <div class="webgl_bottombar">
 <h3>type="notjs"가 어떤 의미인가요?</h3>
 <p>
-<code>&lt;script&gt;</code> 태그는 기본적으로 javascript가 포함합니다.
-type을 넣지 않거나 <code>type="javascript"</code> 또는 <code>type="text/javascript"</code>라고 넣으면 브라우저는 내용을 javascript로 해석하는데요.
+<code>&lt;script&gt;</code> 태그는 기본적으로 자바스크립트가 포함합니다.
+타입을 넣지 않거나 <code>type="javascript"</code> 또는 <code>type="text/javascript"</code>라고 넣으면 브라우저는 내용을 자바스크립트로 해석하는데요.
 이외에 다른 <code>type</code>을 넣으면 브라우저는 script 태그의 내용을 무시합니다.
 즉 <code>type="notjs"</code>나 <code>type="foobar"</code>는 브라우저에서 아무런 의미가 없습니다.
 </p>
