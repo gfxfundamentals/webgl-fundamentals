@@ -6,7 +6,7 @@ TOC: 카메라 시각화
 이 글은 여러분이 [다중 뷰에 대한 글](webgl-multiple-views.html)을 읽었다고 가정합니다.
 해당 글을 읽지 않았다면 [그걸](webgl-multiple-views.html) 먼저 읽어주세요.
 
-또한 이 글에선 예제를 깔끔하게 정리하기 위해 [less code more fun](webgl-less-code-more-fun.html)에서 언급된 라이브러리를 사용합니다.
+또한 이 글에선 예제를 깔끔하게 정리하기 위해 [유틸리티 함수에 대한 글](webgl-less-code-more-fun.html)에서 언급한 라이브러리를 사용합니다.
 `webglUtils.setBuffersAndAttributes`라는 함수가 버퍼와 속성을 설정하는 게 어떤 의미인지, 혹은 `webglUtils.setUniforms`라는 함수가 유니폼을 설정하는 게 어떤 의미인지 이해하지 못 하겠다면, 더 뒤로 돌아가서 [기초](webgl-fundamentals.html)를 읽어야 합니다.
 
 카메라가 보는 영역인 "절두체"를 시각화할 수 있으면 유용한데요.

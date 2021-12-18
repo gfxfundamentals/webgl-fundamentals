@@ -89,7 +89,7 @@ TOC: 스키닝
 * 정점 `6,7`은 뼈 b1과 b2에서 0.5의 가중치를 얻습니다.
 * 정점 `8,9`는 뼈 b2에서 1.0의 가중치를 얻습니다.
 
-[Less code more fun](webgl-less-code-more-fun.html)에서 설명한 유틸들을 사용할 겁니다.
+[유틸리티 함수에 대한 글](webgl-less-code-more-fun.html)에서 설명한 유틸들을 사용할 겁니다.
 
 먼저 정점들과 각 정점에 대해 영향을 미치는 각 뼈의 인덱스 그리고 해당 뼈가 얼마나 영향을 주는지에 대한 0에서 1사이의 숫자가 필요합니다.
 
@@ -374,7 +374,7 @@ gl.bindTexture(gl.TEXTURE_2D, boneMatrixTexture);
 // 순수한 데이터로 텍스처를 사용하고 싶기 때문에 필터링 끄기
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-// 텍스처가 2의 거듭 제곱이 아닐 수도 있으므로 래핑도 끄기
+// 텍스처가 2의 거듭제곱이 아닐 수도 있으므로 래핑도 끄기
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 ```
@@ -490,7 +490,7 @@ async function loadJSON(url) {
 먼저 glTF가 메시로 간주하는 것을 처리해봅시다.
 메시는 프리미티브의 모음입니다.
 프리미티브는 실제로 무언가를 렌더링하는 데 필요한 버퍼와 속성인데요.
-[Less code more fun](webgl-less-code-more-fun.html)에서 다룬 webgl 유틸리티를 사용해봅시다.
+[유틸리티 함수에 대한 글](webgl-less-code-more-fun.html)에서 다룬 WebGL 유틸리티를 사용해봅시다.
 메시를 살펴보고 각 메시에 대해 `webglUtils.setBuffersAndAttributes`에 전달할 수 있는 `BufferInfo`를 빌드합니다.
 `BufferInfo`는 사실상 속성 정보, 인덱스, `gl.drawXXX`에 전달할 요소의 수임을 기억하세요.
 예를 들어 위치와 법선만 있는 큐브는 이런 구조의 BufferInfo를 가질 수 있습니다.
@@ -700,7 +700,7 @@ class Node {
   그려야 하는 항목은 대신에 데이터를 가져올 그래프에서 노드를 참조할 수 있습니다.
   그래프에서 `drawables`를 사용하는 게 일반적인 방법이기 때문에 이 방법으로 시작하겠습니다.
 
-* `traverse` 메소드를 추가했습니다.
+* `traverse` 메서드를 추가했습니다.
 
   현재 노드를 전달하는 함수를 호출한 다음 모든 자식 노드에 대해 동일한 작업을 재귀적으로 수행합니다.
 
@@ -731,7 +731,7 @@ gltf.nodes = gltf.nodes.map((n) => {
 위에서 각 노드에 대한 `TRS` 인스턴스, 각 노드에 대한 `Node` 인스턴스를 만들고, `mesh` 속성이 있는 경우 이전에 설정한 메시 데이터를 찾아, `MeshRenderer`를 생성하여 그립니다.
 
 `MeshRenderer`를 만들어봅시다.
-단일 모델을 렌더링하기 위해 [less code more fun](webgl-less-code-more-fun.html)에서 사용한 코드를 캡슐화한 것 뿐입니다.
+단일 모델을 렌더링하기 위해 [유틸리티 함수에 대한 글](webgl-less-code-more-fun.html)에서 사용한 코드를 캡슐화한 것 뿐입니다.
 메시에 대한 참조를 유지하고, 각 프리미티브에 프로그램, 속성, 유니폼을 설정한 다음, 마지막으로 `webglUtils.drawBufferInfo`를 통해 `gl.drawArrays`나 `gl.drawElements`를 호출합니다.
 
 ```

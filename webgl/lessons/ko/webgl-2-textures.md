@@ -17,13 +17,13 @@ TOC: 2개 이상의 텍스처 사용
 
 기본적으로 처리할 수 있는 2가지 방법이 있습니다.
 텍스처 없이 실행되고 텍스처가 로드되면 프로그램이 업데이트하도록 코드를 구조화할 수 있는데요.
-이후의 글을 위해 해당 method를 저장해두겠습니다.
+이후의 글을 위해 해당 메서드를 저장해두겠습니다.
 
 이 경우 그리기 전에 모든 이미지가 로드되는 걸 기다릴 겁니다.
 
 먼저 이미지를 로드하는 코드를 함수로 수정해봅시다.
 이는 매우 간단합니다.
-새로운 `Image` 객체를 생성하고, 로드할 URL을 설정한 다음, 이미지 로딩이 끝났을 때 호출할 callback을 설정합니다.
+새로운 `Image` 객체를 생성하고, 로드할 URL을 설정한 다음, 이미지 로딩이 끝났을 때 호출할 콜백을 설정합니다.
 
 ```
 function loadImage(url, callback) {
@@ -36,8 +36,8 @@ function loadImage(url, callback) {
 
 이제 URL 배열을 로드하고 이미지 배열을 생성하는 함수를 만들어 보겠습니다.
 먼저 `imagesToLoad`를 로드할 이미지 개수로 설정합니다.
-그런 다음 `loadImage`에 전달하는 callback에서 `imagesToLoad`를 감소시킵니다.
-`imagesToLoad`가 0이 되면 모든 이미지가 로드되었고 이미지 배열을 callback에 전달합니다.
+그런 다음 `loadImage`에 전달하는 콜백에서 `imagesToLoad`를 감소시킵니다.
+`imagesToLoad`가 0이 되면 모든 이미지가 로드되었고 이미지 배열을 콜백에 전달합니다.
 
 ```
 function loadImages(urls, callback) {
@@ -47,7 +47,7 @@ function loadImages(urls, callback) {
   // 이미지 로딩이 끝날 때마다 호출
   var onImageLoad = function() {
     --imagesToLoad;
-    // 모든 이미지가 로드되면 callback 호출
+    // 모든 이미지가 로드되면 콜백 호출
     if (imagesToLoad == 0) {
       callback(images);
     }
@@ -118,10 +118,10 @@ void main() {
 
 WebGL에는 "텍스처 유닛"이 있습니다.
 이는 텍스처에 대한 레퍼런스 배열이라 생각할 수 있습니다.
-각 sampler에 대해 사용할 텍스처 유닛을 셰이더에 알려줍니다.
+각 샘플러에 대해 사용할 텍스처 유닛을 셰이더에 알려줍니다.
 
 ```
-  // Sampler location 탐색
+  // 샘플러 위치 탐색
   var u_image0Location = gl.getUniformLocation(program, "u_image0");
   var u_image1Location = gl.getUniformLocation(program, "u_image1");
 
@@ -173,7 +173,7 @@ var getContext = function() {
   var activeTextureUnit = 0;
 
   var activeTexture = function(unit) {
-    // unit enum을 인덱스로 변환
+    // "unit enum"을 인덱스로 변환
     var index = unit - gl.TEXTURE0;
     // 활성 텍스처 유닛 설정
     activeTextureUnit = index;
@@ -217,7 +217,7 @@ var getContext = function() {
   gl.bindTexture(gl.TEXTURE_2D, textures[1]);
 ```
 
-이렇게 할 수도 있고
+이렇게 할 수도 있고,
 
 ```
   gl.activeTexture(gl.TEXTURE0 + 0);
@@ -226,7 +226,7 @@ var getContext = function() {
   gl.bindTexture(gl.TEXTURE_2D, textures[1]);
 ```
 
-혹은 이렇게
+혹은 이렇게,
 
 ```
   for (var ii = 0; ii < 2; ++ii) {

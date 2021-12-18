@@ -147,7 +147,7 @@ gl.uniform1i(skyboxLocation, 0);
 {{{example url="../webgl-skybox.html" }}}
 
 이 샘플에 환경맵 큐브를 결합해봅시다.
-[Less code more fun](webgl-less-code-more-fun.html)에서 언급한 유틸을 사용할 겁니다.
+[유틸리티 함수에 대한 글](webgl-less-code-more-fun.html)에서 언급한 유틸리티를 사용할 겁니다.
 
 두 셰이더 세트를 모두 넣어야 합니다.
 

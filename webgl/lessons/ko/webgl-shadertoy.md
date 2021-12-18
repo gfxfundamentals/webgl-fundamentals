@@ -35,7 +35,7 @@ const fs = `
   void main() {
     // gl_FragColor는 프래그먼트 셰이더가 설정을 담당하는 특수 변수입니다.
 
-    gl_FragColor = vec4(1, 0, 0.5, 1); // 붉은 보라색 반환
+    gl_FragColor = vec4(1, 0, 0.5, 1); // 자주색 반환
   }
 `;
 ```
@@ -130,7 +130,7 @@ const fs = `
   void main() {
     // gl_FragColor는 프래그먼트 셰이더가 설정을 담당하는 특수 변수입니다.
 
--    gl_FragColor = vec4(1, 0, 0.5, 1); // 붉은 보라색 반환
+-    gl_FragColor = vec4(1, 0, 0.5, 1); // 자주색 반환
 +    gl_FragColor = vec4(fract(gl_FragCoord.xy / 50.0), 0, 1);
   }
 `;

@@ -94,7 +94,7 @@ gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LI
 텍스처가 아니라면 렌더링되지 않을 겁니다.
 하지만 우리는 이미지 6개를 로딩하고 있습니다.
 즉시 렌더링을 시작하고 싶으므로 6개의 면을 모두 할당한 다음 이미지 로딩을 시작합니다.
-각 이미지가 로드되면 알맞은 면으로 업로드한 다음 mipmap을 다시 생성합니다.
+각 이미지가 로드되면 알맞은 면으로 업로드한 다음 밉맵을 다시 생성합니다.
 다시 말해 즉시 렌더링할 수 있고, 이미지가 다운로드되면 큐브맵의 면이 한 번에 하나씩 이미지로 채워지며, 6개가 모두 로드되지 않아도 렌더링할 수 있습니다.
 
 하지만 이미지를 로딩하는 것만으로는 부족합니다.
@@ -168,7 +168,7 @@ gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LI
 
 이제 반사가 어떻게 작동하는지 알고, 큐브맵에서 값을 찾기 위해 사용할 수 있으므로, 셰이더를 변경해봅시다.
 
-먼저 정점 셰이더에서 정점의 world position과 world oriented normal을 계산하고 이를 프래그먼트 셰이더에 varying으로 전달할 겁니다.
+먼저 정점 셰이더에서 정점의 world position과 world oriented normal을 계산하고 이를 프래그먼트 셰이더에 베링으로 전달할 겁니다.
 이는 [스포트라이트에 대한 글](webgl-3d-lighting-spot.html)에서 했던 것과 유사합니다.
 
 ```glsl

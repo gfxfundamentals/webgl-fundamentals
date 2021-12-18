@@ -34,7 +34,7 @@ uniform vec4 u_color;
 +uniform sampler2D u_ramp;
 
 void main() {
-  // v_normal이 varying이기 때문에 보간되므로 단위 벡터가 아닙니다.
+  // v_normal이 베링이기 때문에 보간되므로 단위 벡터가 아닙니다.
   // 정규화하면 다시 단위 벡터가 됩니다.
   vec3 normal = normalize(v_normal);
 
@@ -158,7 +158,7 @@ uniform sampler2D u_ramp;
 +uniform vec2 u_rampSize;
 
 void main() {
-  // v_normal이 varying이기 보간되므로 단위 벡터가 아닙니다.
+  // v_normal이 베링이기 보간되므로 단위 벡터가 아닙니다.
   // 정규화하면 다시 단위 벡터가 됩니다.
   vec3 normal = normalize(v_normal);
 
@@ -221,7 +221,7 @@ uniform vec2 u_rampSize;
 +uniform bool u_useRampTexture;
 
 void main() {
-  // v_normal이 varying이기 보간되므로 단위 벡터가 아닙니다.
+  // v_normal이 베링이기 보간되므로 단위 벡터가 아닙니다.
   // 정규화하면 다시 단위 벡터가 됩니다.
   vec3 normal = normalize(v_normal);
 
@@ -374,7 +374,7 @@ uniform vec2 u_rampSize;
 -uniform float u_linearAdjust;  // "linear"인 경우 1.0, "nearest"인 경우 0.0
 
 void main() {
-  // v_normal이 varying이기 보간되므로 단위 벡터가 아닙니다.
+  // v_normal이 베링이기 보간되므로 단위 벡터가 아닙니다.
   // 정규화하면 다시 단위 벡터가 됩니다.
   vec3 normal = normalize(v_normal);
 

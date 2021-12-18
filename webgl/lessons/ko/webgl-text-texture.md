@@ -16,7 +16,7 @@ TOC: 텍스트 - 텍스처 사용
 
 <img class="webgl_center" src="resources/my-awesme-text.png" />
 
-그런 다음 plane geometry를 만들고 표시하는데요.
+그런 다음 평면 지오메트리를 만들고 표시하는데요.
 이게 실제로 제가 작업했던 일부 게임들이 텍스트를 표시하는 방식입니다.
 예를 들어 Locoroco는 약 270개의 문자열만 있었습니다.
 이는 17개의 언어로 현지화되었는데요.
@@ -72,7 +72,7 @@ WebGL은 브라우저에서 실행되기 때문에 Canvas 2D API를 활용하여
     var textTex = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, textTex);
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textCanvas);
-    // 2의 거듭 제곱이 아니라도 렌더링할 수 있는지 확인
+    // 2의 거듭제곱이 아니라도 렌더링할 수 있는지 확인
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
@@ -354,7 +354,7 @@ GPU에서 3D 렌더링할 때 겪는 가장 어려운 문제 중 하나에 직�
       var textTex = gl.createTexture();
       gl.bindTexture(gl.TEXTURE_2D, textTex);
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textCanvas);
-      // 2의 거듭 제곱이 아니더라도 렌더링할 수 있는지 확인
+      // 2의 거듭제곱이 아니더라도 렌더링할 수 있는지 확인
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
@@ -465,7 +465,7 @@ HTML 컨텐츠와 적용한 다양한 스타일로 텍스처를 생성하고, �
 이 방법은 굉장히 느릴 수 있습니다.
 </li>
 <li>
-또 다른 방법으로 geometry에서 2D 텍스트를 만들 수 있습니다
+또 다른 방법으로 지오메트리에서 2D 텍스트를 만들 수 있습니다
 다시 말해 텍스트를 텍스처에 그리는 대신에 수많은 삼각형으로 텍스트를 만드는 겁니다.
 이는 작동하지만 작은 텍스트가 잘 렌더링되지 않고 큰 텍스트는 삼각형이 보이는 문제가 있습니다.
 </li>

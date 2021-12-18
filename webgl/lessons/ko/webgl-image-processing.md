@@ -16,7 +16,7 @@ WebGL에서 이미지를 그리기 위해서는 텍스처를 사용해야 하는
 
 단 하나의 사각형(정확히는 2개의 삼각형)만 그리기 때문에 사각형의 각 점이 텍스처의 어느 위치에 해당하는지 WebGL에 알려줘야 합니다.
 'varying'이라고 불리는 특수 변수를 이용해 이 정보를 정점 셰이더에서 프래그먼트 셰이더로 전달해야 하는데요.
-이 변수는 변하기 때문에 varying이라 불립니다.
+이 변수는 변하기 때문에 베링이라 불립니다.
 WebGL은 프래그먼트 셰이더를 사용해서 각 픽셀을 그릴 때 정점 셰이더에 제공한 값을 보간합니다.
 
 [이전 글](webgl-fundamentals.html)의 마지막에 있는 정점 셰이더를 사용해서 텍스처 좌표 전달을 위한 속성을 추가한 다음 프래그먼트 셰이더로 전달해야 합니다.
@@ -27,12 +27,12 @@ WebGL은 프래그먼트 셰이더를 사용해서 각 픽셀을 그릴 때 정�
 
     void main() {
       ...
-      // 프래그먼트 셰이더로 texCoord 전달
+      // 프래그먼트 셰이더로 텍스처 좌표 전달
       // GPU는 점들 사이의 값을 보간
       v_texCoord = a_texCoord;
     }
 
-그런 다음 텍스처의 색상을 찾기 위해 프래그먼트 셰이더를 제공합니다.
+그런 다음 텍스처의 색상을 찾기 위해 프래그먼트 셰이더를 작성합니다.
 
     <script id="fragment-shader-2d" type="x-shader/x-fragment">
     precision mediump float;
@@ -49,7 +49,7 @@ WebGL은 프래그먼트 셰이더를 사용해서 각 픽셀을 그릴 때 정�
     }
     </script>
 
-마지막으로 이미지를 불러오고, 텍스처를 생성하고, 이미지를 텍스처로 복사해야 하는데요.
+마지막으로 이미지를 불러오고, 텍스처를 생성한 다음, 이미지를 텍스처로 복사해야 하는데요.
 브라우저에서 이미지를 비동기적으로 불러오기 때문에 텍스처 로딩을 기다리도록 코드를 약간 변경해야 합니다.
 불러오자마자 그리도록 할 겁니다.
 
@@ -119,7 +119,7 @@ WebGL은 프래그먼트 셰이더를 사용해서 각 픽셀을 그릴 때 정�
 {{{example url="../webgl-2d-image-red2blue.html" }}}
 
 실제로 다른 픽셀을 보는 이미지 처리는 어떻게 해야 할까요?
-WebGL은 0.0에서 1.0까지인 텍스처 좌표에서 텍스처를 참조하기 때문에 간단한 수식(<code>onePixel = 1.0 / textureSize</code>)으로 1px을 위해 얼마나 이동해야 하는지 계산할 수 있습니다.
+WebGL은 0.0에서 1.0까지인 텍스처 좌표에서 텍스처를 참조하기 때문에 간단한 수식(<code>onePixel = 1.0 / textureSize</code>)으로 1픽셀을 위해 얼마나 이동해야 하는지 계산할 수 있습니다.
 
 다음은 텍스처에 있는 각 픽셀의 왼쪽과 오른쪽의 픽셀을 평균화하는 프래그먼트 셰이더입니다.
 
@@ -134,7 +134,7 @@ WebGL은 0.0에서 1.0까지인 텍스처 좌표에서 텍스처를 참조하기
     varying vec2 v_texCoord;
 
     void main() {
-      // 텍스처 좌표의 1px 계산
+      // 텍스처 좌표의 1픽셀 계산
       vec2 onePixel = vec2(1.0, 1.0) / u_textureSize;
 
       // 왼쪽, 중앙, 오른쪽 픽셀 평균화
@@ -163,14 +163,14 @@ WebGL은 0.0에서 1.0까지인 텍스처 좌표에서 텍스처를 참조하기
 
 {{{example url="../webgl-2d-image-blend.html" }}}
 
-이제 다른 픽셀을 참조하는 방법을 알았으니 convolution kernel을 이용해서 일반적인 이미지 처리를 해봅시다.
-이 경우 3x3 kernel을 사용하는데요.
-Convolution kernel은 행렬의 각 항목이 렌더링하는 픽셀 주변에 있는 8개의 픽셀에 얼마나 곱할지 나타내는 3x3 행렬입니다.
-그런 다음 결과를 kernel의 가중치(kernel에 있는 모든 값의 합) 또는 1.0 중에 더 큰 값으로 나누는데요.
+이제 다른 픽셀을 참조하는 방법을 알았으니 컨볼루션 커널을 이용해서 일반적인 이미지 처리를 해봅시다.
+이 경우 3x3 커널을 사용하는데요.
+컨볼루션 커널은 행렬의 각 항목이 렌더링하는 픽셀 주변에 있는 8개의 픽셀에 얼마나 곱할지 나타내는 3x3 행렬입니다.
+그런 다음 결과를 커널의 가중치(커널에 있는 모든 값의 합) 또는 1.0 중에 더 큰 값으로 나누는데요.
 이에 관한 [제법 좋은 글](https://docs.gimp.org/2.10/en/gimp-filter-convolution-matrix.html)이 있습니다.
 그리고 C++로 직접 작성하면 어떤지 실제 코드를 보여주는 [다른 글](https://www.codeproject.com/KB/graphics/ImageConvolution.aspx)도 있습니다.
 
-우리의 경우 셰이더에서 해당 작업을 수행하므로 새로운 프래그먼트 셰이더가 필요합니다.
+우리는 셰이더에서 해당 작업을 수행하므로 새로운 프래그먼트 셰이더가 필요합니다.
 
     <script id="fragment-shader-2d" type="x-shader/x-fragment">
     precision mediump float;
@@ -198,12 +198,12 @@ Convolution kernel은 행렬의 각 항목이 렌더링하는 픽셀 주변에 �
         texture2D(u_image, v_texCoord + onePixel * vec2( 1,  1)) * u_kernel[8] ;
 
       // 합계를 가중치로 나누지만 rgb만을 사용
-      // Alpha는 1.0으로 설정
+      // 알파는 1.0으로 설정
       gl_FragColor = vec4((colorSum / u_kernelWeight).rgb, 1.0);
     }
     </script>
 
-자바스크립트에서 convolution kernel과 가중치를 제공해줘야 합니다.
+자바스크립트에서 컨볼루션 커널과 가중치를 제공해줘야 합니다.
 
      function computeKernelWeight(kernel) {
        var weight = kernel.reduce(function(prev, curr) {
@@ -226,7 +226,7 @@ Convolution kernel은 행렬의 각 항목이 렌더링하는 픽셀 주변에 �
      ...
 
 그리고 짜잔...
-Drop down 목록을 사용해서 다른 커널을 선택해보세요.
+드롭 다운 목록을 사용하여 다른 커널을 선택해보세요.
 
 {{{example url="../webgl-2d-image-3x3-convolution.html" }}}
 
@@ -237,11 +237,11 @@ Drop down 목록을 사용해서 다른 커널을 선택해보세요.
 <h3><code>u_image</code>는 설정되지 않습니다. 이건 어떻게 동작하나요?</h3>
 <p>
 유니폼은 0이 기본값이므로 u_image는 기본적으로 텍스처 유닛 0을 사용합니다.
-텍스처 유닛 0도 default active texture 이므로 bindTexture를 호출하면 텍스처가 텍스처 유닛 0에 할당됩니다.
+텍스처 유닛 0도 기본 활성 텍스처이기 때문에 <code>bindTexture</code>를 호출하면 텍스처 유닛 0에 텍스처가 할당됩니다.
 </p>
 <p>
 WebGL은 텍스처 유닛의 배열을 가지는데요.
-각 sampler uniform이 참조하는 텍스처 유닛을 설정하기 위해, 해당 sampler uniform의 location을 탐색한 다음, 참조할 텍스처 유닛의 인덱스로 설정합니다.
+각 샘플러 유니폼이 참조하는 텍스처 유닛을 설정하기 위해, 해당 샘플러 유니폼의 위치를 탐색한 다음, 참조할 텍스처 유닛의 인덱스로 설정합니다.
 </p>
 <p>예제:</p>
 <pre class="prettyprint showlinemods">
@@ -250,22 +250,22 @@ var u_imageLoc = gl.getUniformLocation(program, "u_image");
 gl.uniform1i(u_imageLoc, textureUnitIndex);
 </pre>
 <p>
-다른 unit에 texture를 설정하려면 <code>gl.activeTexture</code>를 호출하고 원하는 unit에 texture를 할당하면 됩니다.
+다른 유닛에 텍스처를 설정하려면 <code>gl.activeTexture</code>를 호출하고 원하는 유닛에 텍스처를 할당하면 됩니다.
 </p>
 <pre class="prettyprint showlinemods">
-// 텍스처 유닛 6에 someTexture 할당
+// 텍스처 유닛 6에 someTexture 바인딩
 gl.activeTexture(gl.TEXTURE6);
 gl.bindTexture(gl.TEXTURE_2D, someTexture);
 </pre>
 <p>이것도 동작합니다.</p>
 <pre class="prettyprint showlinemods">
 var textureUnitIndex = 6; // 텍스처 유닛 6 사용
-// 텍스처 유닛 6에 someTexture 할당
+// 텍스처 유닛 6에 someTexture 바인딩
 gl.activeTexture(gl.TEXTURE0 + textureUnitIndex);
 gl.bindTexture(gl.TEXTURE_2D, someTexture);
 </pre>
 <p>
-모든 WebGL 구현체들은 프래그먼트 셰이더에서 최소 8개의 텍스처 유닛을 지원해야 하지만 정점 셰이더에서는 0뿐 입니다.
+모든 WebGL 구현체들은 프래그먼트 셰이더에서 최소 8개의 텍스처 유닛을 지원해야 하지만 정점 셰이더에서는 최소 지원 개수가 없습니다.
 따라서 8개 이상을 사용하려면 <code>gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS)</code>를 호출해서 몇 개가 있는지 확인해야 하고, 정점 셰이더에서 텍스처를 사용하고 싶다면 <code>gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS)</code>를 호출해서 몇 개를 사용할 수 있는지 알아보세요.
 99% 이상의 기기들이 정점 셰이더에서 최소 4개 이상의 텍스처 유닛을 지원합니다.
 </p>
@@ -274,10 +274,10 @@ gl.bindTexture(gl.TEXTURE_2D, someTexture);
 <div class="webgl_bottombar">
 <h3>GLSL의 변수에서 a_, u_, v_ 접두사는 뭔가요?</h3>
 <p>
-그건 단순 명명 규칙입니다.
+이는 단순 명명 규칙입니다.
 필수는 아니지만 값이 어디서 왔는지 한 눈에 보기 쉽게 만들어 줍니다.
-a_는 버퍼에서 제공되는 데이터인 attribute입니다.
-u_는 셰이더에 입력하는 uniform이고, v_는  정점 셰이더에서 프래그먼트 셰이더로 전달되고 그려진 각 픽셀에 대해 정점 사이가 보간(또는 가변)되는 값인 varying입니다.
+a_는 버퍼에서 제공되는 데이터인 속성입니다.
+u_는 셰이더에 입력하는 유니폼이고, v_는 정점 셰이더에서 프래그먼트 셰이더로 전달되고 그려진 각 픽셀에 대해 정점 사이가 보간(또는 가변)되는 값인 varying입니다.
 더 자세한 내용은 <a href="webgl-how-it-works.html">동작 원리</a>를 봐주세요.
 </p>
 </div>

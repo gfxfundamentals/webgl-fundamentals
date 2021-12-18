@@ -106,7 +106,7 @@ Canvas 2D API는 `drawImage`라는 이미지를 그리는 용도의 굉장히 �
       var tex = gl.createTexture();
       gl.bindTexture(gl.TEXTURE_2D, tex);
 
-      // 모든 이미지가 2의 거듭 제곱이 아니라고 가정
+      // 모든 이미지가 2의 거듭제곱이 아니라고 가정
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);

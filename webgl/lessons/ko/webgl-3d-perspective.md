@@ -1,27 +1,27 @@
-Title: WebGL 3D Perspective
-Description: WebGL에서 3D로 perspective를 나타내는 방법
-TOC: 3D Perspective
+Title: WebGL 3D 원근 투영
+Description: WebGL에서 3D로 원근을 나타내는 방법
+TOC: 3D 원근 투영
 
 
 이 포스트는 WebGL 관련 시리즈에서 이어집니다.
 첫 번째는 [기초](webgl-fundamentals.html)로 시작했고, 이전에는 [3D 기초](webgl-3d-orthographic.html)에 관한 것이었습니다.
 아직 읽지 않으셨다면 해당 글들을 먼저 읽어주세요.
 
-지난 포스트에서 어떻게 3D를 하는지 살펴봤지만 해당 3D는 어떤 perspective도 가지지 않았는데요.
-"Orthographic"이라 불리는 방법을 사용했는데 이건 사람들이 "3D"를 말할 때 일반적으로 원하는 게 아닙니다.
+지난 포스트에서 어떻게 3D를 하는지 살펴봤지만 해당 3D는 어떤 원근감도 가지지 않았습니다.
+"직교 투영"이라 불리는 방법을 사용했는데 이건 사람들이 "3D"를 말할 때 일반적으로 원하는 게 아닙니다.
 
-대신에 perspective를 추가해야 합니다.
-Perspective가 뭘까요?
-기본적으로 더 멀리 있는 것들이 더 작게 보이는 기능입니다.
+대신에 원근법을 추가해야 합니다.
+원근법이 뭘까요?
+기본적으로 더 멀리 있는 것들이 더 작게 보이는 방법입니다.
 
 <img class="webgl_center noinvertdark" width="500" src="resources/perspective-example.svg" />
 
-위 예시를 보면 더 멀리 있는 것들이 더 작게 그려지는 걸 볼 수 있습니다.
-주어진 현재 샘플에서 더 멀리 있는 것들이 더 작게 보이도록 만드는 쉬운 방법은 클립 공간의 X와 Y를 Z로 나누는 겁니다.
+예시를 보면 더 멀리 있는 것들은 더 작게 그려지는 것을 볼 수 있습니다.
+현재 샘플에서 더 멀리 있는 것들이 더 작게 보이도록 만드는 쉬운 방법은 클립 공간의 X와 Y를 Z로 나누는 겁니다.
 
 (10, 15)에서 (20,15)까지 길이가 10인 선이 있다고 생각해보세요.
-현재 샘플에서 이건 10px의 길이로 그려질 겁니다.
-하지만 Z로 나눈다면
+현재 샘플에서 이 선은 10픽셀의 길이로 그려질 겁니다.
+하지만 Z로 나눈다면,
 
 <pre class="webgl_center">
 10 / 1 = 10
@@ -29,7 +29,7 @@ Perspective가 뭘까요?
 abs(10-20) = 10
 </pre>
 
-Z가 1일 경우 길이는 10px이 됩니다.
+Z가 1인 경우 길이는 10픽셀이 됩니다.
 
 <pre class="webgl_center">
 10 / 2 = 5
@@ -37,7 +37,7 @@ Z가 1일 경우 길이는 10px이 됩니다.
 abs(5 - 10) = 5
 </pre>
 
-Z가 2일 경우에는 5px이 되죠.
+Z가 2인 경우에는 5픽셀이 되죠.
 
 <pre class="webgl_center">
 10 / 3 = 3.333
@@ -47,7 +47,7 @@ abs(3.333 - 6.666) = 3.333
 
 Z가 증가할수록, 멀어질수록, 더 작게 그려지는 걸 볼 수 있습니다.
 클립 공간에서 나누면 Z가 더 작은 숫자(-1 ~ +1)이기 때문에 더 나은 결과를 얻을 수 있는데요.
-나누기 전에 Z를 fudgeFactor와 곱하면 주어진 거리에 따라 얼마나 작게 할지 조정할 수 있습니다.
+나누기 전에 Z를 `fudgeFactor`와 곱하면 주어진 거리에 따라 얼마나 작게 할지 조정할 수 있습니다.
 
 한 번 해봅시다.
 먼저 "fudgeFactor"를 곱한 뒤 Z로 나누도록 정점 셰이더를 수정합니다.
@@ -70,9 +70,9 @@ void main() {
 </script>
 ```
 
-참고로 Z가 -1에서 +1인 클립 공간에 있기 때문에, 0에서 +2 * fudgeFactor인 `zToDivideBy`를 얻기 위해 1을 더했습니다.
+참고로 Z가 -1에서 +1인 클립 공간에 있기 때문에, 0에서 +2 * `fudgeFactor`인 `zToDivideBy`를 얻기 위해 1을 더했습니다.
 
-또한 fudgeFactor를 설정할 수 있도록 코드를 업데이트해야 합니다.
+또한 `fudgeFactor`를 설정할 수 있도록 코드를 업데이트해야 합니다.
 
 ```
   ...
@@ -100,7 +100,7 @@ void main() {
 알아보기 힘들다면 Z로 나누는 코드를 추가하기 전 어떤 모습이었는지 보기 위해 "fudgeFactor" 슬라이더를 1.0에서 0.0으로 드래그해보세요.
 
 <img class="webgl_center" src="resources/orthographic-vs-perspective.png" />
-<div class="webgl_center">orthographic vs perspective</div>
+<div class="webgl_center">직교 투영 vs 원근 투영</div>
 
 WebGL은 정점 셰이더의 `gl_Position`에 할당한 x,y,z,w 값을 가져와 자동으로 w로 나눕니다.
 
@@ -118,10 +118,10 @@ void main() {
   // 나누려는 z 조정
   float zToDivideBy = 1.0 + position.z * u_fudgeFactor;
 
-  // x, y, z를 zToDivideBy로 나누기
+  // x, y, z를 "zToDivideBy"로 나누기
 *  gl_Position = vec4(position.xyz, zToDivideBy);
 
-  // 프래그먼트 셰이더로 color 전달
+  // 프래그먼트 셰이더로 색상 전달
   v_color = a_color;
 }
 </script>
@@ -143,7 +143,7 @@ WebGL이 자동으로 W로 나눈다는 사실이 유용한 이유는 뭘까요?
 0, 0, 0, 0,
 </pre></div>
 
-각 열을 다음과 같이 볼 수 있으며
+각 열을 다음과 같이 볼 수 있으며,
 
 <div class="webgl_math_center"><pre class="webgl_math">
 x_out = x_in * 1 +
@@ -167,7 +167,7 @@ w_out = x_in * 0 +
         w_in * 0 ;
 </pre></div>
 
-이를 단순화하면
+이를 단순화하면,
 
 <div class="webgl_math_center"><pre class="webgl_math">
 x_out = x_in;
@@ -185,7 +185,7 @@ w_out = z_in;
 0, 0, 0, 1,
 </pre></div>
 
-다음과 같이 W 계산이 바뀌고
+다음과 같이 W 계산이 바뀌고,
 
 <div class="webgl_math_center"><pre class="webgl_math">
 w_out = x_in * 0 +
@@ -194,13 +194,13 @@ w_out = x_in * 0 +
         w_in * 1 ;
 </pre></div>
 
-`w_in` = 1.0임을 알기 때문에
+`w_in` = 1.0인 것을 알기 때문에,
 
 <div class="webgl_math_center"><pre class="webgl_math">
 w_out = z_in + 1;
 </pre></div>
 
-마지막으로 행렬이 다음과 같으면 fudgeFactor을 다시 사용할 수 있는데
+마지막으로 행렬이 다음과 같으면 `fudgeFactor`를 다시 사용할 수 있는데,
 
 <div class="webgl_math_center"><pre class="webgl_math">
 1, 0, 0, 0,
@@ -209,7 +209,7 @@ w_out = z_in + 1;
 0, 0, 0, 1,
 </pre></div>
 
-이게 의미하는 건
+이게 의미하는 것은,
 
 <div class="webgl_math_center"><pre class="webgl_math">
 w_out = x_in * 0 +
@@ -218,7 +218,7 @@ w_out = x_in * 0 +
         w_in * 1 ;
 </pre></div>
 
-그리고 단순화해서
+그리고 단순화해서,
 
 <div class="webgl_math_center"><pre class="webgl_math">
 w_out = z_in * fudgeFactor + 1;
@@ -273,7 +273,7 @@ function makeZToWMatrix(fudgeFactor) {
 
 {{{example url="../webgl-3d-perspective-w-matrix.html" }}}
 
-기본적으로 모든 내용들은 Z로 나누는 게 perspective를 준다는 것과 WebGL이 편리하게 Z로 나누는 작업을 해준다는 걸 보여주기 위한 겁니다.
+기본적으로 모든 내용들은 Z로 나누는 게 원근감을 준다는 것과 WebGL이 편리하게 Z로 나누는 작업을 해준다는 걸 보여주기 위한 겁니다.
 
 하지만 여전히 몇 가지 문제가 있습니다.
 예를 들어 Z를 -100 정도로 설정하면 아래와 같은 애니메이션을 보게 됩니다.
@@ -289,7 +289,7 @@ WebGL은 X와 Y 혹은 +1에서 -1까지 클리핑하는 것처럼 Z도 클리�
 Z를 가져오고, 약간을 더하고, 어느정도 크기를 조정해야 하며, 원하는 범위를 -1에서 +1사이로 다시 매핑할 수 있습니다.
 
 멋진 점은 이 모든 단계를 하나의 행렬로 수행할 수 있다는 겁니다.
-더 좋은 건 `fudgeFactor`보다는 `fieldOfView`로 결정하고, 이를 위한 올바른 값을 계산하는 겁니다.
+더 좋은 것은 `fudgeFactor` 대신에 `fieldOfView`를 결정하고, 이를 위한 올바른 값을 계산하는 겁니다.
 
 다음은 행렬을 만드는 함수입니다.
 
@@ -311,8 +311,8 @@ var m4 = {
 ```
 
 이 행렬이 모든 변환을 수행할 겁니다.
-단위가 클립 공간 안에 있도록 조정되며, 각도별로 시야각을 선택할 수 있고, Z-clipping 공간을 선택할 수 있게 되는데요.
-원점(0, 0, 0)에 *눈*이나 *카메라*가 있다고 가정하고, `zNear`와 `fieldOfView`가 주어지면, `zNear`의 항목이 `Z = -1`이 되는데 필요한 값을 계산하며, 중심에서 위나 아래로 `fieldOfView`의 절반인 `zNear`의 항목은 각각 `Y = -1`과 `Y = 1`로 끝납니다.
+단위가 클립 공간 안에 있도록 조정되며, 각도별로 시야각을 선택할 수 있고, Z-클리핑 공간을 선택할 수 있게 되는데요.
+원점(0, 0, 0)에 *눈*이나 *카메라*가 있다고 가정하고, `zNear`와 `fieldOfView`가 주어지면, `zNear`의 항목이 `Z = -1`이 되는데 필요한 값을 계산하며, `fieldOfView`의 절반인 `zNear`의 위와 아래는 각각 `Y = -1`과 `Y = 1`이 됩니다.
 전달된 `aspect`를 곱하여 X에 사용할 값을 계산하는데요.
 일반적으로 디스플레이 영역의 `width / height`로 설정합니다.
 마지막으로 `zFar`의 항목이 `Z = 1`이 되도록 하기 위해 Z에서 얼마나 크기를 조정할지 알아냅니다.
@@ -334,7 +334,7 @@ var m4 = {
 이걸 보이게 하려면 절두체 안으로 옮겨야 합니다.
 F를 움직이면 되는데요.
 기존에는 (45, 150, 0)에 그리고 있었습니다.
-(-150, 0, -360)로 옮기고 오른쪽이 위로 보이도록 rotation을 설정합시다.
+이걸 (-150, 0, -360)로 옮기고 오른쪽이 위로 보이도록 회전을 설정합시다.
 
 이제 이걸 사용하려면 `m4.projection`에 대한 기존 호출을 `m4.perspective`에 대한 호출로 바꾸면 됩니다.
 
@@ -354,7 +354,7 @@ matrix = m4.scale(matrix, scale[0], scale[1], scale[2]);
 
 {{{example url="../webgl-3d-perspective-matrix.html" }}}
 
-다시 행렬 곱셉으로 돌아가서 시야각을 확보하고 Z space를 선택할 수 있습니다.
+다시 행렬 곱셉으로 돌아가서 시야각을 확보하고 Z 공간을 선택할 수 있습니다.
 아직 끝나지 않았지만 글이 너무 길어지고 있군요.
 다음은 [카메라](webgl-3d-camera.html)입니다.
 
@@ -366,13 +366,13 @@ matrix = m4.scale(matrix, scale[0], scale[1], scale[2]);
 </p>
 <p>
 그 이유는 마지막 샘플까지 <code>m4.projection</code> 함수가 픽셀에서 클립 공간으로 투영을 만들었기 때문입니다.
-이는 우리가 표시하고 있던 영역이 400x300px을 나타냈다는 걸 의미하는데요.
+이는 우리가 표시하고 있던 영역이 400x300픽셀을 나타냈다는 것을 의미하는데요.
 3D에서 '픽셀'을 사용하는 건 정말 의미가 없습니다.
 </p>
 <p>다시말해 0,0,0에서 F를 그리려고 했지만 회전하지 않는다면</p>
 <div class="webgl_center"><img src="resources/f-big-and-wrong-side.svg" style="width: 500px;"></div>
 <p>
-F는 원점에 왼쪽 상단 앞 모서리가 있게 됩니다.
+F는 원점의 왼쪽 상단 모서리의 앞쪽에 있게 됩니다.
 투영은 -Z를 향하지만 F는 +Z로 만들어졌죠.
 투영은 +Y가 위를 향하지만 F는 +Z가 아래를 향합니다.
 </p>
@@ -386,6 +386,6 @@ F의 크기가 150이고, <code>-zNear</code>에 무언가가 있을 때 뷰는 
 Z단위로 -360 움직이면 절두체의 내부로 이동합니다.
 또한 오른쪽이 위쪽에 오도록 회전했습니다.
 </p>
-<div class="webgl_center"><img src="resources/f-right-side.svg" style="width: 500px;"><div>Scale 없음</div></div>
+<div class="webgl_center"><img src="resources/f-right-side.svg" style="width: 500px;"><div>스케일 없음</div></div>
 </div>
 

@@ -11,7 +11,7 @@ TOC: 데이터 텍스처
 이번 글에서는 이미지 대신 자바스크립트에서 직접 데이터를 생성할 겁니다.
 
 자바스크립트에서 텍스처 데이터를 생성하는 것은 굉장히 간단합니다.
-기본적으로 WebGL1은 텍스처의 몇 가지 type만 지원하는데
+기본적으로 WebGL1은 텍스처의 몇 가지 타입만 지원하는데
 
 <div class="webgl_center">
   <table class="tabular-data tabular-data1">
@@ -53,7 +53,7 @@ function setTexcoords(gl) {
         ...
 ```
 
-그런 다음 텍스처 생성 코드를 수정하는데
+그런 다음 텍스처 생성 코드를 수정하는데,
 
 ```
 // 텍스처 생성
@@ -97,7 +97,7 @@ gl.texImage2D(
   data
 );
 
-// 필터링을 설정했으므로 mip은 필요없으며 필터링되지 않습니다.
+// 필터링을 설정했기 때문에 밉맵이 필요없고 필터링되지 않습니다.
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
@@ -131,7 +131,7 @@ WebGL은 기본적으로 한 번에 4바이트를 사용하므로 각 데이터 
     const alignment = 1;
     gl.pixelStorei(gl.UNPACK_ALIGNMENT, alignment);
 
-1, 2, 4, 8이 alignment에 유효한 값입니다.
+1, 2, 4, 8이 `alignment`에 유효한 값입니다.
 
 WebGL에서 정렬된 데이터와 비정렬 데이터 사이의 속도 차이를 측정할 수 없다고 생각합니다.
 이 문제가 새로운 사용자들에게 영향을 주지 않도록 4가 아닌 1을 기본값으로 하고 싶지만, OpenGL과의 호환성을 유지하기 위해 기본값은 유지되어야 했습니다.
@@ -143,15 +143,15 @@ WebGL에서 정렬된 데이터와 비정렬 데이터 사이의 속도 차이�
 이 부분을 다뤘으니 이제 [텍스처 렌더링](webgl-render-to-texture.html)으로 넘어갑시다.
 
 <div class="webgl_bottombar">
-<h3>Pixel vs Texel</h3>
+<h3>픽셀 vs 텍셀</h3>
 <p>
-가끔씩 texture의 pixel이 texel로 불리는데요.
+가끔씩 텍스처의 픽셀이 텍셀로 불리는데요.
 Pixel은 Picture Element의 줄임말입니다.
 Texel은 Texture Element의 줄임말이죠.
 </p>
 <p>
-물론 그래픽 전문가들의 말에 귀 기울일 것이지만, 제가 아는 한 "texel"은 전문 용어의 한 예시입니다.
-개인적으로 저는 별생각 없이 texture element를 언급할 때 일반적으로 "pixel"을 사용합니다 &#x1f607;
+물론 그래픽 전문가들의 말에 귀 기울일 것이지만, 제가 아는 한 "텍셀"은 전문 용어의 한 예시입니다.
+개인적으로 저는 별생각 없이 텍스처 요소를 언급할 때 일반적으로 "픽셀"을 사용합니다 &#x1f607;
 </p>
 </div>
 

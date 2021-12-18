@@ -67,7 +67,7 @@ WebGL에서 대부분의 숫자는 32비트에 불과한데요.
 음 하나는 그냥 `highp`를 사용하고 이에 대해 걱정하지 않을 수 있습니다.
 `highp`를 지원하지 않는 기기를 가진 사용자는 아마 페이지를 잘 실행시킬 수 없는 오래되고 느린 기기를 가져서 목표 고객이 아닐 수 있습니다.
 
-또 다른 쉬운 방법은 `highp`를 기본값으로 하되 기기에서 `highp`를 지원하지 않는 경우 `mediump`로 fallback하는 겁니다.
+또 다른 쉬운 방법은 `highp`를 기본값으로 하되 기기에서 `highp`를 지원하지 않는 경우 `mediump`로 폴백하는 겁니다.
 프래그먼트 셰이더에서 `GL_FRAGMENT_PRECISION_HIGH` 전처리 매크로를 사용하면 됩니다.
 
 ```glsl
@@ -108,7 +108,7 @@ uniform vec4 u_color;
 uniform float u_shininess;
 
 void main() {
-  // v_normal이 varying이기 때문에 보간되며 단위 벡터가 아닙니다.
+  // v_normal이 베링이기 때문에 보간되며 단위 벡터가 아닙니다.
   // 정규화하면 다시 단위 벡터가 됩니다.
   vec3 normal = normalize(v_normal);
 
@@ -117,7 +117,7 @@ void main() {
 
   gl_FragColor = u_color;
 
-  // 색상 일부(alpha 제외)에 조명 곱하기
+  // 색상 일부(알파 제외)에 조명 곱하기
   gl_FragColor.rgb *= light;
 
 #ifdef GL_FRAGMENT_PRECISION_HIGH
@@ -226,10 +226,10 @@ x, y, z 중 하나라도 1000이면 1000*1000은 1000000인데요.
 예를 들어
 
 ```glsl
-uniform mediump vec4 color;  // uniform
-attribute lowp vec4 normal;  // attribute
-varying lowp vec4 texcoord;  // varying
-lowp float foo;              // variable
+uniform mediump vec4 color;  // 유니폼
+attribute lowp vec4 normal;  // 속성
+varying lowp vec4 texcoord;  // 베링
+lowp float foo;              // 변수
 ```
 
 ## 캔버스 정밀도 문제
@@ -246,7 +246,7 @@ const bitsInCanvas =
     gl.getParameter(gl.ALPHA_BITS);
 ```
 
-이건 실제로 현재 바인딩된 프레임 버퍼 color attachment나, 프레임 버퍼가 첨부되지 않았다면 캔버스에서, 채널의 bit depth를 반환합니다.
+이건 실제로 현재 바인딩된 프레임 버퍼 색상 어태치먼트나, 프레임 버퍼가 첨부되지 않았다면 캔버스에서, 채널의 bit depth를 반환합니다.
 
 {{{example url="../webgl-precision-check-canvas-bits.html"}}}
 

@@ -13,18 +13,18 @@ WebGL 관련 주제에 대한 무작위 질문 및 답변 링크 모음
 
 ---
 
-* [GPU의 vertex 및 fragment 처리에 대한 부하를 표시하는 간단한 방법이 있나요?](webgl-qna-a-simple-way-to-show-the-load-on-the-gpu-s-vertex-and-fragment-processing-.html)
+* [GPU의 정점과 프래그먼트 처리에 대한 부하를 표시하는 간단한 방법이 있나요?](webgl-qna-a-simple-way-to-show-the-load-on-the-gpu-s-vertex-and-fragment-processing-.html)
 * [WebGL에서 두꺼운 선을 그리는 방법](https://mattdesl.svbtle.com/drawing-lines-is-hard)
 * [기본 행렬 변환으로 FPS같은 카메라 움직임](webgl-qna-fps-like-camera-movement-with-basic-matrix-transformations.html)
 * [WebGL에서 텍스처와 함께 색상도 사용할 수 있나요?](webgl-qna-how-to-use-texture--and-color-also-in-webgl-.html)
-* [coloring과 texturing를 지원하기 위한 GLSL 셰이더](webgl-qna-glsl-shader-to-support-coloring-and-texturing.html)
+* [컬러링과 텍스처링을 지원하기 위한 GLSL 셰이더](webgl-qna-glsl-shader-to-support-coloring-and-texturing.html)
 
 ---
 
-* [어떻게 텍스처 배열을 WebGL shader uniform에 바인딩하나요?](webgl-qna-how-to-bind-an-array-of-textures-to-a-webgl-shader-uniform-.html)
-* [일괄 처리 시 각 sprite의 alpha 값 전달하기](webgl-qna-passing-in-per-sprite-alpha-values-when-batching.html)
+* [어떻게 텍스처 배열을 WebGL 셰이더 유니폼에 바인딩하나요?](webgl-qna-how-to-bind-an-array-of-textures-to-a-webgl-shader-uniform-.html)
+* [일괄 처리 시 각 스프라이트의 알파 값 전달하기](webgl-qna-passing-in-per-sprite-alpha-values-when-batching.html)
 * [이 GLSL 프래그먼트 셰이더가 뭘 하는지 설명해주실 수 있는 분 있나요?](webgl-qna-can-anyone-explain-what-this-glsl-fragment-shader-is-doing-.html)
-* [WebGL 2D tilemap](webgl-qna-webgl-2d-tilemaps.html)
+* [WebGL 2D 타일맵](webgl-qna-webgl-2d-tilemaps.html)
 * [전체 이미지의 최소/최대 값 결정하기](webgl-qna-determine-min-max-values-for-the-entire-image.html)
 
 ---
@@ -32,7 +32,7 @@ WebGL 관련 주제에 대한 무작위 질문 및 답변 링크 모음
 * [단일 그리기 호출로 다양한 모델 그리기](webgl-qna-drawing-many-different-models-in-a-single-draw-call.html)
 * [WebGL에서 FPS 기록](webgl-qna-recording-fps-in-webgl.html)
 * [웹 기반의 음악 visualizer를 작성하는 방법](webgl-qna-how-to-write-a-web-based-music-visualizer.html)
-* [오디오 데이터를 shader로 가져오는 방법](webgl-qna-how-to-get-audio-data-into-a-shader.html)
+* [오디오 데이터를 셰이더로 가져오는 방법](webgl-qna-how-to-get-audio-data-into-a-shader.html)
 * [순수 WebGL 점선](webgl-qna-pure-webgl-dashed-line.html)
 * [WebGL에서 scene의 객체에 확대/축소 및 중지](webgl-qna-zooming-to-and-stopping-at-object-in-a-scene-in-webgl.html)
 
@@ -66,7 +66,7 @@ WebGL 관련 주제에 대한 무작위 질문 및 답변 링크 모음
 * [프래그먼트 셰이더에서 잘린 삼각형을 감지하는 방법](webgl-qna-how-to-detect-clipped-triangles-in-the-framgment-shader.html)
 * [많은 원을 그리는 가장 빠른 방법](webgl-qna-the-fastest-way-to-draw-many-circles.html)
 * [instanced rendering 정렬 및 최적화](webgl-qna-sorting-and-optimizing-instanced-rendering.html)
-* [이미지에 alpha 채널이 있는지 확인하는 방법](webgl-qna-how-to-tell-if-an-image-has-an-alpha-channel.html)
+* [이미지에 알파 채널이 있는지 확인하는 방법](webgl-qna-how-to-tell-if-an-image-has-an-alpha-channel.html)
 
 ---
 
@@ -111,7 +111,7 @@ WebGL 관련 주제에 대한 무작위 질문 및 답변 링크 모음
 ---
 
 * [1000개의 선분 중 각 점에 가장 가까운 500개의 점을 계산하려면 어떻게 해야 하나요?](webgl-qna-how-can-i-compute-for-500-points-which-of-1000-line-segments-is-nearest-to-each-point-.html)
-* [캔버스의 중앙에서 perspective 소실점을 움직이려면 어떻게 해야 하나요?](webgl-qna-how-can-i-move-the-perspective-vanishing-point-from-the-center-of-the-canvas-.html)
+* [캔버스의 중앙에서 원근 소실점을 움직이려면 어떻게 해야 하나요?](webgl-qna-how-can-i-move-the-perspective-vanishing-point-from-the-center-of-the-canvas-.html)
 * [일반화된 정점 및 프래그먼트 셰이더의 개념이 있나요?](webgl-qna-is-there-the-notion-of-a-generalized-vertex-and-fragment-shader-.html)
 * [Scene의 평균 밝기를 어떻게 결정하나요?](webgl-qna-how-to-determine-the-average-brightness-in-a-scene-.html)
 * [3D 모델의 원점은 뭔가요?](webgl-qna-what-is-the-local-origin-of-a-3d-model-.html)
@@ -125,7 +125,7 @@ WebGL 관련 주제에 대한 무작위 질문 및 답변 링크 모음
 ## WebGL2
 
 * [WebGL2에서 픽셀 좌표로 텍스처 접근하기](webgl-qna-accessing-textures-by-pixel-coordinate-in-webgl2.html)
-* [어떻게 모든 uniform과 uniformBlock을 얻을 수 있나요](webgl-qna-how-can-i-get-all-the-uniforms-and-uniformblocks.html)
+* [어떻게 모든 유니폼과 유니폼 블록을 얻을 수 있나요](webgl-qna-how-can-i-get-all-the-uniforms-and-uniformblocks.html)
 * [어떻게 16비트 데이터의 16비트 히스토그램을 만들 수 있나요](webgl-qna-how-can-i-create-a-16bit-historgram-of-16bit-data.html)
 * [particle 위치를 처리하는 방법](webgl-qna-how-to-process-particle-positions.html)
 

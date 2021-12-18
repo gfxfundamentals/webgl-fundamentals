@@ -3,7 +3,7 @@ Description: 다중 뷰 그리기
 TOC: 다중 뷰, 다중 캔버스
 
 
-이 글은 예제를 정리하기 위해 [less code more fun](webgl-less-code-more-fun.html)에서 언급한 라이브러리를 사용합니다.
+이 글은 예제를 정리하기 위해 [유틸리티 함수에 대한 글](webgl-less-code-more-fun.html)에서 언급한 라이브러리를 사용합니다.
 `webglUtils.setBuffersAndAttributes`라는 함수가 버퍼와 속성을 설정하는 게 어떤 의미인지, `webglUtils.setUniforms`라는 함수가 유니폼을 설정하는 게 어떤 의미인지 모르겠다면, 뒤로 돌아가 [기초](webgl-fundamentals.html)를 먼저 읽어주세요.
 
 같은 장면을 여러 뷰로 그리고 싶다고 가정했을 때, 어떻게 할 수 있을까요?
@@ -397,16 +397,16 @@ const bufferInfos = [
   primitives.createSphereBufferInfo(
       gl,
       0.5,  // 반지름
-      8,    // subdivisions around
-      6,    // subdivisions down
+      8,    // 둘레 세분화
+      6,    // 수직 세분화
   ),
   primitives.createTruncatedConeBufferInfo(
       gl,
       0.5,  // 아래쪽 반지름
       0,    // 위쪽 반지름
       1,    // 높이
-      6,    // subdivisions around
-      1,    // subdivisions down
+      6,    // 둘레 세분화
+      1,    // 수직 세분화
   ),
 ];
 ```

@@ -17,7 +17,7 @@ WebGL에서는 텍스처로 사용하기 위해 이미지를 다운로드한 다
     function loadImageAndCreateTextureInfo(url) {
       var tex = gl.createTexture();
       gl.bindTexture(gl.TEXTURE_2D, tex);
-      // 텍스처를 1x1 파랑 픽셀로 채우기
+      // 텍스처를 1x1 파란 픽셀로 채우기
       gl.texImage2D(
         gl.TEXTURE_2D,
         0,
@@ -30,7 +30,7 @@ WebGL에서는 텍스처로 사용하기 위해 이미지를 다운로드한 다
         new Uint8Array([0, 0, 255, 255])
       );
 
-      // 모든 이미지가 2의 거듭 제곱이 아니라고 가정
+      // 모든 이미지가 2의 거듭제곱이 아니라고 가정
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
@@ -53,7 +53,7 @@ WebGL에서는 텍스처로 사용하기 위해 이미지를 다운로드한 다
       return textureInfo;
     }
 
-문제는 이미지에 개인 데이터(에를 들어 캡차, 서명, 노출 사진, ...)가 있을 수 있다는 겁니다.
+문제는 이미지에 개인 데이터(에를 들어 캡차, 서명, 노출 사진)가 있을 수 있다는 겁니다.
 웹 페이지에는 페이지를 직접 제어하지 않는 광고와 기타 요소들이 있으므로 브라우저는 이러한 개인 이미지를 볼 수 없도록 해야 합니다.
 
 이미지가 브라우저에 표시되더라도 스크립트는 이미지 내부의 데이터를 볼 수 없기 때문에 `<img src="private.jpg">`만 사용하는 것은 괜찮습니다.
@@ -94,7 +94,7 @@ CORS는 웹 페이지에 이미지 사용 권한을 이미지 서버에 요청�
 `crossOrigin`에 설정할 수 있는 값에는 3가지가 있습니다.
 하나는 "권한을 요청하지 않음"을 의미하는 기본값인 `undefined`입니다.
 다른 하나는 권한을 요청하지만 추가 정보를 보내지 않음을 의미하는 `"anonymous"`입니다.
-마지막은 서버가 권한을 부여할지 말지 결정하기 위해 살펴보는 cookie와 기타 정보 전송을 의미하는 `"use-credentials"`입니다.
+마지막은 서버가 권한을 부여할지 말지 결정하기 위해 살펴보는 쿠키와 기타 정보 전송을 의미하는 `"use-credentials"`입니다.
 그 외 다른 값으로 `crossOrigin`을 설정하면 `anonymous`로 설정한 것과 같습니다.
 
 로드하려는 이미지가 동일한 origin에 있는지 확인하고 그렇다면 `crossOrigin` 속성을 설정하는 함수를 만들 수 있습니다.
@@ -124,7 +124,7 @@ Github page, flickr.com, imgur.com 등은 권한을 부여하지만, 대부분�
 
 <div class="webgl_bottombar">
 <h3>Apache에 CORS 권한 부여</h3>
-<p>Apache로 웹 사이트를 운영하고 mod_rewrite 플러그인이 설치되어 있다면 putting으로 전체적인 CORS 지원을 허용할 수 있습니다.</p>
+<p>Apache로 웹 사이트를 운영하고 mod_rewrite 플러그인이 설치되어 있다면 전체적인 CORS 지원을 허용할 수 있습니다.</p>
 <pre class="prettyprint">
     Header set Access-Control-Allow-Origin "*"
 </pre>

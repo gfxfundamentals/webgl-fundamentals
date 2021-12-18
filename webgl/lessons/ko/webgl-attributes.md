@@ -107,7 +107,7 @@ void main() {
 `gl.linkProgram(someProgram)`를 호출하여 정점 셰이더와 프래그먼트 셰이더를 연결할 때 WebGL(driver/GPU/browser)은 각 attribute에 사용할 index/location를 자체적으로 결정하는데요.
 수동(아래 참조)으로 location을 지정하지 않는 한 어떤 location을 선택할지 알 수 없습니다.
 오직 browser/driver/GPU에 달려있죠.
-따라서 position, texcoord, normal에 어떤 attribute를 사용했는지 물어봐야 합니다.
+따라서 위치, 텍스처 좌표, 법선에 어떤 속성을 사용했는지 물어봐야 합니다.
 `gl.getAttribLocation`을 호출하면 되는데
 
 ```js
@@ -123,7 +123,7 @@ const normalLoc = gl.getAttribLocation(program, 'normal');
 예제:
 
 ```js
-// attribute #7을 사용해 `position`을 할당하도록 `gl.linkProgram`에 지시
+// 속성 #7을 사용해 "position"을 할당하도록 "gl.linkProgram"에 지시
 gl.bindAttribLocation(program, 7, 'position');
 ```
 
@@ -236,5 +236,5 @@ WebGL은 적어도 8개의 attribute가 지원되어야 하지만 특정 compute
 const maxAttributes = gl.getParameter(gl.MAX_VERTEX_ATTRIBS);
 ```
 
-8개보다 많이 사용하기로 결정했다면 실제로 얼마나 지원되는지 확인하고 컴퓨터가 충분히 가지고 있지 않다면 사용자에게 알리거나 더 간단한 셰이더로 fallback하는 게 좋습니다.
+8개보다 많이 사용하기로 결정했다면 실제로 얼마나 지원되는지 확인하고 컴퓨터가 충분히 가지고 있지 않다면 사용자에게 알리거나 더 간단한 셰이더로 폴백하는 게 좋습니다.
 

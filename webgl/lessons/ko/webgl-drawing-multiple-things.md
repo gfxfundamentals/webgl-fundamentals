@@ -3,7 +3,7 @@ Description: WebGL에서 다른 종류의 여러 물체를 그리는 방법
 TOC: 여러 물체 그리기
 
 
-이 글은 [이전 글](webgl-fundamentals.html)에서 이어집니다.
+이 글은 [기초](webgl-fundamentals.html)에서 이어집니다.
 아직 읽지 않았다면 거기부터 시작하는 게 좋습니다.
 
 처음으로 WebGL에서 무언가를 한 다음 물어보는 대다수의 공통적인 질문 중 하나는 어떻게 여러 물체를 그리는가 입니다.
@@ -47,14 +47,14 @@ WebGL은 두 번째 방법으로 동작하는데요.
 
 초기화할 때
 
-*   모든 셰이더와 프로그램을 만들고 location 탐색
+*   모든 셰이더와 프로그램을 만들고 위치 탐색
 *   버퍼를 생성하고 정점 데이터 업로드
 *   텍스처를 생성하고 텍스처 데이터 업로드
 
 렌더링할 때
 
-*   Viewport와 전역 상태를 지우고 설정
-    (depth testing 활성화, culling 활성화, 등등..)
+*   뷰포트와 전역 상태를 지우고 설정
+    (깊이 테스트 활성화, 컬링 활성화, 등등..)
 *   그리려는 각각에 대해
     *   그려야 하는 프로그램에 대해 `gl.useProgram` 호출
     *   그리려는 것에 대한 속성 설정
@@ -73,10 +73,10 @@ WebGL은 두 번째 방법으로 동작하는데요.
 큐브와 구체 그리고 원뿔입니다.
 
 큐브, 구체, 원뿔 데이터를 계산하는 방법에 대해 자세히 설명하진 않겠습니다.
-그냥 이들을 생성하는 함수가 있고 [이전 글](webgl-less-code-more-fun.html)에서 설명한 bufferInfo 객체가 반환된다고 가정해봅시다.
+그냥 이들을 생성하는 함수가 있고 [이전 글](webgl-less-code-more-fun.html)에서 설명한 `bufferInfo` 객체가 반환된다고 가정해봅시다.
 
 여기 해당 코드입니다.
-정점 색상을 곱하기 위해 `u_colorMult`를 추가한 걸 제외하고는 [perspective 예제](webgl-3d-perspective.html)와 같은 간단한 셰이더입니다.
+정점 색상을 곱하기 위해 `u_colorMult`를 추가한 걸 제외하고는 [원근 투영 예제](webgl-3d-perspective.html)와 같은 간단한 셰이더입니다.
 
     // 정점 셰이더에서 전달됩니다.
     varying vec4 v_color;
@@ -90,7 +90,7 @@ WebGL은 두 번째 방법으로 동작하는데요.
 
 초기화할 때
 
-    // 그리려는 각각에 대한 uniform
+    // 그리려는 각각에 대한 유니폼
     var sphereUniforms = {
       u_colorMult: [0.5, 1, 0.5, 1],
       u_matrix: m4.identity(),
@@ -104,7 +104,7 @@ WebGL은 두 번째 방법으로 동작하는데요.
       u_matrix: m4.identity(),
     };
 
-    // 각 객체에 대한 translation
+    // 각 객체에 대한 평행 이동
     var sphereTranslation = [  0, 0, 0];
     var cubeTranslation   = [-40, 0, 0];
     var coneTranslation   = [ 40, 0, 0];
@@ -122,7 +122,7 @@ WebGL은 두 번째 방법으로 동작하는데요.
 
     gl.useProgram(programInfo.program);
 
-    // 필요한 모든 attribute 설정
+    // 필요한 모든 속성 설정
     webglUtils.setBuffersAndAttributes(gl, programInfo, sphereBufferInfo);
 
     sphereUniforms.u_matrix = computeMatrix(
@@ -131,14 +131,14 @@ WebGL은 두 번째 방법으로 동작하는데요.
       sphereXRotation,
       sphereYRotation);
 
-    // 계산한 uniform 설정
+    // 계산한 유니폼 설정
     webglUtils.setUniforms(programInfo, sphereUniforms);
 
     gl.drawArrays(gl.TRIANGLES, 0, sphereBufferInfo.numElements);
 
     // ------ 큐브 그리기 --------
 
-    // 필요한 모든 attribute 설정
+    // 필요한 모든 속성 설정
     webglUtils.setBuffersAndAttributes(gl, programInfo, cubeBufferInfo);
 
     cubeUniforms.u_matrix = computeMatrix(
@@ -147,14 +147,14 @@ WebGL은 두 번째 방법으로 동작하는데요.
       cubeXRotation,
       cubeYRotation);
 
-    // 계산한 uniform 설정
+    // 계산한 유니폼 설정
     webglUtils.setUniforms(programInfo, cubeUniforms);
 
     gl.drawArrays(gl.TRIANGLES, 0, cubeBufferInfo.numElements);
 
     // ------ 원뿔 그리기 --------
 
-    // 필요한 모든 attribute 설정
+    // 필요한 모든 속성 설정
     webglUtils.setBuffersAndAttributes(gl, programInfo, coneBufferInfo);
 
     coneUniforms.u_matrix = computeMatrix(
@@ -163,7 +163,7 @@ WebGL은 두 번째 방법으로 동작하는데요.
         coneXRotation,
         coneYRotation);
 
-    // 계산한 uniform 설정
+    // 계산한 유니폼 설정
     webglUtils.setUniforms(programInfo, coneUniforms);
 
     gl.drawArrays(gl.TRIANGLES, 0, coneBufferInfo.numElements);
@@ -178,7 +178,7 @@ WebGL은 두 번째 방법으로 동작하는데요.
 이 또한 단순화하기 좋은데요.
 실질적으로 갖춰야 할 3가지 주요 사항은 아래와 같습니다.
 
-1.  셰이더 프로그램 (그리고 유니폼과 속성의 info/setter)
+1.  셰이더 프로그램 (그리고 유니폼과 속성의 정보/설정자)
 2.  그리려는 것에 대한 버퍼와 속성
 3.  주어진 셰이더로 해당 물체를 그리는데 필요한 유니폼
 
@@ -240,10 +240,10 @@ WebGL은 두 번째 방법으로 동작하는데요.
 
       gl.useProgram(programInfo.program);
 
-      // 필요한 모든 attribute 설정
+      // 필요한 모든 속성 설정
       webglUtils.setBuffersAndAttributes(gl, programInfo, bufferInfo);
 
-      // Uniform 설정
+      // 유니폼 설정
       webglUtils.setUniforms(programInfo, object.uniforms);
 
       // 그리기
@@ -257,7 +257,7 @@ WebGL은 두 번째 방법으로 동작하는데요.
 
 몇 가지 기본적인 최적화가 있는데요.
 그리려는 프로그램이 이전에 그렸던 프로그램과 같다면 `gl.useProgram`을 호출할 필요가 없습니다.
-마찬가지로 이전에 그렸던 것과 동일한 shape/geometry/vertice을 그린다면 다시 설정할 필요가 없겠죠.
+마찬가지로 이전에 그렸던 것과 동일한 도형/지오메트리/정점을 그린다면 다시 설정할 필요가 없겠죠.
 
 따라서 다음과 같이 최적화할 수 있습니다.
 
@@ -274,17 +274,17 @@ WebGL은 두 번째 방법으로 동작하는데요.
         gl.useProgram(programInfo.program);
 
         // 프로그램이 사용하는 버퍼만 바인딩하기 때문에 프로그램이 바뀔 때마다 버퍼를 다시 바인딩해야 합니다.
-        // 따라서 2개의 프로그램이 동일한 bufferInfo를 사용하지만 첫 번째 버퍼가 위치만 사용하면 두 번째 버퍼로 전환할 때 속성 중 일부는 활성화되지 않을 겁니다.
+        // 따라서 2개의 프로그램이 동일한 "bufferInfo"를 사용하지만 첫 번째 버퍼가 위치만 사용하면 두 번째 버퍼로 전환할 때 속성 중 일부는 활성화되지 않을 겁니다.
         bindBuffers = true;
       }
 
-      // 필요한 모든 attribute 설정
+      // 필요한 모든 속성 설정
       if (bindBuffers || bufferInfo != lastUsedBufferInfo) {
         lastUsedBufferInfo = bufferInfo;
         webglUtils.setBuffersAndAttributes(gl, programInfo, bufferInfo);
       }
 
-      // Uniform 설정
+      // 유니폼 설정
       webglUtils.setUniforms(programInfo, object.uniforms);
 
       // 그리기
@@ -294,7 +294,7 @@ WebGL은 두 번째 방법으로 동작하는데요.
 이번엔 더 많은 객체를 그려 보겠습니다.
 이전처럼 3개 대신 그리는 목록을 더 크게 만들어봅시다.
 
-    // 무작위로 선택하기 쉽도록 shape를 배열에 넣기
+    // 무작위로 선택하기 쉽도록 도형을 배열에 넣기
     var shapes = [
       sphereBufferInfo,
       cubeBufferInfo,
@@ -305,10 +305,10 @@ WebGL은 두 번째 방법으로 동작하는데요.
     var objectsToDraw = [];
     var objects = [];
 
-    // 각 객체에 대한 uniform
+    // 각 객체에 대한 유니폼
     var numObjects = 200;
     for (var ii = 0; ii < numObjects; ++ii) {
-      // shape 선택
+      // 도형 선택
       var bufferInfo = shapes[rand(0, shapes.length) | 0];
 
       // 객체 만들기
@@ -356,20 +356,20 @@ WebGL은 두 번째 방법으로 동작하는데요.
 하나는 불투명 요소에 대한 목록입니다.
 다른 하나는 투명 요소에 대한 목록입니다.
 불투명 목록는 프로그램과 지오메트리로 정렬됩니다.
-투명 목록은 depth로 정렬됩니다.
-Overlay나 후처리 효과처럼 다른 것들에 대한 별도의 목록이 있을 수도 있습니다.
+투명 목록은 깊이로 정렬됩니다.
+오버레이나 후처리 효과처럼 다른 것들에 대한 별도의 목록이 있을 수도 있습니다.
 
 여기 <a href="../webgl-multiple-objects-list-optimized-sorted.html" target="_blank">정렬된 예제</a>입니다.
 제 컴퓨터에서는 비정렬일 때 ~31fps, 정렬일 때 ~37fps이 나옵니다.
 거의 20% 향상되었네요.
 하지만 이는 최악의 경우 vs 최고의 경우이며, 대부분의 프로그램은 더 많은 걸 수행하므로, 특별한 경우를 제외하고는 전부 고려할만한 가치가 없습니다.
 
-어떤 셰이더만으로는 어떤 geometry들은 그릴 수 없다는 점에 유의해야 합니다.
-예를 들어 법선이 필요한 셰이더는 법선이 없는 geometry에서 작동하지 않을 겁니다.
+일부 셰이더만으로는 일부 지오메트리를 그릴 수 없다는 점에 유의해야 합니다.
+예를 들어 법선이 필요한 셰이더는 법선이 없는 지오메트리에서 작동하지 않을 겁니다.
 마찬가지로 텍스처가 필요한 셰이더는 텍스처 없이는 작동하지 않습니다.
 
 이 모든 걸 처리하기 때문에 [Three.js](https://threejs.org)같은 3D 라이브러리를 선택하는 것이 좋습니다.
-몇 가지 geometry를 만들고, 어떻게 렌더링하고 싶은지 three.js에 지시하면, 런타임에 필요한 것들을 처리하기 위해 셰이더를 생성합니다.
+몇 가지 지오메트리를 만들고, 어떻게 렌더링하고 싶은지 three.js에 지시하면, 런타임에 필요한 것들을 처리하기 위해 셰이더를 생성합니다.
 Unity3D, Unreal, Source, Crytek 등 거의 모든 3D 엔진들이 이를 수행합니다.
 일부는 오프라인으로 생성되지만 중요한 점은 셰이더를 *생성*한다는 겁니다.
 
@@ -379,7 +379,7 @@ Unity3D, Unreal, Source, Crytek 등 거의 모든 3D 엔진들이 이를 수행�
 
 루프 안에 `computeMatrix`를 넣지 않았다는 걸 눈치채셨을 겁니다.
 이는 렌더링이 행렬 계산과 분리되어야 하기 때문인데요.
-일반적으로 [scene graph](webgl-scene-graph.html)에서 행렬을 계산하는데 이건 또 다른 글에서 설명하겠습니다.
+일반적으로 [장면 그래프](webgl-scene-graph.html)에서 행렬을 계산하는데 이건 또 다른 글에서 설명하겠습니다.
 
 이제 여러 물체를 그리기 위한 프레임워크가 생겼으니 [텍스트](webgl-text-html.html)를 그려봅시다.
 

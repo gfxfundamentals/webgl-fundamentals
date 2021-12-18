@@ -3,12 +3,12 @@ Description: 텍스처를 평면으로 투영
 TOC: 평면 및 원근 투영 매핑
 
 
-이 글은 예제를 정리하기 위해 [less code more fun](webgl-less-code-more-fun.html)에서 언급된 라이브러리를 사용합니다.
-`webglUtils.setBuffersAndAttributes` 함수가 buffer와 attribute를 설정하는 것이나, `webglUtils.setUniforms` 함수가 uniform을 설정하는 게 무슨 의미인지 모르겠다면, 뒤로 돌아가서 [WebGL 기초](webgl-fundamentals.html)를 먼저 읽어주세요.
+이 글은 예제를 정리하기 위해 [유틸리티 함수에 대한 글](webgl-less-code-more-fun.html)에서 언급한 라이브러리를 사용합니다.
+`webglUtils.setBuffersAndAttributes` 함수가 버퍼와 속성을 설정하는 것이나, `webglUtils.setUniforms` 함수가 유니폼을 설정하는 게 무슨 의미인지 모르겠다면, 뒤로 돌아가서 [WebGL 기초](webgl-fundamentals.html)를 먼저 읽어주세요.
 
-또한 [perspective](webgl-3d-perspective.html), [카메라](webgl-3d-camera.html), [텍스처](webgl-3d-textures.html), [카메라 시각화](webgl-visualizing-the-camera.html)에 대한 글을 읽었다고 가정하기 때문에 읽지 않았다면 먼저 읽어주세요.
+또한 [원근](webgl-3d-perspective.html), [카메라](webgl-3d-camera.html), [텍스처](webgl-3d-textures.html), [카메라 시각화](webgl-visualizing-the-camera.html)에 대한 글을 읽었다고 가정하기 때문에 읽지 않았다면 먼저 읽어주세요.
 
-투영 매핑은 영사기가 스크린을 향하게 하고 영화를 투사하는 것과 같은 의미로 "projecting" 방법입니다.
+투영 매핑은 영사기가 스크린을 향하게 하고 영화를 투사하는 것과 같은 의미로 "투영" 방법입니다.
 영사기는 투시면을 투사하는데요.
 스크린이 영사기에서 멀어질수록 이미지는 더 커집니다.
 영사기에 수직이 아니도록 스크린의 각도를 조정하면 결과는 사디리꼴이나 임의의 사변형이 됩니다.
@@ -47,7 +47,7 @@ void main() {
 }
 ```
 
-또한 uniform `u_colorMult`를 추가하여 텍스처 색상을 곱했습니다.
+또한 유니폼 `u_colorMult`를 추가하여 텍스처 색상을 곱했습니다.
 단색 텍스처를 만들면 이런 식으로 색상을 변경할 수 있습니다.
 
 ```glsl
@@ -75,15 +75,15 @@ const textureProgramInfo = webglUtils.createProgramInfo(gl, ['vertex-shader-3d',
 const sphereBufferInfo = primitives.createSphereBufferInfo(
     gl,
     1,  // 반지름
-    12, // subdivisions around
-    6,  // subdivisions down
+    12, // 둘레 세분화
+    6,  // 수직 세분화
 );
 const planeBufferInfo = primitives.createPlaneBufferInfo(
     gl,
     20,  // 너비
     20,  // 높이
-    1,   // subdivisions across
-    1,   // subdivisions down
+    1,   // 수평 세분화
+    1,   // 수직 세분화
 );
 ```
 
@@ -95,7 +95,7 @@ const checkerboardTexture = gl.createTexture();
 gl.bindTexture(gl.TEXTURE_2D, checkerboardTexture);
 gl.texImage2D(
     gl.TEXTURE_2D,
-    0,                // mip level
+    0,                // 밉 레벨
     gl.LUMINANCE,     // 내부 포맷
     8,                // 너비
     8,                // 높이
@@ -116,10 +116,10 @@ gl.generateMipmap(gl.TEXTURE_2D);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 ```
 
-그리기 위해 projection matrix와 camera matrix를 가져와서, camera matrix로 view matrix를 계산한 다음, 구체와 큐브를 그리는 함수를 만들겁니다.
+그리기 위해 투영 행렬와 카메라 행렬을 가져와서, 카메라 행렬로 뷰 행렬을 계산한 다음, 구체와 큐브를 그리는 함수를 만들겁니다.
 
 ```js
-// 각 객체에 대한 uniform
+// 각 객체에 대한 유니폼
 const planeUniforms = {
   u_colorMult: [0.5, 0.5, 1, 1],  // 하늘색
   u_texture: checkerboardTexture,
@@ -137,7 +137,7 @@ function drawScene(projectionMatrix, cameraMatrix) {
 
   gl.useProgram(textureProgramInfo.program);
 
-  // 구체와 평면이 공유하는 uniform 설정
+  // 구체와 평면이 공유하는 유니폼 설정
   webglUtils.setUniforms(textureProgramInfo, {
     u_view: viewMatrix,
     u_projection: projectionMatrix,
@@ -145,10 +145,10 @@ function drawScene(projectionMatrix, cameraMatrix) {
 
   // ------ 구체 그리기 --------
 
-  // 필요한 모든 attribute 설정
+  // 필요한 모든 속성 설정
   webglUtils.setBuffersAndAttributes(gl, textureProgramInfo, sphereBufferInfo);
 
-  // 구체에 고유한 uniform 설정
+  // 구체에 고유한 유니폼 설정
   webglUtils.setUniforms(textureProgramInfo, sphereUniforms);
 
   // gl.drawArrays 혹은 gl.drawElements 호출
@@ -156,10 +156,10 @@ function drawScene(projectionMatrix, cameraMatrix) {
 
   // ------ 평면 그리기 --------
 
-  // 필요한 모든 attribute 설정
+  // 필요한 모든 속성 설정
   webglUtils.setBuffersAndAttributes(gl, textureProgramInfo, planeBufferInfo);
 
-  // 평면에 고유한 uniform 설정
+  // 평면에 고유한 유니폼 설정
   webglUtils.setUniforms(textureProgramInfo, planeUniforms);
 
   // gl.drawArrays 혹은 gl.drawElements 호출
@@ -185,10 +185,10 @@ function render() {
   gl.enable(gl.CULL_FACE);
   gl.enable(gl.DEPTH_TEST);
 
-  // 캔버스와 depth buffer 지우기
+  // 캔버스와 깊이 버퍼 지우기
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-  // Projection matrix 계산
+  // 투영 행렬 계산
   const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
   const projectionMatrix =
       m4.perspective(fieldOfViewRadians, aspect, 1, 2000);
@@ -237,7 +237,7 @@ function loadImageTexture(url) {
     // 이제 이미지가 로드되었기 때문에 텍스처로 복사
     gl.bindTexture(gl.TEXTURE_2D, texture);
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, image);
-    // 텍스처가 2의 거듭 제곱이라 가정
+    // 텍스처가 2의 거듭제곱이라 가정
     gl.generateMipmap(gl.TEXTURE_2D);
     render();
   });
@@ -248,7 +248,7 @@ const imageTexture = loadImageTexture('resources/f-texture.png');
 ```
 
 [카메라 시각화에 대한 글](webgl-visualizing-the-camera.html)을 떠올려보면, -1에서 +1사이의 큐브를 만들고 카메라의 절두체를 나타내도록 그렸습니다.
-절두체 내부의 공간이 world space에서 -1에서 +1사이의 클립 공간으로 변환되는 world space 내부에 있는 절두체 모양의 영역을 나타내도록 행렬을 만들었는데요.
+절두체 내부의 공간이 월드 공간에서 -1에서 +1사이의 클립 공간으로 변환되는 월드 공간 내부에 있는 절두체 모양의 영역을 나타내도록 행렬을 만들었는데요.
 여기서도 비슷하게 할 수 있습니다.
 
 한 번 해봅시다.
@@ -268,7 +268,7 @@ uniform sampler2D u_texture;
 
 void main() {
 -  gl_FragColor = texture2D(u_texture, v_texcoord) * u_colorMult;
-+  // 올바른 값을 얻기 위해 w로 나누기 (Perspective에 대한 글 참고)
++  // 올바른 값을 얻기 위해 w로 나누기 (원근에 대한 글 참고)
 +  vec3 projectedTexcoord = v_projectedTexcoord.xyz / v_projectedTexcoord.w;
 +
 +  bool inRange = 
@@ -286,10 +286,10 @@ void main() {
 ```
 
 투영된 텍스처 좌표를 계산하기 위해 [카메라 시각화](webgl-visualizing-the-camera.html)에 대한 글의 특정 방향을 향하도록 배치된 카메라처럼 3D 공간을 나타내는 행렬을 만듭니다.
-그런 다음 해당 공간을 통해 구체의 world position과 평면 정점을 투영합니다.
+그런 다음 해당 공간을 통해 구체의 월드 위치와 평면 정점을 투영합니다.
 0과 1사이에 있을 때 방금 작성한 코드가 텍스처를 표시할 겁니다.
 
-이 *공간*을 통해 구체의 world position과 평면 정점을 투영하기 위해 정점 셰이더에 코드를 추가해봅시다.
+이 *공간*을 통해 구체의 월드 위치와 평면 정점을 투영하기 위해 정점 셰이더에 코드를 추가해봅시다.
 
 ```glsl
 attribute vec4 a_position;
@@ -309,7 +309,7 @@ void main() {
 -  gl_Position = u_projection * u_view * u_world * a_position;
 +  gl_Position = u_projection * u_view * worldPosition;
 
-  // 프래그먼트 셰이더로 texcoord 전달
+  // 프래그먼트 셰이더로 텍스처 좌표 전달
   v_texcoord = a_texcoord;
 
 +  v_projectedTexcoord = u_textureMatrix * worldPosition;
@@ -317,9 +317,9 @@ void main() {
 ```
 
 이제 남은 것은 이 상대적인 공간을 정의하는 행렬을 실제로 계산하는 겁니다.
-다른 객체들과 마찬가지로 world matrix를 계산한 다음 역행렬을 적용하면 되는데요.
-이는 이 공간에 상대적인 다른 객체들의 world position을 향하는 행렬을 제공할 겁니다.
-이건 [카메라에 대한 글](webgl-3d-camera.html)에서 사용한 view matrix와 완전히 동일합니다.
+다른 객체들과 마찬가지로 월드 행렬을 계산한 다음 역행렬을 적용하면 되는데요.
+이는 이 공간에 상대적인 다른 객체들의 월드 위치를 향하는 행렬을 제공할 겁니다.
+이건 [카메라에 대한 글](webgl-3d-camera.html)에서 사용한 뷰 행렬과 완전히 동일합니다.
 
 마찬가지로 [같은 글](webgl-3d-camera.html)에서 만들었던 `lookAt` 함수를 사용할 겁니다.
 
@@ -342,13 +342,13 @@ function drawScene(projectionMatrix, cameraMatrix) {
   let textureWorldMatrix = m4.lookAt(
       [settings.posX, settings.posY, settings.posZ],          // 위치
       [settings.targetX, settings.targetY, settings.targetZ], // 대상
-      [0, 1, 0],                                              // up
+      [0, 1, 0],                                              // 위쪽
   );
 
-  // 이 world matrix의 역행렬을 사용하여 다른 위치가 world space에 상대적으로 되도록 변환하는 행렬을 만듭니다.
+  // 이 월드 행렬의 역행렬을 사용하여 다른 위치가 월드 공간에 상대적으로 되도록 변환하는 행렬을 만듭니다.
   const textureMatrix = m4.inverse(textureWorldMatrix);
 
-  // 구체와 평면 모두에 동일한 uniform 설정
+  // 구체와 평면 모두에 동일한 유니폼 설정
   webglUtils.setUniforms(textureProgramInfo, {
     u_view: viewMatrix,
     u_projection: projectionMatrix,
@@ -361,9 +361,9 @@ function drawScene(projectionMatrix, cameraMatrix) {
 ```
 
 물론 꼭 `lookAt`을 사용하지 않아도 됩니다.
-예를 들어 [장면 그래프](webgl-scene-graph.html)나 [행렬 스택](webgl-2d-matrix-stack.html)을 사용하여 원하는대로 world matrix를 만들 수 있습니다.
+예를 들어 [장면 그래프](webgl-scene-graph.html)나 [행렬 스택](webgl-2d-matrix-stack.html)을 사용하여 원하는대로 월드 행렬을 만들 수 있습니다.
 
-실행 전에 몇 가지 scale을 추가해봅시다.
+실행 전에 몇 가지 스케일을 추가해봅시다.
 
 ```js
 const settings = {
@@ -386,14 +386,14 @@ function drawScene(projectionMatrix, cameraMatrix) {
   let textureWorldMatrix = m4.lookAt(
       [settings.posX, settings.posY, settings.posZ],          // 위치
       [settings.targetX, settings.targetY, settings.targetZ], // 대상
-      [0, 1, 0],                                              // up
+      [0, 1, 0],                                              // 위쪽
   );
 +  textureWorldMatrix = m4.scale(
 +      textureWorldMatrix,
 +      settings.projWidth, settings.projHeight, 1,
 +  );
 
-  // 이 world matrix의 역행렬을 사용하여 다른 위치가 world space에 상대적으로 되도록 변환하는 행렬을 만듭니다.
+  // 이 월드 행렬의 역행렬을 사용하여 다른 위치가 월드 공간에 상대적으로 되도록 변환하는 행렬을 만듭니다.
   const textureMatrix = m4.inverse(textureWorldMatrix);
 
   ...
@@ -450,15 +450,15 @@ const textureProgramInfo = webglUtils.createProgramInfo(gl, ['vertex-shader-3d',
 const sphereBufferInfo = primitives.createSphereBufferInfo(
     gl,
     1,  // 반지름
-    12, // subdivisions around
-    6,  // subdivisions down
+    12, // 둘레 세분화
+    6,  // 수직 세분화
 );
 const planeBufferInfo = primitives.createPlaneBufferInfo(
     gl,
     20,  // 너비
     20,  // 높이
-    1,   // subdivisions across
-    1,   // subdivisions down
+    1,   // 수평 세분화
+    1,   // 수직 세분화
 );
 +const cubeLinesBufferInfo = webglUtils.createBufferInfoFromArrays(gl, {
 +  position: [
@@ -504,13 +504,13 @@ function drawScene(projectionMatrix, cameraMatrix) {
 +
 +  gl.useProgram(colorProgramInfo.program);
 +
-+  // 필요한 모든 attribute 설정
++  // 필요한 모든 속성 설정
 +  webglUtils.setBuffersAndAttributes(gl, colorProgramInfo, cubeLinesBufferInfo);
 +
 +  // Z에서 큐브의 크기를 조정하기 때문에 무한대로 투영되는 텍스처를 나타내기 위해 정말 길어집니다.
 +  const mat = m4.scale(textureWorldMatrix, 1, 1, 1000);
 +
-+  // 계산한 uniform 설정
++  // 계산한 유니폼 설정
 +  webglUtils.setUniforms(colorProgramInfo, {
 +    u_color: [0, 0, 0, 1],
 +    u_view: viewMatrix,
@@ -532,7 +532,7 @@ function drawScene(projectionMatrix, cameraMatrix) {
 렌더링되는 객체의 각 픽셀에 대해 텍스처의 어느 부분이 거기에 투영되는지 확인한 다음 텍스처의 해당 부분에서 색상을 찾습니다.
 
 위의 영사기를 언급했는데 어떻게 영사기를 시뮬레이션할까요?
-기본적으로는 projection matrix로 곱할 수 있습니다.
+기본적으로는 투영 행렬로 곱할 수 있습니다.
 
 ```js
 const settings = {
@@ -559,7 +559,7 @@ function drawScene(projectionMatrix, cameraMatrix) {
   const textureWorldMatrix = m4.lookAt(
       [settings.posX, settings.posY, settings.posZ],          // 위치
       [settings.targetX, settings.targetY, settings.targetZ], // 대상
-      [0, 1, 0],                                              // up
+      [0, 1, 0],                                              // 위쪽
   );
 -  textureWorldMatrix = m4.scale(
 -      textureWorldMatrix,
@@ -570,26 +570,26 @@ function drawScene(projectionMatrix, cameraMatrix) {
 +      ? m4.perspective(
 +          degToRad(settings.fieldOfView),
 +          settings.projWidth / settings.projHeight,
-+          0.1,  // near
-+          200)  // far
++          0.1,  // 근거리
++          200)  // 원거리
 +      : m4.orthographic(
-+          -settings.projWidth / 2,   // left
-+           settings.projWidth / 2,   // right
-+          -settings.projHeight / 2,  // bottom
-+           settings.projHeight / 2,  // top
-+           0.1,                      // near
-+           200);                     // far
++          -settings.projWidth / 2,   // 왼쪽
++           settings.projWidth / 2,   // 오른쪽
++          -settings.projHeight / 2,  // 아래쪽
++           settings.projHeight / 2,  // 위쪽
++           0.1,                      // 근거리
++           200);                     // 원거리
 
-  // 이 world matrix의 역행렬을 사용하여 다른 위치가 world space에 상대적으로 되도록 변환하는 행렬을 만듭니다.
+  // 이 월드 행렬의 역행렬을 사용하여 다른 위치가 월드 공간에 상대적으로 되도록 변환하는 행렬을 만듭니다.
 -  const textureMatrix = m4.inverse(textureWorldMatrix);
 +  const textureMatrix = m4.multiply(
 +      textureProjectionMatrix,
 +      m4.inverse(textureWorldMatrix));
 ```
 
-참고로 perspective나 orthographic projection matrix를 사용하는 선택지가 있습니다.
+참고로 원근이나 직교 투영 행렬을 사용하는 선택지가 있습니다.
 
-또한 선을 그릴 때 해당 projection matrix를 사용해야 합니다.
+또한 선을 그릴 때 해당 투영 행렬을 사용해야 합니다.
 
 ```js
 // ------ 큐브 그리기 ------
@@ -599,7 +599,7 @@ function drawScene(projectionMatrix, cameraMatrix) {
 -// Z에서 큐브의 크기를 조정하기 때문에 무한대로 투영되는 텍스처를 나타내기 위해 정말 길어집니다.
 -const mat = m4.scale(textureWorldMatrix, 1, 1, 1000);
 
-+// Projection과 일치하도록 큐브 방향 조정
++// 투영과 일치하도록 큐브 방향 조정
 +const mat = m4.multiply(
 +    textureWorldMatrix, m4.inverse(textureProjectionMatrix));
 ```
@@ -608,7 +608,7 @@ function drawScene(projectionMatrix, cameraMatrix) {
 
 {{{example url="../webgl-planar-projection-with-projection-matrix-0-to-1.html"}}}
 
-작동은 하지만 projection과 cube line은 모두 0에서 1사이의 공간을 사용하므로 projection frustum의 1/4만 사용합니다.
+작동은 하지만 투영과 큐브 라인은 모두 0에서 1사이의 공간을 사용하므로 투영 절두체의 1/4만 사용합니다.
 
 수정을 위해 먼저 큐브를 모든 방향으로 -1에서 +1사이인 큐브로 만들어봅시다.
 
@@ -651,29 +651,29 @@ const cubeLinesBufferInfo = webglUtils.createBufferInfoFromArrays(gl, {
 });
 ```
 
-그런 다음 텍스처 행렬을 사용할 때 절두체 내부 공간을 0에서 1사이로 만들어야 하는데, 공간을 0.5만큼 offset하고 0.5로 scale하면 됩니다.
+그런 다음 텍스처 행렬을 사용할 때 절두체 내부 공간을 0에서 1사이로 만들어야 하는데, 공간을 0.5만큼 오프셋하고 0.5로 스케일링하면 됩니다.
 
 ```js
 const textureWorldMatrix = m4.lookAt(
     [settings.posX, settings.posY, settings.posZ],          // 위치
     [settings.targetX, settings.targetY, settings.targetZ], // 대상
-    [0, 1, 0],                                              // up
+    [0, 1, 0],                                              // 위쪽
 );
 const textureProjectionMatrix = settings.perspective
     ? m4.perspective(
         degToRad(settings.fieldOfView),
         settings.projWidth / settings.projHeight,
-        0.1,  // near
-        200)  // far
+        0.1,  // 근거리
+        200)  // 원거리
     : m4.orthographic(
-        -settings.projWidth / 2,   // left
-         settings.projWidth / 2,   // right
-        -settings.projHeight / 2,  // bottom
-         settings.projHeight / 2,  // top
-         0.1,                      // near
-         200);                     // far
+        -settings.projWidth / 2,   // 왼쪽
+         settings.projWidth / 2,   // 오른쪽
+        -settings.projHeight / 2,  // 아래쪽
+         settings.projHeight / 2,  // 위쪽
+         0.1,                      // 근거리
+         200);                     // 원거리
 
--// 이 world matrix의 역행렬을 사용하여 다른 위치가 world space에 상대적으로 되도록 변환하는 행렬을 만듭니다.
+-// 이 월드 행렬의 역행렬을 사용하여 다른 위치가 월드 공간에 상대적으로 되도록 변환하는 행렬을 만듭니다.
 -const textureMatrix = m4.multiply(
 -    textureProjectionMatrix,
 -    m4.inverse(textureWorldMatrix));
@@ -682,7 +682,7 @@ const textureProjectionMatrix = settings.perspective
 +textureMatrix = m4.translate(textureMatrix, 0.5, 0.5, 0.5);
 +textureMatrix = m4.scale(textureMatrix, 0.5, 0.5, 0.5);
 +textureMatrix = m4.multiply(textureMatrix, textureProjectionMatrix);
-+// 이 world matrix의 역행렬을 사용하여 다른 위치가 world space에 상대적으로 되도록 변환하는 행렬을 만듭니다.
++// 이 월드 행렬의 역행렬을 사용하여 다른 위치가 월드 공간에 상대적으로 되도록 변환하는 행렬을 만듭니다.
 +textureMatrix = m4.multiply(
 +    textureMatrix,
 +    m4.inverse(textureWorldMatrix));
@@ -697,13 +697,13 @@ const textureProjectionMatrix = settings.perspective
 하나는 여러분이 원하기 때문이죠, 하하.
 대부분의 3D 모델링 패키지는 텍스처를 평면으로 투영하는 기능을 제공합니다.
 
-또 하나는 decal입니다.
-Decal은 표면에 페인트 얼룩이나 폭발 흔적을 붙이는 방법입니다.
-일반적으로 decal은 위와 같은 셰이더를 통해 작동하지 않습니다.
-대신에 decal을 적용하려는 모델의 geometry를 검토하는 함수를 작성하는데요.
-자바스크립트의 셰이더 예제에 있는 `inRange` 확인과 동일하게, 각 삼각형에 대해 decal이 적용될 영역의 내부에 있는지 확인합니다.
-범위 내에 있는 각 삼각형에 대해 투영된 텍스처 좌표를 사용하여 새로운 geometry에 추가합니다.
-그런 다음 해당 decal을 그려야 하는 목록에 추가하면 되죠.
+또 하나는 데칼입니다.
+데칼은 표면에 페인트 얼룩이나 폭발 흔적을 붙이는 방법입니다.
+일반적으로 데칼은 위와 같은 셰이더를 통해 작동하지 않습니다.
+대신에 데칼을 적용하려는 모델의 지오메트리를 검토하는 함수를 작성하는데요.
+자바스크립트의 셰이더 예제에 있는 `inRange` 확인과 동일하게, 각 삼각형에 대해 데칼이 적용될 영역의 내부에 있는지 확인합니다.
+범위 내에 있는 각 삼각형에 대해 투영된 텍스처 좌표를 사용하여 새로운 지오메트리에 추가합니다.
+그런 다음 해당 데칼을 그려야 하는 목록에 추가하면 되죠.
 
 지오메트리를 생성은 적절한 방법이며, 그렇지 않으면 2개, 3개, 4개의 다른 셰이더가 필요하고 너무 복잡해져서 GPU 셰이더 텍스처 제한에 도달하게 됩니다.
 
@@ -731,16 +731,16 @@ Decal은 표면에 페인트 얼룩이나 폭발 흔적을 붙이는 방법입�
     gl_FragColor = texture2D(u_texture, v_texcoord) * u_colorMult;
   }
 </code></pre>
-<p><a href="https://www.khronos.org/files/opengles_shading_language.pdf">GLSL ES 1.0 spec Appendix A, Section 6</a>을 보면</p>
+<p><a href="https://www.khronos.org/files/opengles_shading_language.pdf">GLSL ES 1.0 스펙 부록 A, 섹션 6</a>을 보면</p>
 <blockquote>
 <h4>텍스처 접근</h4>
 <p>
-non-uniform conditional block의 body 내에서 mip-mapped texture에 접근하면 정의되지 않은 값이 제공됩니다.
-non-uniform conditional block은 컴파일 시 실행을 결정할 수 없는 block입니다.
+유니폼이 아닌 조건부 블록의 바디 내에서 밉 매핑된 텍스처에 접근하면 정의되지 않은 값이 제공됩니다.
+유니폼이 아닌 조건부 블록은 컴파일 시 실행을 결정할 수 없는 블록입니다.
 <p>
 </blockquote>
 <p>
-다시 말해, mip-mapped texture를 사용하려면 늘 접근해야 하는데요.
+다시 말해 밉 매핑된 텍스처를 사용하려면 항상 접근해야 하는데요.
 결과를 조건부로 사용할 수 있습니다.
 예를 들어 다음과 같이 작성할 수 있죠.
 </p>
@@ -762,9 +762,9 @@ non-uniform conditional block은 컴파일 시 실행을 결정할 수 없는 bl
   gl_FragColor = inRange ? projectedTexColor : texColor;
 </code></pre>
 <p>
-하지만 mip-mapped texture 자체에 조건부로 접근할 수는 없는데요.
+하지만 밉 매핑 텍스처 자체에 조건부로 접근할 수는 없는데요.
 GPU에서 작동하지만 모든 GPU에서 작동하지는 않습니다.
-non-mipmapped texture에 대해서는 아무 명령도 내리지 않으므로 mip-mapped texture가 아닌 것을 알고 있다면 괜찮습니다.
+밉 매핑되지 않은 텍스처에 대해서는 아무 명령도 내리지 않으므로 밉 매핑 텍스처가 아닌 것을 알고 있다면 괜찮습니다.
 </p>
 <p>어쨌든 아는 것이 중요합니다.</p>
 <p>

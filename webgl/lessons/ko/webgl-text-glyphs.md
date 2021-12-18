@@ -120,10 +120,10 @@ UI처럼 자주 바뀌는 다량의 텍스트를 렌더링하고 싶다고 가�
 일반적인 UI에는 쉽게 1000개의 문자가 표시될 수 있습니다.
 이는 적절한 프레임 레이트를 얻기에 너무 너무 많은 작업입니다.
 
-보통 이런 방법을 고치기 위해 모든 문자를 포함하는 texture atlas를 만드는데요.
-[큐브의 면 6개에 텍스처를 적용하는 방법](webgl-3d-textures.html#texture-atlas)에 대해 말할 때 texture atlas가 무엇인지 살펴봤습니다.
+보통 이런 방법을 고치기 위해 모든 문자를 포함하는 텍스처 아틀라스를 만드는데요.
+[큐브의 면 6개에 텍스처를 적용하는 방법](webgl-3d-textures.html#texture-atlas)에 대해 말할 때 텍스처 아틀라스가 무엇인지 살펴봤습니다.
 
-웹 검색 중 [간단한 font texture atlas 오픈 소스](https://opengameart.org/content/8x8-font-chomps-wacky-worlds-beta)를 찾았습니다.
+웹 검색 중 [간단한 폰트 텍스처 아틀라스 오픈 소스](https://opengameart.org/content/8x8-font-chomps-wacky-worlds-beta)를 찾았습니다.
 <img class="webgl_center" width="256" height="160" style="image-rendering: pixelated;" src="../resources/8x8-font.png" />
 
 ```
@@ -364,7 +364,7 @@ There are a few obvious things to add or ways to improve it.
 공간이 부족합니다.
 
 OS와 브라우저가 GPU가 가속 시 이를 처리하는 방법은 글리프 텍스처 캐시를 사용하는 겁니다.
-위와 같이 texture atlas에 텍스처를 넣을 수도 있지만 각 글리프의 영역을 고정된 크기로 만들 수도 있습니다.
+위와 같이 텍스처 아틀라스에 텍스처를 넣을 수도 있지만 각 글리프의 영역을 고정된 크기로 만들 수도 있습니다.
 그들은 텍스처에서 최근에 가장 많이 사용한 글리프를 유지하는데요.
 텍스처에 없는 글리프를 그려야 한다면 가장 최근에 사용된 글리프를 새롭게 필요한 글리프로 바꿉니다.
 물론 교체하려는 글리프가 아직 그려지지 않은 쿼드에 의해 참조되고 있다면 교체하기 전에 가지고 있던 글리프로 그려야 합니다.

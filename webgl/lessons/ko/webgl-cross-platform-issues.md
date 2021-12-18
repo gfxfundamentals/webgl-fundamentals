@@ -84,15 +84,15 @@ WebGL은 다양한 최소 지원 기능이 있지만 로컬 장치에서는 최�
 
      ```
 
-  게다가 uniform 배열은 항상 수직이므로, 예를 들어 허용되는 uniform vector 최대값이 16개면 요소 17개의 `float` 배열을 가질 수 없고, 실제로 전체 행을 차지하는 하나의 `vec4`가 있는 경우 15개의 행만 남으며, 이는 가질 수 있는 가장 큰 배열이 15개의 요소가 된다는 걸 의미합니다.
+  게다가 유니폼 배열은 항상 수직이므로, 예를 들어 허용되는 유니폼 벡터 최대값이 16개면 요소 17개의 `float` 배열을 가질 수 없고, 실제로 전체 행을 차지하는 하나의 `vec4`가 있는 경우 15개의 행만 남으며, 이는 가질 수 있는 가장 큰 배열이 15개의 요소가 된다는 걸 의미합니다.
 
   제 조언은 완벽한 패킹을 기대하지 말라는 겁니다.
   비록 명세서에는 위 알고리즘을 통과해야 한다고 나와 있지만 모든 드라이버를 통과하는지 테스트하기엔 조합이 너무 많습니다.
   그냥 한도에 가까워지고 있는지 확인해주세요.
 
-  참고: varying과 attribute는 패킹할 수 없습니다.
+  참고: 베링과 속성은 패킹할 수 없습니다.
 
-* Varying vector 최대값
+* 베링 벡터 최대값
 
   WebGL1의 최소값은 8입니다.
   WebGL2는 16입니다.
@@ -121,7 +121,7 @@ WebGL은 다양한 최소 지원 기능이 있지만 로컬 장치에서는 최�
   WebGL1에서 정점 셰이더에 대한 값이 **0**임을 주의해야 합니다.
   참고로 너무 낙담하지 않아도 괜찮은데요.
   [모든 장치의 약 97%가 최소 4개를 지원](https://webglstats.com/webgl/parameter/MAX_VERTEX_TEXTURE_IMAGE_UNITS)합니다.
-  그래도, 앱이 동작하지 않을 수 있다고 사용자에게 알릴 수 있는지 혹은 다른 셰이더로 fallback할 수 있는지 확인하는 게 좋습니다.
+  그래도, 앱이 동작하지 않을 수 있다고 사용자에게 알릴 수 있는지 혹은 다른 셰이더로 폴백할 수 있는지 확인하는 게 좋습니다.
 
 다른 제한도 있는데요.
 이를 조회하기 위해 다음의 값으로 `gl.getParameter`를 호출합니다.
@@ -132,7 +132,7 @@ WebGL은 다양한 최소 지원 기능이 있지만 로컬 장치에서는 최�
     <tr><td>MAX_TEXTURE_SIZE                </td><td>텍스처 최대 크기</td></tr>
     <tr><td>MAX_VERTEX_ATTRIBS              </td><td>가질 수 있는 attribute 개수</td></tr>
     <tr><td>MAX_VERTEX_UNIFORM_VECTORS      </td><td>정점 셰이더가 가질 수 있는 vec4 uniform 개수</td></tr>
-    <tr><td>MAX_VARYING_VECTORS             </td><td>가지고 있는 varying 개수</td></tr>
+    <tr><td>MAX_VARYING_VECTORS             </td><td>가지고 있는 베링 개수</td></tr>
     <tr><td>MAX_COMBINED_TEXTURE_IMAGE_UNITS</td><td>존재하는 텍스처 유닛 개수</td></tr>
     <tr><td>MAX_VERTEX_TEXTURE_IMAGE_UNITS  </td><td>정점 셰이더가 참조할 수 있는 텍스처 유닛 개수</td></tr>
     <tr><td>MAX_TEXTURE_IMAGE_UNITS         </td><td>프래그먼트 셰이더가 참조할 수 있는 텍스처 유닛 개수</td></tr>
@@ -154,10 +154,10 @@ WebGL2는 몇 가지 더 추가합니다.
 <table class="tabular-data">
   <tbody>
     <tr><td>MAX_3D_TEXTURE_SIZE                          </td><td>3D 텍스처 최대 크기</td></tr>
-    <tr><td>MAX_DRAW_BUFFERS                             </td><td>가질 수 있는 color attachment 개수</td></tr>
+    <tr><td>MAX_DRAW_BUFFERS                             </td><td>가질 수 있는 색상 어태치먼트 개수</td></tr>
     <tr><td>MAX_ARRAY_TEXTURE_LAYERS                     </td><td>2D 텍스처 배열의 최대 레이어</td></tr>
-    <tr><td>MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS      </td><td>transform feedback을 사용할 때 별도의 버퍼로 출력할 수 있는 varying 개수</td></tr>
-    <tr><td>MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS</td><td>모든 걸 단일 버퍼로 보낼 때 출력할 수 있는 varying 개수</td></tr>
+    <tr><td>MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS      </td><td>transform feedback을 사용할 때 별도의 버퍼로 출력할 수 있는 베링 개수</td></tr>
+    <tr><td>MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS</td><td>모든 걸 단일 버퍼로 보낼 때 출력할 수 있는 베링 개수</td></tr>
     <tr><td>MAX_COMBINED_UNIFORM_BLOCKS                  </td><td>종합적으로 사용할 수 있는 uniform block 개수</td></tr>
     <tr><td>MAX_VERTEX_UNIFORM_BLOCKS                    </td><td>정점 셰이더가 사용할 수 있는 uniform block 개수</td></tr>
     <tr><td>MAX_FRAGMENT_UNIFORM_BLOCKS                  </td><td>프래그먼트 셰이더가 사용할 수 있는 uniform block 개수</td></tr>
@@ -176,20 +176,22 @@ WebGL2는 몇 가지 더 추가합니다.
 다른 조합들은 선택적인데요.
 이 내용은 [이 글](webgl-readpixels.html)에서 다룹니다.
 
-## 프레임 버퍼 attachment 조합
+## 프레임 버퍼 어태치먼트 조합
 
-프레임 버퍼는 텍스처와 렌더 버퍼의 attachment를 하나 이상 가질 수 있습니다.
+프레임 버퍼는 텍스처와 렌더 버퍼의 어태치먼트를 하나 이상 가질 수 있습니다.
 
-WebGL1에서는 3개의 attachment 조합만 동작이 보장됩니다.
+WebGL1에서는 3개의 어태치먼트 조합만 동작이 보장됩니다.
 
-1. 단일 format = `RGBA`, type = `UNSIGNED_BYTE`, texture = `COLOR_ATTACHMENT0`
-2. format = `RGBA`, type = `UNSIGNED_BYTE`, texture = `COLOR_ATTACHMENT0` 그리고 format = `DEPTH_COMPONENT`, `DEPTH_ATTACHMENT`로 연결된 renderbuffer
-3. format = `RGBA`, type = `UNSIGNED_BYTE`, texture = `COLOR_ATTACHMENT0` 그리고 format = `DEPTH_STENCIL`, `DEPTH_STENCIL_ATTACHMENT`로 연결된 renderbuffer 
+1. a single format = `RGBA`, type = `UNSIGNED_BYTE` texture as `COLOR_ATTACHMENT0`
+2. a format = `RGBA`, type = `UNSIGNED_BYTE` texture as `COLOR_ATTACHMENT0` and a
+   format = `DEPTH_COMPONENT` renderbuffer attached as `DEPTH_ATTACHMENT`
+3. a format = `RGBA`, type = `UNSIGNED_BYTE` texture as `COLOR_ATTACHMENT0` and a
+   format = `DEPTH_STENCIL` renderbuffer attached as `DEPTH_STENCIL_ATTACHMENT`
 
 다른 모든 조합은 `gl.checkFramebufferStatus`를 호출하여 `FRAMEBUFFER_COMPLETE`를 반환했는지 확인하는 구현에 따라 달라집니다.
 
-WebGL2는 더 많은 format을 쓸 수 있도록 보장하지만 **어떤 조합이 실패할 수 있다**는 한계는 여전한데요.
-1개보다 많이 첨부한다면 모든 color attachment가 같은 format일 경우가 가장 안전한 방법일 수 있습니다.
+WebGL2는 더 많은 포맷을 쓸 수 있도록 보장하지만 **어떤 조합이 실패할 수 있다**는 한계는 여전한데요.
+1개보다 많이 첨부한다면 모든 색상 어태치먼트가 같은 포맷일 경우가 가장 안전한 방법일 수 있습니다.
 
 ## Extension
 
@@ -199,7 +201,7 @@ WebGL1과 WebGL2의 많은 기능들이 선택적인데요.
 아마 WebGL1과 WebGL2에서 가장 흔하게 누락되는 extension은 floating point texture를 필터링할 수 있는 `OES_texture_float_linear`인데, 이는 `TEXTURE_MIN_FILTER`와 `TEXTURE_MAX_FILTER`를 `NEAREST`를 제외한 모든 항목으로 설정하도록 지원하는 기능을 의미합니다.
 많은 모바일 기기들이 이걸 지원하지 않습니다.
 
-WebGL1에서 종종 누락되는 또 다른 extension은 2개 이상의 color attachment를 프레임 버퍼로 첨부할 수 있는 기능인 `WEBGL_draw_buffers`이며 여전히 데스크탑의 경우 70% 정도이고 스마트폰의 경우 거의 없습니다.
+WebGL1에서 종종 누락되는 또 다른 extension은 2개 이상의 색상 어태치먼트를 프레임 버퍼로 첨부할 수 있는 기능인 `WEBGL_draw_buffers`이며 여전히 데스크탑의 경우 70% 정도이고 스마트폰의 경우 거의 없습니다.
 기본적으로 WebGL2를 실행할 수 있는 모든 기기는 WebGL1에서 `WEBGL_draw_buffers`도 지원해야 하지만 여전히 문제가 있는데요.
 여러 텍스처를 한 번에 렌더링해야 한다면 고사양 GPU로도 시간이 필요할 수 있습니다.
 그래도 사용자 기기가 지원하는지 확인하고, 지원하지 않는다면 친절한 설명을 제공해야 합니다.
@@ -283,9 +285,9 @@ Scissor는 항상 픽셀 클리핑하기 때문에 시저 테스트를 켜고, �
 
 * WebGL 캔버스와 레이어 변환에 대한 변경 사항이 항상 동기화되지 않는 [버그](https://bugs.webkit.org/show_bug.cgi?id=172969) (3년 전)
 
-* Alpha 채널이 없는 PNG 텍스처가 잘못된 rgb 색상을 가지는 [버그](https://bugs.webkit.org/show_bug.cgi?id=165297) (4년 전)
+* 알파 채널이 없는 PNG 텍스처가 잘못된 rgb 색상을 가지는 [버그](https://bugs.webkit.org/show_bug.cgi?id=165297) (4년 전)
 
-* 사파리가 일반적인 attribute 없이 쓰는 경우를 처리하지 않는 [버그](https://bugs.webkit.org/show_bug.cgi?id=197592) (1년 전) 
+* 사파리가 일반적인 속성 없이 쓰는 경우를 처리하지 않는 [버그](https://bugs.webkit.org/show_bug.cgi?id=197592) (1년 전) 
 
 * <a id="safari"></a>
   또한 사파리에는 WebGL2를 활성화하는 옵션이 있지만 `#version 300 es` 셰이더를 허용하는 게 전부입니다.

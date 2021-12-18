@@ -4,10 +4,10 @@ TOC: 장면 그래프
 
 
 이 글은 WebGL 관련 시리즈에서 이어집니다.
-이전에는 [여러 사물 그리기](webgl-drawing-multiple-things.html)에 관한 것이었습니다. 
+이전에는 [여러 물체 그리기](webgl-drawing-multiple-things.html)에 관한 것이었습니다. 
 아직 읽지 않았다면 거기부터 시작하는 게 좋습니다.
 
-장면 그래프는 tree의 각 node가 행렬을 생성하는 tree 구조입니다.
+장면 그래프는 트리의 각 노드가 행렬을 생성하는 트리 구조입니다.
 흠, 이건 쓸모있는 정의가 아니네요.
 몇 가지 예제가 더 유용할 것 같습니다.
 
@@ -26,11 +26,11 @@ TOC: 장면 그래프
 은하를 움직인다면 내부의 모든 별들이 함께 움직입니다.
 위 다이어그램의 이름들을 드래그하면 그들의 관계를 볼 수 있습니다.
 
-[2D 행렬 수학](webgl-2d-matrices.html)으로 돌아가보면 translate, rotate, scale을 하기 위한 많은 행렬을 객체에 곱한 걸 기억하실 겁니다.
+[2D 행렬 수학](webgl-2d-matrices.html)으로 돌아가보면 평행 이동, 회전, 스케일링을 하기 위한 많은 행렬을 객체에 곱한 걸 기억하실 겁니다.
 장면 그래프는 객체에 어떤 행렬 수식을 적용할지 도와주는 구조를 제공합니다.
 
-일반적으로 장면 그래프의 각 `Node`는 *local space*를 나타냅니다.
-올바른 행렬 수식이 주어지면 *local space*에 있는 무엇이든 그 위에 있는 모든 걸 무시할 수 있습니다.
+일반적으로 장면 그래프의 각 `Node`는 *지역 공간*를 나타냅니다.
+올바른 행렬 수식이 주어지면 *지역 공간*에 있는 무엇이든 그 위에 있는 모든 걸 무시할 수 있습니다.
 다시 말해 달은 지구 궤도를 선회하는 것에만 신경쓰면 된다는 겁니다.
 태양 궤도를 선회하는 것에 대해서는 신경쓰지 않아도 되죠.
 장면 그래프 구조가 없다면 달이 태양 궤도를 선회하는 방법을 계산하기 위해 훨씬 더 복잡한 수식을 수행해야 합니다.
@@ -39,7 +39,7 @@ TOC: 장면 그래프
 
 장면 그래프로 달을 지구의 자식으로 만들면 지구의 궤도를 선회합니다.
 그리고 장면 그래프는 지구가 태양을 선회한다는 사실을 처리하는데요.
-Node를 탐색하다가 행렬을 곱하여 이를 수행합니다.
+노드를 탐색하다가 행렬을 곱하여 이를 수행합니다.
 
     worldMatrix = greatGrandParent * grandParent * parent * self(localMatrix)
 
@@ -50,7 +50,7 @@ Node를 탐색하다가 행렬을 곱하여 이를 수행합니다.
 재귀 함수로 이를 매우 간단하게 할 수 있습니다.
 
     function computeWorldMatrix(currentNode, parentWorldMatrix) {
-        // local matrix를 부모의 world matrix로 곱하여 worldMatrix를 계산
+        // 지역 행렬을 부모의 월드 행렬로 곱하여 "worldMatrix"를 계산
         var worldMatrix = m4.multiply(parentWorldMatrix, currentNode.localMatrix);
 
         // 모든 자식에게 동일하게 수행
@@ -61,12 +61,12 @@ Node를 탐색하다가 행렬을 곱하여 이를 수행합니다.
 
 이는 3D 장면 그래프에서 굉장히 일반적인 용어를 가져온 겁니다.
 
-*   `localMatrix`: 현재 node에 대한 local matrix 입니다.
-    원점에서 자신과 함께 local space의 자식들을 변형시킵니다.
+*   `localMatrix`: 현재 노드에 대한 지역 행렬 입니다.
+    원점에서 자신과 함께 지역 공간의 자식들을 변형시킵니다.
 
-*   `worldMatrix`: 주어진 node의 local space에 있는 걸 가져와 장면 그래프의 root node space로 변환합니다.
-    다시 말해 world에 배치합니다.
-    달에 대해 worldMatrix를 계산하면 위에서 본 궤도를 얻게 될 겁니다.
+*   `worldMatrix`: 주어진 노드의 지역 공간에 있는 걸 가져와 장면 그래프의 루트 노드 공간으로 변환합니다.
+    다시 말해 월드에 배치합니다.
+    달에 대한 `worldMatrix`를 계산하면 위에서 본 궤도를 얻게 될 겁니다.
 
 장면 그래프는 굉장히 만들기 쉽습니다.
 간단한 `Node` 객체를 정의해봅시다.
@@ -74,16 +74,16 @@ Node를 탐색하다가 행렬을 곱하여 이를 수행합니다.
 가장 일반적인 방법은 그리는 사물의 선택적 필드를 가지는 겁니다.
 
     var node = {
-       localMatrix: ...,  // node에 대한 "local" matrix
-       worldMatrix: ...,  // node에 대한 "world" matrix
+       localMatrix: ...,  // 노드에 대한 "지역" 행렬
+       worldMatrix: ...,  // 노드에 대한 "월드" 행렬
        children: [],      // 자식 배열
-       thingToDraw: ??,   // node에서 그리는 요소
+       thingToDraw: ??,   // 노드에서 그리는 요소
     };
 
 태양계 장면 그래프를 만들어 봅시다.
 멋진 텍스처나 예제를 복잡하게 만들 수 있는 것은 사용하지 않겠습니다.
-먼저 node 관리를 도와줄 몇 가지 함수를 만들어 보려고 하는데요.
-우선 node class를 만듭니다.
+먼저 노드 관리를 도와줄 몇 가지 함수를 만들어 보려고 하는데요.
+우선 노드 클래스를 만듭니다.
 
     var Node = function() {
       this.children = [];
@@ -91,7 +91,7 @@ Node를 탐색하다가 행렬을 곱하여 이를 수행합니다.
       this.worldMatrix = m4.identity();
     };
 
-Node의 부모를 설정하는 방법을 제공합니다.
+노드의 부모를 설정하는 방법을 제공합니다.
 
     Node.prototype.setParent = function(parent) {
       // 부모에서 자식 제거
@@ -109,16 +109,16 @@ Node의 부모를 설정하는 방법을 제공합니다.
       this.parent = parent;
     };
 
-그리고 여기 부모-자식 관계를 기반으로 local matrix에서 world matrix를 계산하는 코드입니다.
-부모에서 시작해 재귀적으로 자식들을 찾아가면 world matrix를 계산할 수 있습니다.
+그리고 여기 부모-자식 관계를 기반으로 지역 행렬에서 월드 행렬을 계산하는 코드입니다.
+부모에서 시작해 재귀적으로 자식들을 찾아가면 월드 행렬을 계산할 수 있습니다.
 행렬 수학을 모른다면 [이 글](webgl-2d-matrices.html)을 확인해주세요.
 
     Node.prototype.updateWorldMatrix = function(parentWorldMatrix) {
       if (parentWorldMatrix) {
-        // 행렬이 전달되므로 수식을 수행하고 결과를 `this.worldMatrix`에 저장
+        // 행렬이 전달되므로 수식을 수행하고 결과를 "this.worldMatrix"에 저장
         m4.multiply(this.localMatrix, parentWorldMatrix, this.worldMatrix);
       } else {
-        // 행렬이 전달되지 않았으니 localMatrix를 worldMatrix로 복사
+        // 행렬이 전달되지 않았으니 "localMatrix"를 "worldMatrix"로 복사
         m4.copy(this.localMatrix, this.worldMatrix);
       }
 
@@ -134,7 +134,7 @@ Node의 부모를 설정하는 방법을 제공합니다.
 하나의 구체 모형만 사용하고 태양은 황색, 지구는 청록색, 달은 회색으로 칠할 겁니다.
 `drawInfo`, `bufferInfo`, `programInfo`가 익숙하지 않다면 [이전 글](webgl-drawing-multiple-things.html)을 봐주세요.
 
-    // 모든 node 만들기
+    // 모든 노드 만들기
     var sunNode = new Node();
     sunNode.localMatrix = m4.translation(0, 0, 0);  // 중앙에 태양
     sunNode.drawInfo = {
@@ -147,7 +147,7 @@ Node의 부모를 설정하는 방법을 제공합니다.
     };
 
     var earthNode = new Node();
-    earthNode.localMatrix = m4.translation(100, 0, 0);  // 지구는 태양으로부터 100unit
+    earthNode.localMatrix = m4.translation(100, 0, 0);  // 지구는 태양으로부터 100유닛
     earthNode.drawInfo = {
       uniforms: {
         u_colorOffset: [0.2, 0.5, 0.8, 1],  // 청록색
@@ -158,7 +158,7 @@ Node의 부모를 설정하는 방법을 제공합니다.
     };
 
     var moonNode = new Node();
-    moonNode.localMatrix = m4.translation(20, 0, 0);  // 달은 지구로부터 20unit
+    moonNode.localMatrix = m4.translation(20, 0, 0);  // 달은 지구로부터 20유닛
     moonNode.drawInfo = {
       uniforms: {
         u_colorOffset: [0.6, 0.6, 0.6, 1],  // 회색
@@ -168,7 +168,7 @@ Node의 부모를 설정하는 방법을 제공합니다.
       bufferInfo: sphereBufferInfo,
     };
 
-이제 node를 만들었으니 이들을 연결합시다.
+이제 노드를 만들었으니 이들을 연결합시다.
 
     // 천체 연결
     moonNode.setParent(earthNode);
@@ -188,18 +188,18 @@ Node의 부모를 설정하는 방법을 제공합니다.
       moonNode.drawInfo,
     ];
 
-렌더링할 때 각 객체의 local matrix를 약간 회전하여 업데이트합니다.
+렌더링할 때 각 객체의 지역 행렬을 약간 회전하여 업데이트합니다.
 
-    // 각 객체에 대한 local matrix 업데이트
+    // 각 객체에 대한 지역 행렬 업데이트
     m4.multiply(m4.yRotation(0.01), sunNode.localMatrix  , sunNode.localMatrix);
     m4.multiply(m4.yRotation(0.01), earthNode.localMatrix, earthNode.localMatrix);
     m4.multiply(m4.yRotation(0.01), moonNode.localMatrix , moonNode.localMatrix);
 
-이제 local matrix가 업데이트되었으니 모든 world matrix를 업데이트할 겁니다.
+이제 지역 행렬이 업데이트되었으니 모든 월드 행렬을 업데이트할 겁니다.
 
     sunNode.updateWorldMatrix();
 
-마지막으로 world matrix가 있으니 각 객체에 대한 [worldViewProjection matrix](webgl-3d-perspective.html)를 구하기 위해 곱해야 합니다.
+마지막으로 월드 행렬이 있으니 각 객체에 대한 [월드 뷰 투영 행렬](webgl-3d-perspective.html)을 구하기 위해 곱해야 합니다.
 
     // 렌더링을 위한 모든 행렬 계산
     objects.forEach(function(object) {
@@ -213,7 +213,7 @@ Node의 부모를 설정하는 방법을 제공합니다.
 모든 행성이 같은 크기임을 알 수 있는데요.
 지구를 더 크게 만들어 보겠습니다.
 
-    // 지구는 태양으로부터 100unit
+    // 지구는 태양으로부터 100유닛
     earthNode.localMatrix = m4.translation(100, 0, 0);
     // 지구를 두 배로 만들기
     earthNode.localMatrix = m4.scale(earthNode.localMatrix, 2, 2, 2);
@@ -222,50 +222,50 @@ Node의 부모를 설정하는 방법을 제공합니다.
 
 이런 달도 커졌군요.
 이를 고치기 위해 수동으로 달을 축소할 수 있습니다.
-하지만 더 좋은 해결책은 장면 그래프에 node를 더 추가하는 겁니다.
-아래 장면 그래프 대신에
+하지만 더 좋은 해결책은 장면 그래프에 노드를 더 추가하는 겁니다.
+아래 장면 그래프 대신에,
 
-      sun
+      태양
        |
-      earth
+      지구
        |
-      moon
+       달
 
 이렇게 바꿀 겁니다.
 
-     solarSystem
-       |    |
-       |   sun
+       태양계
+       |  |
+       | 태양
        |
-     earthOrbit
+       지구 궤도
        |    |
-       |  earth
+       |   지구
        |
-      moonOrbit
+       달 궤도
           |
-         moon
+          달
 
 이렇게 하면 지구는 태양계 주변을 돌지만, 태양만 개별적으로 회전하고 크기 조정할 수 있으며, 지구에는 영향을 주지 않습니다.
 마찬가지로 지구는 달과 별도로 회전할 수 있습니다.
-`solarSystem`, `earthOrbit` `moonOrbit`에 대한 node 만들어 봅시다.
+`solarSystem`, `earthOrbit` `moonOrbit`에 대한 노드를 만들어 봅시다.
 
     var solarSystemNode = new Node();
     var earthOrbitNode = new Node();
-    earthOrbitNode.localMatrix = m4.translation(100, 0, 0);  // 지구 궤도는 태양으로부터 100unit
+    earthOrbitNode.localMatrix = m4.translation(100, 0, 0);  // 지구 궤도는 태양으로부터 100유닛
     var moonOrbitNode = new Node();
-    moonOrbitNode.localMatrix = m4.translation(20, 0, 0);  // 달은 지구로부터 100unit
+    moonOrbitNode.localMatrix = m4.translation(20, 0, 0);  // 달은 지구로부터 100유닛
 
-이러한 궤도 거리는 기존 node에서 제거되었습니다.
+이러한 궤도 거리는 기존 노드에서 제거되었습니다.
 
     var earthNode = new Node();
-    -// 지구는 태양으로부터 100unit
+    -// 지구는 태양으로부터 100유닛
     -earthNode.localMatrix = m4.translation(100, 0, 0);
     -// 지구를 두 배로 만들기
     -earthNode.localMatrix = m4.scale(earthNode.localMatrix, 2, 2, 2);
     +earthNode.localMatrix = m4.scaling(2, 2, 2);   // 지구를 두 배로 만들기
 
     var moonNode = new Node();
-    -moonNode.localMatrix = m4.translation(20, 0, 0);  // 달은 지구로부터 20unit
+    -moonNode.localMatrix = m4.translation(20, 0, 0);  // 달은 지구로부터 20유닛
 
 이제 연결하는 것은 다음과 같습니다.
 
@@ -278,14 +278,14 @@ Node의 부모를 설정하는 방법을 제공합니다.
 
 그리고 궤도만 업데이트하면 됩니다.
 
-    // 각 객체에 대한 local matrix 업데이트
+    // 각 객체에 대한 지역 행렬 업데이트
     -m4.multiply(m4.yRotation(0.01), sunNode.localMatrix  , sunNode.localMatrix);
     -m4.multiply(m4.yRotation(0.01), earthNode.localMatrix, earthNode.localMatrix);
     -m4.multiply(m4.yRotation(0.01), moonNode.localMatrix , moonNode.localMatrix);
     +m4.multiply(m4.yRotation(0.01), earthOrbitNode.localMatrix, earthOrbitNode.localMatrix);
     +m4.multiply(m4.yRotation(0.01), moonOrbitNode.localMatrix, moonOrbitNode.localMatrix);
 
-    // 장면 그래프의 모든 world matrix 업데이트
+    // 장면 그래프의 모든 월드 행렬 업데이트
     -sunNode.updateWorldMatrix();
     +solarSystemNode.updateWorldMatrix();
 
@@ -306,7 +306,7 @@ Node의 부모를 설정하는 방법을 제공합니다.
     +moonNode.localMatrix = m4.scaling(0.4, 0.4, 0.4);
 
     ...
-    // 각 객체에 대한 local matrix 업데이트
+    // 각 객체에 대한 지역 행렬 업데이트
     matrixMultiply(earthOrbitNode.localMatrix, m4.yRotation(0.01), earthOrbitNode.localMatrix);
     matrixMultiply(moonOrbitNode.localMatrix, m4.yRotation(0.01), moonOrbitNode.localMatrix);
     +// 지구 회전
@@ -318,7 +318,7 @@ Node의 부모를 설정하는 방법을 제공합니다.
 
 현재 `localMatrix`를 가지고 있으며 프레임마다 이를 수정하고 있습니다.
 하지만 모든 프레임에서 수식이 약간의 오류를 수집한다는 문제가 있는데요.
-*Ortho normalizing matrix*라 불리는 수식을 고치는 방법이 있지만 항상 작동하지는 않습니다.
+*직교 정규화 행렬*이라 불리는 수식을 고치는 방법이 있지만 항상 작동하지는 않습니다.
 예를 들어 크기를 0으로 줄였다가 돌아오게 한다고 가정해 보겠습니다.
 `x`에 대해 그렇게 해봅시다.
 
@@ -340,9 +340,9 @@ Node의 부모를 설정하는 방법을 제공합니다.
     x = x * scale  // frame #5, x = 0  이런!
 
 값을 잃었습니다.
-다른 값들로 행렬을 업데이트하는 다른 class를 추가하여 이를 고칠 수 있는데요.
+다른 값들로 행렬을 업데이트하는 다른 클래스를 추가하여 이를 고칠 수 있는데요.
 `source`를 가지도록 `Node` 정의를 수정해봅시다.
-이미 존재한다면 `source`에 local matrix를 요청할 겁니다.
+이미 존재한다면 `source`에 지역 행렬을 요청할 겁니다.
 
     *var Node = function(source) {
       this.children = [];
@@ -360,8 +360,8 @@ Node의 부모를 설정하는 방법을 제공합니다.
 
       ...
 
-이제 source를 생성할 수 있습니다.
-일반적인 source는 다음과 같이 translation, rotation, scale을 제공합니다.
+이제 소스를 생성할 수 있습니다.
+일반적인 소스는 다음과 같이 평행 이동, 회전, 스케일링을 제공합니다.
 
     var TRS = function() {
       this.translation = [0, 0, 0];
@@ -375,7 +375,7 @@ Node의 부모를 설정하는 방법을 제공합니다.
       var r = this.rotation;
       var s = this.scale;
 
-      // translation, rotation, scale로 행렬 계산
+      // 평행 이동, 회전, 스케일링으로 행렬 계산
       m4.translation(t[0], t[1], t[2], dst);
       matrixMultiply(m4.xRotation(r[0]), dst, dst);
       matrixMultiply(m4.yRotation(r[1]), dst, dst);
@@ -386,7 +386,7 @@ Node의 부모를 설정하는 방법을 제공합니다.
 
 그리고 이렇게 사용할 수 있습니다.
 
-    // 초기화할 때 source와 함께 node 만들기
+    // 초기화할 때 소스로 노드 만들기
     var someTRS  = new TRS();
     var someNode = new Node(someTRS);
 
@@ -405,10 +405,10 @@ Node의 부모를 설정하는 방법을 제공합니다.
 버추어 파이터처럼 오래된 게임들은 약 15개의 관절을 가졌습니다.
 2000년대 초반부터 중반까지의 게임들은 30~70개의 관절을 가졌죠.
 손의 모든 관절을 구현한다면 각 손에 20개 이상의 관절이 있으므로 두 손에만 관절이 40개입니다.
-손 애니메이션을 구현하려는 많은 게임들은 엄지 손가락 하나 그리고 4개의 손가락을 하나의 큰 손가락으로 애니메이션하여 시간(CPU/GPU/Artist의 시간)과 메모리를 절약합니다.
+손 애니메이션을 구현하려는 많은 게임들은 엄지 손가락 하나 그리고 4개의 손가락을 하나의 큰 손가락으로 애니메이션하여 시간(CPU/GPU/아티스트 시간)과 메모리를 절약합니다.
 
 어쨌든 여기 제가 해킹한 블록맨이 있습니다.
-각 node에 대해 위에서 언급한 `TRS` source를 사용하고 있습니다.
+각 노드에 대해 위에서 언급한 `TRS` 소스를 사용하고 있습니다.
 
 {{{example url="../webgl-scene-graph-block-guy.html" }}}
 
