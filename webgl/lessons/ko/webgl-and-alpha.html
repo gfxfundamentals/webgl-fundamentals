@@ -37,23 +37,23 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="WebGL alpha가 OpenGL alpha와 다른 점">
+<meta name="description" content="WebGL 알파가 OpenGL 알파와 다른 점">
 <meta name="keywords" content="webgl graphics">
 <meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-and-alpha_ko.jpg">
 
-<meta property="og:title" content="WebGL Alpha">
+<meta property="og:title" content="WebGL 알파">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-and-alpha_ko.jpg">
-<meta property="og:description" content="WebGL alpha가 OpenGL alpha와 다른 점">
+<meta property="og:description" content="WebGL 알파가 OpenGL 알파와 다른 점">
 <meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-and-alpha.html">
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@greggman">
 <meta name="twitter:creator" content="@greggman">
 <meta name="twitter:domain" content="webglfundamentals.org">
-<meta name="twitter:title" content="WebGL Alpha">
+<meta name="twitter:title" content="WebGL 알파">
 <meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-and-alpha.html">
-<meta name="twitter:description" content="WebGL alpha가 OpenGL alpha와 다른 점">
+<meta name="twitter:description" content="WebGL 알파가 OpenGL 알파와 다른 점">
 <meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-and-alpha_ko.jpg">
 
 <script type="application/ld+json">
@@ -78,7 +78,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-and-alpha.html#webpage",
       "url":"https://webglfundamentals.org/webgl/lessons/ko/webgl-and-alpha.html",
       "inLanguage":"ko",
-      "name":"WebGL Alpha",
+      "name":"WebGL 알파",
       "keywords":"webgl graphics programming",
       "isPartOf":{
         "@id":"https://webglfundamentals.org/#website"
@@ -92,7 +92,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </script>
 
 
-<title>WebGL Alpha</title>
+<title>WebGL 알파</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
 <link rel="stylesheet" href="/webgl/lessons/lang.css">
 <link rel="stylesheet" href="/webgl/lessons/ko/lang.css">
@@ -236,36 +236,36 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL Alpha</h1>
+    <h1>WebGL 알파</h1>
   </div>
   <div class="lesson">
     <div class="lesson-main">
-      <p>WebGL이 backbuffer(ie, 캔버스)에서 alpha를 처리하는 방법에 문제를 겪는 일부 OpenGL 개발자들을 발견해서, alpha와 관련하여 WebGL과 OpenGL의 차이점을 살펴보는 것도 좋을 것이라 생각했습니다.</p>
-<p>OpenGL과 WebGL의 가장 큰 차이점으로 OpenGL은 어떤 것과도 합성되지 않거나, 실제로 OS 윈도우 매니저에 의해 어떤 것도 합성되지 않은, backbuffer에 렌더링하므로 alpha가 무언인지는 중요하지 않습니다.</p>
-<p>WebGL은 브라우저에 의해 웹 페이지와 합성되고 기본값으로 투명도가 있는 .png <code class="notranslate" translate="no">&lt;img&gt;</code> 태그와 2D 캔버스 태그와 동일한 pre-multiplied alpha를 사용합니다.</p>
+      <p>WebGL이 백버퍼(ie, 캔버스)에서 알파를 처리하는 방법에 문제를 겪는 일부 OpenGL 개발자들을 발견해서, 알파와 관련하여 WebGL과 OpenGL의 차이점을 살펴보는 것도 좋을 것이라 생각했습니다.</p>
+<p>OpenGL과 WebGL의 가장 큰 차이점으로 OpenGL은 어떤 것과도 합성되지 않거나, 실제로 OS 윈도우 매니저에 의해 어떤 것도 합성되지 않은, 백버퍼에 렌더링하므로 알파가 무언인지는 중요하지 않습니다.</p>
+<p>WebGL은 브라우저에 의해 웹 페이지와 합성되고 기본값으로 투명도가 있는 .png <code class="notranslate" translate="no">&lt;img&gt;</code> 태그와 2D 캔버스 태그와 동일한 pre-multiplied 알파를 사용합니다.</p>
 <p>WebGL은 이걸 좀 더 OpenGL처럼 만들기 위한 여러 방법을 가지고 있습니다.</p>
-<h3 id="-1-webgl-non-premultiplied-alpha-">#1) WebGL에 non-premultiplied alpha와 합성을 원한다고 알림</h3>
+<h3 id="-1-webgl-non-premultiplied-">#1) WebGL에 non-premultiplied 알파와 합성을 원한다고 알림</h3>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl = canvas.getContext(&quot;webgl&quot;, {
-  premultipliedAlpha: false  // non-premultiplied alpha 요청
+  premultipliedAlpha: false  // non-premultiplied 알파 요청
 });
 </code></pre><p>기본값은 true입니다.</p>
 <p>물론 결과는 캔버스 아래에 있는 배경색(캔버스의 배경색, 캔버스 컨테이너의 배경색, 페이지의 배경색, 캔버스가 z-index &gt; 0일 경우 캔버스 뒤에 있는 항목, 등등...)으로 페이지 위에 합성되는데, 말인즉슨 색상 CSS가 웹 페이지의 해당 영역을 정의합니다.</p>
-<p>Alpha 문제가 있는지 찾는 정말 좋은 방법은 캔버스의 배경을 빨강같은 밝은 색상으로 설정하는 겁니다.
+<p>알파 문제가 있는지 찾는 정말 좋은 방법은 캔버스의 배경을 빨강같은 밝은 색상으로 설정하는 겁니다.
 무슨 일이 일어나고 있는지 바로 보실 수 있습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;canvas style=&quot;background: red;&quot;&gt;&lt;canvas&gt;
-</code></pre><p>또한 alpha 문제를 숨겨주는 검은색으로 설정할 수도 있습니다.</p>
-<h3 id="-2-webgl-backbuffer-alpha-">#2) WebGL에 backbuffer에서 alpha를 원하지 않는다고 알림</h3>
+</code></pre><p>또한 알파 문제를 숨겨주는 검은색으로 설정할 수도 있습니다.</p>
+<h3 id="-2-webgl-">#2) 백버퍼에서 알파를 원하지 않는다고 WebGL에 알림</h3>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl = canvas.getContext(&quot;webgl&quot;, { alpha: false }};
-</code></pre><p>Backbuffer는 RGB만 있기 때문에 이는 좀 더 OpenGL처럼 작동하게 만들어 줍니다.
-좋은 브라우저는 alpha가 없다는 것을 알 수 있고 WebGL이 합성하는 방식을 최적화할 수 있기 때문에 아마 이게 최고의 선택일 겁니다.
-물론 이는 실제로 backbuffer에 alpha가 없다는 걸 의미하므로 어떤 목적으로 backbuffer에서 alpha를 사용하고 있다면 동작하지 않을 수 있습니다.
-제가 아는 소수의 앱만이 backbuffer에서 alpha를 사용합니다.
+</code></pre><p>백버퍼는 RGB만 있기 때문에 이는 좀 더 OpenGL처럼 작동하게 만들어 줍니다.
+좋은 브라우저는 알파가 없다는 것을 알 수 있고 WebGL이 합성하는 방식을 최적화할 수 있기 때문에 아마 이게 최고의 선택일 겁니다.
+물론 이는 실제로 백버퍼에 알파가 없다는 걸 의미하므로 어떤 목적으로 백버퍼에서 알파를 사용하고 있다면 동작하지 않을 수 있습니다.
+제가 아는 소수의 앱만이 백버퍼에서 알파를 사용합니다.
 주장하건대 저는 이게 기본값이었어야 한다고 생각합니다.</p>
-<h3 id="-3-alpha-">#3) 렌더링의 마지막에 alpha 지우기</h3>
+<h3 id="-3-">#3) 렌더링의 마지막에 알파 지우기</h3>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">..
 renderScene();
 ..
-// Backbuffer의 alpha를 1.0으로 설정
+// 백버퍼의 알파를 1.0으로 설정
 gl.clearColor(1, 1, 1, 1);
 gl.colorMask(false, false, false, true);
 gl.clear(gl.COLOR_BUFFER_BIT);
@@ -274,33 +274,33 @@ gl.clear(gl.COLOR_BUFFER_BIT);
 제가 똑똑했다면 위의 #2 방법으로 바꿨을 겁니다.
 이 글을 올린 후에 바로 작업할 것 같습니다.
 대부분의 WebGL 라이브러리는 이 방법을 기본값으로 해야할 것처럼 보입니다.
-실제로 합성 효과에 alpha를 사용하는 소수의 개발들은 이를 요청할 수 있습니다.
+실제로 합성 효과에 알파를 사용하는 소수의 개발들은 이를 요청할 수 있습니다.
 나머지는 최고의 성능과 최소한의 놀라움을 얻을 겁니다.</p>
-<h3 id="-4-alpha-">#4) Alpha를 한 번 지우고 더 이상 렌더링하지 않기</h3>
-<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 초기화할 때, backbuffer 지우기
+<h3 id="-4-">#4) 알파를 한 번 지우고 더 이상 렌더링하지 않기</h3>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 초기화할 때, 백버퍼 지우기
 gl.clearColor(1,1,1,1);
 gl.clear(gl.COLOR_BUFFER_BIT);
 
-// alpha 렌더링 끄기
+// 알파 렌더링 끄기
 gl.colorMask(true, true, true, false);
 </code></pre><p>물론 자신만의 프레임 버퍼로 렌더링한다면 알파 렌더링을 다시 켰다가 캔버스 렌더링으로 전환할 때 다시 꺼야할 수 있습니다.</p>
 <h3 id="-5-">#5) 이미지 처리</h3>
-<p>Alpha가 있는 이미지를 WebGL로 로딩하는 경우 저의 기본값입니다.
+<p>알파가 있는 이미지를 WebGL로 로딩하는 경우 저의 기본값입니다.
 WebGL은 미리 곱하지 않은 색상 값인 PNG 파일 그대로의 값을 제공할 겁니다.
 pre-multiplied는 손실인 반면 이건 무손실이기 때문에 일반적으로 OpenGL 프로그램에 사용됩니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">1, 0.5, 0.5, 0  // RGBA
 </code></pre><p><code class="notranslate" translate="no">r</code>, <code class="notranslate" translate="no">g</code>, <code class="notranslate" translate="no">b</code>가 0이 되는 걸 의미하는 <code class="notranslate" translate="no">a = 0</code>이기 때문에 un-premultiplied는 가능한 값인 반면 pre-multiplied는 불가능한 값입니다.</p>
-<p>원한다면 WebGL이 alpha를 미리 곱하도록 할 수 있습니다.
+<p>원한다면 WebGL이 알파를 미리 곱하도록 할 수 있습니다.
 이렇게 <code class="notranslate" translate="no">UNPACK_PREMULTIPLY_ALPHA_WEBGL</code>를 true로 설정하여 이를 수행하는데</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
 </code></pre><p>기본값은 un-premultiplied 입니다.</p>
-<p>대부분의 Canvas 2D 구현은 pre-multiplied alpha로 작동한다는 점에 유의하세요.
+<p>대부분의 Canvas 2D 구현은 pre-multiplied 알파로 작동한다는 점에 유의하세요.
 이는 WebGL로 전송하고 <code class="notranslate" translate="no">UNPACK_PREMULTIPLY_ALPHA_WEBGL</code>이 false일 때 WebGL이 다시 un-premultipiled로 전환할 것임을 의미합니다.</p>
-<h3 id="-6-pre-multiplied-alpha-blending-equation-">#6) pre-multiplied alpha와 함께 작동하는 blending equation 사용</h3>
+<h3 id="-6-pre-multiplied-blending-equation-">#6) pre-multiplied 알파와 함께 작동하는 blending equation 사용</h3>
 <p>제가 작성하거나 작업한 거의 모든 OpenGL 앱들이 사용 중인데</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-</code></pre><p>non-premultiplied alpha texture에서 작동합니다.</p>
-<p>실제로 pre-multiplied alpha texture로 작업하려면</p>
+</code></pre><p>non-premultiplied 알파 텍스처에서 작동합니다.</p>
+<p>실제로 pre-multiplied 알파 텍스처로 작업하려면,</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
 </code></pre><p>이게 제가 알고 있는 방법입니다.
 더 많은 걸 알고 있다면 아래에 알려주세요.</p>
@@ -332,17 +332,17 @@ pre-multiplied는 손실인 반면 이건 무손실이기 때문에 일반적으
           <li><a href="/webgl/lessons/ko/webgl-image-processing.html">이미지 처리</a></li>
 <li><a href="/webgl/lessons/ko/webgl-image-processing-continued.html">이미지 처리 심화</a></li>
         </ul>
-  <li>2D 평행 이동, 회전, 스케일링, 행렬 수학</li>
+  <li>2D 평행 이동, 회전, 스케일, 행렬 수학</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-2d-translation.html">2D Translation</a></li>
-<li><a href="/webgl/lessons/ko/webgl-2d-rotation.html">2D Rotation</a></li>
-<li><a href="/webgl/lessons/ko/webgl-2d-scale.html">2D Scale</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-2d-translation.html">2D 평행 이동</a></li>
+<li><a href="/webgl/lessons/ko/webgl-2d-rotation.html">2D 회전</a></li>
+<li><a href="/webgl/lessons/ko/webgl-2d-scale.html">2D 스케일</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-matrices.html">2D 행렬</a></li>
         </ul>
   <li>3D</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-3d-orthographic.html">3D Orthographic</a></li>
-<li><a href="/webgl/lessons/ko/webgl-3d-perspective.html">3D Perspective</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-3d-orthographic.html">3D 직교 투영</a></li>
+<li><a href="/webgl/lessons/ko/webgl-3d-perspective.html">3D 원근 투영</a></li>
 <li><a href="/webgl/lessons/ko/webgl-3d-camera.html">3D 카메라</a></li>
         </ul>
   <li>조명</li>
@@ -353,13 +353,13 @@ pre-multiplied는 손실인 반면 이건 무손실이기 때문에 일반적으
         </ul>
   <li>구조와 구성</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-less-code-more-fun.html">Less Code, More Fun</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-less-code-more-fun.html">유틸리티 함수</a></li>
 <li><a href="/webgl/lessons/ko/webgl-drawing-multiple-things.html">여러 물체 그리기</a></li>
 <li><a href="/webgl/lessons/ko/webgl-scene-graph.html">장면 그래프</a></li>
         </ul>
   <li>지오메트리</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">지오메트리 - Lathe</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">지오메트리 - 선반 가공</a></li>
 <li><a href="/webgl/lessons/ko/webgl-load-obj.html">.obj 파일 로딩</a></li>
 <li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">.mtl 파일로 .obj 로딩</a></li>
         </ul>
@@ -434,7 +434,7 @@ pre-multiplied는 손실인 반면 이건 무손실이기 때문에 일반적으
 <li><a href="/webgl/lessons/ko/webgl-points-lines-triangles.html">점, 선, 삼각형</a></li>
 <li><a href="/webgl/lessons/ko/webgl-multiple-views.html">다중 뷰, 다중 캔버스</a></li>
 <li><a href="/webgl/lessons/ko/webgl-visualizing-the-camera.html">카메라 시각화</a></li>
-<li><a href="/webgl/lessons/ko/webgl-and-alpha.html">WebGL Alpha</a></li>
+<li><a href="/webgl/lessons/ko/webgl-and-alpha.html">WebGL 알파</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-vs-3d-library.html">2D vs 3D 라이브러리</a></li>
 <li><a href="/webgl/lessons/ko/webgl-anti-patterns.html">안티 패턴</a></li>
 <li><a href="/webgl/lessons/ko/webgl-matrix-vs-math.html">WebGL 행렬 vs 수학 행렬</a></li>
@@ -474,8 +474,8 @@ pre-multiplied는 손실인 반면 이건 무손실이기 때문에 일반적으
         <script>
             /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
             var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
-            var disqus_identifier = 'WebGL Alpha';
-            var disqus_title = 'WebGL Alpha';
+            var disqus_identifier = 'WebGL 알파';
+            var disqus_title = 'WebGL 알파';
 
             /* * * DON'T EDIT BELOW THIS LINE * * */
             (function() {

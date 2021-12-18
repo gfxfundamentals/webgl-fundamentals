@@ -242,13 +242,13 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <div class="lesson-main">
       <p>이 글은 WebGL에서 프레임 버퍼가 무엇인지에 대한 대략적인 이미지를 제공할 겁니다.
 프레임 버퍼는 <a href="webgl-render-to-texture.html">텍스처에 렌더링</a>할 때 언급되는데요.</p>
-<p>프레임 버퍼는 그냥 <em>attachment collection</em>입니다.
+<p>프레임 버퍼는 그냥 <em>어태치먼트 모음</em>입니다.
 그게 전부에요!
-텍스처와 renderbuffer로 렌더링하는데 사용되죠.</p>
+텍스처와 렌더 버퍼로 렌더링하는데 사용되죠.</p>
 <p>이런식으로 프레임 버퍼 객체를 생각하실 수 있으며</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">class Framebuffer {
   constructor() {
-    this.attachments = new Map();  // attachment point별 attachment
+    this.attachments = new Map();  // 어태치먼트 포인트별 어태치먼트
   }
 }
 </code></pre>
@@ -271,7 +271,7 @@ gl = {
   }
 }
 </code></pre>
-<p><code class="notranslate" translate="no">framebufferTexture2D</code>, <code class="notranslate" translate="no">framebufferRenderbuffer</code>, 두 함수를 통해 attachment를 framebuffer에 추가할 수 있습니다.</p>
+<p><code class="notranslate" translate="no">framebufferTexture2D</code>, <code class="notranslate" translate="no">framebufferRenderbuffer</code>, 두 함수를 통해 어태치먼트를 프레임 버퍼에 추가할 수 있습니다.</p>
 <p>구현이 이런식으로 되어 있을 것이라 상상할 수 있는데</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 의사 코드
 gl._getFramebufferByTarget(target) {
@@ -312,11 +312,11 @@ ext.drawBuffersWebGL(drawBuffers) {
   }
 }
 </code></pre>
-<p>요점은 <em>프레임 버퍼</em>가 단순한 attachment 모음이라는 겁니다.
-문제는 attachment가 될 수 있는 것들과 작동하는 조합에 대한 제한인데요.
-예를 들어 floating point texture attachment는 기본적으로 렌더링될 수 없습니다.
+<p>요점은 <em>프레임 버퍼</em>가 단순한 어태치먼트 모음이라는 겁니다.
+문제는 어태치먼트가 될 수 있는 것들과 작동하는 조합에 대한 제한인데요.
+예를 들어 플로팅 포인트 텍스처 어태치먼트는 기본적으로 렌더링될 수 없습니다.
 extension은 <code class="notranslate" translate="no">WEBGL_color_buffer_float</code>같은 걸 활성화할 수 있습니다.
-마찬가지로 2개 이상의 attachment가 있다면 모두 동일한 넓이여야 합니다.</p>
+마찬가지로 2개 이상의 어태치먼트가 있다면 모두 동일한 넓이여야 합니다.</p>
 
     </div>
     <div class="lesson-sidebar">
@@ -345,17 +345,17 @@ extension은 <code class="notranslate" translate="no">WEBGL_color_buffer_float</
           <li><a href="/webgl/lessons/ko/webgl-image-processing.html">이미지 처리</a></li>
 <li><a href="/webgl/lessons/ko/webgl-image-processing-continued.html">이미지 처리 심화</a></li>
         </ul>
-  <li>2D 평행 이동, 회전, 스케일링, 행렬 수학</li>
+  <li>2D 평행 이동, 회전, 스케일, 행렬 수학</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-2d-translation.html">2D Translation</a></li>
-<li><a href="/webgl/lessons/ko/webgl-2d-rotation.html">2D Rotation</a></li>
-<li><a href="/webgl/lessons/ko/webgl-2d-scale.html">2D Scale</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-2d-translation.html">2D 평행 이동</a></li>
+<li><a href="/webgl/lessons/ko/webgl-2d-rotation.html">2D 회전</a></li>
+<li><a href="/webgl/lessons/ko/webgl-2d-scale.html">2D 스케일</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-matrices.html">2D 행렬</a></li>
         </ul>
   <li>3D</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-3d-orthographic.html">3D Orthographic</a></li>
-<li><a href="/webgl/lessons/ko/webgl-3d-perspective.html">3D Perspective</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-3d-orthographic.html">3D 직교 투영</a></li>
+<li><a href="/webgl/lessons/ko/webgl-3d-perspective.html">3D 원근 투영</a></li>
 <li><a href="/webgl/lessons/ko/webgl-3d-camera.html">3D 카메라</a></li>
         </ul>
   <li>조명</li>
@@ -366,13 +366,13 @@ extension은 <code class="notranslate" translate="no">WEBGL_color_buffer_float</
         </ul>
   <li>구조와 구성</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-less-code-more-fun.html">Less Code, More Fun</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-less-code-more-fun.html">유틸리티 함수</a></li>
 <li><a href="/webgl/lessons/ko/webgl-drawing-multiple-things.html">여러 물체 그리기</a></li>
 <li><a href="/webgl/lessons/ko/webgl-scene-graph.html">장면 그래프</a></li>
         </ul>
   <li>지오메트리</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">지오메트리 - Lathe</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">지오메트리 - 선반 가공</a></li>
 <li><a href="/webgl/lessons/ko/webgl-load-obj.html">.obj 파일 로딩</a></li>
 <li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">.mtl 파일로 .obj 로딩</a></li>
         </ul>
@@ -447,7 +447,7 @@ extension은 <code class="notranslate" translate="no">WEBGL_color_buffer_float</
 <li><a href="/webgl/lessons/ko/webgl-points-lines-triangles.html">점, 선, 삼각형</a></li>
 <li><a href="/webgl/lessons/ko/webgl-multiple-views.html">다중 뷰, 다중 캔버스</a></li>
 <li><a href="/webgl/lessons/ko/webgl-visualizing-the-camera.html">카메라 시각화</a></li>
-<li><a href="/webgl/lessons/ko/webgl-and-alpha.html">WebGL Alpha</a></li>
+<li><a href="/webgl/lessons/ko/webgl-and-alpha.html">WebGL 알파</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-vs-3d-library.html">2D vs 3D 라이브러리</a></li>
 <li><a href="/webgl/lessons/ko/webgl-anti-patterns.html">안티 패턴</a></li>
 <li><a href="/webgl/lessons/ko/webgl-matrix-vs-math.html">WebGL 행렬 vs 수학 행렬</a></li>

@@ -325,7 +325,7 @@ gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LI
 텍스처가 아니라면 렌더링되지 않을 겁니다.
 하지만 우리는 이미지 6개를 로딩하고 있습니다.
 즉시 렌더링을 시작하고 싶으므로 6개의 면을 모두 할당한 다음 이미지 로딩을 시작합니다.
-각 이미지가 로드되면 알맞은 면으로 업로드한 다음 mipmap을 다시 생성합니다.
+각 이미지가 로드되면 알맞은 면으로 업로드한 다음 밉맵을 다시 생성합니다.
 다시 말해 즉시 렌더링할 수 있고, 이미지가 다운로드되면 큐브맵의 면이 한 번에 하나씩 이미지로 채워지며, 6개가 모두 로드되지 않아도 렌더링할 수 있습니다.</p>
 <p>하지만 이미지를 로딩하는 것만으로는 부족합니다.
 <a href="webgl-3d-lighting-point.html">조명</a>처럼 약간의 수식이 필요합니다.</p>
@@ -382,7 +382,7 @@ gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LI
 
 </p>
 <p>이제 반사가 어떻게 작동하는지 알고, 큐브맵에서 값을 찾기 위해 사용할 수 있으므로, 셰이더를 변경해봅시다.</p>
-<p>먼저 정점 셰이더에서 정점의 world position과 world oriented normal을 계산하고 이를 프래그먼트 셰이더에 varying으로 전달할 겁니다.
+<p>먼저 정점 셰이더에서 정점의 world position과 world oriented normal을 계산하고 이를 프래그먼트 셰이더에 베링으로 전달할 겁니다.
 이는 <a href="webgl-3d-lighting-spot.html">스포트라이트에 대한 글</a>에서 했던 것과 유사합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">attribute vec4 a_position;
 attribute vec3 a_normal;
@@ -521,17 +521,17 @@ gl.uniform1i(textureLocation, 0);
           <li><a href="/webgl/lessons/ko/webgl-image-processing.html">이미지 처리</a></li>
 <li><a href="/webgl/lessons/ko/webgl-image-processing-continued.html">이미지 처리 심화</a></li>
         </ul>
-  <li>2D 평행 이동, 회전, 스케일링, 행렬 수학</li>
+  <li>2D 평행 이동, 회전, 스케일, 행렬 수학</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-2d-translation.html">2D Translation</a></li>
-<li><a href="/webgl/lessons/ko/webgl-2d-rotation.html">2D Rotation</a></li>
-<li><a href="/webgl/lessons/ko/webgl-2d-scale.html">2D Scale</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-2d-translation.html">2D 평행 이동</a></li>
+<li><a href="/webgl/lessons/ko/webgl-2d-rotation.html">2D 회전</a></li>
+<li><a href="/webgl/lessons/ko/webgl-2d-scale.html">2D 스케일</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-matrices.html">2D 행렬</a></li>
         </ul>
   <li>3D</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-3d-orthographic.html">3D Orthographic</a></li>
-<li><a href="/webgl/lessons/ko/webgl-3d-perspective.html">3D Perspective</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-3d-orthographic.html">3D 직교 투영</a></li>
+<li><a href="/webgl/lessons/ko/webgl-3d-perspective.html">3D 원근 투영</a></li>
 <li><a href="/webgl/lessons/ko/webgl-3d-camera.html">3D 카메라</a></li>
         </ul>
   <li>조명</li>
@@ -542,13 +542,13 @@ gl.uniform1i(textureLocation, 0);
         </ul>
   <li>구조와 구성</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-less-code-more-fun.html">Less Code, More Fun</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-less-code-more-fun.html">유틸리티 함수</a></li>
 <li><a href="/webgl/lessons/ko/webgl-drawing-multiple-things.html">여러 물체 그리기</a></li>
 <li><a href="/webgl/lessons/ko/webgl-scene-graph.html">장면 그래프</a></li>
         </ul>
   <li>지오메트리</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">지오메트리 - Lathe</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">지오메트리 - 선반 가공</a></li>
 <li><a href="/webgl/lessons/ko/webgl-load-obj.html">.obj 파일 로딩</a></li>
 <li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">.mtl 파일로 .obj 로딩</a></li>
         </ul>
@@ -623,7 +623,7 @@ gl.uniform1i(textureLocation, 0);
 <li><a href="/webgl/lessons/ko/webgl-points-lines-triangles.html">점, 선, 삼각형</a></li>
 <li><a href="/webgl/lessons/ko/webgl-multiple-views.html">다중 뷰, 다중 캔버스</a></li>
 <li><a href="/webgl/lessons/ko/webgl-visualizing-the-camera.html">카메라 시각화</a></li>
-<li><a href="/webgl/lessons/ko/webgl-and-alpha.html">WebGL Alpha</a></li>
+<li><a href="/webgl/lessons/ko/webgl-and-alpha.html">WebGL 알파</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-vs-3d-library.html">2D vs 3D 라이브러리</a></li>
 <li><a href="/webgl/lessons/ko/webgl-anti-patterns.html">안티 패턴</a></li>
 <li><a href="/webgl/lessons/ko/webgl-matrix-vs-math.html">WebGL 행렬 vs 수학 행렬</a></li>

@@ -37,23 +37,23 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="2D에서 이동하는 방법">
+<meta name="description" content="2D에서 평행 이동하는 방법">
 <meta name="keywords" content="webgl graphics">
 <meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-2d-translation_ko.jpg">
 
-<meta property="og:title" content="WebGL 2D Translation">
+<meta property="og:title" content="WebGL 2D 평행 이동">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-2d-translation_ko.jpg">
-<meta property="og:description" content="2D에서 이동하는 방법">
+<meta property="og:description" content="2D에서 평행 이동하는 방법">
 <meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-2d-translation.html">
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@greggman">
 <meta name="twitter:creator" content="@greggman">
 <meta name="twitter:domain" content="webglfundamentals.org">
-<meta name="twitter:title" content="WebGL 2D Translation">
+<meta name="twitter:title" content="WebGL 2D 평행 이동">
 <meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-2d-translation.html">
-<meta name="twitter:description" content="2D에서 이동하는 방법">
+<meta name="twitter:description" content="2D에서 평행 이동하는 방법">
 <meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-2d-translation_ko.jpg">
 
 <script type="application/ld+json">
@@ -78,7 +78,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-2d-translation.html#webpage",
       "url":"https://webglfundamentals.org/webgl/lessons/ko/webgl-2d-translation.html",
       "inLanguage":"ko",
-      "name":"WebGL 2D Translation",
+      "name":"WebGL 2D 평행 이동",
       "keywords":"webgl graphics programming",
       "isPartOf":{
         "@id":"https://webglfundamentals.org/#website"
@@ -92,7 +92,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </script>
 
 
-<title>WebGL 2D Translation</title>
+<title>WebGL 2D 평행 이동</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
 <link rel="stylesheet" href="/webgl/lessons/lang.css">
 <link rel="stylesheet" href="/webgl/lessons/ko/lang.css">
@@ -236,26 +236,26 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL 2D Translation</h1>
+    <h1>WebGL 2D 평행 이동</h1>
   </div>
   <div class="lesson">
     <div class="lesson-main">
       <p>3D로 넘어가기 전에 잠시 2D를 사용해봅시다.
 끝까지 함께 해주세요.
-어떤 분들에게는 이 글이 굉장히 당연하겠지만 몇 가지 글의 요점을 써보려고 합니다.</p>
+어떤 분들에게는 이 글이 굉장히 당연하겠지만 몇 가지 요점을 써보려고 합니다.</p>
 <p>이 글은 <a href="webgl-fundamentals.html">WebGL 기초</a>로 시작한 WebGL 관련 시리즈에서 이어집니다.
 아직 읽지 않았다면 적어도 첫 번째 글을 먼저 읽고 다시 여기로 돌아오는 게 좋습니다.</p>
-<p>Translation은 기본적으로 무언가를 &quot;움직이는 걸&quot; 의미하는 멋진 수학적 명칭인데요.
-문장을 영어에서 일본어로 옮기는 것도 맞지만 이 경우 기하학적 이동을 말합니다.
-<a href="webgl-fundamentals.html">첫 번째 포스트</a>에서 끝낸 샘플 코드를 사용하면 setRectangle에 전달되는 값을 변경하는 것만으로 쉽게 사각형을 이동할 수 있었죠?
+<p>평행 이동은 기본적으로 무언가를 &quot;움직이는 것&quot;을 의미하는 멋진 수학적 명칭인데요.
+문장을 영어에서 일본어로 옮기는 것도 맞지만 이 경우에는 기하학적 이동을 말합니다.
+<a href="webgl-fundamentals.html">첫 번째 포스트</a>에서 끝낸 샘플 코드를 사용하면 <code class="notranslate" translate="no">setRectangle</code>에 전달되는 값을 변경하는 것만으로 쉽게 사각형을 이동할 수 있었죠?
 다음은 <a href="webgl-fundamentals.html">이전 샘플</a>에 기반한 샘플입니다.</p>
-<p>먼저 사각형의 translation, width, height, color를 담을 변수를 만듭니다.</p>
+<p>먼저 사각형의 <code class="notranslate" translate="no">translation</code>, <code class="notranslate" translate="no">width</code>, <code class="notranslate" translate="no">height</code>, <code class="notranslate" translate="no">color</code> 변수를 만듭니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  var translation = [0, 0];
   var width = 100;
   var height = 30;
   var color = [Math.random(), Math.random(), Math.random(), 1];
 </code></pre><p>그런 다음 전부 다시 그리는 함수를 만들어봅시다.
-Translation을 업데이트한 후에 이 함수를 호출할 수 있습니다.</p>
+<code class="notranslate" translate="no">translation</code>을 업데이트한 후에 이 함수를 호출할 수 있습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // 장면 그리기
   function drawScene() {
     webglUtils.resizeCanvasToDisplaySize(gl.canvas);
@@ -350,8 +350,8 @@ function setGeometry(gl, x, y) {
 수백 수천 개의 선으로 이루어진 아주 복잡한 지오메트리를 그리려면 꽤 복잡한 코드를 작성해야 합니다.
 또한 자바스크립트는 그릴 때마다 모든 점들을 업데이트해야 하는데요.</p>
 <p>더 간단한 방법이 있습니다.
-지오메트리를 업로드하고 셰이더에서 translation을 수행하면 됩니다.</p>
-<p>다음은 새로운 셰이더 입니다.</p>
+지오메트리를 업로드하고 셰이더에서 평행 이동을 수행하면 됩니다.</p>
+<p>여기 새로운 셰이더 입니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-2d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec2 a_position;
 
@@ -359,14 +359,14 @@ uniform vec2 u_resolution;
 +uniform vec2 u_translation;
 
 void main() {
-*  // Translation에 추가
+*  // 평행 이동 추가
 *  vec2 position = a_position + u_translation;
 
   // 사각형을 픽셀에서 0.0에서 1.0사이로 변환
 *  vec2 zeroToOne = position / u_resolution;
   ...
 </code></pre><p>그리고 코드를 조금 재구성할 겁니다.
-우선 geometry는 한 번만 설정하면 됩니다.</p>
+우선 지오메트리는 한 번만 설정하면 됩니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 문자 &#39;F&#39;를 정의하는 값들로 버퍼 채우기
 function setGeometry(gl) {
   gl.bufferData(
@@ -399,7 +399,7 @@ function setGeometry(gl) {
     gl.STATIC_DRAW
   );
 }
-</code></pre><p>그런 다음 원하는 translation으로 그리기 전에 <code class="notranslate" translate="no">u_translation</code>을 업데이트하면 됩니다.</p>
+</code></pre><p>그런 다음 평행 이동하여 그리기 전에 <code class="notranslate" translate="no">u_translation</code>을 업데이트하면 됩니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  ...
 
 +  var translationLocation = gl.getUniformLocation(program, &quot;u_translation&quot;);
@@ -410,7 +410,7 @@ function setGeometry(gl) {
   var positionBuffer = gl.createBuffer();
   // ARRAY_BUFFER에 바인딩 (ARRAY_BUFFER = positionBuffer)
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-+  // 버퍼에 geometry 데이터 넣기
++  // 버퍼에 지오메트리 데이터 넣기
 +  setGeometry(gl);
 
   ...
@@ -420,7 +420,7 @@ function setGeometry(gl) {
 
     ...
 
-+    // Translation 설정
++    // 평행 이동 설정
 +    gl.uniform2fv(translationLocation, translation);
 
     // 사각형 그리기
@@ -432,7 +432,7 @@ function setGeometry(gl) {
 </code></pre><p><code class="notranslate" translate="no">setGeometry</code>가 한 번만 호출된다는 점에 주목하세요.
 더 이상 <code class="notranslate" translate="no">drawScene</code> 안에 있지 않습니다.</p>
 <p>그리고 여기 해당 예제입니다.
-다시 한 번 translation을 업데이트하기 위해 슬라이더를 드래그해보세요.</p>
+다시 한 번 <code class="notranslate" translate="no">translation</code>을 업데이트하기 위해 슬라이더를 드래그해보세요.</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-geometry-translate-better.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-2d-geometry-translate-better.html" target="_blank">새 창을 열려면 여기를 클릭</a>
@@ -440,12 +440,12 @@ function setGeometry(gl) {
 
 </p>
 <p>이제 그릴 때 WebGL이 거의 모든 걸 수행하고 있습니다.
-Translation을 설정하고 그려달라고 요청하는 게 우리가 하는 전부죠.
-심지어 geometry에 수만 개의 점들이 있더라도 주요 코드는 그대로 유지됩니다.</p>
-<p>원한다면 모든 점들을 업데이트하는 위의 <a href="../../webgl-2d-geometry-translate.html">복잡한 자바스크립트를 사용한 버전</a>과 비교할 수 있습니다.</p>
+<code class="notranslate" translate="no">translation</code>을 설정하고 그려달라고 요청하는 게 우리가 하는 전부죠.
+심지어 지오메트리에 수만 개의 점들이 있더라도 주요 코드는 그대로 유지됩니다.</p>
+<p>원한다면 모든 점들을 업데이트하는 <a href="../../webgl-2d-geometry-translate.html">복잡한 자바스크립트 버전</a>과 비교할 수 있습니다.</p>
 <p>너무 뻔한 예제가 아니었기를 바랍니다.
 다른 한편으로 이걸 수행하는 훨씬 더 좋은 방법을 다룰 것이므로 계속 읽어주세요.
-다음 글에서는 <a href="webgl-2d-rotation.html">Rotation</a>으로 넘어가겠습니다.</p>
+다음 글에서는 <a href="webgl-2d-rotation.html">회전</a>으로 넘어가겠습니다.</p>
 
     </div>
     <div class="lesson-sidebar">
@@ -474,17 +474,17 @@ Translation을 설정하고 그려달라고 요청하는 게 우리가 하는 �
           <li><a href="/webgl/lessons/ko/webgl-image-processing.html">이미지 처리</a></li>
 <li><a href="/webgl/lessons/ko/webgl-image-processing-continued.html">이미지 처리 심화</a></li>
         </ul>
-  <li>2D 평행 이동, 회전, 스케일링, 행렬 수학</li>
+  <li>2D 평행 이동, 회전, 스케일, 행렬 수학</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-2d-translation.html">2D Translation</a></li>
-<li><a href="/webgl/lessons/ko/webgl-2d-rotation.html">2D Rotation</a></li>
-<li><a href="/webgl/lessons/ko/webgl-2d-scale.html">2D Scale</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-2d-translation.html">2D 평행 이동</a></li>
+<li><a href="/webgl/lessons/ko/webgl-2d-rotation.html">2D 회전</a></li>
+<li><a href="/webgl/lessons/ko/webgl-2d-scale.html">2D 스케일</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-matrices.html">2D 행렬</a></li>
         </ul>
   <li>3D</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-3d-orthographic.html">3D Orthographic</a></li>
-<li><a href="/webgl/lessons/ko/webgl-3d-perspective.html">3D Perspective</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-3d-orthographic.html">3D 직교 투영</a></li>
+<li><a href="/webgl/lessons/ko/webgl-3d-perspective.html">3D 원근 투영</a></li>
 <li><a href="/webgl/lessons/ko/webgl-3d-camera.html">3D 카메라</a></li>
         </ul>
   <li>조명</li>
@@ -495,13 +495,13 @@ Translation을 설정하고 그려달라고 요청하는 게 우리가 하는 �
         </ul>
   <li>구조와 구성</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-less-code-more-fun.html">Less Code, More Fun</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-less-code-more-fun.html">유틸리티 함수</a></li>
 <li><a href="/webgl/lessons/ko/webgl-drawing-multiple-things.html">여러 물체 그리기</a></li>
 <li><a href="/webgl/lessons/ko/webgl-scene-graph.html">장면 그래프</a></li>
         </ul>
   <li>지오메트리</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">지오메트리 - Lathe</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">지오메트리 - 선반 가공</a></li>
 <li><a href="/webgl/lessons/ko/webgl-load-obj.html">.obj 파일 로딩</a></li>
 <li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">.mtl 파일로 .obj 로딩</a></li>
         </ul>
@@ -576,7 +576,7 @@ Translation을 설정하고 그려달라고 요청하는 게 우리가 하는 �
 <li><a href="/webgl/lessons/ko/webgl-points-lines-triangles.html">점, 선, 삼각형</a></li>
 <li><a href="/webgl/lessons/ko/webgl-multiple-views.html">다중 뷰, 다중 캔버스</a></li>
 <li><a href="/webgl/lessons/ko/webgl-visualizing-the-camera.html">카메라 시각화</a></li>
-<li><a href="/webgl/lessons/ko/webgl-and-alpha.html">WebGL Alpha</a></li>
+<li><a href="/webgl/lessons/ko/webgl-and-alpha.html">WebGL 알파</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-vs-3d-library.html">2D vs 3D 라이브러리</a></li>
 <li><a href="/webgl/lessons/ko/webgl-anti-patterns.html">안티 패턴</a></li>
 <li><a href="/webgl/lessons/ko/webgl-matrix-vs-math.html">WebGL 행렬 vs 수학 행렬</a></li>
@@ -616,8 +616,8 @@ Translation을 설정하고 그려달라고 요청하는 게 우리가 하는 �
         <script>
             /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
             var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
-            var disqus_identifier = 'WebGL 2D Translation';
-            var disqus_title = 'WebGL 2D Translation';
+            var disqus_identifier = 'WebGL 2D 평행 이동';
+            var disqus_title = 'WebGL 2D 평행 이동';
 
             /* * * DON'T EDIT BELOW THIS LINE * * */
             (function() {

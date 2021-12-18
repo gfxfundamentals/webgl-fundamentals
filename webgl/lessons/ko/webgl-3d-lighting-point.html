@@ -250,22 +250,22 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </div>
 
 </p>
-<p>위 표면을 회전시키면 표면의 각 지점이 가지는 <em>surface -&gt; light</em> 벡터가 어떻게 다른지 알 수 있는데요.
+<p>위 표면을 회전시키면 표면의 각 지점이 가지는 <em>표면 -&gt; 빛</em> 벡터가 어떻게 다른지 알 수 있는데요.
 표면 법선과 표면에서 조명을 향하는 각 벡터의 스칼라곱을 구하면, 표면의 각 지점에서 다른 값을 얻을 수 있습니다.</p>
 <p>먼저 조명 위치가 필요합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">uniform vec3 u_lightWorldPosition;
-</code></pre><p>그리고 표면의 world position을 계산하는 방법이 필요한데요.
-이를 위해 위치에 world matrix를 곱할 수 있습니다.</p>
+</code></pre><p>그리고 표면의 월드 위치를 계산하는 방법이 필요한데요.
+이를 위해 위치에 월드 행렬을 곱할 수 있습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">uniform mat4 u_world;
 
 ...
 
-// 표면의 world position 계산
+// 표면의 월드 위치 계산
 vec3 surfaceWorldPosition = (u_world * a_position).xyz;
 </code></pre><p>그리고 표면에서 조명까지의 벡터를 계산할 수 있습니다.
 이번엔 표면의 모든 위치에서 한 지점까지의 벡터를 계산합시다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">v_surfaceToLight = u_lightWorldPosition - surfaceWorldPosition;
-</code></pre><p>다음은 컨텍스트의 전부입니다.</p>
+</code></pre><p>여기 모든 컨텍스트입니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec4 a_position;
 attribute vec3 a_normal;
 
@@ -286,14 +286,14 @@ void main() {
   // 법선의 방향을 정하고 프래그먼트 셰이더로 전달
   v_normal = mat3(u_worldInverseTranspose) * a_normal;
 
-+  // 표면의 world position 계산
++  // 표면의 월드 위치 계산
 +  vec3 surfaceWorldPosition = (u_world * a_position).xyz;
 +
-+  // surface -&gt; light 벡터를 계산하고 프래그먼트 셰이더로 전달
++  // 표면 -&gt; 빛 벡터를 계산하고 프래그먼트 셰이더로 전달
 +  v_surfaceToLight = u_lightWorldPosition - surfaceWorldPosition;
 }
-</code></pre><p>surface -&gt; light 벡터는 단위 벡터가 아니기 때문에 프래그먼트 셰이더에서 정규화해야 합니다.
-참고로 정점 셰이더에서 정규화할 수 있었지만 <code class="notranslate" translate="no">varying</code>이기 때문에 위치 사이를 선형적으로 보간하기 때문에 완전한 단위 벡터가 아니게 됩니다.</p>
+</code></pre><p>표면 -&gt; 빛 벡터는 단위 벡터가 아니기 때문에 프래그먼트 셰이더에서 정규화해야 합니다.
+참고로 정점 셰이더에서 정규화할 수 있었지만 베링이기 때문에 위치 사이를 선형적으로 보간하여 완전한 단위 벡터가 아니게 됩니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">precision mediump float;
 
 // 정점 셰이더에서 전달됩니다.
@@ -304,7 +304,7 @@ varying vec3 v_normal;
 uniform vec4 u_color;
 
 void main() {
-  // v_normal은 varying이기 때문에 보간되므로 단위 벡터가 아닙니다.
+  // v_normal은 베링이기 때문에 보간되므로 단위 벡터가 아닙니다.
   // 정규화하면 다시 단위 벡터가 됩니다.
   vec3 normal = normalize(v_normal);
 
@@ -315,7 +315,7 @@ void main() {
 
   gl_FragColor = u_color;
 
-  // 색상 부분(alpha 제외)에만 light 곱하기
+  // 색상 부분(알파 제외)에만 광량 곱하기
   gl_FragColor.rgb *= light;
 }
 </code></pre><p>그런 다음 <code class="notranslate" translate="no">u_world</code>와 <code class="notranslate" translate="no">u_lightWorldPosition</code>의 위치를 찾아야 합니다.</p>
@@ -351,21 +351,21 @@ void main() {
 </div>
 
 </p>
-<p>이제 반사광 강조를 추가할 수 있습니다.</p>
+<p>이제 포인트가 생겼으니 반사광 하이라이팅을 추가할 수 있습니다.</p>
 <p>현실의 물체를 보면 먼 곳에서 조명이 비칠 때 거울처럼 빛을 반사하는데요.</p>
 <p><img class="webgl_center" src="../resources/specular-highlights.jpg" /></p>
 <p>해당 효과는 빛이 눈에 반사되는지 계산하여 시뮬레이션할 수 있습니다.
-다시 <em>스칼라곱</em>을 구합니다.</p>
+다시 <em>스칼라곱</em>을 구하게 되는데요.</p>
 <p>무엇을 확인해야 할까요?
 생각해봅시다.
-빛은 표면에 부딪히는 각도와 동일한 각도로 반사되는데, surface -&gt; light 방향이 surface -&gt; eye 방향과 정확히 반전이라면 완벽한 반사각입니다.</p>
+빛은 표면에 부딪히는 각도와 동일한 각도로 반사되는데, 표면 -&gt; 빛 방향이 표면 -&gt; 눈 방향과 정확히 반전이라면 완벽한 반사각입니다.</p>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example noborder" style="width: 500px; height: 400px;" src="/webgl/lessons/resources/surface-reflection.html"></iframe>
 </div>
 
 </p>
 <p>모델의 표면에서 조명을 향하는 방향을 알고, 표면에서 뷰/눈/카메라로 향하는 방향을 안다면, 이 두 벡터를 더하고 정규화해서, 이들 사이 중간에 있는 <code class="notranslate" translate="no">halfVector</code>를 계산할 수 있습니다.
-<code class="notranslate" translate="no">halfVector</code>와 surface normal이 일치한다면 빛을 뷰/눈/카메라로 반사하기에 완벽한 각도입니다.
+<code class="notranslate" translate="no">halfVector</code>와 표면 법선이 일치한다면 빛을 뷰/눈/카메라로 반사하기에 완벽한 각도입니다.
 그럼 어떻게 일치하는지 알 수 있을까요?
 이전에 했던 것처럼 <em>스칼라곱</em>을 구하면 됩니다.
 (1 = 일치, 0 = 수직, -1 = 반대)</p>
@@ -374,7 +374,7 @@ void main() {
 </div>
 
 </p>
-<p>먼저 뷰/눈/카메라의 위치를 전달하고, surface -&gt; view 벡터를 계산한 다음 프래그먼트 셰이더로 전달해야 합니다.</p>
+<p>먼저 뷰/눈/카메라의 위치를 전달하고, 표면 -&gt; 뷰 벡터를 계산한 다음 프래그먼트 셰이더로 전달해야 합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec4 a_position;
 attribute vec3 a_normal;
 
@@ -397,16 +397,16 @@ void main() {
   // 법선의 방향을 정하고 프래그먼트 셰이더로 전달
   v_normal = mat3(u_worldInverseTranspose) * a_normal;
 
-  // 표면의 world position 계산
+  // 표면의 월드 위치 계산
   vec3 surfaceWorldPosition = (u_world * a_position).xyz;
 
-  // surface -&gt; light 벡터를 계산하고 프래그먼트 셰이더로 전달
+  // 표면 -&gt; 빛 벡터를 계산하고 프래그먼트 셰이더로 전달
   v_surfaceToLight = u_lightWorldPosition - surfaceWorldPosition;
 
-+  // surface -&gt; view/camera 벡터를 계산하고 프래그먼트 셰이더로 전달
++  // 표면 -&gt; 뷰/카메라 벡터를 계산하고 프래그먼트 셰이더로 전달
 +  v_surfaceToView = u_viewWorldPosition - surfaceWorldPosition;
 }
-</code></pre><p>다음으로 프래그먼트 셰이더에서 surface -&gt; view 벡터와 surface -&gt; light 벡터 사이의 <code class="notranslate" translate="no">halfVector</code>를 계산해야 합니다.
+</code></pre><p>다음으로 프래그먼트 셰이더에서 표면 -&gt; 뷰 벡터와 표면 -&gt; 빛 벡터 사이의 <code class="notranslate" translate="no">halfVector</code>를 계산해야 합니다.
 그런 다음 <code class="notranslate" translate="no">halfVector</code>와 법선의 스칼라곱을 구하여, 빛이 뷰로 반사되는지 확인할 수 있습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 정점 셰이더에서 전달됩니다.
 varying vec3 v_normal;
@@ -416,7 +416,7 @@ varying vec3 v_surfaceToLight;
 uniform vec4 u_color;
 
 void main() {
-  // v_normal이 varying이기 때문에 보간되므로 단위 벡터가 아닙니다.
+  // v_normal이 베링이기 때문에 보간되므로 단위 벡터가 아닙니다.
   // 정규화하면 다시 단위 벡터가 됩니다.
   vec3 normal = normalize(v_normal);
 
@@ -429,10 +429,10 @@ void main() {
 
   gl_FragColor = u_color;
 
-  // 색상 부분(alpha 제외)에만 light 곱하기
+  // 색상 부분(알파 제외)에만 광량 곱하기
   gl_FragColor.rgb *= light;
 
-+  // Specular 더하기
++  // 반사율 더하기
 +  gl_FragColor.rgb += specular;
 }
 </code></pre><p>마지막으로 <code class="notranslate" translate="no">u_viewWorldPosition</code>을 찾아 설정해야 합니다.</p>
@@ -459,8 +459,8 @@ var cameraMatrix = makeLookAt(camera, target, up);
 
 </p>
 <p><strong>으악 너무 밝아!</strong></p>
-<p>스칼라곱을 거듭 제곱해서 밝기를 수정할 수 있습니다.
-이는 반사되는 가장 밝은 부분을 linear falloff에서 exponential falloff로 더 작게 만듭니다.</p>
+<p>스칼라곱을 거듭제곱해서 밝기를 수정할 수 있습니다.
+이는 반사되는 가장 밝은 부분을 선형적 폴오프에서 지수적 폴오프로 더 작게 만듭니다.</p>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example noborder" style="width: 300px; height: 300px;" src="/webgl/lessons/resources/power-graph.html"></iframe>
 </div>
@@ -480,14 +480,14 @@ var cameraMatrix = makeLookAt(camera, target, up);
 +    specular = pow(dot(normal, halfVector), u_shininess);
 +  }
 </code></pre><p>스칼라곱은 음수가 될 수 있습니다.
-하지만 음수를 거듭 제곱하는 건 WebGL에 정의되어 있지 않은데요.
-그러니 스칼라곱이 음수가 된다면 specular를 0.0으로 남겨둡시다.</p>
+하지만 음수를 거듭제곱하는 건 WebGL에 정의되어 있지 않은데요.
+그러니 스칼라곱이 음수가 된다면 <code class="notranslate" translate="no">specular</code>를 0.0으로 남겨둡시다.</p>
 <p>물론 위치를 찾고 설정해야 합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">+var shininessLocation = gl.getUniformLocation(program, &quot;u_shininess&quot;);
 
 ...
 
-// Shininess 설정
+// 광택 설정
 gl.uniform1f(shininessLocation, shininess);
 </code></pre><p>그리고 여기 결과입니다.</p>
 <p><div class="webgl_example_container">
@@ -498,7 +498,7 @@ gl.uniform1f(shininessLocation, shininess);
 </p>
 <p>마지막으로 이 글에서 다루고 싶은 건 조명 색상입니다.</p>
 <p>지금까지 F에 전달하는 색상을 곱하기 위해 <code class="notranslate" translate="no">light</code>를 사용했는데요.
-색상을 가진 조명을 원한다면 조명 색상을 제공할 수 있습니다.</p>
+조명이 색상을 가지도록 하고 싶다면 조명 색상을 제공할 수 있습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">uniform vec4 u_color;
 uniform float u_shininess;
 +uniform vec3 u_lightColor;
@@ -506,18 +506,18 @@ uniform float u_shininess;
 
 ...
 
-  // 색상 부분(alpha 제외)에만 light 곱하기
+  // 색상 부분(알파 제외)에만 광량 곱하기
 *  gl_FragColor.rgb *= light * u_lightColor;
 
-  // Specular 더하기
+  // 반사율 더하기
 *  gl_FragColor.rgb += specular * u_specularColor;
 }
-</code></pre><p>그리고 당연히</p>
+</code></pre><p>당연히 위치를 찾고,</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">+  var lightColorLocation =
 +      gl.getUniformLocation(program, &quot;u_lightColor&quot;);
 +  var specularColorLocation =
 +      gl.getUniformLocation(program, &quot;u_specularColor&quot;);
-</code></pre><p>그리고</p>
+</code></pre><p>설정해야 합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 조명 색상 설정
 +  gl.uniform3fv(lightColorLocation, m4.normalize([1, 0.6, 0.6]));  // 빨간 조명
 // 반사광 색상 설정
@@ -533,19 +533,19 @@ uniform float u_shininess;
 <h3>왜 <code class="notranslate" translate="no">pow(negative, power)</code>는 정의되어 있지 않나요?</h3>
 <p>이게 무슨 뜻일까요?</p>
 <div class="webgl_center"><pre class="glocal-center-content">pow(5, 2)</pre></div>
-<p>이렇게 볼 수 있고</p>
+<p>이렇게 볼 수 있습니다.</p>
 <div class="webgl_center"><pre class="glocal-center-content">5 * 5 = 25</pre></div>
-<p>이건</p>
+<p>그리고 이것은,</p>
 <div class="webgl_center"><pre class="glocal-center-content">pow(5, 3)</pre></div>
 <p>이렇게 볼 수 있죠.</p>
 <div class="webgl_center"><pre class="glocal-center-content">5 * 5 * 5 = 125</pre></div>
 <p>그럼 이건 어떤가요?</p>
 <div class="webgl_center"><pre class="glocal-center-content">pow(-5, 2)</pre></div>
-<p>이렇게 될 수 있으며</p>
+<p>이렇게 될 수 있으며,</p>
 <div class="webgl_center"><pre class="glocal-center-content">-5 * -5 = 25</pre></div>
-<p>그리고</p>
+<p>그리고 이것은,</p>
 <div class="webgl_center"><pre class="glocal-center-content">pow(-5, 3)</pre></div>
-<p>다음과 같이 볼 수 있겠죠.</p>
+<p>이런 식으로 볼 수 있겠죠.</p>
 <div class="webgl_center"><pre class="glocal-center-content">-5 * -5 * -5 = -125</pre></div>
 <p>
 아시다시피 음수를 음수로 곱하면 양수를 만듭니다.
@@ -587,17 +587,17 @@ uniform float u_shininess;
           <li><a href="/webgl/lessons/ko/webgl-image-processing.html">이미지 처리</a></li>
 <li><a href="/webgl/lessons/ko/webgl-image-processing-continued.html">이미지 처리 심화</a></li>
         </ul>
-  <li>2D 평행 이동, 회전, 스케일링, 행렬 수학</li>
+  <li>2D 평행 이동, 회전, 스케일, 행렬 수학</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-2d-translation.html">2D Translation</a></li>
-<li><a href="/webgl/lessons/ko/webgl-2d-rotation.html">2D Rotation</a></li>
-<li><a href="/webgl/lessons/ko/webgl-2d-scale.html">2D Scale</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-2d-translation.html">2D 평행 이동</a></li>
+<li><a href="/webgl/lessons/ko/webgl-2d-rotation.html">2D 회전</a></li>
+<li><a href="/webgl/lessons/ko/webgl-2d-scale.html">2D 스케일</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-matrices.html">2D 행렬</a></li>
         </ul>
   <li>3D</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-3d-orthographic.html">3D Orthographic</a></li>
-<li><a href="/webgl/lessons/ko/webgl-3d-perspective.html">3D Perspective</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-3d-orthographic.html">3D 직교 투영</a></li>
+<li><a href="/webgl/lessons/ko/webgl-3d-perspective.html">3D 원근 투영</a></li>
 <li><a href="/webgl/lessons/ko/webgl-3d-camera.html">3D 카메라</a></li>
         </ul>
   <li>조명</li>
@@ -608,13 +608,13 @@ uniform float u_shininess;
         </ul>
   <li>구조와 구성</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-less-code-more-fun.html">Less Code, More Fun</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-less-code-more-fun.html">유틸리티 함수</a></li>
 <li><a href="/webgl/lessons/ko/webgl-drawing-multiple-things.html">여러 물체 그리기</a></li>
 <li><a href="/webgl/lessons/ko/webgl-scene-graph.html">장면 그래프</a></li>
         </ul>
   <li>지오메트리</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">지오메트리 - Lathe</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">지오메트리 - 선반 가공</a></li>
 <li><a href="/webgl/lessons/ko/webgl-load-obj.html">.obj 파일 로딩</a></li>
 <li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">.mtl 파일로 .obj 로딩</a></li>
         </ul>
@@ -689,7 +689,7 @@ uniform float u_shininess;
 <li><a href="/webgl/lessons/ko/webgl-points-lines-triangles.html">점, 선, 삼각형</a></li>
 <li><a href="/webgl/lessons/ko/webgl-multiple-views.html">다중 뷰, 다중 캔버스</a></li>
 <li><a href="/webgl/lessons/ko/webgl-visualizing-the-camera.html">카메라 시각화</a></li>
-<li><a href="/webgl/lessons/ko/webgl-and-alpha.html">WebGL Alpha</a></li>
+<li><a href="/webgl/lessons/ko/webgl-and-alpha.html">WebGL 알파</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-vs-3d-library.html">2D vs 3D 라이브러리</a></li>
 <li><a href="/webgl/lessons/ko/webgl-anti-patterns.html">안티 패턴</a></li>
 <li><a href="/webgl/lessons/ko/webgl-matrix-vs-math.html">WebGL 행렬 vs 수학 행렬</a></li>

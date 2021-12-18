@@ -37,23 +37,23 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="베지에 곡선을 선반 처리하는 방법">
+<meta name="description" content="베지에 곡선을 선반 가공하는 방법">
 <meta name="keywords" content="webgl graphics">
 <meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-geometry-lathe_ko.jpg">
 
-<meta property="og:title" content="WebGL 3D 지오메트리 - Lathe">
+<meta property="og:title" content="WebGL 3D 지오메트리 - 선반 가공">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-geometry-lathe_ko.jpg">
-<meta property="og:description" content="베지에 곡선을 선반 처리하는 방법">
+<meta property="og:description" content="베지에 곡선을 선반 가공하는 방법">
 <meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-3d-geometry-lathe.html">
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@greggman">
 <meta name="twitter:creator" content="@greggman">
 <meta name="twitter:domain" content="webglfundamentals.org">
-<meta name="twitter:title" content="WebGL 3D 지오메트리 - Lathe">
+<meta name="twitter:title" content="WebGL 3D 지오메트리 - 선반 가공">
 <meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-3d-geometry-lathe.html">
-<meta name="twitter:description" content="베지에 곡선을 선반 처리하는 방법">
+<meta name="twitter:description" content="베지에 곡선을 선반 가공하는 방법">
 <meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-3d-geometry-lathe_ko.jpg">
 
 <script type="application/ld+json">
@@ -78,7 +78,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-3d-geometry-lathe.html#webpage",
       "url":"https://webglfundamentals.org/webgl/lessons/ko/webgl-3d-geometry-lathe.html",
       "inLanguage":"ko",
-      "name":"WebGL 3D 지오메트리 - Lathe",
+      "name":"WebGL 3D 지오메트리 - 선반 가공",
       "keywords":"webgl graphics programming",
       "isPartOf":{
         "@id":"https://webglfundamentals.org/#website"
@@ -92,7 +92,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </script>
 
 
-<title>WebGL 3D 지오메트리 - Lathe</title>
+<title>WebGL 3D 지오메트리 - 선반 가공</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
 <link rel="stylesheet" href="/webgl/lessons/lang.css">
 <link rel="stylesheet" href="/webgl/lessons/ko/lang.css">
@@ -236,7 +236,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL 3D 지오메트리 - Lathe</h1>
+    <h1>WebGL 3D 지오메트리 - 선반 가공</h1>
   </div>
   <div class="lesson">
     <div class="lesson-main">
@@ -253,7 +253,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 해당 아이디어의 문제는 매끄러운 상단을 얻을 수 없다는 것인데요.
 표준 실린더는 동일한 크기의 연속된 링으로 생성되지만 굴곡이 많을수록 더 많은 링이 필요합니다.</p>
 <p>모델링 패키지에서 2D 실루엣을 혹은 2D 실루엣의 가장자리와 일치하는 곡선을 만들어 볼링핀을 만들 겁니다.
-그런 다음 3D 모양으로 선반 처리할 겁니다.
+그런 다음 3D 모양으로 선반 가공할 겁니다.
 <em>선반</em>이란 어떤 축을 중심으로 회전하고 원하는 대로 돌출부를 생성한다는 의미입니다.
 이렇게 하면 그릇, 유리잔, 야구 방망이, 병, 전구처럼 둥근 물체를 쉽게 만들 수 있습니다.</p>
 <p>그래서 어떻게 해야 할까요?
@@ -494,16 +494,16 @@ Lock 체크 박스를 해제한 다음 <code class="notranslate" translate="no">
 </code></pre><p><a href="https://developer.mozilla.org/en/docs/Web/SVG/Tutorial/Paths">데이터를 해석</a>하면 이런 점들을 얻을 수 있습니다. </p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">        ___
 44, 371,   |
-62, 338,   | 1st curve
+62, 338,   | 첫 번째 곡선
 63, 305,___|__
 59, 260,___|  |
-55, 215,      | 2nd curve
+55, 215,      | 두 번째 곡선
 22, 156,______|__
 20, 128,______|  |
-18, 100,         | 3rd curve
+18, 100,         | 세 번째 곡선
 31,  77,_________|__
 36,  47,_________|  |
-41,  17,            | 4th curve
+41,  17,            | 네 번째 곡선
 39, -16,            |
  0, -16,____________|
 </code></pre><p>이제 곡선에 대한 데이터가 있으니 곡선 위의 점을 계산해야 합니다.</p>
@@ -576,7 +576,7 @@ function lathePoints(points,
   };
 }
 </code></pre><p>위 코드는 위치와 텍스처 좌표를 생성한 다음, 인덱스를 생성하여 삼각형을 만듭니다.
-<code class="notranslate" translate="no">capStart</code>와 <code class="notranslate" translate="no">capEnd</code>는 cap point의 생성 여부를 지정합니다.
+<code class="notranslate" translate="no">capStart</code>와 <code class="notranslate" translate="no">capEnd</code>는 캡 포인트의 생성 여부를 지정합니다.
 캔을 만들고 있다고 상상해보세요.
 이러한 옵션으로 끝을 닫을지 여부를 지정할 겁니다.</p>
 <p><a href="webgl-less-code-more-fun.html">단순화된 코드</a>를 사용하여 다음과 같이 데이터로 WebGL 버퍼를 생성할 수 있습니다.</p>
@@ -684,9 +684,9 @@ function lathePoints(points,
 
 </p>
 <p>이 텍스처 좌표들은 아직 완벽하지 않습니다.
-Cap에 대해 무엇을 할지 정하지 않았는데요.
+캡에 대해 무엇을 할지 정하지 않았는데요.
 이게 바로 모델링 프로그램을 써야하는 또 다른 이유입니다.
-Cap에 대한 UV 좌표를 계산하는 다른 아이디어를 생각해볼 수 있겠지만 그다지 유용하진 않을 겁니다.
+캡에 대한 UV 좌표를 계산하는 다른 아이디어를 생각해볼 수 있겠지만 그다지 유용하진 않을 겁니다.
 구글에 <a href="https://www.google.com/search?q=uv+map+a+barrel">uv map a barrel</a>이라고 검색해보면 완벽한 UV 좌표를 얻는 것이, 데이터 입력 문제 정도의 수학 문제가 아니며, 해당 데이터를 입력하기 위해 좋은 도구가 필요하다는 것을 알 수 있습니다.</p>
 <p>우리가 해야할 또 다른 것이 있는데 바로 법선을 추가하는 겁니다.</p>
 <p>곡선의 각 점에 대한 법선을 계산할 수 있는데요.
@@ -751,7 +751,7 @@ Cap에 대한 UV 좌표를 계산하는 다른 아이디어를 생각해볼 수 
 
   // 공유된 정점을 파악해야 하는데요.
   // 이는 면(삼각형)을 보는 것만큼 간단하지 않습니다.
-  // 예를 들어 표준 실린더가 있다면
+  // 예를 들어 표준 실린더가 있다면,
   //
   //
   //      3-4
@@ -906,7 +906,7 @@ function makeIndiceIterator(arrays) {
 <p>3D 데이터를 만들고 싶다면 <strong>3D 모델링 패키지를 사용</strong>하면 된다는 걸 배웠습니다!!! 😝</p>
 <p>정말로 유용한 무언가를 하려면 실제 <a href="https://www.google.com/search?q=uv+editor">UV 에디터</a>가 필요할 겁니다.
 Cap을 잘 다루는 것도 3D가 도움이 될 수 있습니다.
-선반 처리를 할 때 제한된 옵션 세트를 사용하는 대신에 에디터의 다른 기능을 사용하여 cap을 추가하고 더 쉽게 cap에 대한 UV를 생성할 수 있습니다.
+선반 가공할 때 제한된 옵션 세트를 사용하는 대신에 에디터의 다른 기능을 사용하여 캡을 추가하고 더 쉽게 캡에 대한 UV를 생성할 수 있습니다.
 또한 3D 에디터는 <a href="https://www.google.com/search?q=extruding+model">돌출된 면</a>과 <a href="https://www.google.com/search?q=extruding+along+a+path">경로를 따라 돌출</a>을 지원하는데, 위의 선반 예제를 보면 어떻게 작동하는지 알 수 있습니다.</p>
 <h2 id="-">참고</h2>
 <p><a href="https://pomax.github.io/bezierinfo/">베지에 곡선에 대한 멋진 페이지</a>가 없었다면 이걸 완료할 수 없었다고 언급하고 싶습니다.</p>
@@ -970,12 +970,12 @@ function getVertIndex(position) {
 경계선이 없어졌네요.
 하지만 실행에 몇 초가 걸리고 인터페이스를 사용할 수 없게 되었습니다.
 이는 O^2 해결법이기 때문인데요.
-distance는 낮고, divisions은 높게, 최대 정점에 관한 슬라이더를 움직여보면, 정점을 114000개까지 생성할 수 있습니다.
+<code class="notranslate" translate="no">distance</code>는 낮고, <code class="notranslate" translate="no">divisions</code>은 높게, 최대 정점에 관한 슬라이더를 움직여보면, 정점을 114000개까지 생성할 수 있습니다.
 O^2일 경우 최대 12조에 가까운 반복이 발생합니다.
 </p>
 <p>
 인터넷에서 쉬운 해결책을 찾아봤지만 찾지 못했습니다.
-일치하는 점을 더 빨리 찾도록 만들기 위해 모든 점을 <a href="https://en.wikipedia.org/wiki/Octree">octree</a>에 넣는 걸 생각해봤지만 이 글에서 다루긴 너무 많은 것 같습니다.
+일치하는 점을 더 빨리 찾도록 만들기 위해 모든 점을 <a href="https://en.wikipedia.org/wiki/Octree">팔진트리</a>에 넣는 걸 생각해봤지만 이 글에서 다루긴 너무 많은 것 같습니다.
 </p>
 <p>
 그제서야 끝점만 문제라면 수식에 나머지 연산을 추가하여 실제로 점이 동일하도록 할 수 있다는 것을 깨달았습니다.
@@ -1001,8 +1001,8 @@ O^2일 경우 최대 12조에 가까운 반복이 발생합니다.
 </div>
 
 <div class="webgl_bottombar">
-<h3>행렬 수학은 여기에 과도한가요?</h3>
-<p>점을 선반 처리할 때 회전시키는 이런 코드가 있습니다.</p>
+<h3>행렬 수학은 여기에 사용하기 과한가요?</h3>
+<p>점을 선반 가공할 때 회전시키는 이런 코드가 있습니다.</p>
 <pre class="prettyprint">
 const mat = m4.yRotation(angle);
 ...
@@ -1040,7 +1040,7 @@ points.forEach((p, ndx) => {
    const mat = m4.axisRotation(userSuppliedAxis, angle);
 </pre>
 <p>
-어느 방법이 최선인지는 당신과 당신의 필요에 달렸습니다.
+어느 방법이 최선인지는 당신의 필요에 달렸습니다.
 저는 먼저 유연한 방법을 고르고 추후 너무 느리면 최적화할 겁니다.
 </p>
 </div>
@@ -1073,17 +1073,17 @@ points.forEach((p, ndx) => {
           <li><a href="/webgl/lessons/ko/webgl-image-processing.html">이미지 처리</a></li>
 <li><a href="/webgl/lessons/ko/webgl-image-processing-continued.html">이미지 처리 심화</a></li>
         </ul>
-  <li>2D 평행 이동, 회전, 스케일링, 행렬 수학</li>
+  <li>2D 평행 이동, 회전, 스케일, 행렬 수학</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-2d-translation.html">2D Translation</a></li>
-<li><a href="/webgl/lessons/ko/webgl-2d-rotation.html">2D Rotation</a></li>
-<li><a href="/webgl/lessons/ko/webgl-2d-scale.html">2D Scale</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-2d-translation.html">2D 평행 이동</a></li>
+<li><a href="/webgl/lessons/ko/webgl-2d-rotation.html">2D 회전</a></li>
+<li><a href="/webgl/lessons/ko/webgl-2d-scale.html">2D 스케일</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-matrices.html">2D 행렬</a></li>
         </ul>
   <li>3D</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-3d-orthographic.html">3D Orthographic</a></li>
-<li><a href="/webgl/lessons/ko/webgl-3d-perspective.html">3D Perspective</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-3d-orthographic.html">3D 직교 투영</a></li>
+<li><a href="/webgl/lessons/ko/webgl-3d-perspective.html">3D 원근 투영</a></li>
 <li><a href="/webgl/lessons/ko/webgl-3d-camera.html">3D 카메라</a></li>
         </ul>
   <li>조명</li>
@@ -1094,13 +1094,13 @@ points.forEach((p, ndx) => {
         </ul>
   <li>구조와 구성</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-less-code-more-fun.html">Less Code, More Fun</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-less-code-more-fun.html">유틸리티 함수</a></li>
 <li><a href="/webgl/lessons/ko/webgl-drawing-multiple-things.html">여러 물체 그리기</a></li>
 <li><a href="/webgl/lessons/ko/webgl-scene-graph.html">장면 그래프</a></li>
         </ul>
   <li>지오메트리</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">지오메트리 - Lathe</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">지오메트리 - 선반 가공</a></li>
 <li><a href="/webgl/lessons/ko/webgl-load-obj.html">.obj 파일 로딩</a></li>
 <li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">.mtl 파일로 .obj 로딩</a></li>
         </ul>
@@ -1175,7 +1175,7 @@ points.forEach((p, ndx) => {
 <li><a href="/webgl/lessons/ko/webgl-points-lines-triangles.html">점, 선, 삼각형</a></li>
 <li><a href="/webgl/lessons/ko/webgl-multiple-views.html">다중 뷰, 다중 캔버스</a></li>
 <li><a href="/webgl/lessons/ko/webgl-visualizing-the-camera.html">카메라 시각화</a></li>
-<li><a href="/webgl/lessons/ko/webgl-and-alpha.html">WebGL Alpha</a></li>
+<li><a href="/webgl/lessons/ko/webgl-and-alpha.html">WebGL 알파</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-vs-3d-library.html">2D vs 3D 라이브러리</a></li>
 <li><a href="/webgl/lessons/ko/webgl-anti-patterns.html">안티 패턴</a></li>
 <li><a href="/webgl/lessons/ko/webgl-matrix-vs-math.html">WebGL 행렬 vs 수학 행렬</a></li>
@@ -1215,8 +1215,8 @@ points.forEach((p, ndx) => {
         <script>
             /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
             var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
-            var disqus_identifier = 'WebGL 3D 지오메트리 - Lathe';
-            var disqus_title = 'WebGL 3D 지오메트리 - Lathe';
+            var disqus_identifier = 'WebGL 3D 지오메트리 - 선반 가공';
+            var disqus_title = 'WebGL 3D 지오메트리 - 선반 가공';
 
             /* * * DON'T EDIT BELOW THIS LINE * * */
             (function() {
