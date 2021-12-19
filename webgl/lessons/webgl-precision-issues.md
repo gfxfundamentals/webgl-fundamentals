@@ -16,7 +16,7 @@ the line
 precision mediump float;
 ```
 
-What that heck was that about?
+What the heck was that about?
 
 `lowp`, `mediump`, and `highp` are precision settings. Precision in this case
 effectively means how many bits are used to store a value. A number in
