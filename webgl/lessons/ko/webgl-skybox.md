@@ -14,7 +14,7 @@ TOC: 스카이박스
 
 이 방식은 잘 동작하지만 몇 가지 문제가 있습니다.
 한 가지는 카메라가 향하고 있는 방향이 어디든 여러 방향에서 봐야하는 큐브가 있다는 겁니다.
-여러분은 모든 게 멀리 그려지길 바라겠지만 큐브의 모서리가 clipping plane 바깥으로 나가길 원하진 않을 텐데요.
+여러분은 모든 게 멀리 그려지길 바라겠지만 큐브의 모서리가 클리핑 평면 바깥으로 나가길 원하진 않을 텐데요.
 해당 문제를 복잡하게 하는 것은 성능 상의 이유로, GPU가 [깊이 버퍼 테스트](webgl-3d-orthographic.html)를 사용하여 테스트가 실패할 픽셀의 그리기를 건너뛸 수 있기 때문에, 멀리 있는 것보다 가까이 있는 것을 먼저 그리려는 겁니다.
 따라서 이상적으로는 깊이 버퍼 테스트를 키고 마지막에 스카이박스를 그려야 겠지만, 실제로 박스를 쓰는 경우 카메라가 다른 방향에서 보기 때문에, 박스의 모서리가 측면보다 멀리 떨어져 문제가 발생합니다.
 
@@ -25,9 +25,9 @@ TOC: 스카이박스
 일반적인 해결책은 depth test를 끄고 스카이박스를 먼저 그리는 거지만, 장면에서 나중에 다룰 픽셀을 그리지 않는 depth buffer test는 이점이 없습니다.
 
 큐브를 사용하는 대신에 캔버스 전체를 덮고 [큐브맵](webgl-cube-maps.html)을 사용하는 사각형을 그려봅시다.
-일반적으로 3D 공간에서 사각형을 투영하기 위해 view projection matrix를 사용하는데요.
+일반적으로 3D 공간에서 사각형을 투영하기 위해 뷰 투영 행렬을 사용하는데요.
 이 경우에는 정반대로 하려고 합니다.
-View projection matrix의 역행렬을 사용하여, 카메라가 사각형의 각 픽셀을 바라보는 방향을 가져오려고 하는데요.
+뷰 투영 행렬의 역행렬을 사용하여, 카메라가 사각형의 각 픽셀을 바라보는 방향을 가져오려고 하는데요.
 이는 큐브맵을 바라보는 방향을 알려줄 겁니다.
 
 [환경맵 예제](webgl-environment-maps.html)를 가져와 여기서 사용하지 않을 법선 관련 코드를 모두 제거했습니다.
@@ -50,10 +50,10 @@ function setGeometry(gl) {
 ```
 
 이 사각형은 이미 클립 공간에 있으므로 캔버스를 채울 겁니다.
-정점마다 2개의 값만 있기 때문에 attribute를 설정하는 코드를 수정해야 합니다.
+정점마다 2개의 값만 있기 때문에 속성을 설정하는 코드를 수정해야 합니다.
 
 ```js
-// positionBuffer(ARRAY_BUFFER)에서 데이터 가져오는 방법을 attribute에 지시
+// positionBuffer(ARRAY_BUFFER)에서 데이터 가져오는 방법을 속성에 지시
 -var size = 3;          // 반복마다 3개의 컴포넌트
 +var size = 2;          // 반복마다 2개의 컴포넌트
 var type = gl.FLOAT;   // 데이터는 32비트 부동 소수점
@@ -78,7 +78,7 @@ void main() {
 }
 ```
 
-프래그먼트 셰이더에서 position을 view projection matrix의 역행렬로 곱하고, 4D 공간에서 3D 공간으로 만들기 위해 w로 나눕니다.
+프래그먼트 셰이더에서 위치를 뷰 투영 행렬의 역행렬로 곱하고, 4D 공간에서 3D 공간으로 만들기 위해 w로 나눕니다.
 
 ```glsl
 precision mediump float;
@@ -93,7 +93,7 @@ void main() {
 }
 ```
 
-마지막으로 uniform location을 찾아야 합니다.
+마지막으로 유니폼 위치를 찾아야 합니다.
 
 ```js
 var skyboxLocation = gl.getUniformLocation(program, "u_skybox");
@@ -104,11 +104,11 @@ var viewDirectionProjectionInverseLocation =
 그리고 이것들을 설정합니다.
 
 ```js
-// projection matrix 계산
+// 투영 행렬 계산
 var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
 var projectionMatrix = m4.perspective(fieldOfViewRadians, aspect, 1, 2000);
 
-// 원점에서 2unit인 원을 그리며 원점을 바라보는 카메라
+// 원점에서 2유닛인 원을 그리며 원점을 바라보는 카메라
 var cameraPosition = [Math.cos(time * .1), 0, Math.sin(time * .1)];
 var target = [0, 0, 0];
 var up = [0, 1, 0];
@@ -118,7 +118,7 @@ var cameraMatrix = m4.lookAt(cameraPosition, target, up);
 // 카메라 행렬로 뷰 행렬 만들기
 var viewMatrix = m4.inverse(cameraMatrix);
 
-// direction만 다루므로 translation 제거
+// 방향만 다루므로 평행 이동 제거
 viewMatrix[12] = 0;
 viewMatrix[13] = 0;
 viewMatrix[14] = 0;
@@ -128,7 +128,7 @@ var viewDirectionProjectionMatrix =
 var viewDirectionProjectionInverseMatrix =
     m4.inverse(viewDirectionProjectionMatrix);
 
-// uniform 설정
+// 유니폼 설정
 gl.uniformMatrix4fv(
   viewDirectionProjectionInverseLocation,
   false,
@@ -140,9 +140,9 @@ gl.uniform1i(skyboxLocation, 0);
 ```
 
 위에서 `cameraPosition`을 계산하는 원점을 중심으로 카메라를 회전하고 있습니다.
-그런 다음 `cameraMatrix`를 `viewMatrix`로 변환한 후에는 카메라가 있는 위치가 아니라 카메라가 바라보는 방향만 다루므로 translation을 0으로 만듭니다.
+그런 다음 `cameraMatrix`를 `viewMatrix`로 변환한 후에는 카메라가 있는 위치가 아니라 카메라가 바라보는 방향만 다루므로 평행 이동을 0으로 만듭니다.
 
-거기에 projection matrix를 곱하고, 역행렬로 만든 다음, 행렬을 설정합니다.
+거기에 투영 행렬을 곱하고, 역행렬로 만든 다음, 행렬을 설정합니다.
 
 {{{example url="../webgl-skybox.html" }}}
 
@@ -184,7 +184,7 @@ const quadBufferInfo = primitives.createXYQuadBufferInfo(gl);
 렌더링할 때 모든 행렬을 계산합니다.
 
 ```js
-// 원점에서 2unit인 원을 그리며 원점을 바라보는 카메라
+// 원점에서 2유닛인 원을 그리며 원점을 바라보는 카메라
 var cameraPosition = [Math.cos(time * .1) * 2, 0, Math.sin(time * .1) * 2];
 var target = [0, 0, 0];
 var up = [0, 1, 0];
@@ -197,7 +197,7 @@ var viewMatrix = m4.inverse(cameraMatrix);
 // x축을 중심으로 큐브 회전
 var worldMatrix = m4.xRotation(time * 0.11);
 
-// direction만 다루므로 translation 제거
+// 방향만 다루므로 평행 이동 제거
 var viewDirectionMatrix = m4.copy(viewMatrix);
 viewDirectionMatrix[12] = 0;
 viewDirectionMatrix[13] = 0;
@@ -213,7 +213,7 @@ var viewDirectionProjectionInverseMatrix =
 
 ```js
 // 큐브 그리기
-gl.depthFunc(gl.LESS);  // default depth test 사용
+gl.depthFunc(gl.LESS);  // 기본 깊이 테스트 사용
 gl.useProgram(envmapProgramInfo.program);
 webglUtils.setBuffersAndAttributes(gl, envmapProgramInfo, cubeBufferInfo);
 webglUtils.setUniforms(envmapProgramInfo, {
@@ -231,7 +231,7 @@ webglUtils.drawBufferInfo(gl, cubeBufferInfo);
 ```js
 // 스카이박스 그리기
 
-// 사각형이 1.0에서 depth test를 통과하도록 만들기
+// 사각형이 1.0에서 깊이 테스트를 통과하도록 만들기
 gl.depthFunc(gl.LEQUAL);
 
 gl.useProgram(skyboxProgramInfo.program);

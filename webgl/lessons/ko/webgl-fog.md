@@ -214,7 +214,7 @@ function drawScene(time) {
   // u_texture에 텍스처 유닛 0을 사용하도록 셰이더에 지시
   gl.uniform1i(textureLocation, 0);
 
-  // 안개색, near, far 설정
+  // 안개색, 근거리, 원거리 설정
   gl.uniform4fv(fogColorLocation, fogColor);
 +  gl.uniform1f(fogNearLocation, settings.fogNear);
 +  gl.uniform1f(fogFarLocation, settings.fogFar);
@@ -276,15 +276,15 @@ for (let i = 0; i <= numCubes; ++i) {
 
 {{{example url="../webgl-3d-fog-depth-based-issue.html" }}}
 
-Above there is a ring of 8 cubes directly around the camera.
-The camera in spinning in place.
-That means the cubes are always the same distance from the camera but a different distance from the Z plane and so our fog amount calculation results in the cubes near the edge coming out of the fog.
- 
-The fix is to instead compute the distance from the camera which will be the same for all cubes.
+위를 보면 카메라 바로 주위에 8개의 큐브가 원을 형성하고 있습니다.
+카메라가 제자리에서 회전하고 있는데요.
+즉 큐브는 항상 카메라와 같은 거리에 있지만 Z평면과는 다른 거리이기 때문에 안개량 계산 결과 가장자리 근처의 큐브가 안개 밖으로 나오게 됩니다.
+
+대신에 모든 큐브에 대해 동일한 카메라와의 거리를 계산하여 고칠 수 있습니다.
 
 <div class="webgl_center"><img src="resources/fog-distance.svg" style="width: 600px;"></div>
 
-To do this we just need to pass the vertex position in view space from the vertex shader to the fragment shader.
+이를 위해 뷰 공간의 정점 위치를 정점 셰이더에서 프래그먼트 셰이더로 전달해야 합니다.
 
 ```glsl
 attribute vec4 a_position;
@@ -344,7 +344,7 @@ void main() {
 {{{example url="../webgl-3d-fog-distance-based.html" }}}
 
 지금까지 모든 안개는 선형 계산을 사용했습니다.
-다시 말해 안개색은 near와 far 사이에 선형적으로 적용됩니다.
+다시 말해 안개색은 근거리와 원거리 사이에 선형적으로 적용됩니다.
 현실 세계에서 보여지는 것처럼 안개는 기하급수적으로 작용하는데요.
 뷰어로부터의 거리의 제곱에 따라 더 짙어집니다.
 다음은 기하급수적인 안개에 대한 일반적인 방정식입니다.
@@ -390,7 +390,7 @@ void main() {
 
 {{{example url="../webgl-3d-fog-distance-exp2.html" }}}
 
-밀도 기반의 안개에 대해 한 가지 주의해야 할 점은 near와 far 설정이 없다는 겁니다.
+밀도 기반의 안개에 대해 한 가지 주의해야 할 점은 근거리와 원거리 설정이 없다는 겁니다.
 이게 더 현실적일 수 있지만 심미적 요구 사항에는 안 맞을 수도 있습니다.
 어느 걸 선호하는 것은 디자인적인 결정입니다.
 
@@ -399,7 +399,7 @@ void main() {
 `gl_FragCoord`는 WebGL이 설정하는 전역 변수입니다.
 `x` 그리고 `y` 컴포넌트는 그려지는 픽셀의 좌표입니다.
 `z` 좌표는 0에서 1사이 해당 픽셀의 깊이입니다.
-바로 거리로 변환할 수는 없지만 near와 far에 대한 0에서 1사이의 값을 선택해서 안개처럼 보이도록 할 수 있습니다.
+바로 거리로 변환할 수는 없지만 근거리와 원거리에 대한 0에서 1사이의 값을 선택해서 안개처럼 보이도록 할 수 있습니다.
 정점 셰이더에서 아무것도 프래그먼트 셰이더로 전달하지 않아도 되며 거리 계산이 필요하지 않으므로 이건 저전력 GPU에서 저렴한 안개 효과를 만드는 한 가지 방법입니다.
 
 {{{example url="../webgl-3d-fog-depth-based-gl_FragCoord.html" }}}

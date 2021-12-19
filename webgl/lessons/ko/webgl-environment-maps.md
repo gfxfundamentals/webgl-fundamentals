@@ -100,7 +100,7 @@ gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LI
 하지만 이미지를 로딩하는 것만으로는 부족합니다.
 [조명](webgl-3d-lighting-point.html)처럼 약간의 수식이 필요합니다.
 
-이 경우 눈/카메라에서 객체의 표면까지의 벡터가 주어지면, 그려지는 각 fragment가 해당 표면에서 반사되는 방향을 알고 싶습니다.
+이 경우 눈/카메라에서 객체의 표면까지의 벡터가 주어지면, 그려지는 각 프래그먼트가 해당 표면에서 반사되는 방향을 알고 싶습니다.
 그러면 해당 방향을 사용하여 큐브맵의 색상을 가져올 수 있습니다.
 
 반사에 대한 공식은 다음과 같습니다.
@@ -108,7 +108,7 @@ gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LI
     reflectionDir = eyeToSurfaceDir – 
         2 ∗ dot(surfaceNormal, eyeToSurfaceDir) ∗ surfaceNormal
 
-[조명에 대한 글](webgl-3d-lighting-directional.html)을 떠올려보면 두 벡터의 스칼라곱은 두 벡터 사이 각도의 cosine을 반환합니다.
+[조명에 대한 글](webgl-3d-lighting-directional.html)을 떠올려보면 두 벡터의 스칼라곱은 두 벡터 사이 각도의 코사인을 반환합니다.
 벡터를 추가하면 새로운 벡터가 생기므로 평평한 표면을 수직으로 보는 눈을 예제를 들어봅시다.
 
 <div class="webgl_center"><img src="resources/reflect-180-01.svg" style="width: 400px"></div>
@@ -161,14 +161,14 @@ gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LI
 
 <span style="color: red">반사된 방향</span>을 이용하여 큐브맵을 보고 물체의 표면을 채색합니다.
 
-다음은 surface의 rotation을 설정하고 방정식의 다양한 부분을 볼 수 있는 다이어그램입니다.
+다음은 표면의 회전을 설정하고 방정식의 다양한 부분을 볼 수 있는 다이어그램입니다.
 또한 반사 벡터가 큐브맵의 다른 면을 가리켜서 표면 색상에 영향을 주는 것도 볼 수 있습니다.
 
 {{{diagram url="resources/environment-mapping.html" width="400" height="400" }}}
 
 이제 반사가 어떻게 작동하는지 알고, 큐브맵에서 값을 찾기 위해 사용할 수 있으므로, 셰이더를 변경해봅시다.
 
-먼저 정점 셰이더에서 정점의 world position과 world oriented normal을 계산하고 이를 프래그먼트 셰이더에 베링으로 전달할 겁니다.
+먼저 정점 셰이더에서 정점의 월드 위치와 월드를 향하는 법선을 계산하고 이를 프래그먼트 셰이더에 베링으로 전달할 겁니다.
 이는 [스포트라이트에 대한 글](webgl-3d-lighting-spot.html)에서 했던 것과 유사합니다.
 
 ```glsl
@@ -186,7 +186,7 @@ void main() {
   // 위치에 행렬 곱하기
   gl_Position = u_projection * u_view * u_world * a_position;
 
-  // View position을 프래그먼트 셰이더로 보내기
+  // 뷰 위치를 프래그먼트 셰이더로 보내기
   v_worldPosition = (u_world * a_position).xyz;
 
   // 법선의 방향을 정하고 프래그먼트 셰이더로 전달
@@ -195,7 +195,7 @@ void main() {
 ```
 
 그런 다음 프래그먼트 셰이더에서 `worldNormal`이 정점 사이의 표면을 가로질러 보간되므로 정규화합니다.
-카메라의 world position을 전달하고 표면의 world position에서 이를 빼면 `eyeToSurfaceDir`이 됩니다.
+카메라의 월드 위치를 전달하고 표면의 월드 위치에서 이를 빼면 `eyeToSurfaceDir`이 됩니다.
 
 마지막으로 위에서 살펴본 공식을 구현하는 GLSL 내장 함수 `reflect`를 사용합니다.
 그리고 결과를 이용하여 큐브맵에서 색상을 가져옵니다.
@@ -243,7 +243,7 @@ setNormals(gl);
 // 법선 버퍼 바인딩
 gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
 
-// Tell the attribute how to get data out of normalBuffer (ARRAY_BUFFER)
+// normalBuffer(ARRAY_BUFFER)에서 데이터 가져오는 방법을 속성에 지시
 var size = 3;          // 반복마다 3개의 컴포넌트
 var type = gl.FLOAT;   // 데이터는 32비트 부동 소수점 값
 var normalize = false; // 데이터 정규화 (0-255에서 0-1로 전환)
@@ -252,7 +252,7 @@ var offset = 0;        // 버퍼의 처음부터 시작
 gl.vertexAttribPointer(normalLocation, size, type, normalize, stride, offset);
 ```
 
-물론 초기화할 때 uniform location을 찾아야 합니다.
+물론 초기화할 때 유니폼 위치를 찾아야 합니다.
 
 ```js
 var projectionLocation = gl.getUniformLocation(program, "u_projection");
@@ -265,7 +265,7 @@ var worldCameraPositionLocation = gl.getUniformLocation(program, "u_worldCameraP
 그리고 렌더링할 때 이들을 설정합니다.
 
 ```js
-// projection matrix 계산
+// 투영 행렬 계산
 var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
 var projectionMatrix = m4.perspective(fieldOfViewRadians, aspect, 1, 2000);
 gl.uniformMatrix4fv(projectionLocation, false, projectionMatrix);
@@ -282,7 +282,7 @@ var viewMatrix = m4.inverse(cameraMatrix);
 var worldMatrix = m4.xRotation(modelXRotationRadians);
 worldMatrix = m4.yRotate(worldMatrix, modelYRotationRadians);
 
-// Uniform 설정
+// 유니폼 설정
 gl.uniformMatrix4fv(projectionLocation, false, projectionMatrix);
 gl.uniformMatrix4fv(viewLocation, false, viewMatrix);
 gl.uniformMatrix4fv(worldLocation, false, worldMatrix);

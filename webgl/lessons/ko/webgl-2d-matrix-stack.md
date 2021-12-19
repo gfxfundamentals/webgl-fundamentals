@@ -1,22 +1,22 @@
 Title: WebGL 행렬 스택 구현
-Description: WebGL에서 Canvas 2D의 translate/rotate/scale 함수를 구현하는 방법
+Description: WebGL에서 Canvas 2D의 평행 이동/회전/스케일 함수를 구현하는 방법
 TOC: 2D - 행렬 스택
 
 
 이 글은 [WebGL 2D DrawImage](webgl-2d-drawimage.html)에서 이어집니다.
 아직 읽지 않았다면 [거기](webgl-2d-drawimage.html)부터 시작하는 게 좋습니다.
 
-지난 글에서 우리는 source rectangle과 destination rectangle을 모두 지정하는 기능을 포함하여 Canvas 2D의 `drawImage` 함수와 동일한 WebGL을 구현했습니다.
+지난 글에서 우리는 원본 사각형과 결과 사각형을 모두 지정하는 기능을 포함하여 Canvas 2D의 `drawImage` 함수와 동일한 WebGL을 구현했습니다.
 
 아직 하지 않은 것은 임의의 지점에서 회전 및 크기 조정하는 겁니다.
-더 많은 매개변수를 추가하여 이를 수행할 수 있으며, 최소한 중심점과 rotation 그리고 x와 y의 scale을 지정해야 합니다.
+더 많은 매개변수를 추가하여 이를 수행할 수 있으며, 최소한 중심점과 회전 그리고 x와 y의 스케일을 지정해야 합니다.
 다행히 더 일반적이고 유용한 방법이 있습니다.
 Canvas 2D API가 이를 수행하는 방법은 행렬 스택을 사용하는 겁니다.
 Canvas 2D API의 행렬 스택 함수는 `save`, `restore`, `translate`, `rotate`, `scale`이 있습니다.
 
 행렬 스택은 구현하기 매우 간단합니다.
 우선 행렬의 스택을 만듭니다.
-그리고 [이전에 만들었던 함수들](webgl-2d-matrices.html)을 이용하여 translation, rotation, scale 행렬로 스택의 최상단 행렬을 곱하는 함수를 만들면 되는데요.
+그리고 [이전에 만들었던 함수들](webgl-2d-matrices.html)을 이용하여 평행 이동, 회전, 스케일 행렬로 스택의 최상단 행렬을 곱하는 함수를 만들면 되는데요.
 
 다음은 구현입니다.
 
@@ -39,7 +39,7 @@ MatrixStack.prototype.restore = function() {
   }
 };
 
-// Current matrix의 복사본을 스택에 복사
+// 현재 행렬의 복사본을 스택에 복사
 MatrixStack.prototype.save = function() {
   this.stack.push(this.getCurrentMatrix());
 };
@@ -48,33 +48,33 @@ MatrixStack.prototype.save = function() {
 또한 최상단 행렬을 가져오고 설정하기 위한 함수가 필요합니다.
 
 ```
-// Current matrix(스택의 최상단)의 복사본 가져오기
+// 현재 행렬(스택의 최상단)의 복사본 가져오기
 MatrixStack.prototype.getCurrentMatrix = function() {
   return this.stack[this.stack.length - 1].slice();
 };
 
-// Current matrix 설정
+// 현재 행렬 설정
 MatrixStack.prototype.setCurrentMatrix = function(m) {
   return this.stack[this.stack.length - 1] = m;
 };
 ```
 
-마지막으로 이전의 행렬 함수를 이용하여`translate`, `rotate`, `scale`을 구현해야 합니다.
+마지막으로 이전의 행렬 함수를 이용하여 `translate`, `rotate`, `scale`을 구현해야 합니다.
 
 ```
-// Current matrix 이동
+// 현재 행렬 이동
 MatrixStack.prototype.translate = function(x, y, z) {
   var m = this.getCurrentMatrix();
   this.setCurrentMatrix(m4.translate(m, x, y, z));
 };
 
-// Z를 중심으로 current matrix 회전
+// Z를 중심으로 현재 행렬 회전
 MatrixStack.prototype.rotateZ = function(angleInRadians) {
   var m = this.getCurrentMatrix();
   this.setCurrentMatrix(m4.zRotate(m, angleInRadians));
 };
 
-// Current matrix 크기 조정
+// 현재 행렬 크기 조정
 MatrixStack.prototype.scale = function(x, y, z) {
   var m = this.getCurrentMatrix();
   this.setCurrentMatrix(m4.scale(m, x, y, z));
@@ -82,10 +82,10 @@ MatrixStack.prototype.scale = function(x, y, z) {
 ```
 
 3D 행렬 수학 함수를 사용하고 있는데요.
-Translation의 `z`에 `0`을 사용하고 scale의 `z`에 `1`을 사용할 수 있지만, Canvas 2D의 2D 함수 사용에 너무 익숙해서 종종 `z`에 대한 지정을 까먹어서 코드가 끊기므로 `z`를 선택적으로 만들어봅시다.
+`translate`의 `z`에 `0`을 사용하고 `scale`의 `z`에 `1`을 사용할 수 있지만, Canvas 2D의 2D 함수 사용에 너무 익숙해서 종종 `z`에 대한 지정을 까먹어서 코드가 끊기므로 `z`를 선택적으로 만들어봅시다.
 
 ```
-// Current matrix 이동
+// 현재 행렬 이동
 MatrixStack.prototype.translate = function(x, y, z) {
 +  if (z === undefined) {
 +    z = 0;
@@ -96,7 +96,7 @@ MatrixStack.prototype.translate = function(x, y, z) {
 
 ...
 
-// Current matrix 크기 조정
+// 현재 행렬 크기 조정
 MatrixStack.prototype.scale = function(x, y, z) {
 +  if (z === undefined) {
 +    z = 1;
@@ -115,7 +115,7 @@ var matrix = m4.orthographic(0, gl.canvas.width, gl.canvas.height, 0, -1, 1);
 // 이 행렬은 사각형을 dstX,dstY로 이동시킵니다.
 matrix = m4.translate(matrix, dstX, dstY, 0);
 
-// 이 행렬은 사각형을 1단위에서 dstWidth,dstHeight 단위로 크기를 조정합니다.
+// 이 행렬은 사각형을 1유닛에서 dstWidth,dstHeight 유닛으로 크기를 조정합니다.
 matrix = m4.scale(matrix, dstWidth, dstHeight, 1);
 ```
 
@@ -131,13 +131,13 @@ var matrixStack = new MatrixStack();
 // 이 행렬은 픽셀에서 클립 공간으로 변환합니다.
 var matrix = m4.orthographic(0, gl.canvas.width, gl.canvas.height, 0, -1, 1);
 
-+// 이 행렬은 원점을 current matrix stack에 해당하는 곳으로 이동시킵니다.
++// 이 행렬은 원점을 현재 행렬 스택에 해당하는 곳으로 이동시킵니다.
 +matrix = m4.multiply(matrix, matrixStack.getCurrentMatrix());
 
 // 이 행렬은 사각형을 dstX,dstY로 이동시킵니다.
 matrix = m4.translate(matrix, dstX, dstY, 0);
 
-// 이 행렬은 사각형을 1단위에서 dstWidth,dstHeight 단위로 크기를 조정합니다.
+// 이 행렬은 사각형을 1유닛에서 dstWidth,dstHeight 유닛으로 크기를 조정합니다.
 matrix = m4.scale(matrix, dstWidth, dstHeight, 1);
 ```
 
@@ -309,6 +309,6 @@ matrixStack.rotateZ(time);
 새로운 원점이므로 스택에 텍스처가 없다면 텍스처가 그려질 위치를 기준으로 원점이 이동할 곳을 결정하면 됩니다.
 
 행렬 스택이 이전에 다뤘던 [장면 그래프](webgl-scene-graph.html)와 굉장히 비슷하다는 것을 알아채셨을 겁니다.
-장면 그래프는 node tree가 있으며 tree를 탐색하면서 각 node를 parent node로 곱했습니다.
+장면 그래프는 노드 트리가 있으며 트리를 탐색하면서 각 노드를 부모 노드로 곱했습니다.
 행렬 스택은 사실상 동일한 프로세스의 또 다른 버전입니다.
 

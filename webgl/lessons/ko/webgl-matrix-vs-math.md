@@ -3,7 +3,7 @@ Description: WebGL 규칙과 수학 규칙의 차이점
 TOC: WebGL 행렬 vs 수학 행렬
 
 
-이 글은 행렬을 이야기하는 다양한 글, 특히 [행렬을 소개하는 글](webgl-2d-matrices.html)뿐만 아니라 [3D를 소개하는 글](webgl-3d-orthographic.html), [perspective projection에 관한 글](webgl-3d-perspective.html), [카메라에 관한 글](webgl-3d-camera.html)과는 별개입니다.
+이 글은 행렬을 이야기하는 다양한 글, 특히 [행렬을 소개하는 글](webgl-2d-matrices.html)뿐만 아니라 [3D를 소개하는 글](webgl-3d-orthographic.html), [원근 투영에 관한 글](webgl-3d-perspective.html), [카메라에 관한 글](webgl-3d-camera.html)과는 별개입니다.
 
 프로그래밍에서는 일반적으로 행은 좌에서 우로 이동하고, 열은 위아래로 이동합니다.
 
@@ -30,7 +30,7 @@ TOC: WebGL 행렬 vs 수학 행렬
 
 왼쪽 하단 영역에 있는 상태 바가 줄과 열을 표시합니다.
 
-스프레드시트 소프트웨어에서는 행이 가로로 진행하고
+스프레드시트 소프트웨어에서는 행이 가로로 진행하고,
 
 <div class="webgl_center"><img src="resources/spreadsheet-row.png" style="width: 808px; filter: brightness(0.9);" class="nobg"></div>
 
@@ -38,7 +38,7 @@ TOC: WebGL 행렬 vs 수학 행렬
 
 <div class="webgl_center"><img src="resources/spreadsheet-column.png" style="width: 808px; filter: brightness(0.9);" class="nobg"></div>
 
-따라서, 자바스크립트에서 WebGL용 3x3 혹은 4x4 행렬을 만들 때 이렇게 만들어야 하는데
+따라서 자바스크립트에서 WebGL용 3x3 혹은 4x4 행렬을 만들 때 이렇게 만들어야 하는데,
 
 ```js
 const m3x3 = [
@@ -57,7 +57,7 @@ const m4x4 = [
 
 위 규칙에 따라 `m3x3`의 첫 행은 `0, 1, 2`이고 `m4x4`의 마지막 행은 `12, 13, 14, 15`입니다.
 
-아주 표준적인 WebGL 3x3 2D translation 행렬을 만드는 [행렬에 관한 첫 번째 글](webgl-2d-matrices.html)에서 볼 수 있듯이 translation 값 `tx`와 `ty`는 6과 7에 위치하고 있습니다.
+아주 표준적인 WebGL 3x3 2D 평행 이동 행렬을 만드는 [행렬에 관한 첫 번째 글](webgl-2d-matrices.html)에서 볼 수 있듯이 translation 값 `tx`와 `ty`는 6과 7에 위치하고 있습니다.
 
 ```js
 const some3x3TranslationMatrix = [
@@ -67,7 +67,7 @@ const some3x3TranslationMatrix = [
 ];
 ```
 
-[3D에 관한 첫 번째 글](webgl-3d-orthographic.html)에서 소개된 4x4 행렬의 경우 translation은 12, 13, 14에 위치합니다.
+[3D에 관한 첫 번째 글](webgl-3d-orthographic.html)에서 소개된 4x4 행렬의 경우 평행 이동량은 12, 13, 14에 위치합니다.
 
 ```js
 const some4x4TranslationMatrix = [
@@ -80,11 +80,11 @@ const some4x4TranslationMatrix = [
 
 하지만 한 가지 문제가 있습니다.
 행렬 수학에 대한 수학 규칙은 일반적으로 열에서 작업을 수행합니다.
-수학자는 다음과 같이 3x3 translation 행렬을 작성할 겁니다.
+수학자는 다음과 같이 3x3 평행 이동 행렬을 작성할 겁니다.
 
 <div class="webgl_center"><img src="resources/3x3-math-translation-matrix.svg" style="width: 120px;"></div>
 
-그리고 4x4 translation 행렬은 이렇게 되겠죠.
+그리고 4x4 평행 이동 행렬은 이렇게 되겠죠.
 
 <div class="webgl_center"><img src="resources/4x4-math-translation-matrix.svg" style="width: 150px;"></div>
 
@@ -103,7 +103,7 @@ const some4x4TranslationMatrix = [
 불행히도 이렇게 하는 건 문제가 있습니다.
 [카메라에 관한 글](webgl-3d-camera.html)에서 언급했듯이 4x4 행렬의 각 열은 의미를 가집니다.
 
-첫 번째, 두 번째, 세 번째 열들은 각각 x, y, z 축으로 간주되며 마지막 열은 position이나 translation입니다.
+첫 번째, 두 번째, 세 번째 열들은 각각 x, y, z 축으로 간주되며 마지막 열은 위치나 평행 이동입니다.
 
 한 가지 문제는 코드에서 이런 부분을 개별적으로 가져오는 게 재미없다는 겁니다.
 Z축을 원한다면?
@@ -209,7 +209,7 @@ const someTranslationMatrix = [
 ];
 ```
 
-이런 식으로
+이런 식으로,
 
 ```js
 // 행복한 얼굴 이미지
@@ -231,7 +231,7 @@ const dataFor7x8OneChannelImage = [
 해결법이 없어서 죄송합니다.
 행 3을 열이라고 부를 수도 있지만 일치하는 다른 프로그래밍이 없기 때문에 혼란스러울 겁니다.
 
-어찌됐든, 왜 수학 책처럼 보이는 설명이 없는지를 명확히 하는데 도움이 되셨기를 바랍니다.
+왜 수학 책처럼 보이는 설명이 없는지를 명확히 하는데 도움이 되셨기를 바랍니다.
 대신에 이들은 코드처럼 보이고 코드의 규칙을 사용합니다.
-무슨 일이 일어나는지 설명하는데 도움이 되고 수학 규칙에 익숙한 분들에게는 너무 혼랍스럽지 않기를 바랍니다.
+무슨 일이 일어나는지 설명하는데 도움이 되고 수학 규칙에 익숙한 분들에게는 너무 혼란스럽지 않으시길 바랍니다.
 

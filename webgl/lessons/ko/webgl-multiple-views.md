@@ -353,7 +353,7 @@ function render() {
 
 예제를 만들어 보겠습니다.
 
-First let's make a canvas that goes in the background with some content that goes in front.
+먼저 앞으로 갈 일부 콘텐츠와 함께 배경으로 할 캔버스를 만들어봅시다.
 첫 번째는 HTML입니다.
 
 ```html

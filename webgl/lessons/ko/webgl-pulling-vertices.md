@@ -1,6 +1,6 @@
-Title: WebGL Pulling Vertices
+Title: WebGL 정점 풀링
 Description: 독립적인 인덱스 사용
-TOC: Pulling Vertices
+TOC: 정점 풀링
 
 
 이 글은 [기초](webgl-fundamentals.html)를 포함한 다른 글들을 이미 읽었다고 가정합니다.
@@ -155,7 +155,7 @@ function makeDataTexture(gl, data, numComponents) {
   gl.bindTexture(gl.TEXTURE_2D, tex);
   gl.texImage2D(
       gl.TEXTURE_2D,
-      0,            // mip level
+      0,            // 밉 레벨
       gl.RGBA,      // 포맷
       numElements,  // 너비
       1,            // 높이
@@ -262,7 +262,7 @@ vec4 getValueByIndexFromTexture(sampler2D tex, vec2 texSize, float index) {
 }
 ```
 
-So given those 2 functions here is our shader.
+여기 두 함수가 작성된 셰이더입니다.
 
 ```glsl
 attribute vec2 positionAndTexcoordIndices;
@@ -436,14 +436,14 @@ WebGL에서 해결하려는 문제가 있을 때 WebGL은 셰이더를 실행하
 사용한 기존의 방법으로 인해 WebGL이 가지는 유연성을 못 보는 일이 없으시길 바랍니다.
 
 <div class="webgl_bottombar">
-<h3>왜 Vertex Pulling이라고 부르나요?</h3>
+<h3>왜 정점 풀링이라고 부르나요?</h3>
 <p>
 저는 이전부터 이 기술을 사용했음에도 최근(2019년 7월)에서야 이 용어를 들었습니다.
 Daniel Rakos의 <a href='https://www.google.com/search?q=OpenGL+Insights+"Programmable+Vertex+Pulling"+article+by+Daniel+Rakos'>OpenGL Insights "Programmable Vertex Pulling"</a>이라는 글에서 가져왔는데요.
 </p>
 <p>
-It's called vertex *pulling* since it's the vertex shader that decides which vertex data to read vs the traditional way where vertex data is supplied automatically via attributes.
-사실상 정점 셰이더는 메모리에서 데이터를 *pulling*합니다.
+어떤 데이터를 읽을지 결정하는 정점 셰이더 vs 속성을 통해 자동으로 정점 데이터가 제공되는 전통적인 방식이기 때문에 정점 *풀링*이라고 부릅니다.
+사실상 정점 셰이더는 메모리에서 데이터를 *풀링*합니다.
 </p>
 </div>
 

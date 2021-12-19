@@ -64,7 +64,7 @@ TOC: 그림자
 
 ```js
 function main() {
-  // WebGL 컨텍스트 가져오기
+  // WebGL Context 얻기
   /** @type {HTMLCanvasElement} */
   const canvas = document.querySelector('#canvas');
   const gl = canvas.getContext('webgl');

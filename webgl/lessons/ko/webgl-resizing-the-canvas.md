@@ -1,13 +1,17 @@
 Title: WebGL 캔버스 크기 조정
-Description: WebGL canvas의 크기를 조정하는 방법과 관련 문제
+Description: WebGL 캔버스의 크기를 조정하는 방법과 관련 문제
 TOC: 캔버스 크기 조정
+
 
 캔버스의 사이즈를 바꿀때 알아야 할 것들이 있습니다.
 
-모든 캔버스는 2개의 크기를 가집니다. drawingbuffer의 크기는 캔버스 안에 얼마나 많은 픽셀이 있는지를 의미합니다.
-두 번째 크기는 캔버스의 디스플레이(화면에 표시)되는 크기입니다. CSS가 화면에 표시되는 크기를 결정합니다.
+모든 캔버스는 2개의 크기를 가집니다.
+`drawingbuffer`의 크기는 캔버스 안에 얼마나 많은 픽셀이 있는지를 의미합니다.
+두 번째 크기는 캔버스의 디스플레이(화면에 표시)되는 크기입니다.
+CSS가 화면에 표시되는 크기를 결정합니다.
 
-캔버스의 drawingbuffer 크기를 정하는 방법이 두 가지 있습니다. 하나는 HTML을 사용하는 것이고,
+캔버스의 `drawingbuffer` 크기를 정하는 방법이 두 가지 있습니다.
+하나는 HTML을 사용하는 것이고,
 
 ```html
 <canvas id="c" width="400" height="300"></canvas>
@@ -27,9 +31,9 @@ canvas.width = 400;
 canvas.height = 300;
 ```
 
-캔버스의 화면에 표시되는 크기를 설정할 때는, 영향을 미치는 CSS가 없다면 화면에 표시되는 크기가 drawingbuffer와 동일한 크기가 됩니다.
-따라서 위 두 가지 예시의 경우에는 drawingbuffer의 크기가 400x300이므로 화면에 표시되는 크기도 400x300이 됩니다.
-아래는 drawingbuffer가 10x15 픽셀이고 디스플레이 크기는 400x300인 경우의 캔버스 예시입니다.
+캔버스의 화면에 표시되는 크기를 설정할 때는, 영향을 미치는 CSS가 없다면 화면에 표시되는 크기가 `drawingbuffer`와 동일한 크기가 됩니다.
+따라서 위 두 가지 예시의 경우에는 `drawingbuffer`의 크기가 400x300이므로 화면에 표시되는 크기도 400x300이 됩니다.
+아래는 `drawingbuffer`가 10x15 픽셀이고 디스플레이 크기는 400x300인 경우의 캔버스 예시입니다.
 
 ```html
 <canvas id="c" width="10" height="15" style="width: 400px; height: 300px;"></canvas>
@@ -51,11 +55,13 @@ canvas.height = 300;
 
 {{{example url="../webgl-10x15-canvas-400x300-css.html" }}}
 
-왜 이렇게 흐린걸까요? 이는 브라우저가 10x15 픽셀 크기 캔버스를 400x300 크기로 늘렸기 때문입니다.
+왜 이렇게 흐린걸까요?
+이는 브라우저가 10x15 픽셀 크기 캔버스를 400x300 크기로 늘렸기 때문입니다.
 그리고 보통은 그렇게 크기를 늘릴 때 필터를 적용하게 됩니다.
 
 그러면 예를 들어, 캔버스가 윈도우 전체를 커버하길 윈하면 어떻게 해야 할까요?
-첫 번째로 할 수 있는것은 CSS를 사용해 캔버스가 윈도우 전체 영역이 되도록 늘리는 것입니다. 예를 들어,
+첫 번째로 할 수 있는 것은 CSS를 사용해 캔버스가 윈도우 전체 영역이 되도록 늘리는 것입니다.
+예를 들어,
 
     <html>
       <head>
@@ -65,7 +71,7 @@ canvas.height = 300;
             height: 100%;
             margin: 0;
           }
-          /* make the canvas fill its container */
+          /* 캔버스가 컨테이너를 채우도록 만들기 */
           #c {
             width: 100%;
             height: 100%;
@@ -78,19 +84,19 @@ canvas.height = 300;
       </body>
     </html>
 
-이제는 drawingbuffer의 크기를 브라우저가 늘려놓은 캔버스의 크기와 일치시키기만 하면 됩니다.
-불행하게도 이는 다루기 복잡한 문제입니다. 다른 방법으로 넘어가서 알아보도록 하겠습니다.
+이제는 `drawingbuffer`의 크기를 브라우저가 늘려놓은 캔버스의 크기와 일치시키기만 하면 됩니다.
+불행하게도 이는 다루기 복잡한 문제입니다.
+다른 방법으로 넘어가서 알아보도록 하겠습니다.
 
 ## `clientWidth`와 `clientHeight` 사용하기
 
 이것이 가장 쉬운 방법입니다.
 `clientWidth`와 `clientHeight`는 HTML의 모든 요소(element)가 가진 속성으로, CSS 픽셀 단위로 요소의 크기를 알려줍니다.
 
-> 주의: client 사각형은 CSS 패딩을 포함하므로 `clientWidth`와 `clientHeight`를 사용할 때는
-캔버스 요소에 패딩을 사용하지 않는 것이 좋습니다.
+> 주의: `clientRectangle`은 CSS 패딩을 포함하므로 `clientWidth`와 `clientHeight`를 사용할 때는 캔버스 요소에 패딩을 사용하지 않는 것이 좋습니다.
 
 자바스크립트를 사용하여 요소가 얼만한 크기로 화면에 보여지고 있는지를 확인할 수 있고,
-drawingbuffer의 크기를 그 값에 맞춰주면 됩니다.
+`drawingbuffer`의 크기를 그 값에 맞춰주면 됩니다.
 
 ```js
 function resizeCanvasToDisplaySize(canvas) {
@@ -130,9 +136,11 @@ function drawScene() {
 이유는 캔버스의 사이즈를 수정하기 전에 `gl.viewport`를 호출하여 뷰포트를 설정해야 하기 때문입니다.
 `gl.viewport`는 WebGL에게 클립 공간(-1에서 +1)에서 픽셀로 변환하는 법과 그러한 변환히 캔버스의 어떤 부분에서 이루어져야 하는지 알려줍니다.
 처음 WebGL 컨텍스트를 생성할 때, WebGL은 뷰포트를 캔버스의 크기와 동일하도록 설정합니다.
-하지만 그 이후에는 여러분이 설정해 주어야 합니다. 만일 캔버스의 크기를 바꾸었다면 WebGL에게 새로운 뷰포트 설정을 알려주어야 합니다.
+하지만 그 이후에는 여러분이 설정해 주어야 합니다.
+만일 캔버스의 크기를 바꾸었다면 WebGL에게 새로운 뷰포트 설정을 알려주어야 합니다.
 
-이를 처리할 수 있도록 코드를 수정해 봅시다. WebGL 컨텍스트가 캔버스에 대한 참조를 가지고 있으므로 리사이즈시에 그것을 넘겨줍니다.
+이를 처리할 수 있도록 코드를 수정해 봅시다.
+WebGL 컨텍스트가 캔버스에 대한 참조를 가지고 있으므로 크기를 조절할 때 그것을 넘겨줍니다.
 
     function drawScene() {
        resizeCanvasToDisplaySize(gl.canvas);
@@ -155,7 +163,8 @@ WebGL에 여러분의 의도를 파악하는 능력은 없으므로 자동으로
 
 ## `devicePixelRatio`와 Zoom 다루기
 
-왜 이걸로 끝이 아닐까요? 이제는 문제가 복잡해 지는 상황을 알아봅시다.
+왜 이걸로 끝이 아닐까요?
+이제는 문제가 복잡해 지는 상황을 알아봅시다.
 
 먼저 아셔야 할것은 브라우저에서 말하는 대부분의 크기는 CSS 픽셀 단위라는 것입니다.
 이렇게 하는 이유는 크기를 장치에 독립적으로 표현하기 위해서 입니다.
@@ -168,12 +177,10 @@ WebGL에 여러분의 의도를 파악하는 능력은 없으므로 자동으로
 
 > <div>devicePixelRatio = <span data-diagram="dpr"></span></div>
 
-데스크탑이나 노트북을 사용 중이시라면 <kbd>ctrl</kbd>+<kbd>+</kbd> 와 <kbd>ctrl</kbd>+<kbd>-</kbd> 
-을 눌러 확대 또는 축소를 해 보세요.(<kbd>⌘</kbd>+<kbd>+</kbd> and <kbd>⌘</kbd>+<kbd>-</kbd> on Mac).
+데스크탑이나 노트북을 사용 중이시라면 <kbd>ctrl</kbd>+<kbd>+</kbd> 와 <kbd>ctrl</kbd>+<kbd>-</kbd>을 눌러 확대 또는 축소를 해 보세요.(<kbd>⌘</kbd>+<kbd>+</kbd> and <kbd>⌘</kbd>+<kbd>-</kbd> on Mac).
 숫자가 바뀌는 것을 보실 수 있을겁니다.
 
-따라서 캔버스의 픽셀 숫자가 실제 디스플레이 숫자와 동일하기를 원한다면 아래처럼 `clientWidth`와 `clientHeight`에
- `devicePixelRatio`를 곱하는 것이 당연한 해결책으로 보입니다:
+따라서 캔버스의 픽셀 숫자가 실제 디스플레이 숫자와 동일하기를 원한다면 아래처럼 `clientWidth`와 `clientHeight`에 `devicePixelRatio`를 곱하는 것이 당연한 해결책으로 보입니다:
 
 ```js
 function resizeCanvasToDisplaySize(canvas) {
@@ -200,14 +207,14 @@ function resizeCanvasToDisplaySize(canvas) {
 
 정수값을 얻기 위해 `Math.round` (또는 `Math.ceil`, 또는 `Math.floor` 또는 `| 0`)를 호출해야 합니다.
 왜냐하면 `canvas.width`와 `canvas.height`는 항상 정수값이기 때문입니다.
-그래서 `devicePixelRatio`가 정수가 아니라면 대개는 비교가 실패합니다. 특히 확대/축소의 경우 대개 그렇습니다.
+그래서 `devicePixelRatio`가 정수가 아니라면 대개는 비교가 실패합니다.
+특히 확대/축소의 경우 대개 그렇습니다.
 
 > 주의: `Math.floor` 또는 `Math.ceil` 또는 `Math.round` 중 어떤 것을 사용할지는 HTML 표준에 정의되어 있지 않습니다.
 브라우저 구현에 의존적입니다(=브라우저마다 다를 수 있습니다). 🙄
 
 어떤 경우에든, 위 코드는 제대로 동작하지 **않습니다**. 
-또 다른 문제는 `devicePixelRatio`가 1.0이 아닐 때, 캔버스가 채워야 하는 CSS 영역은 정수값이 아니지만 
-`clientWidth`와 `clientHeight`는 정수로 정의된다는 것입니다.
+또 다른 문제는 `devicePixelRatio`가 1.0이 아닐 때, 캔버스가 채워야 하는 CSS 영역은 정수값이 아니지만 `clientWidth`와 `clientHeight`는 정수로 정의된다는 것입니다.
 예를 들어 윈도우가 실제로는 장치에서 999 픽셀 너비이고 devicePixelRatio = 2.0인 상태에서 100% 크기의 캔버스를 사용하려고 한다고 해 봅시다. 
 CSS 크기 * 2.0이 999가 되는 정수는 없습니다.
 
@@ -270,7 +277,9 @@ function resizeCanvasToDisplaySize(canvas) {
 }
 ```
 
-이제 다된걸까요? 안타깝게도 아닙니다. 알고보니 `canvas.getBoundingClientRect()`가 언제나 올바른 값을 반환하지는 않습니다.
+이제 다된걸까요?
+안타깝게도 아닙니다.
+알고보니 `canvas.getBoundingClientRect()`가 언제나 올바른 값을 반환하지는 않습니다.
 원인은 복잡하지만 이는 브라우저가 요소들을 그리는 방식과 관련되어 있습니다.
 어떤 부분은 HTML 수준에서 결정되고 어떤 부분은 나중에 "컴포지터(compositor)" 수준(실제로 그려지는 부분)에서 결정됩니다.
 `getBoundingClientRect()`는 HTML 수준이고 몇가지 다른 일들이 그 뒤에 발생해서 실제로 캔버스가 그려지는 크기에 영향을 줄 수 있습니다.
@@ -281,11 +290,11 @@ function resizeCanvasToDisplaySize(canvas) {
 하지만 컴포지터에서 실제로 그릴 떄에는 499.5 픽셀을 그릴 수 없으므로 하나는 499, 다른 하나는 500 픽셀이 됩니다.
 어떤 것이 더 크고 어떤 것이 더 작은지는 어떠한 스펙에서도 정의되어 있지 않습니다.
 
-브라우저의 벤더들이 찾은 해결책은 [`ResizeObserver` API](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver)를 사용해서,
-실제 사용되는 크기를 `devicePixelContextBoxSize` 속성을 통해 제공하는 것이었습니다.
-이것은 실제 사용된 장치 픽셀을 반환합니다. `ClientBox`가 아닌 `ContentBox`라 이름붙여진 것에 주의하십시오.
+브라우저의 벤더들이 찾은 해결책은 [`ResizeObserver` API](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver)를 사용해서, 실제 사용되는 크기를 `devicePixelContextBoxSize` 속성을 통해 제공하는 겁니다.
+이것은 실제 사용된 장치 픽셀을 반환합니다.
+`ClientBox`가 아닌 `ContentBox`라 명명된 것에 주의하십시오.
 이는 캔버스 요소에서 *컨텐츠*를 보여주는 부분을 의미한다는 뜻이고, 따라서 `clientWidth`, `clientHeight`와 `getBoundingClientRect`처럼 
-패딩을 포함하지 않는다는 뜻입니다. 장점입니다.
+패딩을 포함하지 않는다는 뜻이고 이는 큰 장점입니다.
 
 이런 식으로 반환하는 이유는 결과가 비동기적이기 때문입니다.
 위에서 언급한 "컴포지터"는 페이지와 비동기적으로 실행됩니다.
@@ -345,7 +354,7 @@ function onResize(entries) {
       // 이러한 문제를 해결하는 방법을 제공하지 않는 경우임
       width = entry.devicePixelContentBoxSize[0].inlineSize;
       height = entry.devicePixelContentBoxSize[0].blockSize;
-      dpr = 1; // 이미 width와 height값에 포함됨
+      dpr = 1; // 이미 너비와 높이 값에 포함됨
     } else if (entry.contentBoxSize) {
       if (entry.contentBoxSize[0]) {
         width = entry.contentBoxSize[0].inlineSize;
@@ -371,7 +380,7 @@ function onResize(entries) {
 
 ```js
 function resizeCanvasToDisplaySize(canvas) {
--  // Lookup the size the browser is displaying the canvas in CSS pixels.
+-  // 브라우저가 캔버스를 CSS 픽셀로 표시하는 크기를 조회합니다.
 -  const dpr = window.devicePixelRatio;
 -  const {width, height} = canvas.getBoundingClientRect();
 -  const displayWidth  = Math.round(width * dpr);
@@ -411,7 +420,7 @@ function resizeCanvasToDisplaySize(canvas) {
 {{{example url="../webgl-resize-the-canvas-comparison.html"}}}
 
 윈도우를 리사이즈 하거나, 더 좋은 방법은 새 창으로 열어서 위에 이야기한 키를 사용하여 확대/축소 해 보십시오.
-서로 다른 확대/축소 수준에서 윈도우 크기를 바꿔 보면 가장 아래쪽 예제만 올바로 동작하는 것을 볼 수 있을겁니다(크롬/엣지 브라우저의 경우).
+서로 다른 확대/축소 수준에서 윈도우 크기를 바꿔 보면 가장 아래쪽 예제만 올바로 동작하는 것을 볼 수 있을겁니다. (크롬/엣지 브라우저의 경우)
 주의할 것은 여러분 장치의 `devicePixelRatio`가 커질수록 문제점을 눈치채기 어렵다는 것입니다.
 주목하셔야 할 것은 오른쪽과 왼쪽 패턴이 유사하게 보이는지 입니다.
 패턴이 거칠어 보이거나 음영이 다르게 보이면 제대로 동작하지 않는 것입니다.
@@ -422,26 +431,24 @@ function resizeCanvasToDisplaySize(canvas) {
 
 이는 다른 브라우저에는 아직 좋은 해결 방안이 없다는 뜻이지만 꼭 완전한 해결법이 필요한 것일까요?
 대부분의 WebGL 앱의 역할은 텍스처와 조명 효과를 더한 3D를 그리는 것입니다.
-그래서 위쪽과 같이 `devicePixelRatio`를 무시하거나, `clientWidth`, `clientHeight` 또는 `getBoundingClientRect()` * `devicePixelRatio`를 사용하고 
-그냥 넘어가도 크게 티가 나지는 않습니다.
+그래서 위쪽과 같이 `devicePixelRatio`를 무시하거나, `clientWidth`, `clientHeight` 또는 `getBoundingClientRect()` * `devicePixelRatio`를 사용하고 그냥 넘어가도 크게 티가 나지는 않습니다.
 
 나아가서, `devicePixelRatio`를 무작정 사용하는 것은 성능 저하를 불러일으킬 수 있습니다.
-iPhoneX나 iPhone11에서는 <code>window.devicePixelRatio</code>가 <code>3</code>인데 
-이는 9배나 많은 픽셀을 그리게 된다는 뜻입니다.
+iPhoneX나 iPhone11에서는 <code>window.devicePixelRatio</code>가 <code>3</code>인데 이는 9배나 많은 픽셀을 그리게 된다는 뜻입니다.
 Samsung Galaxy S8에서는 그 값이 <code>4</code>인데 이는 16배 많은 픽셀을 그린다는 뜻입니다.
-이는 여러분 프로그램을 느리게 만듭니다. 사실 게임에서 실제 그려지는 것보다 더 적은 픽셀을 그리고 GPU에서 스케일을 늘리는 것이 보편적인 최적화 기법입니다.
+이는 여러분 프로그램을 느리게 만듭니다.
+사실 게임에서 실제 그려지는 것보다 더 적은 픽셀을 그리고 GPU에서 스케일을 늘리는 것이 보편적인 최적화 기법입니다.
 어떻게 할지는 여러분에게 필요한 것이 무엇인지에 달렸습니다.
 프린트하기 위한 그래픽을 그리는 것이라면 HD-DPI를 지원하는 것이 필요합니다.
 게임을 만든다면 이러한 기능이 필요 없거나 혹은 시스템이 충분히 빠르지 못한 경우 유저에게 이러한 기능을 켜고 끄는 옵션을 제공하는 것이 좋습니다.
  
-또 다른 주의사항은, 적어도 2021 1월 현재 `round(getBoundingClientRect * devicePixelRatio)`가 위의 선 예제처럼 
-캔버스가 풀 사이즈인 **경우에만** 모던 브라우저들에서 제대로 동작한다는 것입니다.
+또 다른 주의사항은, 적어도 2021 1월 현재 `round(getBoundingClientRect * devicePixelRatio)`가 위의 선 예제처럼 캔버스가 **전체 크기인 경우**에만 모던 브라우저들에서 제대로 동작한다는 것입니다.
 아래는 패턴을 사용한 예제입니다.
 
 {{{example url="../webgl-resize-the-canvas-comparison-fullwindow.html"}}}
 
 여러분이 *이 페이지*를 확대/축소 하고 리사이즈 한다면 `getBoundingClientRect`가 제대로 동작하지 않을 것입니다.
-이는 캔버스가 전체 윈도우가 아니고 iframe내부에 있기 때문입니다.
+이는 캔버스가 전체 윈도우가 아니고 iframe 내부에 있기 때문입니다.
 예제를 별도의 윈도우에서 열면 제대로 동작할 것입니다.
 
 어떤 방법을 사용할 것인지는 여러분에게 달렸습니다.
@@ -455,8 +462,3 @@ Samsung Galaxy S8에서는 그 값이 <code>4</code>인데 이는 16배 많은 �
 이유가 궁금하시다면 <a href="webgl-anti-patterns.html">여기 몇 가지 이유가 있습니다.</a> 
 위에 말씀드린 방법이 가장 선호되는 방법일 것 같습니다.
 
-<!-- just to shut up the build that this link used to exist
-     and still exists in older translations -->
-<a href="webgl-animation.html"></a>
-
-<script type="module" src="resources/webgl-resizing-the-canvas.module.js"></script>

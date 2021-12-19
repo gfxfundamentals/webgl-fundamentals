@@ -540,7 +540,7 @@ matrix = m3.scale(matrix, scale[0], scale[1]);
 
 > {{{diagram url="resources/matrix-space-change.html?stage=0" caption="클립 공간" }}}
 >
-> 흰색 영역은 캔버스입니다. 파랑색은 캔버스 바깥입니다. 우리는 클립 공간에 있습니다.
+> 흰색 영역은 캔버스입니다. 파란색은 캔버스 바깥입니다. 우리는 클립 공간에 있습니다.
 > 전달된 위치는 클립 공간에 있어야 합니다.
 
 2단계:  `matrix = m3.projection(gl.canvas.clientWidth, gl.canvas.clientHeight);`

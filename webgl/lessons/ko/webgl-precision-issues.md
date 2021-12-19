@@ -23,11 +23,11 @@ WebGL에서 대부분의 숫자는 32비트에 불과한데요.
 더 적은 비트 = 더 빠름, 더 많은 비트 = 더 정확하고 더 넓은 범위입니다.
 
 이걸 잘 설명할 수 있을지 모르겠습니다.
-정밀도 문제의 다른 예시로 [double vs float](https://www.google.com/search?q=double+vs+float)를 찾아볼 수도 있지만 이를 설명하는 한 가지 방법은 byte와 short 또는 자바스크립트의 `Uint8Array` vs `Uint16Array`의 차이와 같다는 겁니다.
+정밀도 문제의 다른 예시로 [double vs float](https://www.google.com/search?q=double+vs+float)를 찾아볼 수도 있지만 이를 설명하는 한 가지 방법은 `byte`와 `short` 또는 자바스크립트의 `Uint8Array` vs `Uint16Array`의 차이와 같다는 겁니다.
 
-* `Uint8Array`는 unsigned 8bit integer 배열입니다. 8비트는 0에서 255까지 2<sup>8</sup>개의 값을 포함할 수 있습니다.
-* `Uint16Array`는 unsigned 16bit integer 배열입니다. 16비트는 0에서 65535까지 2<sup>16</sup>개의 값을 포함할 수 있습니다.
-* `Uint32Array`는 unsigned 32bit integer 배열입니다. 32비트는 0에서 4294967295까지 2<sup>32</sup>개의 값을 포함할 수 있습니다.
+* `Uint8Array`는 부호없는 8비트 정수형 배열입니다. 8비트는 0에서 255까지 2<sup>8</sup>개의 값을 포함할 수 있습니다.
+* `Uint16Array`는 부호없는 16비트 정수형 배열입니다. 16비트는 0에서 65535까지 2<sup>16</sup>개의 값을 포함할 수 있습니다.
+* `Uint32Array`는 부호없는 32비트 정수형 배열입니다. 32비트는 0에서 4294967295까지 2<sup>32</sup>개의 값을 포함할 수 있습니다.
 
 `lowp`, `mediump`, `highp`도 비슷합니다.
 
@@ -136,7 +136,7 @@ void main() {
 ```
 
 참고: 이것만으로는 충분하지 않습니다.
-정점 셰이더에는
+정점 셰이더에는,
 
 ```glsl
   // 조명에 대한 표면의 벡터를 계산하고 프래그먼트 셰이더로 전달
@@ -144,14 +144,14 @@ void main() {
 ```
 
 조명이 표면에서 1000단위 떨어져 있다고 해봅시다.
-그런 다음 프래그먼트 셰이더와 이 줄에 도달하는데
+그런 다음 프래그먼트 셰이더와 이 줄에 도달하는데,
 
 ```glsl
   vec3 surfaceToLightDirection = normalize(v_surfaceToLight);
 ```
 
 충분히 문제없어 보입니다.
-해당 방법을 제외하고 벡터를 정규화하는 일반적인 방법은 길이로 나누는 건데
+해당 방법을 제외하고 벡터를 정규화하는 일반적인 방법은 길이로 나누는 것인데,
 
 ```
   float length = sqrt(v.x * v.x + v.y * v.y * v.z * v.z);
@@ -190,7 +190,7 @@ x, y, z 중 하나라도 1000이면 1000*1000은 1000000인데요.
 ## `highp` 및 `mediump` 정밀도 지원 감지
 
 이건 비교적 쉬울 것 같네요.
-`gl.getShaderPrecisionFormat`을 호출하여, shader type인 `VERTEX_SHADER`나 `FRAGMENT_SHADER`를 전달하고, `LOW_FLOAT`, `MEDIUM_FLOAT`, `HIGH_FLOAT`, `LOW_INT`, `MEDIUM_INT`, `HIGH_INT` 중 하나를 전달하면, [정밀도 정보를 반환](../webgl-precision-lowp-mediump-highp.html)합니다.
+`gl.getShaderPrecisionFormat`을 호출하여, 셰이더 타입인 `VERTEX_SHADER`나 `FRAGMENT_SHADER`를 전달하고, `LOW_FLOAT`, `MEDIUM_FLOAT`, `HIGH_FLOAT`, `LOW_INT`, `MEDIUM_INT`, `HIGH_INT` 중 하나를 전달하면, [정밀도 정보를 반환](../webgl-precision-lowp-mediump-highp.html)합니다.
 
 불행히도 사파리는 여기에 버그가 있어, 최소한 2020년 4월 기준 이 방법은 아이폰에서 실패할 겁니다.
 
@@ -202,7 +202,7 @@ x, y, z 중 하나라도 1000이면 1000*1000은 1000000인데요.
 
 `mediump`이 정말로 고정밀도가 아니라 중간 정밀도인지 확인하기 위해서는 렌더 테스트를 해야 합니다.
 기본적으로 `mediump`를 사용하는 셰이더를 만들고 `highp`에서는 작동하지만 `mediump`에서는 실패하는 몇 가지 계산을 한 뒤 결과를 확인하면 되는데요.
-결과가 정확하다면 driver/gpu/device가 `mediump`에 `highp`를 사용하는 겁니다.
+결과가 정확하다면 드라이버/GPU/디바이스가 `mediump`에 `highp`를 사용하는 겁니다.
 결과가 부정확하다면 `mediump`는 `mediump`인 겁니다.
 
 다음은 프래그먼트 셰이더의 `mediump`이 실제로 `mediump`인지 확인하는 예제이고
@@ -223,7 +223,7 @@ x, y, z 중 하나라도 1000이면 1000*1000은 1000000인데요.
 
 이 글을 통해서 우리는 프래그먼트 셰이더의 기본 정밀도를 지정했습니다.
 또한 어떤 개별 변수의 정밀도라도 지정할 수 있는데요.
-예를 들어
+예를 들어,
 
 ```glsl
 uniform mediump vec4 color;  // 유니폼
@@ -236,7 +236,7 @@ lowp float foo;              // 변수
 
 명세서에는 캔버스가 32비트 대신 16비트가 될 수 있습니다.
 
-아래처럼 호출하여 확인할 수 있는데
+아래처럼 호출하여 확인할 수 있는데,
 
 ```
 const bitsInCanvas =
@@ -246,7 +246,7 @@ const bitsInCanvas =
     gl.getParameter(gl.ALPHA_BITS);
 ```
 
-이건 실제로 현재 바인딩된 프레임 버퍼 색상 어태치먼트나, 프레임 버퍼가 첨부되지 않았다면 캔버스에서, 채널의 bit depth를 반환합니다.
+이건 실제로 현재 바인딩된 프레임 버퍼 색상 어태치먼트나, 프레임 버퍼가 첨부되지 않았다면 캔버스에서, 채널의 비트 깊이를 반환합니다.
 
 {{{example url="../webgl-precision-check-canvas-bits.html"}}}
 
@@ -255,22 +255,22 @@ const bitsInCanvas =
 이는 일반적으로 이미지 이외의 항목에 대해 캔버스에서 픽셀을 읽는 경우를 제외하고는 무시할 수 있습니다. 
 또한, 캔버스가 16비트라고 하더라도 32비트 렌더 대상([프레임 버퍼에 첨부된 텍스처](webgl-render-to-texture.html))을 만들 수 있습니다.
 
-## Texture Format
+## 텍스처 포맷
 
 텍스처는 명세서에서 실제 사용된 정밀도는 요청된 정밀도보다 더 클 수 있다고 말하는 또 다른 것입니다.
 
-예를 들어 다음과 같이 채널당 4비트씩, 16비트 텍스처를 요청할 수 있는데 
+예를 들어 다음과 같이 채널당 4비트씩, 16비트 텍스처를 요청할 수 있는데 ,
 
 ```
 gl.texImage2D(
   gl.TEXTURE_2D,               // 대상
-  0,                           // mip 레벨
-  gl.RGBA,                     // 내부 format
+  0,                           // 밉 레벨
+  gl.RGBA,                     // 내부 포맷
   width,                       // 너비
   height,                      // 높이
-  0,                           // border
-  gl.RGBA,                     // format
-  gl.UNSIGNED_SHORT_4_4_4_4,   // type
+  0,                           // 테두리
+  gl.RGBA,                     // 포맷
+  gl.UNSIGNED_SHORT_4_4_4_4,   // 타입
   null,
 );
 ```
@@ -297,7 +297,7 @@ gl.texImage2D(
 <div class="webgl_center"><img src="resources/desktop-4-4-4-4-texture-no-dither.png" style="image-rendering: pixelated; width: 600px;"></div>
 
 한 가지 주목할 점은 기본적으로 WebGL은 결과를 디더링하여 이와 같은 그라데이션을 더 부드럽게 만들 수 있다는 겁니다.
-다음과 같이 디더링을 끌 수 있으며
+다음과 같이 디더링을 끌 수 있으며,
 
 ```js
 gl.disable(gl.DITHER);

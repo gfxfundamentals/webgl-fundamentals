@@ -55,7 +55,7 @@ gl.clear(gl.COLOR_BUFFER_BIT);
 gl.enable(gl.SCISSOR_TEST);
 ```
 
-그런 다음 왼쪽 하단 모서리를 기준으로 scissor rectangle을 픽셀 단위로 설정합니다.
+그런 다음 왼쪽 하단 모서리를 기준으로 시저 사각형을 픽셀 단위로 설정합니다.
 이는 `gl.viewport`와 같은 매개변수를 사용합니다.
 
 ```js
@@ -97,7 +97,7 @@ function rand(min, max) {
 
 {{{example url="../webgl-simple-scissor.html"}}}
 
-Not saying that particular one is all that useful but still it's good to know.
+모든 게 유용한 것은 아니지만 그래도 알아두면 좋을 것 같습니다.
 
 ## 큰 `gl.POINTS` 하나 사용
 
@@ -105,7 +105,7 @@ Not saying that particular one is all that useful but still it's good to know.
 이러한 버퍼에 정점 데이터를 넣습니다.
 속성이 있는 셰이더를 만듭니다.
 버퍼에서 데이터를 가져오도록 속성을 설정합니다.
-그런 다음 셰이더에서도 사용되는 uniform과 텍스처를 사용하여 그립니다.
+그런 다음 셰이더에서도 사용되는 유니폼과 텍스처를 사용하여 그립니다.
 
 하지만 간혹 테스트하고 싶을 때가 있습니다.
 무언가 그리는 걸 보고 싶다고 가정해봅시다.
@@ -195,7 +195,7 @@ const tex = gl.createTexture();
 gl.bindTexture(gl.TEXTURE_2D, tex);
 gl.texImage2D(
     gl.TEXTURE_2D,
-    0,                 // mip level
+    0,                 // 밉 레벨
     gl.RGBA,           // 내부 포맷
     2,                 // 너비
     2,                 // 높이
@@ -208,12 +208,12 @@ gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 ```
 
-WebGL은 기본적으로 텍스처 유닛 0을 사용하고 uniform은 기본적으로 0이므로 따로 설정할 것은 없습니다.
+WebGL은 기본적으로 텍스처 유닛 0을 사용하고 유니폼은 기본적으로 0이므로 따로 설정할 것은 없습니다.
 
 {{{example url="../webgl-simple-point-w-texture.html"}}}
 
 이건 텍스처 관련 문제를 테스트하는 좋은 방법이 될 수 있습니다.
-버퍼도 안 쓰고, 속성도 없으며, uniform을 찾아 설정하지 않아도 됩니다.
+버퍼도 안 쓰고, 속성도 없으며, 유니폼을 찾아 설정하지 않아도 됩니다.
 예를 들어 이미지를 로드한다면 표시되지 않는데요.
 위 셰이더를 사용하면 점에 이미지가 표시될까요?
 텍스처에 렌더링한 다음 텍스처를 보려고 합니다.
@@ -286,7 +286,7 @@ void main() {
 }
 ```
 
-그리고 color location을 찾아야 합니다.
+그리고 색상 위치를 찾아야 합니다.
 
 ```js
 // GLSL 프로그램 설정

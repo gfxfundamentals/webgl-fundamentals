@@ -9,7 +9,7 @@ TOC: 큐브맵
 또한 [조명에 대한 글](webgl-3d-lighting-directional.html)에서 다룬 개념을 사용합니다.
 아직 읽지 않으셨다면 해당 글들을 먼저 읽어주세요.
 
-[이전 글](webgl-3d-textures.html)에서는 텍스처를 사용하는 방법, 텍스처를 가로지르는 0부터 1까지의 텍스처 좌표로 참조하는 방법, mip을 사용하여 선택적으로 필터링하는 방법 등을 다뤘습니다.
+[이전 글](webgl-3d-textures.html)에서는 텍스처를 사용하는 방법, 텍스처를 가로지르는 0부터 1까지의 텍스처 좌표로 참조하는 방법, 밉을 사용하여 선택적으로 필터링하는 방법 등을 다뤘습니다.
 
 *큐브맵*은 또 다른 종류의 텍스처입니다.
 큐브의 여섯 면을 나타내는 6개의 면으로 구성됩니다.
@@ -47,7 +47,7 @@ function generateFace(ctx, faceColor, textColor, text) {
 그리고 여기 6개의 이미지를 생성하기 위해 호출하는 코드입니다.
 
 ```js
-// 2D Context 가져오기
+// 2D Context 얻기
 /** @type {Canvas2DRenderingContext} */
 const ctx = document.createElement("canvas").getContext("2d");
 
@@ -135,7 +135,7 @@ void main() {
 var texture = gl.createTexture();
 gl.bindTexture(gl.TEXTURE_CUBE_MAP, texture);
 
-// 2D Context 가져오기
+// 2D Context 얻기
 /** @type {Canvas2DRenderingContext} */
 const ctx = document.createElement("canvas").getContext("2d");
 
@@ -184,8 +184,8 @@ gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LI
   위에서 크기는 128x128입니다.
 
   큐브맵은 사각형 텍스처가 필요합니다.
-  그리고 2D 텍스처처럼 두 차원에서 2의 거듭제곱이 아니면 필터링하거나 mip을 사용할 수 없습니다.
-  이 경우에는 2의 거듭제곱(128)이기 때문에 mip을 생성하고 필터링을 활성화하여 mip을 사용합니다.
+  그리고 2D 텍스처처럼 두 차원에서 2의 거듭제곱이 아니면 필터링하거나 밉을 사용할 수 없습니다.
+  이 경우에는 2의 거듭제곱(128)이기 때문에 밉을 생성하고 필터링을 활성화하여 밉을 사용합니다.
 
 {{{example url="../webgl-cubemap.html" }}}
 

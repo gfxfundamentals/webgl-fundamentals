@@ -41,7 +41,7 @@ TOC: 안티 패턴
     컨텍스트도 너비와 높이를 가지고 있습니다.
 
     <pre class="prettyprint">
-    // 캔버스 drawingBuffer의 크기와 크기가 일치하도록 viewport를 설정하면 이는 항상 정확합니다
+    // 캔버스 드로잉 버퍼의 크기와 크기가 일치하도록 뷰포트를 설정하면 이는 항상 정확합니다
     gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
     </pre>
 
@@ -73,7 +73,7 @@ TOC: 안티 패턴
     perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
     </pre>
 
-    다음은 drawingbuffer가 동일한 크기(`width="400" height="300"`)지만 CSS를 사용하여 다른 크기로 캔버스를 표시하도록 브라우저에 지시하는 예제입니다.
+    다음은 드로잉 버퍼가 동일한 크기(`width="400" height="300"`)지만 CSS를 사용하여 다른 크기로 캔버스를 표시하도록 브라우저에 지시하는 예제입니다.
     두 샘플 모두 올바른 종횡비로 'F'를 표시한다는 점에 주목하세요.
 
     {{{diagram url="../webgl-canvas-clientwidth-clientheight.html" width="150" height="200" }}}
@@ -131,11 +131,11 @@ TOC: 안티 패턴
 
     <a href="../webgl-same-code-canvas-embedded-border-box.html" target="_blank"><code>box-sizing: border-box;</code>를 사용한 단락에 캔버스가 포함된 페이지</a>
 
-    <code>box-sizing: border-box;</code>는 border와 padding이 외부가 아닌 정의된 요소에서 공간을 차지하도록 만듭니다.
-    다시 말해 `box-sizing: normal` 모드에서 15px border를 가진 400x300px 요소는 15px border에 둘러싸인 400x300px content space를 가지며 전체 크기는 430x330px이 됩니다.
-    `box-sizing: border-box` 모드에서는 border가 내부로 들어가므로, 동일한 요소가 400x300px를 유지하며 content space는 370x270이 됩니다.
+    <code>box-sizing: border-box;</code>는 테두리와 패딩이 외부가 아닌 정의된 요소에서 공간을 차지하도록 만듭니다.
+    다시 말해 `box-sizing: normal` 모드에서 15px 테두리를 가진 400x300픽셀 요소는 15픽셀 테두리에 둘러싸인 400x300픽셀 컨텐츠 공간 가지며 전체 크기는 430x330픽셀이 됩니다.
+    `box-sizing: border-box` 모드에서는 테두리가 내부로 들어가므로, 동일한 요소가 400x300픽셀을 유지하며 컨텐츠 공간은 370x270이 됩니다.
     이게 `clientWidth`와 `clientHeight`를 사용하는 것이 중요한 또 다른 이유입니다.
-    border를 `1em`으로 설정하면 캔버스의 크기를 알아낼 방법이 없습니다.
+    테두리를 `1em`으로 설정하면 캔버스의 크기를 알아낼 방법이 없습니다.
     다른 컴퓨터 혹은 다른 브라우저의 다른 글꼴에 따라 달라질 수도 있습니다.
 
     <a href="../webgl-same-code-container-fullscreen.html" target="_blank">전체 화면으로 만들기 위해 CSS를 사용하는 캔버스를 삽입할 컨테이너만 있는 페이지</a>
@@ -171,7 +171,7 @@ TOC: 안티 패턴
     다른 이유로 캔버스의 크기가 바뀌면 작동하지 않습니다.
     예를 들어 3D 에디터를 만들고 있다고 가정해 해봅시다.
     캔버스는 왼쪽에 있고 설정은 오른쪽에 있습니다.
-    두 부분을 분리하는 draggable bar가 있도록 만들었고 bar를 드래그하여 설정 공간을 크거나 작게 만들 수 있습니다.
+    두 부분을 분리하는 드래그 가능한 바가 있도록 만들었고 바를 드래그하여 설정 공간을 크거나 작게 만들 수 있습니다.
     이 경우 `'resize'` 이벤트가 발생하지 않습니다.
     마찬가지로 다른 컨텐츠가 추가되거나 제거되는 페이지가 있고 브라우저가 페이지를 다시 레이아웃함에 따라 캔버스의 크기가 변한다면 resize 이벤트가 발생하지 않습니다.
 
@@ -280,11 +280,11 @@ TOC: 안티 패턴
 
 <div class="webgl_bottombar">
 <a id="drawingbuffer"></a>
-<h3>drawingBufferWidth와 drawingBufferHeight는 뭔가요?</h3>
+<h3>"drawingBufferWidth"와 "drawingBufferHeight"는 뭔가요?</h3>
 <p>
-GPU에는 지원할 수 있는 픽셀 사각형(texture, renderbuffer)의 크기에 대한 제한이 있습니다.
-Often this size is the next power of 2 larger than whatever a common monitor resolution was at the time the GPU was made.
-예를 들어 GPU가 1280x1024 화면을 지원하도록 설계되었다면 2048의 크기 제한을 있을 수 있습니다.
+GPU에는 지원할 수 있는 픽셀 사각형(텍스처, 렌더 버퍼)의 크기에 대한 제한이 있습니다.
+이 크기는 GPU가 만들어졌을 때의 일반적인 모니터 해상도보다 더 큰 크기를 가지는데요.
+예를 들어 GPU가 1280x1024 화면을 지원하도록 설계되었다면 2048의 크기 제한이 있을 수 있습니다.
 2560x1600 화면을 지원하도록 설계되었다면 4096의 제한을 가질 겁니다.
 </p>
 <p>
@@ -311,7 +311,7 @@ GPU가 2048의 제한을 가지고 있지만 2개의 1920x1080 모니터가 있�
 </p>
 </li>
 <li>
-<p>캔버스는 사용자가 요청한 크기로 하지만 drawingbuffer 제한 설정</p>
+<p>캔버스는 사용자가 요청한 크기로 하지만 드로잉 버퍼 제한 설정</p>
 <p>
 이게 WebGL이 사용하는 해결책입니다.
 코드가 올바르게 작성되었다면 사용자가 알아차릴 수 있는 유일한 것은 캔버스의 이미지가 약간 조정된다는 겁니다.
@@ -331,9 +331,9 @@ GPU가 2048의 제한을 가지고 있지만 2개의 1920x1080 모니터가 있�
 <p>
 따라서 이런 경우를 처리하고 싶다면 위의 #1에서 보여드린 <code>gl.drawingBufferWidth</code>와 <code>gl.drawingBufferHeight</code>를 사용하세요.
 대부분의 앱에서 위 모범 사례를 따르면 제대로 작동할 겁니다.
-drawingBuffer의 실제 크기를 알아야 하는 계산을 수행한다면 이를 고려해야 하는데요. 
-머리속에 떠오르는 예제는, [picking](webgl-picking.html), 즉 마우스 좌표를 캔버스 픽셀 좌표롤 변환하는 겁니다.
-다른 하나는 drawingbuffer의 실제 크기를 알아야 하는 모든 종류의 후처리 효과입니다.
+드로잉 버퍼의 실제 크기를 알아야 하는 계산을 수행한다면 이를 고려해야 하는데요. 
+머리속에 떠오르는 예제는, [피킹](webgl-picking.html), 즉 마우스 좌표를 캔버스 픽셀 좌표롤 변환하는 겁니다.
+다른 하나는 드로잉 버퍼의 실제 크기를 알아야 하는 모든 종류의 후처리 효과입니다.
 </p>
 </div>
 

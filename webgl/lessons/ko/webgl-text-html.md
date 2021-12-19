@@ -12,7 +12,7 @@ TOC: 텍스트 - HTML
 따라서 첫 번째 답은 HTML을 사용하여 텍스트를 표시하는 겁니다.
 
 가장 쉬운 예시를 먼저 들어보면, WebGL 위에 텍스트를 그리고 싶다고 해봅시다.
-이걸 text overlay라고 부르는데요.
+이걸 텍스트 오버레이라고 부르는데요.
 기본적으로 이것은 같은 위치에 있는 텍스트입니다.
 
 가장 간단한 방법은 HTML 요소를 만들고 CSS를 사용하여 겹치도록 만드는 겁니다.
@@ -44,26 +44,26 @@ TOC: 텍스트 - HTML
     var timeElement = document.querySelector("#time");
     var angleElement = document.querySelector("#angle");
 
-    // 브라우저의 시간을 아끼기 위해 text node 생성
+    // 브라우저의 시간을 아끼기 위해 텍스트 노드 생성
     var timeNode = document.createTextNode("");
     var angleNode = document.createTextNode("");
 
-    // 놓아야 할 곳에 해당 text node를 추가
+    // 놓아야 할 곳에 해당 텍스트 노드 추가
     timeElement.appendChild(timeNode);
     angleElement.appendChild(angleNode);
 
-마지막으로 렌더링할 때 node를 업데이트합니다.
+마지막으로 렌더링할 때 노드를 업데이트합니다.
 
     function drawScene() {
         ...
 
-        // rotation을 radian에서 degree로 전환
+        // 회전 라디안에서 도 단위로 전환
         var angle = radToDeg(rotation[1]);
 
         // 0 - 360
         angle = angle % 360;
 
-        // node 설정
+        // 노드 설정
         angleNode.nodeValue = angle.toFixed(0);  // 소수점 없음
         timeNode.nodeValue = clock.toFixed(2);   // 소수점 이하 2자리
 
@@ -76,19 +76,19 @@ TOC: 텍스트 - HTML
 
     timeNode.value = "Time " + clock.toFixed(2);
 
-또한 `node = document.createTextNode()`와 이후에 `node.nodeValue = someMsg`를 호출하여 text node를 사용하고 있습니다.
+또한 `node = document.createTextNode()`와 이후에 `node.nodeValue = someMsg`를 호출하여 텍스트 노드를 사용하고 있습니다.
 `someElement.innerHTML = someHTML`도 사용할 수 있는데요.
-임의의 HTML 문자열을 삽입할 수 있기 때문에 더 유연하지만, 설정할 때마다 브라우저가 node를 생성하고 파괴해야 하기 때문에 약간 느릴 수 있습니다.
+임의의 HTML 문자열을 삽입할 수 있기 때문에 더 유연하지만, 설정할 때마다 브라우저가 노드를 생성하고 파괴해야 하기 때문에 약간 느릴 수 있습니다.
 뭐가 더 좋을지는 여러분이 선택하시면 됩니다.
 
-Overlay 기법의 중요한 점은 WebGL이 브라우저에서 실행된다는 겁니다.
+오버레이 기법의 중요한 점은 WebGL이 브라우저에서 실행된다는 겁니다.
 적절하게 브라우저의 기능을 사용하는 걸 잊지마세요.
 많은 OpenGL 프로그래머들은 앱의 모든 부분을 처음부터 100% 렌더링하는 것에 익숙하지만, WebGL은 브라우저에서 실행되기 때문에 이미 많은 기능들을 가지고 있습니다.
 그 기능들을 활용하세요.
 여러 장점이 있습니다.
-예를 들면 CSS를 사용하여 해당 overlay에 재미있는 style을 쉽게 부여할 수 있죠.
+예를 들면 CSS를 사용하여 해당 오버레이에 재미있는 스타일을 쉽게 부여할 수 있죠.
 
-여기 동일한 예제에 일부 style을 추가했습니다.
+여기 동일한 예제에 일부 스타일을 추가했습니다.
 모서리가 둥글고, 글자 주변이 빛납니다.
 그리고 테두리는 빨간색이죠.
 HTML을 사용하면 이 모든 기능을 자유롭게 사용할 수 있습니다.
@@ -137,25 +137,25 @@ HTML을 사용하면 이 모든 기능을 자유롭게 사용할 수 있습니�
 
 마지막으로 `.floating-div`는 위치 지정이 가능한 div 생성에 사용될 겁니다.
 
-이제 divcontainer를 찾고, div를 만들어 추가해야 합니다.
+이제 div 컨테이너를 찾고, div를 만들어 추가해야 합니다.
 
-    // divcontainer 탐색
+    // div 컨테이너 탐색
     var divContainerElement = document.querySelector("#divcontainer");
 
     // div 생성
     var div = document.createElement("div");
 
-    // CSS class 할당
+    // CSS 클래스 할당
     div.className = "floating-div";
 
-    // 내용에 대한 text node 생성
+    // 내용에 대한 텍스트 노드 생성
     var textNode = document.createTextNode("");
     div.appendChild(textNode);
 
     // divcontainer에 추가
     divContainerElement.appendChild(div);
 
-이제 style을 설정하여 div의 위치를 조정할 수 있습니다.
+이제 스타일을 설정하여 div의 위치를 조정할 수 있습니다.
 
     div.style.left = Math.floor(x) + "px";
     div.style.top  = Math.floor(y) + "px";
@@ -169,7 +169,7 @@ HTML을 사용하면 이 모든 기능을 자유롭게 사용할 수 있습니�
 어떻게 할까요?
 [Perspective projection](webgl-3d-perspective.html)을 다룰 때 GPU에 요청한 방법과 정확히 동일하게 수행합니다.
 
-위 예제를 통해 행렬을 사용하는 방법, 곱하는 방법, 클립 공간으로 전환하기 위해 projection matrix를 적용하는 방법을 배웠습니다.
+위 예제를 통해 행렬을 사용하는 방법, 곱하는 방법, 클립 공간으로 전환하기 위해 투영 행렬를 적용하는 방법을 배웠습니다.
 이 모든 것을 셰이더로 전달하고 지역 공간의 정점에 곱하여 클립 공간으로 전환합니다.
 자바스크립트에서도 이 모든 계산을 수행할 수 있는데요.
 클립 공간(-1 ~ +1)을 픽셀로 곱하고 이를 사용하여 div를 배치할 수 있습니다.
@@ -206,7 +206,7 @@ HTML을 사용하면 이 모든 기능을 자유롭게 사용할 수 있습니�
 
 {{{example url="../webgl-text-html-divs.html" }}}
 
-자세한 내용을 보시려면 마지막 예제의 source를 봐주세요.
+자세한 내용을 보시려면 마지막 예제의 소스 코드를 봐주세요.
 한 가지 중요한 점은 DOM에서 HTML 요소를 생성하고, 추가하고, 제거하는 작업이 느리기 때문에, 위 예제에서는 생성하고 해당 요소들을 유지한다는 겁니다.
 사용하지 않는 것은 DOM에서 지우지 않고 숨깁니다.
 더 빠른지 알아보려면 정보를 수집해야 하는데요.

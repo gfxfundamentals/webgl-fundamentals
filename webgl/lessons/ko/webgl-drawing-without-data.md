@@ -326,15 +326,14 @@ float sliceId = floor(vertexId / 3.0);
 
 위 다이어그램을 보면 3번째 값이 항상 중앙(0,0)이여서 값에 관계없이 0으로 곱할 수 있기 때문에 ?는 중요하지 않습니다.
 
-To get the pattern above this would work
+위 패턴을 얻기 위해 이렇게 작업할 겁니다.
 
 ```glsl
 float triVertexId = mod(vertexId, 3.0);
 float edge = triVertexId + sliceId;
 ```
 
-가장자리의 점과 중앙의 점의 경우 이 패턴이 필요한데.
-가장자리의 2개 다음 중앙에 1개를 반복합니다.
+가장자리의 점과 중앙의 점의 경우 이 패턴이 필요한데, 가장자리의 2개 다음 중앙에 1개를 반복합니다.
 
     1, 1, 0, 1, 1, 0, 1, 1, 0, ...
 
@@ -493,7 +492,7 @@ void main() {
 물론 원 모양의 비를 만들기 위해 위에서 했던 걸 적용할 수 있습니다.
 아마 의미가 없을 것이기 때문에 다루지는 않겠지만 정점 셰이더에서 데이터 없이 삼각형 만드는 방법을 보여줍니다.
 
-위 기술은 직사각형이나 정사각형을 만든 다음, UV 좌표를 생성하고, passing those the fragment shader and texture mapping our generated geometry.
+위 기술은 직사각형이나 정사각형을 만든 다음, UV 좌표를 생성하고, 프래그먼트 셰이더로 전달하여 생성된 지오메트리를 텍스처 매핑합니다.
 이는 [3D 원근법](webgl-3d-perspective.html)에 대한 글에서 사용한 3D 기술을 적용하여 뒤집어지는 눈송이와 나뭇잎이 떨어지는 효과에 유용할 수 있습니다.
 
 **이러한 기술**이 일반적이지 않다는 점을 강조하고 싶습니다.

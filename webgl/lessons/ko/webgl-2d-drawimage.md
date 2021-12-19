@@ -3,7 +3,7 @@ Description: WebGL에서 Canvas 2D의 drawImage 함수를 구현하는 방법
 TOC: 2D - DrawImage
 
 
-이 글은 [WebGL orthographic 3D](webgl-3d-orthographic.html)에서 이어집니다.
+이 글은 [WebGL 3D 직교 투영](webgl-3d-orthographic.html)에서 이어집니다.
 아직 읽지 않았다면 [거기](webgl-3d-orthographic.html)부터 시작하는 게 좋습니다.
 또한 텍스처와 텍스처 좌표가 어떻게 작동하는지 알아야 하기 때문에 [WebGL 3D 텍스처](webgl-3d-textures.html)를 읽어주세요.
 
@@ -33,7 +33,7 @@ Canvas 2D API는 `drawImage`라는 이미지를 그리는 용도의 굉장히 �
 비슷한 WebGL 기반의 함수를 만들기 위해 `x, y`, `x + width, y`, `x, y + height`, `x + width, y + height`에 대한 정점을 업로드한 다음, 다른 위치에 다른 이미지를 그릴 때 다른 정점 세트를 생성합니다.
 
 하지만 더 일반적인 방법은 단위 사각형을 사용하는 겁니다.
-1단위 크기의 사각형 하나를 업로드합니다.
+크기가 1인 사각형 하나를 업로드합니다.
 그런 다음 [행렬 수학](webgl-2d-matrices.html)을 사용하여 해당 단위 사각형의 크기를 조정하고 이동시켜 원하는 위치에 있도록 합니다.
 
 먼저 간단한 정점 셰이더가 필요합니다.
@@ -71,7 +71,7 @@ Canvas 2D API는 `drawImage`라는 이미지를 그리는 용도의 굉장히 �
       // 셰이더 프로그램 쌍을 사용하도록 WebGL에 지시
       gl.useProgram(program);
 
-      // 버퍼에서 데이터를 가져오기 위한 attribute 설정
+      // 버퍼에서 데이터를 가져오기 위한 속성 설정
       gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
       gl.enableVertexAttribArray(positionLocation);
       gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
@@ -85,7 +85,7 @@ Canvas 2D API는 `drawImage`라는 이미지를 그리는 용도의 굉장히 �
       // 이 행렬은 사각형을 dstX,dstY로 이동시킵니다.
       matrix = m4.translate(matrix, dstX, dstY, 0);
 
-      // 이 행렬은 사각형을 1단위에서 texWidth,texHeight 단위로 크기를 조정합니다.
+      // 이 행렬은 사각형을 1유닛에서 texWidth,texHeight 유닛으로 크기를 조정합니다.
       matrix = m4.scale(matrix, texWidth, texHeight, 1);
 
       // 행렬 설정
@@ -224,7 +224,7 @@ Canvas 2D API는 `drawImage`라는 이미지를 그리는 용도의 굉장히 �
       // 이 행렬은 픽셀에서 클립 공간으로 변환합니다.
       var projectionMatrix = m3.projection(canvas.width, canvas.height, 1);
 
-    *  // 이 행렬은 사각형을 1단위에서 dstWidth,dstHeight 단위로 크기 조정합니다.
+    *  // 이 행렬은 사각형을 1유닛에서 dstWidth,dstHeight 유닛으로 크기 조정합니다.
     *  var scaleMatrix = m4.scaling(dstWidth, dstHeight, 1);
 
       // 이 행렬은 사각형을 dstX,dstY로 이동시킵니다.
@@ -315,7 +315,7 @@ Canvas 2D API는 `drawImage`라는 이미지를 그리는 용도의 굉장히 �
       // 이 행렬은 픽셀에서 클립 공간으로 변환합니다.
       var projectionMatrix = m3.projection(canvas.width, canvas.height, 1);
 
-      // 이 행렬은 사각형을 1단위에서 dstWidth,dstHeight 단위로 크기 조정합니다.
+      // 이 행렬은 사각형을 1유닛에서 dstWidth,dstHeight 유닛으로 크기 조정합니다.
       var scaleMatrix = m4.scaling(dstWidth, dstHeight, 1);
 
       // 이 행렬은 사각형을 dstX,dstY로 이동시킵니다.
@@ -349,7 +349,7 @@ Canvas 2D API는 `drawImage`라는 이미지를 그리는 용도의 굉장히 �
 
 Canvas 2D API와 달리 WebGL 버전은 Canvas 2D `drawImage`가 처리하지 않는 경우를 처리합니다.
 
-한 가지 경우로 source나 dest에 대해 음수 너비와 높이를 전달할 수 있습니다.
+한 가지 경우로 `source`나 `dest`에 대해 음수 너비와 높이를 전달할 수 있습니다.
 음수 `srcWidth`는 `srcX`의 왼쪽에 있는 픽셀을 선택합니다.
 음수 `dstWidth`는 `dstX`의 왼쪽에 그려집니다.
 Canvas 2D API에서 최선의 경우 에러거나 최악의 경우 정의되지 않은 동작이 발생할 수 있습니다.
@@ -372,7 +372,7 @@ Canvas 2D API에서 최선의 경우 에러거나 최악의 경우 정의되지 
     *  var texMatrix = m4.zRotate(texMatrix, srcRotation);
     *  var texMatrix = m4.translate(texMatrix, texWidth * -0.5, texHeight * -0.5, 0);
     *
-    *  // 픽셀 공간에 있기 때문에 scale과 translation은 이제 픽셀 단위입니다.
+    *  // 픽셀 공간에 있기 때문에 "scale"과 "translation"은 이제 픽셀 단위입니다.
     *  var texMatrix = m4.translate(texMatrix, srcX, srcY, 0);
     *  var texMatrix = m4.scale(texMatrix, srcWidth, srcHeight, 1);
 
@@ -422,7 +422,7 @@ Canvas 2D API에서 최선의 경우 에러거나 최악의 경우 정의되지 
            v_texcoord.y < 0.0 ||
            v_texcoord.x > 1.0 ||
            v_texcoord.y > 1.0) {
-    *     gl_FragColor = vec4(0, 0, 1, 1); // blue
+    *     gl_FragColor = vec4(0, 0, 1, 1); // 파란색
     +     return;
        }
        gl_FragColor = texture2D(texture, v_texcoord);
@@ -442,7 +442,7 @@ Canvas 2D API에서 최선의 경우 에러거나 최악의 경우 정의되지 
 WebGL은 제공하는 기능의 창의적인 사용이 전부기 때문에 오히려 더 창의적인 방법을 권장하고 싶습니다.
 </p>
 <p>
-아마 위치에 단위 사각형을 사용하고 이러한 단위 사각형의 위치가 텍스처 좌표와 정확히 일치한다는 걸 눈치채셨을 겁니다.
+아마 위치에 단위 사각형을 사용하고 이러한 단위 사각형의 위치가 텍스처 좌표와 정확히 일치한다는 것을 눈치채셨을 겁니다.
 따라서 위치를 텍스처 좌표처럼 사용할 수 있습니다.
 </p>
 <pre class="prettyprint showlinemods">

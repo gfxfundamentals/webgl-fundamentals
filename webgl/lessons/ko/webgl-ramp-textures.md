@@ -65,7 +65,7 @@ var tex = gl.createTexture();
 gl.bindTexture(gl.TEXTURE_2D, tex);
 gl.texImage2D(
     gl.TEXTURE_2D,     // 대상
-    0,                 // mip 레벨
+    0,                 // 밉 레벨
     gl.LUMINANCE,      // 내부 포맷
     2,                 // 너비
     1,                 // 높이
@@ -140,7 +140,7 @@ gl.uniform1i(rampLocation, 0);
 
 보간없이 양쪽에 0.5픽셀이 있습니다.
 텍스처에서 `TEXTURE_WRAP_S`가 `REPEAT`로 설정되었다고 상상해보세요.
-We'd then expect the left most half of a red pixel to linearly blend toward green as though the green repeated to the left. 
+그러면 초록색이 왼쪽으로 반복되는 것처럼 빨간색 픽셀이 초록색을 향해 선형적 혼합될 것이라 예상했는데요.
 하지만 `CLAMP_TO_EDGE`를 사용하고 있기 때문에 왼쪽이 더 빨갛습니다.
 
 램프를 실제로 얻으려면 해당 중심 범위에서 값을 선택하면 됩니다.
@@ -288,7 +288,7 @@ gl.uniform2fv(rampSizeLocation, [2, 1]);
 > 안타깝지만 코드는 [외부 도우미 라이브러리](webgl-less-code-more-fun.html)를 사용하고 있지 않기 때문에 2개의 셰이더 프로그램을 지원하기 위해 꽤 많이 바뀔 겁니다.
 > 각 프로그램은 고유한 위치 세트가 필요합니다.
 > 하지만 그렇게 많이 변경하면 이 글의 요점에서 벗어날 수 있기 때문에 여기서는 조건문을 사용하기로 결정했습니다.
-> In general though I try avoid conditionals to select features in shaders and instead create different shaders for different features.
+> 일반적으로 저는 셰이더에서 기능을 선택하는 조건문을 피하고 대신에 다른 기능을 위한 다른 셰이더를 생성합니다.
 
 참고: 이 수식은 `LINEAR` 필터링을 사용하는 경우에만 중요합니다.
 `NEAREST` 필터링을 사용하고 있다면 원래 수식이 필요합니다.
@@ -339,7 +339,7 @@ gl.uniform2fv(rampSizeLocation, [2, 1]);
 +  const width = data.length / elementsForFormat[format];
   gl.texImage2D(
       gl.TEXTURE_2D,     // 대상
-      0,                 // mip 레벨
+      0,                 // 밉 레벨
 *      format,            // 내부 포맷
 *      width,             // 너비
       1,                 // 높이

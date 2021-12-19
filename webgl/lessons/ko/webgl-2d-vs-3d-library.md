@@ -19,7 +19,7 @@ WebGL의 경우 래스터화 API라고 부르는 게 중요하다고 생각한 �
 WebGL과 OpenGL ES 2.0+는 모두 3D를 그리는데 사용되지만 이 설명에는 맞지 않습니다.
 
 비유를 위해, C++은 기본적으로 "process word"를 하지 않습니다.
-C++을 "word processor"라고 부르진 않지만 word processor가 C++로 작성될 수는 있습니다.
+C++을 "word processor"라고 부르진 않지만 워드 프로세서가 C++로 작성될 수는 있습니다.
 비슷하게 WebGL은 기본적으로 3D 그래픽을 그리지 않습니다.
 WebGL로 3D 그래픽을 그리는 라이브러리를 작성할 수는 있지만 그 자체로 3D 그래픽을 수행하진 않습니다.
 
@@ -34,7 +34,7 @@ WebGL로 3D 그래픽을 그리는 라이브러리를 작성할 수는 있지만
   renderer.setSize(c.clientWidth, c.clientHeight);
   c.appendChild(renderer.domElement);
 
-  // Camera 만들기 및 설정
+  // 카메라 만들기 및 설정
   camera = new THREE.PerspectiveCamera(
       70, c.clientWidth / c.clientHeight, 1, 1000);
   camera.position.z = 400;
@@ -152,11 +152,11 @@ WebGL을 3D 라이브러리라고 부르는 건 잘못된 것 같습니다.
 WebGL에 유입되는 사용자들은 "오, 3D 라이브러리다. 멋지다. 이걸로 3D를 할 수 있을 거야"라고 생각한 다음, 전혀 그렇지 않다는 걸 알아 냅니다.
 
 한 걸음 더 나아갈 수도 있습니다.
-다음은 캔버스로 wireframe cube를 그립니다.
+다음은 캔버스로 와이어프레임 큐브를 그립니다.
 
 {{{example url="resources/3d-in-canvas.html" }}}
 
-그리고 여기는 WebGL로 wireframe cube를 그립니다.
+그리고 여기는 WebGL로 와이어프레임 큐브를 그립니다.
 
 {{{example url="resources/3d-in-webgl.html" }}}
 
@@ -166,7 +166,7 @@ WebGL 버전은 우리가 제공한 수식이 GLSL에 있고 GPU에 의해 실�
 
 마지막 데모의 요점은 WebGL이 사실상 Canvas 2D와 유사한 래스터화 엔진일 뿐이라는 걸 보여주는 겁니다.
 물론 WebGL은 3D를 구현하는데 도움이 되는 기능들을 가지고 있는데요.
-WebGL에는 depth sorting을 훨씬 더 쉽게 만드는 depth buffer가 있습니다.
+WebGL에는 깊이 정렬을 훨씬 더 쉽게 만드는 깊이 버퍼가 있습니다.
 또한 3D 수학을 처리하는데 유용한 수학 함수들이 내장되어 있지만 3D로 만드는 건 없습니다.
 수학 라이브러리인거죠.
 해당 수학이 1D, 2D, 3D인 것에 상관없이 수식에 사용합니다.

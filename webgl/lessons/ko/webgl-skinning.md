@@ -6,24 +6,24 @@ TOC: 스키닝
 그래픽에서 스키닝은 여러 행렬의 가중치 영향을 기반으로 정점 세트를 움직인다는 겁니다.
 꽤 추상적이네요.
 
-*스키닝*이라 불리는 이유는 일반적으로 행렬의 또 다른 이름인 "뼈"로 만든 "스켈레톤"을 가지는 3D 캐릭터를 만드는 데 사용되고 **정점마다** 각 뼈의 영향을 해당 정점에 설정하기 때문입니다.
+*스키닝*이라 불리는 이유는 일반적으로 행렬의 또 다른 이름인 "본"으로 만든 "스켈레톤"을 가지는 3D 캐릭터를 만드는 데 사용되고 **정점마다** 각 본의 영향을 해당 정점에 설정하기 때문입니다.
 
 예를 들어 손 뼈는 캐릭터의 손 근처 정점에 거의 100% 영향을 주지만 발 뼈는 해당 정점에 영향을 주지 않습니다.
 손목 근처의 정점은 손 뼈와 팔 뼈의 영향만을 받습니다.
 
-기본적인 부분으로 뼈(행렬 계층 구조)와 가중치가 필요합니다.
-가중치는 0에서 1사이의 정점당 값으로 특정 뼈 행렬이 해당 정점의 위치에 얼마나 영향을 미치는지 나타냅니다.
+기본적인 부분으로 본(행렬 계층 구조)과 가중치가 필요합니다.
+가중치는 0에서 1사이의 정점당 값으로 특정 본 행렬이 해당 정점의 위치에 얼마나 영향을 미치는지 나타냅니다.
 데이터로 보면 가중치는 정점 색상과 비슷한데요.
 정점당 하나의 가중치 세트입니다.
 다시 말해 가중치는 버퍼에 저장되고 속성을 통해 제공됩니다.
 
 일반적으로 데이터가 너무 많아지지 않도록 정점당 가중치를 부분적으로 제한합니다.
-캐릭터는 15개(Virtua Fighter 1)에서 150-300개(최신 게임)의 뼈를 가질 수 있습니다.
-300개의 뼈가 있다면 각 뼈의 정점마다 300개의 가중치가 필요합니다.
+캐릭터는 15개(Virtua Fighter 1)에서 150-300개(최신 게임)의 본을 가질 수 있습니다.
+300개의 본이 있다면 각 본의 정점마다 300개의 가중치가 필요합니다.
 캐릭터가 10000개의 정점을 가진다면 3백만 개의 가중치가 필요하겠죠.
 
 그래서 대부분의 실시간 스키닝 시스템은 정점당 ~4개로 가중치를 제한합니다.
-일반적으로 이것은 blender/maya/3dsmax와 같은 3D 패키지에서 데이터를 가져오는 exporter/converter에서 수행되고, 각 정점에 대해 가장 높은 가중치를 가진 4개의 뼈를 찾은 다음 해당 가중치를 정규화합니다.
+일반적으로 이것은 Blender/Maya/3DSMax와 같은 3D 패키지에서 데이터를 가져오는 내보내기/변환 도구에서 수행되고, 각 정점에 대해 가장 높은 가중치를 가진 4개의 본을 찾은 다음 해당 가중치를 정규화합니다.
 
 스킨이 없는 정점은 일반적으로 다음과 같이 계산됩니다.
 
@@ -39,12 +39,12 @@ TOC: 스키닝
 
 보시다시피 각 정점에 대해 4개의 다른 위치를 계산한 다음 가중치를 적용하여 다시 하나로 혼합한 것과 같습니다.
 
-뼈 행렬을 유니폼 배열에 저장하고 속성을 통해 각 가중치가 적용되는 뼈를 전달한다고 가정하면 이렇게 할 수 있습니다.
+본 행렬을 유니폼 배열에 저장하고 속성을 통해 각 가중치가 적용되는 본을 전달한다고 가정하면 이렇게 할 수 있습니다.
 
     attribute vec4 a_position;
     attribute vec4 a_weights;         // 정점당 4개의 가중치
-    attribute vec4 a_boneNdx;         // 정점당 4개의 뼈 인덱스
-    uniform mat4 bones[MAX_BONES];    // 뼈당 1개의 행렬
+    attribute vec4 a_boneNdx;         // 정점당 4개의 본 인덱스
+    uniform mat4 bones[MAX_BONES];    // 본당 1개의 행렬
 
     gl_Position = projection * view *
                   (bones[int(a_boneNdx[0])] * a_position * a_weight[0] +
@@ -57,8 +57,8 @@ TOC: 스키닝
 
 <div class="webgl_center"><img src="resources/bone-head.svg" style="width: 500px;"></div>
 
-이제 행렬/뼈/조인트를 머리에 두고 그것들을 스키닝용으로 뼈에 사용한다고 상상해봅시다.
-간단하게 말하자면 머리의 정점들이 머리 뼈에 대해 1.0의 가중치를 가지고 다른 조인트가 해당 정점에 영향을 주지 않도록 가중치를 설정했다고 상상해보세요.
+이제 행렬/본/조인트를 헤드에 두고 그것들을 스키닝용으로 본에 사용한다고 상상해봅시다.
+간단하게 말하자면 머리의 정점들이 머리뼈에 대해 1.0의 가중치를 가지고 다른 조인트가 해당 정점에 영향을 주지 않도록 가중치를 설정했다고 상상해보세요.
 
 <div class="webgl_center"><img src="resources/bone-head-setup.svg" style="width: 500px;"></div>
 
@@ -74,24 +74,24 @@ TOC: 스키닝
 이 경우 머리 행렬의 바인드 포즈는 원점보다 2유닛 위에 있습니다.
 따라서 이제 역행렬을 사용하여 남은 2유닛을 뺄 수 있습니다.
 
-다시 말해 셰이더에 전달된 뼈 행렬은 각각 역바인드 포즈로 곱해져서 메시의 원점을 기준으로 원래의 위치에서 얼마나 변경되는지에만 영향을 줍니다.
+다시 말해 셰이더에 전달된 본 행렬은 각각 역바인드 포즈로 곱해져서 메시의 원점을 기준으로 원래의 위치에서 얼마나 변경되는지에만 영향을 줍니다.
 
 작은 예제를 하나 만들어봅시다.
 이렇게 2D 그리드에서 애니메이션을 수행할 겁니다.
 
 <div class="webgl_center"><img src="resources/skinned-mesh.svg" style="width: 400px;"></div>
 
-* 여기서 `b0`, `b1`, `b2`은 뼈 행렬입니다.
+* 여기서 `b0`, `b1`, `b2`은 본 행렬입니다.
 * `b1`는 `b0`의 자식이고 `b2`는 `b1`의 자식입니다.
-* 정점 `0,1`은 뼈 b0에서 1.0의 가중치를 얻습니다.
-* 정점 `2,3`은 뼈 b0과 b1에서 0.5의 가중치를 얻습니다.
-* 정점 `4,5`는 뼈 b1에서 1.0의 가중치를 얻습니다.
-* 정점 `6,7`은 뼈 b1과 b2에서 0.5의 가중치를 얻습니다.
-* 정점 `8,9`는 뼈 b2에서 1.0의 가중치를 얻습니다.
+* 정점 `0,1`은 본 b0에서 1.0의 가중치를 얻습니다.
+* 정점 `2,3`은 본 b0과 b1에서 0.5의 가중치를 얻습니다.
+* 정점 `4,5`는 본 b1에서 1.0의 가중치를 얻습니다.
+* 정점 `6,7`은 본 b1과 b2에서 0.5의 가중치를 얻습니다.
+* 정점 `8,9`는 본 b2에서 1.0의 가중치를 얻습니다.
 
 [유틸리티 함수에 대한 글](webgl-less-code-more-fun.html)에서 설명한 유틸들을 사용할 겁니다.
 
-먼저 정점들과 각 정점에 대해 영향을 미치는 각 뼈의 인덱스 그리고 해당 뼈가 얼마나 영향을 주는지에 대한 0에서 1사이의 숫자가 필요합니다.
+먼저 정점들과 각 정점에 대해 영향을 미치는 각 본의 인덱스 그리고 해당 본이 얼마나 영향을 주는지에 대한 0에서 1사이의 숫자가 필요합니다.
 
 ```
 var arrays = {
@@ -164,10 +164,10 @@ var arrays = {
 var bufferInfo = webglUtils.createBufferInfoFromArrays(gl, arrays);
 ```
 
-각 뼈에 대한 행렬을 포함하여 유니폼 값을 정의할 수 있습니다.
+각 본에 대한 행렬을 포함하여 유니폼 값을 정의할 수 있습니다.
 
 ```
-// 각 뼈 하나당 4개의 행렬
+// 각 본 하나당 4개의 행렬
 var numBones = 4;
 var boneArray = new Float32Array(numBones * 16);
 
@@ -179,11 +179,11 @@ var uniforms = {
 };
 ```
 
-각 행렬에 하나씩, boneArray에 대한 뷰를 만들 수 있습니다.
+각 행렬에 하나씩, `boneArray`에 대한 뷰를 만들 수 있습니다.
 
 ```
-// 각 뼈에 대한 뷰를 만듭니다.
-// 업로드를 위해 모든 뼈가 한 배열에 존재하지만 수학 함수와 함께 사용하기 위해 별도의 배열일 수도 있습니다.
+// 각 본에 대한 뷰를 만듭니다.
+// 업로드를 위해 모든 본이 한 배열에 존재하지만 수학 함수와 함께 사용하기 위해 별도의 배열일 수도 있습니다.
 var boneMatrices = [];  // 유니폼 데이터
 var bones = [];         // 바인드 역행렬로 곱하기 전의 값
 var bindPose = [];      // 바인드 행렬
@@ -194,11 +194,11 @@ for (var i = 0; i < numBones; ++i) {
 }
 ```
 
-그런 다음 뼈 행렬을 조작하는 코드를 작성합니다.
+그런 다음 본 행렬을 조작하는 코드를 작성합니다.
 손가락 뼈와 같은 계층 구조로 회전할 겁니다.
 
 ```
-// 각 뼈를 일정 각도로 회전하고 계층 구조를 시뮬레이션
+// 각 본을 일정 각도로 회전하고 계층 구조를 시뮬레이션
 function computeBoneMatrices(bones, angle) {
   var m = m4.identity();
   m4.zRotate(m, angle, bones[0]);
@@ -224,7 +224,7 @@ var bindPoseInv = bindPose.map(function(m) {
 
 이제 렌더링할 준비가 됐습니다.
 
-먼저 뼈에 애니메이션을 적용하여 각각에 대한 새로운 월드 행렬을 계산합니다.
+먼저 본에 애니메이션을 적용하여 각각에 대한 새로운 월드 행렬을 계산합니다.
 
 ```
 var t = time * 0.001;
@@ -235,7 +235,7 @@ computeBoneMatrices(bones, angle);
 그런 다음 위에서 언급한 문제를 처리하기 위해 각 결과에 역바인드 포즈를 곱합니다.
 
 ```
-// 각각을 bindPoseInverse로 곱하기
+// 각각을 "bindPoseInverse"로 곱하기
 bones.forEach(function(bone, ndx) {
   m4.multiply(bone, bindPoseInv[ndx], boneMatrices[ndx]);
 });
@@ -251,7 +251,7 @@ webglUtils.setBuffersAndAttributes(gl, programInfo, bufferInfo);
 // gl.uniformXXX, gl.activeTexture, gl.bindTexture 호출
 webglUtils.setUniforms(programInfo, uniforms);
 
-// gl.drawArrays or gl.drawIndices 호출
+// gl.drawArrays 혹은 gl.drawIndices 호출
 webglUtils.drawBufferInfo(gl, bufferInfo, gl.LINES);
 ```
 
@@ -260,15 +260,15 @@ webglUtils.drawBufferInfo(gl, bufferInfo, gl.LINES);
 {{{example url="../webgl-skinning.html" }}}
 
 빨간색 선은 *스킨이 적용된 메시*입니다.
-초록색과 파란색 선은 각 "뼈" 혹은 "조인트"의 x축과 y축을 나타냅니다.
-여러 뼈의 영향을 받는 정점들이 그 뼈들 사이에서 어떻게 움직이는지 볼 수 있습니다.
-스키닝이 어떻게 작동하는지 설명하는 데에 중요하지 않기 때문에 뼈를 그리는 방법은 다루지 않았습니다.
+초록색과 파란색 선은 각 "본" 혹은 "조인트"의 x축과 y축을 나타냅니다.
+여러 본의 영향을 받는 정점들이 그 본들 사이에서 어떻게 움직이는지 볼 수 있습니다.
+스키닝이 어떻게 작동하는지 설명하는 데에 중요하지 않기 때문에 본을 그리는 방법은 다루지 않았습니다.
 궁금하다면 코드를 봐주세요.
 
-참고: 뼈와 조인트가 헷갈립니다.
+참고: 본과 조인트가 헷갈립니다.
 여기에는 단 한 가지 행렬밖에 없습니다.
-하지만 3D 모델링 패키지에서는 일반적으로 각 행렬 사이에 gizmo(UI 위젯)을 그리는데요.
-그 모습은 결국 뼈처럼 보입니다.
+하지만 3D 모델링 패키지에서는 일반적으로 각 행렬 사이에 기즈모(UI 위젯)를 그리는데요.
+그 모습은 결국 본처럼 보입니다.
 조인트는 행렬이 있는 위치이며 각 조인트에서 다음 조인트까지 선이나 원뿔을 그리기 때문에 일종의 스켈레톤처럼 보이는 겁니다.
 
 <div class="webgl_center">
@@ -276,18 +276,18 @@ webglUtils.drawBufferInfo(gl, bufferInfo, gl.LINES);
   <div class="caption"><a href="https://www.blendswap.com/user/TiZeta">TiZeta</a>의 <a href="https://www.blendswap.com/blends/view/66412">LowPoly Man</a></div>
 </div>
 
-또 다른 참고 사항으로, 위 예제는 가중치와 뼈 인덱스에 부동 소수점을 사용하지만 `UNSIGNED_BYTE`를 사용하여 공간을 절약할 수 있다는 겁니다.
+또 다른 참고 사항으로, 위 예제는 가중치와 본 인덱스에 부동 소수점을 사용하지만 `UNSIGNED_BYTE`를 사용하여 공간을 절약할 수 있다는 겁니다.
 
 안타깝게도 셰이더에서 사용할 수 있는 유니폼 수는 제한되어 있습니다.
-WebGL의 하한선은 vec4 64개로 mat4 8개에 불과하며, 프래그먼트 셰이더의 `color`와 `projection` 그리고 `view`와 같은 다른 작업을 위해 이러한 유니폼이 필요할 수 있는데, vec4 제한이 64개인 기기에서는 5개의 뼈만 가질 수 있습니다!
-[WebGLStats](https://webglstats.com/webgl/parameter/MAX_VERTEX_UNIFORM_VECTORS)를 확인해보면 대부분의 기기들이 128개의 vec4를 지원하고 그 중 70%는 256개의 vec4를 지원하지만 여전히 각각 13개의 뼈와 29개의 뼈에 불과합니다.
+WebGL의 하한선은 vec4 64개로 mat4 8개에 불과하며, 프래그먼트 셰이더의 `color`와 `projection` 그리고 `view`와 같은 다른 작업을 위해 이러한 유니폼이 필요할 수 있는데, vec4 제한이 64개인 기기에서는 5개의 본만 가질 수 있습니다!
+[WebGLStats](https://webglstats.com/webgl/parameter/MAX_VERTEX_UNIFORM_VECTORS)를 확인해보면 대부분의 기기들이 128개의 vec4를 지원하고 그 중 70%는 256개의 vec4를 지원하지만 여전히 각각 13개의 본과 29개의 본에 불과합니다.
 13개는 90년대 초 Virtua Fighter 1 캐릭터에도 충분하지 않으며 29개는 최신 게임에 사용되는 수에 근접하지 않습니다.
 
 이를 해결하기 위한 몇 가지 방법이 있는데요.
-하나는 오프라인으로 모델을 사전 처리하고 N개 이상의 뼈를 사용하지 않도록 여러 부분으로 나누는 겁니다.
+하나는 오프라인으로 모델을 사전 처리하고 N개 이상의 본을 사용하지 않도록 여러 부분으로 나누는 겁니다.
 이는 꽤 복잡하고 자체적인 문제를 야기합니다.
 
-또 다른 방법은 텍스처에 뼈 행렬을 저장하는 겁니다.
+또 다른 방법은 텍스처에 본 행렬을 저장하는 겁니다.
 텍스처가 단순한 이미지가 아니라 사실상 셰이더에 전달할 수 있는 무작위 접근 데이터의 2D 배열이며 텍스처용 이미지를 읽는 것뿐 아니라 모든 종류의 작업에 사용할 수 있습니다.
 
 유니폼의 한계를 우회하기 위해 텍스처에 행렬을 전달해봅시다.
@@ -307,7 +307,7 @@ if (!ext) {
 셰이더를 업데이트하여 텍스처에서 행렬을 가져와봅시다.
 행당 하나의 행렬을 갖는 텍스처를 만들 겁니다.
 텍스처의 각 텍셀은 R, G, B, A를 가지고, 이는 4개의 값이므로 행렬당 4픽셀, 행렬의 행당 1픽셀만 필요합니다.
-일반적으로 텍스처는 특정 차원에서 최소 2048픽셀일 수 있으므로, 최소 2048개의 뼈 행렬을 위한 충분한 공간을 제공합니다.
+일반적으로 텍스처는 특정 차원에서 최소 2048픽셀일 수 있으므로, 최소 2048개의 본 행렬을 위한 충분한 공간을 제공합니다.
 
 ```
 attribute vec4 a_position;
@@ -365,10 +365,10 @@ void main() {
 
 <div class="webgl_center"><img src="resources/texel-coords-middle.svg" style="width: 400px;"></div>
 
-이제 뼈 행렬을 넣을 수 있는 텍스처를 설정할 겁니다.
+이제 본 행렬을 넣을 수 있는 텍스처를 설정할 겁니다.
 
 ```
-// 뼈 행렬용 텍스처 준비
+// 본 행렬용 텍스처 준비
 var boneMatrixTexture = gl.createTexture();
 gl.bindTexture(gl.TEXTURE_2D, boneMatrixTexture);
 // 순수한 데이터로 텍스처를 사용하고 싶기 때문에 필터링 끄기
@@ -379,7 +379,7 @@ gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 ```
 
-그리고 해당 텍스처와 뼈의 개수를 유니폼에 전달할 겁니다.
+그리고 해당 텍스처와 본의 개수를 유니폼에 전달할 겁니다.
 
 ```
 var uniforms = {
@@ -391,7 +391,7 @@ var uniforms = {
 };
 ```
 
-변경해야 할 사항은 렌더링할 때 최신 뼈 행렬로 텍스처를 업데이트하는 것 뿐입니다.
+변경해야 할 사항은 렌더링할 때 최신 본 행렬로 텍스처를 업데이트하는 것 뿐입니다.
 
 ```
 // 현재 행렬로 텍스처 업데이트
@@ -401,7 +401,7 @@ gl.texImage2D(
     0,         // 레벨
     gl.RGBA,   // 내부 포맷
     4,         // 너비 4픽셀, 각 픽셀은 RGBA를 가지므로 4픽셀은 16개의 값
-    numBones,  // 뼈당 하나의 행
+    numBones,  // 본당 하나의 행
     0,         // 테두리
     gl.RGBA,   // 포맷
     gl.FLOAT,  // 타입
@@ -416,7 +416,7 @@ gl.texImage2D(
 스킨이 적용된 메시를 표시하는 코드를 작성하는 것은 그리 어렵지 않습니다.
 더 어려운 부분은 실제로 데이터를 얻는 부분입니다.
 일반적으로 blender/maya/3d studio max와 같은 3D 소프트웨어가 필요하며, 자체적인 내보내기 도구를 작성하거나 필요한 데이터를 모두 제공하는 내보내기 도구와 포맷을 찾아야 합니다.
-You'll see as we go over it that there is 10x more code in loading a skin than there is in displaying it and that doesn't include the probably 20-30x more code in the exporter to get the data out of the 3D modeling program.
+스킨을 로드하는 데 표시하는 것보다 10배 더 많은 코드가 있고, 3D 모델링 프로그램에서 데이터를 가져오기 위해 내보내기 도구에 20-30배 더 많은 코드가 포함되어 있지 않다는 것을 확인할 수 있습니다.
 이것은 사람들이 자체 3D 엔진을 작성할 때 자주 놓치는 것 중 하나입니다.
 엔진은 쉬운 부분이에요 😜
 
@@ -657,11 +657,11 @@ class Node {
       // 행렬이 전달되었으니 수식 수행
       m4.multiply(parentWorldMatrix, this.localMatrix, this.worldMatrix);
     } else {
-      // 행렬이 전달되지 않았기 때문에 `localMatrix`를 `worldMatrix`로 복사
+      // 행렬이 전달되지 않았기 때문에 "localMatrix"를 "worldMatrix"로 복사
       m4.copy(this.localMatrix, this.worldMatrix);
     }
 
-    // 모든 `children` 처리
+    // 모든 자식 처리
     const worldMatrix = this.worldMatrix;
     for (const child of this.children) {
       child.updateWorldMatrix(worldMatrix);
@@ -891,9 +891,9 @@ function renderDrawables(node) {
 }
 
 for (const scene of gltf.scenes) {
-  // `scene`의 모든 `worldMatrix` 업데이트
+  // 장면의 모든 월드 행렬 업데이트
   scene.root.updateWorldMatrix();
-  // `scene`을 탐색하여 모든 `renderables` 렌더링
+  // 장면을 탐색하여 모든 렌더 가능한 요소 렌더링
   scene.root.traverse(renderDrawables);
 }
 ```
@@ -920,7 +920,7 @@ class Skin {
     this.jointMatrices = [];
     // 조인트당 하나의 행렬에 충분한 공간 할당
     this.jointData = new Float32Array(joints.length * 16);
-    // 각 joint와 inverseBindMatrix에 대한 뷰 생성
+    // 각 조인트와 "inverseBindMatrix"에 대한 뷰 생성
     for (let i = 0; i < joints.length; ++i) {
       this.inverseBindMatrices.push(new Float32Array(
           inverseBindMatrixData.buffer,
@@ -941,7 +941,7 @@ class Skin {
   }
   update(node) {
     const globalWorldInverse = m4.inverse(node.worldMatrix);
-    // 각 조인트를 통해 현재 worldMatrix 구하기
+    // 각 조인트를 통해 현재 월드 행렬 구하기
     // 바인드 역행렬을 적용하고 전체 결과를 텍스처에 저장
     for (let j = 0; j < this.joints.length; ++j) {
       const joint = this.joints[j];
@@ -1036,7 +1036,7 @@ void main() {
 이것은 위의 스키닝 셰이더와 거의 동일한데요.
 gltf 파일에 있는 내용과 일치하도록 속성 이름을 바꿨습니다.
 가장 큰 변화는 `skinMatrix`를 만든 것입니다.
-기존 스키닝 셰이더에서는 위치에 개별적인 조인트/뼈 행렬을 곱하고 여기에 각 조인트에 대한 영향의 가중치로 곱했습니다.
+기존 스키닝 셰이더에서는 위치에 개별적인 조인트/본 행렬을 곱하고 여기에 각 조인트에 대한 영향의 가중치로 곱했습니다.
 이 경우 가중치로 곱한 행렬을 더하고 위치에 한 번만 곱합니다.
 이건 동일한 결과를 만들지만 `skinMatrix`를 사용하여 법선도 곱할 수 있고, 그렇지 않으면 법선과 스킨이 일치하지 않을 겁니다.
 
@@ -1045,7 +1045,7 @@ gltf 파일에 있는 내용과 일치하도록 속성 이름을 바꿨습니다
 
 ```
 *const globalWorldInverse = m4.inverse(node.worldMatrix);
-// 각 조인트를 통해 현재 worldMatrix 구하기
+// 각 조인트를 통해 현재 월드 행렬 구하기
 // 바인드 역행렬을 적용하고 전체 결과를 텍스처에 저장
 for (let j = 0; j < this.joints.length; ++j) {
   const joint = this.joints[j];
@@ -1152,7 +1152,7 @@ for (const {node, mesh, skinNdx} of skinNodes) {
 `Skin`의 각 노드, 다시 말해 각 조인트를 살펴보고, `local X access`에 약간 더하거나 빼서 회전시킵니다.
 
 이를 위해 각 조인트에 대한 기존 로컬 행렬을 저장할 겁니다.
-그런 다음 원본 행렬을 각 프레임마다 일정량 회전하고, `m4.decompose` 함수를 사용하여 행렬을 다시 position, rotation, scale로 변환합니다.
+그런 다음 원본 행렬을 각 프레임마다 일정량 회전하고, `m4.decompose` 함수를 사용하여 행렬을 다시 위치, 회전, 스케일로 변환합니다.
 
 ```
 const origMatrix = new Map();
@@ -1168,7 +1168,7 @@ function animSkin(skin, a) {
     const origMatrix = origRotations.get(joint);
     // 회전
     const m = m4.xRotate(origMatrix, a);
-    // 조인트 속의 position, rotation, scale로 분해
+    // 조인트 속의 위치, 회전, 스케일로 분해
     m4.decompose(m, joint.source.position, joint.source.rotation, joint.source.scale);
   }
 }
@@ -1248,7 +1248,7 @@ v_normal = a_WEIGHTS_0.xyz * 2. - 1.;
 <div class="webgl_center"><img src="resources/skinning-debug-03.png"></div>
 
 이게 정확한지는 분명하지 않지만 어느정도 의미가 있습니다.
-각 뼈에 가까운 정점의 색상이 진할 것으로 예상할 수 있으며, 그 부분의 가중치는 1.0이거나 적어도 모두 비슷하기 때문에 뼈 주변의 정점에서 해당 색이 적용된 링을 예상할 수 있습니다.
+각 본에 가까운 정점의 색상이 진할 것으로 예상할 수 있으며, 그 부분의 가중치는 1.0이거나 적어도 모두 비슷하기 때문에 본 주변의 정점에서 해당 색이 적용된 링을 예상할 수 있습니다.
 
 원본 이미지는 너무 지저분하니 조인트 인덱스도 함께 표시해봤습니다.
 
@@ -1265,7 +1265,7 @@ v_normal = a_JOINTS_0.xyz / (u_numJoints - 1.) * 2. - 1.;
 다시 말하지만 원래 난잡한 색상이었습니다.
 위 이미지는 수정 후의 모습입니다.
 범고래의 가중치에 대해 예상한 것과 거의 비슷한 것을 볼 수 있는데요.
-각 뼈 주변에 색이 칠해진 링이 생겼습니다.
+각 본 주변에 색이 칠해진 링이 생겼습니다.
 
 버그는 `webglUtils.createBufferInfoFromArrays`가 컴포넌트 수를 알아내는 방법에 있었습니다.
 지정된 걸 무시하고 추측하려고 시도했고 추측이 잘못된 경우가 있었는데요.

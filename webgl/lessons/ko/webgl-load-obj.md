@@ -278,7 +278,7 @@ void main () {
 
 ```js
 async function main() {
-  // WebGL 컨텍스트 가져오기
+  // WebGL Context 얻기
   /** @type {HTMLCanvasElement} */
   const canvas = document.querySelector("#canvas");
   const gl = canvas.getContext("webgl");
@@ -1152,7 +1152,7 @@ function addVertex(vert) {
 ### .OBJ 파일을 사용하면 안됩니다.
 
 솔직히, 제 생각엔 .OBJ 파일은 사용하면 안됩니다. 이 글은 예제 목적으로 쓰여졌습니다.
-파일에서부터 정점 데이터를 가져올 수 있다면 어떤 포맷에 대해서도 임포터를 구현하실 수 있을겁니다.
+파일에서부터 정점 데이터를 가져올 수 있다면 어떤 포맷에 대해서도 가져오기 도구를 구현하실 수 있을겁니다.
 
 .OBJ파일이 갖고있는 문제점은
 

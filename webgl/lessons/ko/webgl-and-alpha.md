@@ -71,11 +71,11 @@ WebGL은 이걸 좀 더 OpenGL처럼 만들기 위한 여러 방법을 가지고
 
 알파가 있는 이미지를 WebGL로 로딩하는 경우 저의 기본값입니다.
 WebGL은 미리 곱하지 않은 색상 값인 PNG 파일 그대로의 값을 제공할 겁니다.
-pre-multiplied는 손실인 반면 이건 무손실이기 때문에 일반적으로 OpenGL 프로그램에 사용됩니다.
+`pre-multiplied`는 손실인 반면 이건 무손실이기 때문에 일반적으로 OpenGL 프로그램에 사용됩니다.
 
     1, 0.5, 0.5, 0  // RGBA
 
-`r`, `g`, `b`가 0이 되는 걸 의미하는 `a = 0`이기 때문에 un-premultiplied는 가능한 값인 반면 pre-multiplied는 불가능한 값입니다.
+`r`, `g`, `b`가 0이 되는 걸 의미하는 `a = 0`이기 때문에 `un-premultiplied`는 가능한 값인 반면 `pre-multiplied`는 불가능한 값입니다.
 
 원한다면 WebGL이 알파를 미리 곱하도록 할 수 있습니다.
 이렇게 `UNPACK_PREMULTIPLY_ALPHA_WEBGL`를 true로 설정하여 이를 수행하는데
@@ -85,9 +85,9 @@ pre-multiplied는 손실인 반면 이건 무손실이기 때문에 일반적으
 기본값은 un-premultiplied 입니다.
 
 대부분의 Canvas 2D 구현은 pre-multiplied 알파로 작동한다는 점에 유의하세요.
-이는 WebGL로 전송하고 `UNPACK_PREMULTIPLY_ALPHA_WEBGL`이 false일 때 WebGL이 다시 un-premultipiled로 전환할 것임을 의미합니다.
+이는 WebGL로 전송하고 `UNPACK_PREMULTIPLY_ALPHA_WEBGL`이 false일 때 WebGL이 다시 `un-premultipiled`로 전환할 것임을 의미합니다.
 
-### #6) pre-multiplied 알파와 함께 작동하는 blending equation 사용
+### #6) pre-multiplied 알파와 함께 작동하는 혼합 방정식 사용
 
 제가 작성하거나 작업한 거의 모든 OpenGL 앱들이 사용 중인데
 

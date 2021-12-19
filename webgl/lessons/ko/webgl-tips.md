@@ -14,7 +14,7 @@ TOC: #
 브라우저에는 스크린샷을 찍는 2개의 함수가 있는데요.
 오래된 함수인 [`canvas.toDataURL`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toDataURL)과 좀 더 나은 새로운 함수인 [`canvas.toBlob`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob)입니다.
 
-그래서 이렇게 약간의 코드를 추가하여 스크린샷을 쉽게 찍을 수 있을 것이라 생각하실텐데
+그래서 이렇게 약간의 코드를 추가하여 스크린샷을 쉽게 찍을 수 있을 것이라 생각하실텐데요.
 
 ```html
 <canvas id="c"></canvas>
@@ -42,19 +42,19 @@ const saveBlob = (function() {
 }());
 ```
 
-다음은 위 코드와 버튼을 배치하기 위한 CSS가 추가된 [애니메이션에 관한 글](webgl-animation.html)의 예제로
+다음은 위 코드와 버튼을 배치하기 위한 CSS가 추가된 [애니메이션에 관한 글](webgl-animation.html)의 예제로,
 
 {{{example url="../webgl-tips-screenshot-bad.html"}}}
 
-시도해보면 이런 스크린샷을 얻게 되는데
+시도해보면 이런 스크린샷을 얻게 되는데,
 
 <div class="webgl_center"><img src="resources/screencapture-398x298.png"></div>
 
-네, 그냥 빈 이미지입니다.
+네 그냥 빈 이미지입니다.
 
 브라우저/OS에 따라 작동할 수도 있지만 아마 일반적으로는 작동하지 않을 겁니다.
 
-해당 문제는 성능과 호환성 이유로, 기본적으로 브라우저는 WebGL canvas에 그린 뒤 drawing buffer를 지우는데요.
+해당 문제는 성능과 호환성 이유로, 기본적으로 브라우저는 WebGL 캔버스에 그린 뒤 드로잉 버퍼를 지우는데요.
 
 3가지 해결법이 있습니다.
 
@@ -100,7 +100,7 @@ const saveBlob = (function() {
     }
     ```
 
-3. WebGL context를 만들 때 `preserveDrawingBuffer: true`로 설정
+3. WebGL 컨텍스트를 만들 때 `preserveDrawingBuffer: true`로 설정
 
     ```js
     const gl = someCanvas.getContext('webgl', {preserveDrawingBuffer: true});
@@ -125,7 +125,7 @@ const saveBlob = (function() {
 +    // 다음 프레임을 위해 현재 시간을 기억합니다.
 +    then = now;
 +
-+    // 모든 프레임은 rotation을 약간 증가시킵니다.
++    // 모든 프레임은 회전을 약간 증가시킵니다.
 +    rotation[1] += rotationSpeed * deltaTime;
 +
 +    drawScene();
@@ -144,7 +144,7 @@ const saveBlob = (function() {
 -    // 다음 프레임을 위해 현재 시간을 기억합니다.
 -    then = now;
 -
--    // 모든 프레임은 rotation을 약간 증가시킵니다.
+-    // 모든 프레임은 회전을 약간 증가시킵니다.
 -    rotation[1] += rotationSpeed * deltaTime;
 
     webglUtils.resizeCanvasToDisplaySize(gl.canvas);
@@ -181,7 +181,7 @@ elem.addEventListener('click', () => {
 # 캔버스 지우기 방지
 
 사용자가 애니메이션 개체로 그리도록 하고 싶다고 해봅시다.
-먼저 webgl context를 만들 때 `preserveDrawingBuffer: true`를 전달해야 합니다.
+먼저 WebGL 컨텍스트를 만들 때 `preserveDrawingBuffer: true`를 전달해야 합니다.
 이는 브라우저가 캔버스를 지우는 걸 방지합니다.
 
 [애니메이션에 관한 글](webgl-animation.html)의 마지막 예제를 가져오고
@@ -192,12 +192,12 @@ var canvas = document.querySelector("#canvas");
 +var gl = canvas.getContext("webgl", {preserveDrawingBuffer: true});
 ```
 
-`gl.clear` 호출을 수정해서 depth buffer만 지우는데
+`gl.clear` 호출을 수정해서 깊이 버퍼만 지우는데
 
 ```js
--// 캔버스와 the depth buffer 지우기
+-// 캔버스와 깊이 버퍼 지우기
 -gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-+// depth buffer 지우기
++// 깊이 버퍼 지우기
 +gl.clear(gl.DEPTH_BUFFER_BIT);
 ```
 
@@ -227,7 +227,7 @@ var canvas = document.querySelector("#canvas");
 
 이로 인해 새로운 문제가 발생합니다.
 `tabindex`가 설정된 모든 항목은 포커스될 때 하이라이팅이 되는데요.
-이를 수정하기 위해 focus CSS outline을 none으로 설정하고
+이를 수정하기 위해 "focus CSS outline"을 `none`으로 설정하고,
 
 ```css
 canvas:focus {
@@ -235,7 +235,7 @@ canvas:focus {
 }
 ```
 
-증명을 위해 3개의 캔버스를 만들고
+증명을 위해 3개의 캔버스를 만든 다음,
 
 ```html
 <canvas id="c1"></canvas>
@@ -243,7 +243,7 @@ canvas:focus {
 <canvas id="c3" tabindex="1"></canvas>
 ```
 
-마지막 캔버스에 대한 css를 추가한 뒤
+마지막 캔버스에 대한 css를 추가한 뒤,
 
 ```css
 #c3:focus {
@@ -251,7 +251,7 @@ canvas:focus {
 }
 ```
 
-모두에 동일한 이벤트 리스너를 등록하는데
+모두에 동일한 이벤트 리스너를 등록합니다.
 
 ```js
 document.querySelectorAll('canvas').forEach((canvas) => {
@@ -295,7 +295,7 @@ document.querySelectorAll('canvas').forEach((canvas) => {
 
 2가지 확실한 방법이 있는데요.
 
-* 다음처럼 canvas CSS `position`을 `fixed`로 설정
+* 다음처럼 캔버스의 CSS `position`을 `fixed`로 설정
 
 ```css
 #canvas {
@@ -315,7 +315,7 @@ document.querySelectorAll('canvas').forEach((canvas) => {
 
 이건 이 사이트의 [첫 페이지](/)에 사용된 해결법입니다.
 
-웹 페이지에 iframe을 삽입하면 되는데, 예를 들어
+웹 페이지에 iframe을 삽입하면 되는데요.
 
 ```html
 <iframe id="background" src="background.html"></iframe>
@@ -324,7 +324,7 @@ document.querySelectorAll('canvas').forEach((canvas) => {
 </div>
 ```
 
-그런 다음 iframe이 창을 가득 채우고, iframe이 기본적으로 테두리를 가지기 때문에 `border`를 `none`으로 설정해야 한다는 걸 제외하면, 위에서 캔버스에 사용한 것과 동일한 코드로 뒤에 있도록 style을 설정합니다.
+그런 다음 iframe이 창을 가득 채우고, iframe이 기본적으로 테두리를 가지기 때문에 `border`를 `none`으로 설정해야 한다는 걸 제외하면, 위에서 캔버스에 사용한 것과 동일한 코드로 뒤에 있도록 스타일을 설정합니다.
 
 ```css
 #background {

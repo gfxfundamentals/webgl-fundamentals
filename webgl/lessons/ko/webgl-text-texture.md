@@ -52,10 +52,10 @@ WebGL은 브라우저에서 실행되기 때문에 Canvas 2D API를 활용하여
     // 'text'에 대한 단위 사각형 생성
     var textBufferInfo = primitives.createPlaneBufferInfo(gl, 1, 1, 1, 1, m4.xRotation(Math.PI / 2));
 
-단위 사각형은 1단위 크기의 사각형입니다.
+단위 사각형은 크기가 1유닛인 사각형입니다.
 이는 원점의 중심에 있습니다.
-`createPlaneBufferInfo`는 xz plane에 평면을 생성하는데요.
-행렬을 전달하여 회전시키고 xy plane unit quad를 제공합니다.
+`createPlaneBufferInfo`는 xz 평면의 평면을 생성하는데요.
+행렬을 전달하여 회전시키고 xy 평면 유닛 쿼드를 제공합니다.
 
 다음으로 2개의 셰이더를 생성합니다.
 
@@ -77,7 +77,7 @@ WebGL은 브라우저에서 실행되기 때문에 Canvas 2D API를 활용하여
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 
-'F'와 텍스트의 uniform을 설정합니다.
+'F'와 텍스트의 유니폼을 설정합니다.
 
     var fUniforms = {
       u_matrix: m4.identity(),
@@ -88,7 +88,7 @@ WebGL은 브라우저에서 실행되기 때문에 Canvas 2D API를 활용하여
       u_texture: textTex,
     };
 
-이제 F의 행렬을 계산할 때 F의 view matrix를 따로 저장합니다.
+이제 F의 행렬을 계산할 때 F의 뷰 행렬을 따로 저장합니다.
 
     var fViewMatrix = m4.translate(viewMatrix,
         translation[0] + xx * spread, translation[1] + yy * spread, translation[2]);
@@ -113,9 +113,9 @@ F를 그리면 이렇게 나옵니다.
 
 텍스트의 경우 F의 원점 위치만 있으면 됩니다.
 또한 텍스처의 넓이에 맞도록 단위 사각형의 크기를 조정해야 합니다.
-마지막으로 projection matrix로 곱해야 합니다.
+마지막으로 투영 행렬로 곱해야 합니다.
 
-    // 텍스트에 'F'의 view position만 사용
+    // 텍스트에 'F'의 뷰 위치만 사용
     var textMatrix = m4.translate(projectionMatrix,
         fViewMatrix[12], fViewMatrix[13], fViewMatrix[14]);
     // 사각형을 필요한 크기로 조정
@@ -146,12 +146,12 @@ F를 그리면 이렇게 나옵니다.
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
-이는 source pixel(프래그먼트 셰이더의 색상)을 가져와 blend 함수를 이용해 dest pixel(캔버스의 색상)과 결합합니다.
-Blend 함수에서 source는 `SRC_ALPHA`로, dest는 `ONE_MINUS_SRC_ALPHA`로 설정했습니다.
+이는 원본 픽셀(프래그먼트 셰이더의 색상)을 가져와 혼합 함수를 이용해 결과 픽셀(캔버스의 색상)과 결합합니다.
+혼합 함수에서 원본은 `SRC_ALPHA`로, 결과는 `ONE_MINUS_SRC_ALPHA`로 설정했습니다.
 
     result = dest * (1 - src_alpha) + src * src_alpha
 
-다음은 dest가 녹색(`0,1,0,1`)이고 source가 빨간색(`1,0,0,1`)인 예시입니다.
+다음은 결과가 녹색(`0,1,0,1`)이고 원본은 빨간색(`1,0,0,1`)인 예시입니다.
 
     src = [1, 0, 0, 1]
     dst = [0, 1, 0, 1]
@@ -182,13 +182,13 @@ Blend 함수에서 source는 `SRC_ALPHA`로, dest는 `ONE_MINUS_SRC_ALPHA`로 �
 
 무슨 일이 일어난 걸까요?
 현재 F를 그린 다음 텍스트를 그리고, 다음 F와 텍스트 그리기를 반복하고 있는데요.
-[Depth buffer](webgl-3d-orthographic.html)가 있기 때문에, F의 텍스트를 그릴 때 블렌딩으로 일부 픽셀이 배경색을 유지하더라도, depth buffer는 여전히 업데이트됩니다.
+[Depth buffer](webgl-3d-orthographic.html)가 있기 때문에, F의 텍스트를 그릴 때 블렌딩으로 일부 픽셀이 배경색을 유지하더라도, 깊이 버퍼는 여전히 업데이트됩니다.
 다음 F를 그릴 때 F의 일부가 이전에 그려진 텍스트의 픽셀 뒤에 있다면 그려지지 않을 겁니다.
 
 GPU에서 3D 렌더링할 때 겪는 가장 어려운 문제 중 하나에 직면했습니다.
 **바로 투명도 문제입니다.**
 
-대부분의 투명도 렌더링 문제에 가장 일반적인 해결책은 모든 불투명체를 먼저 그리고, depth buffer testing은 켜고 depth buffer updating은 끈 상태에서, z거리로 정렬된 투명한 물체를 모두 그리는 겁니다.
+대부분의 투명도 렌더링 문제에 가장 일반적인 해결책은 모든 불투명체를 먼저 그리고, 깊이 버퍼 테스트를 켜고 깊이 버퍼 업데이트는 끈 상태에서, z거리로 정렬된 투명한 물체를 모두 그리는 겁니다.
 
 먼저 불투명한 것(F)과 투명한 것(텍스트)을 분리해봅시다.
 우선 텍스트 위치를 저장할 배열을 선언할 겁니다.
@@ -204,15 +204,15 @@ GPU에서 3D 렌더링할 때 겪는 가장 어려운 문제 중 하나에 직�
     fViewMatrix = m4.zRotate(fViewMatrix, rotation[2] + now + (yy * 3 + xx) * 0.1);
     fViewMatrix = m4.scale(fViewMatrix, scale[0], scale[1], scale[2]);
     fViewMatrix = m4.translate(fViewMatrix, -50, -75, 0);
-    +// f의 view position 저장
+    +// f의 뷰 위치 저장
     +textPositions.push([fViewMatrix[12], fViewMatrix[13], fViewMatrix[14]]);
 
-'F'를 그리기 전에 블렌딩을 비활성화하고 depth buffer 작성을 켜겠습니다.
+'F'를 그리기 전에 블렌딩을 비활성화하고 깊이 버퍼 작성을 켜겠습니다.
 
     gl.disable(gl.BLEND);
     gl.depthMask(true);
 
-텍스트 그리기의 경우 블렌딩을 활성화하고 depth buffer 작성을 끌겁니다.
+텍스트 그리기의 경우 블렌딩을 활성화하고 깊이 버퍼 작성을 끌겁니다.
 
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
@@ -228,7 +228,7 @@ GPU에서 3D 렌더링할 때 겪는 가장 어려운 문제 중 하나에 직�
     +textPositions.forEach(function(pos) {
       // 텍스트 그리기
 
-      // 텍스트에 'F'의 view position만 사용
+      // 텍스트에 'F'의 뷰 위치만 사용
     *  var textMatrix = m4.translate(projectionMatrix, pos[0], pos[1], pos[2]);
       // 필요한 크기로 사각형의 크기를 조정
       textMatrix = m4.scale(textMatrix, textWidth, textHeight, 1);
@@ -255,10 +255,10 @@ GPU에서 3D 렌더링할 때 겪는 가장 어려운 문제 중 하나에 직�
 
 카메라 앞쪽으로 이동시킬 수도 있는데요.
 그냥 여기에서 해봅시다.
-'pos'는 view space에 있기 때문에 눈(view space의 0,0,0)에 상대적입니다.
+'pos'는 뷰 공간에 있기 때문에 눈(뷰 공간의 0,0,0)에 상대적입니다.
 따라서 정규화하면 눈에서 해당 지점을 가리키는 단위 벡터를 얻은 다음, 텍스트를 눈에서 멀어지거나 가까워지도록 특정 단위의 수만큼 이동하기 위해 일정량을 곱할 수 있습니다.
 
-    +// pos가 view space에 있기 때문에 눈에서 특정 위치까지의 벡터를 의미합니다.
+    +// "pos"가 뷰 공간에 있기 때문에 눈에서 특정 위치까지의 벡터를 의미합니다.
     +// 따라서 벡터를 따라 눈을 향해 약간의 거리를 다시 이동합니다.
     +var fromEye = m4.normalize(pos);
     +var amountToMoveTowardEye = 150;  // F는 150단위의 길이
@@ -327,7 +327,7 @@ GPU에서 3D 렌더링할 때 겪는 가장 어려운 문제 중 하나에 직�
 
 {{{example url="../webgl-text-texture-consistent-scale.html" }}}
 
-각 F에 다른 텍스트를 그리고 싶다면 F마다 새로운 텍스처를 만들고 F의 text uniform을 업데이트해야 합니다.
+각 F에 다른 텍스트를 그리고 싶다면 F마다 새로운 텍스처를 만들고 F의 텍스트 유니폼을 업데이트해야 합니다.
 
     // 각 F마다 하나씩, 텍스트 텍스처 생성
     var textTextures = [
@@ -377,7 +377,7 @@ GPU에서 3D 렌더링할 때 겪는 가장 어려운 문제 중 하나에 직�
       // 원하는 크기로 사각형의 크기를 조정
       *textMatrix = m4.scale(textMatrix, tex.width * scale, tex.height * scale, 1);
 
-그리고 그리기 전에 텍스처에 대한 uniform을 설정합니다.
+그리고 그리기 전에 텍스처에 대한 유니폼을 설정합니다.
 
       *textUniforms.u_texture = tex.texture;
 
@@ -426,7 +426,7 @@ GPU에서 3D 렌더링할 때 겪는 가장 어려운 문제 중 하나에 직�
 
 그릴 때 색상을 선택합니다.
 
-    // uniform 색상 설정
+    // 유니폼 색상 설정
     textUniforms.u_color = colors[ndx];
 
 다음은 여러 색상을 적용한 예제입니다.
@@ -458,7 +458,7 @@ HTML 컨텐츠와 적용한 다양한 스타일로 텍스처를 생성하고, �
 <li>
 다양한 해상도의 글꼴로 다양한 크기의 텍스처를 만듭니다.
 그런 다음 텍스트가 더 커질수록 더 높은 해상도의 텍스처를 사용하는데요.
-이를 LODing(다양한 Levels of Detail 사용)이라고 합니다.
+이를 LODing(다양한 세부 레벨 사용)이라고 합니다.
 </li>
 <li>
 다른 방법은 매 프레임마다 정확한 텍스트 크기로 텍스처를 렌더링하는 겁니다.

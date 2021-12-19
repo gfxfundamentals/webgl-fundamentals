@@ -107,8 +107,8 @@ var count = 6;
 따라서 정점에 닿는 각 면에 한 번씩 동일한 위치가 세 번 사용되더라도, 각자 다른 색상이 결합된 각 면마다 한 번씩 위치를 반복해야 합니다.
 이는 큐브의 각 면에 4개씩 총 24개의 정점이, 필요한 12개의 삼각형을 그리려면 36개의 색인이 필요하다는 걸 의미합니다.
 
-WebGL1에서 위의 `indexType`에 유효한 type은 색인을 0에서 255까지만 가질 수 있는 `gl.UNSIGNED_BYTE`와 최대 색인이 65535인 `gl.UNSIGNED_SHORT`임에 주의하세요.
-`gl.UNSIGNED_INT`와 최대 4294967296까지 색인을 허용하는 `OES_element_index_uint` extension이 있는지 확인하고 활성화할 수 있습니다.
+WebGL1에서 위의 `indexType`에 유효한 타입은 색인을 0에서 255까지만 가질 수 있는 `gl.UNSIGNED_BYTE`와 최대 색인이 65535인 `gl.UNSIGNED_SHORT`임에 주의하세요.
+`gl.UNSIGNED_INT`와 최대 4294967296까지 색인을 허용하는 `OES_element_index_uint` 확장이 있는지 확인하고 활성화할 수 있습니다.
 
 ```js
 const ext = gl.getExtension('OES_element_index_uint');
@@ -117,7 +117,7 @@ if (!ext) {
 }
 ```
 
-[WebGLStats](https://webglstats.com/webgl/extension/OES_element_index_uint)에 따르면 거의 모든 기기에서 이 extension을 지원합니다.
+[WebGLStats](https://webglstats.com/webgl/extension/OES_element_index_uint)에 따르면 거의 모든 기기에서 이 확장을 지원합니다.
 
 <div class="webgl_bottombar">
 <p>

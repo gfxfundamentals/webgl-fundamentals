@@ -237,7 +237,7 @@ function render() {
 
   let worldMatrix = m4.yRotation(degToRad(settings.rotation));
   worldMatrix = m4.xRotate(worldMatrix, degToRad(settings.rotation));
-  // center the 'F' around its origin
+  // 'F'의 원점을 중심으로 이동
   worldMatrix = m4.translate(worldMatrix, -35, -75, -5);
 
   const {width, height} = gl.canvas;
@@ -416,7 +416,7 @@ const settings = {
 
 근거리 평면이나 원거리 평면 혹은 시야를 조절하여 F를 클리핑하면 절두체 표현이 일치하는 것을 볼 수 있습니다.
 
-Whether we use a perspective projection or an orthographic projection for the camera on the left it will work either way because a projection matrix always converts to clip space so it's inverse will always take our +1 to -1 cube and warp it appropriately.
+왼쪽에 있는 카메라에 대해 원근 투영을 사용하던지 직교 투영을 사용하던지 간에 투영 행렬은 항상 클립 공간으로 변환되기 때문에 역행렬은 항상 +1에서 1사이의 큐브를 가져와 적절하게 왜곡합니다.
 
 ```js
 const settings = {

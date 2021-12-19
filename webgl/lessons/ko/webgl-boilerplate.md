@@ -19,8 +19,8 @@ WebGL을 복잡해 보이도록 만드는 것들 중 하나는 정점 셰이더�
      * 셰이더 생성 및 컴파일
      *
      * @param {!WebGLRenderingContext} gl은 WebGL Context
-     * @param {string} shaderSource는 셰이더의 GLSL source 코드
-     * @param {number} shaderType은 셰이더의 type, VERTEX_SHADER 또는 FRAGMENT_SHADER
+     * @param {string} shaderSource는 셰이더의 GLSL 소스 코드
+     * @param {number} shaderType은 셰이더의 타입, VERTEX_SHADER 또는 FRAGMENT_SHADER
      * @return {!WebGLShader} 셰이더
      */
     function compileShader(gl, shaderSource, shaderType) {
@@ -85,9 +85,9 @@ WebGL을 복잡해 보이도록 만드는 것들 중 하나는 정점 셰이더�
      * 스크립트 태그의 내용으로 셰이더 생성
      *
      * @param {!WebGLRenderingContext) gl은 WebGL Context
-     * @param {string} scriptId는 script tag의 id
-     * @param {string} opt_shaderType는 생성할 shader의 type
-     *                 전달되지 않으면 script tag의 type 속성 사용
+     * @param {string} scriptId는 스크립트 태그의 id
+     * @param {string} opt_shaderType는 생성할 셰이더의 타입
+     *                 전달되지 않으면 스크립트 태그의 타입 속성 사용
      * @return {!WebGLShader} 셰이더
      */
     function createShaderFromScript(gl, scriptId, opt_shaderType) {
@@ -98,10 +98,10 @@ WebGL을 복잡해 보이도록 만드는 것들 중 하나는 정점 셰이더�
         throw("*** Error: unknown script element" + scriptId);
       }
 
-      // script tag의 내용 추출
+      // 스크립트 태그의 내용 추출
       var shaderSource = shaderScript.text;
 
-      // type을 넘기지 않으면, script tag의 'type' 사용
+      // 타입을 넘기지 않으면, 스크립트 태그의 'type' 사용
       if (!opt_shaderType) {
         if (shaderScript.type == "x-shader/x-vertex") {
           opt_shaderType = gl.VERTEX_SHADER;
@@ -115,17 +115,17 @@ WebGL을 복잡해 보이도록 만드는 것들 중 하나는 정점 셰이더�
       return compileShader(gl, shaderSource, opt_shaderType);
     };
 
-이제 셰이더를 컴파일할 수 있는데
+이제 셰이더를 컴파일할 수 있습니다.
 
     var shader = compileShaderFromScript(gl, "someScriptTagId");
 
-한 걸음 더 나아가서 스크립트 태그에서 두 셰이더를 컴파일하며, 프로그램에 첨부하고 연결하는 함수를 만들겁니다.
+한 걸음 더 나아가서 스크립트 태그에서 두 셰이더를 컴파일하고, 프로그램에 첨부한 다음 연결하는 함수를 만들겁니다.
 
     /**
      * 두 스크립트 태그에서 프로그램 생성
      *
      * @param {!WebGLRenderingContext} gl은 WebGL Context
-     * @param {string[]} shaderScriptId는 shader용 스크립트 태그의 id 배열입니다.
+     * @param {string[]} shaderScriptId는 셰이더용 스크립트 태그의 id 배열입니다.
      *                   첫 번째는 정점 셰이더, 두 번째는 프래그먼트 셰이더라고 가정합니다.
      * @return {!WebGLProgram} 프로그램
      */
@@ -138,11 +138,11 @@ WebGL을 복잡해 보이도록 만드는 것들 중 하나는 정점 셰이더�
 거의 모든 WebGL 프로그램에서 사용하는 다른 코드는 캔버스의 크기를 조정하는 코드입니다.
 [여기](webgl-resizing-the-canvas.html)에서 해당 함수가 어떻게 구현됐는지 볼 수 있습니다.
 
-모든 예제는 이 두 가지 함수를 있고
+모든 예제는 이 두 가지 함수를 있고,
 
     <script src="resources/webgl-utils.js"></script>
 
-그리고 이렇게 사용하는데
+그리고 이렇게 사용하는데,
 
     var program = webglUtils.createProgramFromScripts(gl, [idOfVertexShaderScript, idOfFragmentShaderScript]);
 
@@ -161,7 +161,7 @@ WebGL을 복잡하게 보이게 만드는 나머지 부분은 셰이더에 모�
 
 또한 [유틸리티 함수](webgl-less-code-more-fun.html)를 읽고 [TWGL](https://twgljs.org)를 확인하는 걸 추천합니다.
 
-참고로 비슷한 이유로 추가하는 몇 가지 script가 더 있습니다.
+참고로 비슷한 이유로 추가하는 몇 가지 스크립트가 더 있습니다.
 
 *   [`webgl-lessons-ui.js`](../resources/webgl-lessons-ui.js)
 
@@ -170,16 +170,16 @@ WebGL을 복잡하게 보이게 만드는 나머지 부분은 셰이더에 모�
 
 *   [`lessons-helper.js`](../resources/lessons-helper.js)
 
-    이 script는 webglfundmentals.org를 제외하고는 필요하지 않습니다.
+    이 스크립트는 webglfundmentals.org를 제외하고는 필요하지 않습니다.
     live editor 내부에서 사용될 때 화면에 에러 메세지 출력하는 걸 도와줍니다.
 
 *   [`m3.js`](../resources/m3.js)
 
     이건 2d 수학 함수 묶음입니다.
-    행렬 수학에 대한 첫 글을 시작했을 때는 inline으로 만들었지만 너무 복잡해져서 이후에는 일부 예제에 이 script가 포함되고 있습니다.
+    행렬 수학에 대한 첫 글을 시작했을 때는 인라인으로 만들었지만 너무 복잡해져서 이후에는 일부 예제에 이 스크립트가 포함되고 있습니다.
 
 *   [`m4.js`](../resources/m4.js)
 
     이건 3d 수학 함수 묶음입니다.
-    3d에 대한 첫 글을 시작했을 때는 inline으로 만들었지만 너무 복잡해져서 3d에 대한 두 번째 글 이후부터 이 script가 포함되고 있습니다.
+    3d에 대한 첫 글을 시작했을 때는 인라인으로 만들었지만 너무 복잡해져서 3d에 대한 두 번째 글 이후부터 이 스크립트가 포함되고 있습니다.
 

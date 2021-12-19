@@ -47,14 +47,14 @@ TOC: 참고 자료
 
 ## Fun
 
-* [Shadertoy.com](https://shadertoy.com): 극한의 제약 조건에서 생성된 놀라운 프래그먼트 셰이더
+* [Shadertoy.com](https://shadertoy.com): 극한의 제약 조건에서 생성되는 놀라운 프래그먼트 셰이더
 
-  주의: shadertoy.com에 있는 셰이더는 일반적으로 production WebGL 앱에서 사용되는 셰이더 유형이 아닙니다.
+  주의: shadertoy.com에 있는 셰이더는 일반적으로 프로덕션 WebGL 앱에서 사용되는 셰이더 유형이 아닙니다.
   그럼에도 불구하고 예제에서 배울 수 있는 많은 기술들이 있습니다.
 
-* [glslsandbox.com](https://glslsandbox.com): original fragment shader playground
+* [glslsandbox.com](https://glslsandbox.com): 원조 프래그먼트 셰이더 플레이그라운드
 
-* [vertexshaerart.com](https://vertexshaderart.com): glslsandbox의 정점 셰이더 버전
+* [vertexshaerart.com](https://vertexshaderart.com): GLSL 샌드박스의 정점 셰이더 버전
 
 ---
 

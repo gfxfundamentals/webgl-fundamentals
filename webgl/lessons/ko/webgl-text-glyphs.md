@@ -85,10 +85,10 @@ UI처럼 자주 바뀌는 다량의 텍스트를 렌더링하고 싶다고 가�
 
         // 텍스트에 'F'의 위치 사용
 
-        // pos가 view space에 있기 때문에 이는 눈에서 특정 위치까지의 벡터입니다.
+        // "pos"가 뷰 공간에 있기 때문에 이는 눈에서 특정 위치까지의 벡터입니다.
         // 따라서 벡터를 따라 눈으로 약간의 거리를 다시 이동합니다.
         var fromEye = m4.normalize(pos);
-        var amountToMoveTowardEye = 150;  // F의 길이는 150unit
+        var amountToMoveTowardEye = 150;  // F의 길이는 150유닛
         var viewX = pos[0] - fromEye[0] * amountToMoveTowardEye;
         var viewY = pos[1] - fromEye[1] * amountToMoveTowardEye;
         var viewZ = pos[2] - fromEye[2] * amountToMoveTowardEye;
@@ -100,7 +100,7 @@ UI처럼 자주 바뀌는 다량의 텍스트를 렌더링하고 싶다고 가�
         textMatrix = m4.scale(textMatrix, tex.width * scale, tex.height * scale, 1);
         +textMatrix = m4.translate(textMatrix, ii, 0, 0);
 
-        // texture uniform 설정
+        // 텍스처 유니폼 설정
         m4.copy(textMatrix, textUniforms.u_matrix);
         textUniforms.u_texture = tex.texture;
         webglUtils.setUniforms(textProgramInfo, textUniforms);
@@ -267,7 +267,7 @@ function makeVerticesForString(fontInfo, s) {
     }
   }
 
-  // 실제로 사용된 TypedArrays의 일부분에 대해 ArrayBufferViews 반환
+  // 실제로 사용된 형식화 배열의 일부분에 대해 ArrayBufferViews 반환
   return {
     arrays: {
       position: new Float32Array(positions.buffer, 0, offset),
@@ -278,10 +278,10 @@ function makeVerticesForString(fontInfo, s) {
 }
 ```
 
-이걸 사용하기 위해 수동으로 bufferInfo를 만들 겁니다.
-bufferInfo가 무엇인지 기억나지 않는다면 [이전 글](webgl-drawing-multiple-things.html)을 봐주세요.
+이걸 사용하기 위해 수동으로 버퍼 정보를 만들 겁니다.
+버퍼 정보가 무엇인지 기억나지 않는다면 [이전 글](webgl-drawing-multiple-things.html)을 봐주세요.
 
-    // 수동으로 bufferInfo 생성
+    // 수동으로 버퍼 정보 생성
     var textBufferInfo = {
       attribs: {
         a_position: { buffer: gl.createBuffer(), numComponents: 2, },
@@ -306,12 +306,12 @@ bufferInfo가 무엇인지 기억나지 않는다면 [이전 글](webgl-drawing-
     +  gl.bindBuffer(gl.ARRAY_BUFFER, textBufferInfo.attribs.a_texcoord.buffer);
     +  gl.bufferData(gl.ARRAY_BUFFER, vertices.arrays.texcoord, gl.DYNAMIC_DRAW);
 
-      // 텍스트에 대한 'F'의 view position 사용
+      // 텍스트에 대한 'F'의 뷰 위치 사용
 
-      // pos가 view space에 있기 때문에 이는 눈에서 특정 위치까지의 벡터입니다.
+      // "pos"가 뷰 공간에 있기 때문에 이는 눈에서 특정 위치까지의 벡터입니다.
       // 따라서 벡터를 따라 눈으로 약간의 거리를 다시 이동합니다.
       var fromEye = m4.normalize(pos);
-      var amountToMoveTowardEye = 150;  // F의 길이는 150unit
+      var amountToMoveTowardEye = 150;  // F의 길이는 150유닛
       var viewX = pos[0] - fromEye[0] * amountToMoveTowardEye;
       var viewY = pos[1] - fromEye[1] * amountToMoveTowardEye;
       var viewZ = pos[2] - fromEye[2] * amountToMoveTowardEye;
@@ -333,16 +333,16 @@ bufferInfo가 무엇인지 기억나지 않는다면 [이전 글](webgl-drawing-
 {{{example url="../webgl-text-glyphs-texture-atlas.html" }}}
 
 이게 글리프의 텍스처 아틀라스를 사용하는 기본 기법입니다.
-There are a few obvious things to add or ways to improve it.
+여기에 몇 가지 추가하거나 개선할 수 있는 방법들이 있는데요.
 
 *   동일한 배열 재사용
 
     현재 `makeVerticesForString`는 호출될 때마다 새로운 Float32Arrays를 할당하는데요.
-    이는 결국 garbage collection hiccup을 일으킬 수 있습니다.
+    이는 결국 가비지 컬렉션 히컵을 일으킬 수 있습니다.
     고로 같은 배열은 재사용하는 게 더 나을 겁니다.
     크기가 충분하지 않다면 배열을 확장하고 해당 크기를 유지하세요.
 
-*   Carriage return 지원 추가
+*   캐리지 리턴 지원 추가
 
     정점을 생성할 때 `\n`를 확인하고 한 줄 아래로 내려가세요.
     이렇게 하면 텍스트 단락을 쉽게 만들 수 있습니다.

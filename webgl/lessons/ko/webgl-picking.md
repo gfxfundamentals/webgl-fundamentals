@@ -66,7 +66,7 @@ const attachmentPoint = gl.COLOR_ATTACHMENT0;
 const level = 0;
 gl.framebufferTexture2D(gl.FRAMEBUFFER, attachmentPoint, gl.TEXTURE_2D, targetTexture, level);
 
-// 깊이 버퍼를 targetTexture와 같은 크기로 만들기
+// 깊이 버퍼를 대상 텍스처와 같은 크기로 만들기
 gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, depthBuffer);
 ```
 
@@ -347,7 +347,7 @@ function drawScene(time) {
 하지만 마우스 아래에 있는 픽셀만 렌더링할 수도 있습니다.
 이를 위해 수식이 해당 1픽셀만 포함하도록 절두체를 사용합니다.
 
-지금까지는 3D의 경우 Z평면에 대한 시야, 종횡비, near/far 값을 입력으로 사용하고, 이러한 값들로 정의된 절두체를 클립 공간으로 변환하기 위한 원근 투영 행렬을 만드는 `perspective` 함수를 사용했습니다.
+지금까지는 3D의 경우 Z평면에 대한 시야, 종횡비, 근거리/원거리 값을 입력으로 사용하고, 이러한 값들로 정의된 절두체를 클립 공간으로 변환하기 위한 원근 투영 행렬을 만드는 `perspective` 함수를 사용했습니다.
 
 대부분의 3D 수학 라이브러리는 Z평면에 대한 left, right, top, bottom, z-near, z-far, 6개의 값을 받아 원근 행렬을 생성하는 `frustum` 함수가 가지고 있습니다.
 

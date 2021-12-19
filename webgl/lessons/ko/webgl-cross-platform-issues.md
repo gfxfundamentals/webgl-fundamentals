@@ -46,10 +46,10 @@ WebGL은 다양한 최소 지원 기능이 있지만 로컬 장치에서는 최�
   WebGL1에서는 정점 셰이더에 128개 그리고 프래그먼트 셰이더에 16개입니다.
   WebGL2에서는 정점 셰이더에 256개 그리고 프래그먼트 셰이더에 224개입니다.
 
-  참고로 uniform은 "패킹"될 수 있음으로 위 숫자는 사용할 수 있는 `vec4`의 개수인데요.
-  이론적으로는 `float` uniform 개수의 4배를 가질 수 있습니다.
+  참고로 유니폼은 "패킹"될 수 있음으로 위 숫자는 사용할 수 있는 `vec4`의 개수인데요.
+  이론적으로는 `float` 유니폼 개수의 4배를 가질 수 있습니다.
   하지만 그것들을 끼워 맞추는 알고리즘이 있는데요.
-  위의 최대 uniform vector 각각에 대해 한 행, 4개의 열이 있는 배열로 공간을 상상할 수 있습니다.
+  위의 최대 유니폼 벡터 각각에 대해 한 행, 4개의 열이 있는 배열로 공간을 상상할 수 있습니다.
 
      ```
      +-+-+-+-+
@@ -57,7 +57,7 @@ WebGL은 다양한 최소 지원 기능이 있지만 로컬 장치에서는 최�
      | | | | |   |
      | | | | |   |
      | | | | |   V
-     | | | | |   최대 uniform vector 행
+     | | | | |   최대 유니폼 벡터 행
      | | | | |
      | | | | |  
      | | | | |
@@ -130,16 +130,16 @@ WebGL은 다양한 최소 지원 기능이 있지만 로컬 장치에서는 최�
 <table class="tabular-data">
   <tbody>
     <tr><td>MAX_TEXTURE_SIZE                </td><td>텍스처 최대 크기</td></tr>
-    <tr><td>MAX_VERTEX_ATTRIBS              </td><td>가질 수 있는 attribute 개수</td></tr>
-    <tr><td>MAX_VERTEX_UNIFORM_VECTORS      </td><td>정점 셰이더가 가질 수 있는 vec4 uniform 개수</td></tr>
+    <tr><td>MAX_VERTEX_ATTRIBS              </td><td>가질 수 있는 속성 개수</td></tr>
+    <tr><td>MAX_VERTEX_UNIFORM_VECTORS      </td><td>정점 셰이더가 가질 수 있는 vec4 유니폼 개수</td></tr>
     <tr><td>MAX_VARYING_VECTORS             </td><td>가지고 있는 베링 개수</td></tr>
     <tr><td>MAX_COMBINED_TEXTURE_IMAGE_UNITS</td><td>존재하는 텍스처 유닛 개수</td></tr>
     <tr><td>MAX_VERTEX_TEXTURE_IMAGE_UNITS  </td><td>정점 셰이더가 참조할 수 있는 텍스처 유닛 개수</td></tr>
     <tr><td>MAX_TEXTURE_IMAGE_UNITS         </td><td>프래그먼트 셰이더가 참조할 수 있는 텍스처 유닛 개수</td></tr>
-    <tr><td>MAX_FRAGMENT_UNIFORM_VECTORS    </td><td>프래그먼트 셰이더가 가질 수 있는 vec4 uniform 개수</td></tr>
+    <tr><td>MAX_FRAGMENT_UNIFORM_VECTORS    </td><td>프래그먼트 셰이더가 가질 수 있는 vec4 유니폼 개수</td></tr>
     <tr><td>MAX_CUBE_MAP_TEXTURE_SIZE       </td><td>큐브맵 최대 크기</td></tr>
-    <tr><td>MAX_RENDERBUFFER_SIZE           </td><td>renderbuffer 최대 크기</td></tr>
-    <tr><td>MAX_VIEWPORT_DIMS               </td><td>viewport 최대 크기</td></tr>
+    <tr><td>MAX_RENDERBUFFER_SIZE           </td><td>렌더 버퍼 최대 크기</td></tr>
+    <tr><td>MAX_VIEWPORT_DIMS               </td><td>뷰포트 최대 크기</td></tr>
   </tbody>
 </table>
 </div>
@@ -147,8 +147,8 @@ WebGL은 다양한 최소 지원 기능이 있지만 로컬 장치에서는 최�
 이건 전체 목록이 아닌데요.
 최대 점 크기와 최대 선 두께 등이 있지만 기본적으로 최대 선 두께는 1.0이고 POINTS는 [클리핑 문제](#points-lines-viewport-scissor-behavior)를 신경쓰지 않아도 되는 간단한 데모에서만 유용하다고 가정해야 합니다.
 
-WebGL2는 몇 가지 더 추가합니다.
-몇 가지 일반적인 것들은
+WebGL2는 몇 가지 더 추가하는데요.
+일반적인 것들은 다음과 같습니다.
 
 <div class="webgl_center">
 <table class="tabular-data">
@@ -156,23 +156,23 @@ WebGL2는 몇 가지 더 추가합니다.
     <tr><td>MAX_3D_TEXTURE_SIZE                          </td><td>3D 텍스처 최대 크기</td></tr>
     <tr><td>MAX_DRAW_BUFFERS                             </td><td>가질 수 있는 색상 어태치먼트 개수</td></tr>
     <tr><td>MAX_ARRAY_TEXTURE_LAYERS                     </td><td>2D 텍스처 배열의 최대 레이어</td></tr>
-    <tr><td>MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS      </td><td>transform feedback을 사용할 때 별도의 버퍼로 출력할 수 있는 베링 개수</td></tr>
+    <tr><td>MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS      </td><td>변환 피드백을 사용할 때 별도의 버퍼로 출력할 수 있는 베링 개수</td></tr>
     <tr><td>MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS</td><td>모든 걸 단일 버퍼로 보낼 때 출력할 수 있는 베링 개수</td></tr>
-    <tr><td>MAX_COMBINED_UNIFORM_BLOCKS                  </td><td>종합적으로 사용할 수 있는 uniform block 개수</td></tr>
-    <tr><td>MAX_VERTEX_UNIFORM_BLOCKS                    </td><td>정점 셰이더가 사용할 수 있는 uniform block 개수</td></tr>
-    <tr><td>MAX_FRAGMENT_UNIFORM_BLOCKS                  </td><td>프래그먼트 셰이더가 사용할 수 있는 uniform block 개수</td></tr>
+    <tr><td>MAX_COMBINED_UNIFORM_BLOCKS                  </td><td>종합적으로 사용할 수 있는 유니폼 블록 개수</td></tr>
+    <tr><td>MAX_VERTEX_UNIFORM_BLOCKS                    </td><td>정점 셰이더가 사용할 수 있는 유니폼 블록 개수</td></tr>
+    <tr><td>MAX_FRAGMENT_UNIFORM_BLOCKS                  </td><td>프래그먼트 셰이더가 사용할 수 있는 유니폼 블록 개수</td></tr>
   </tbody>
 </table>
 </div>
 
 ## 깊이 버퍼 해상도
 
-정말 오래된 일부 기기들은 16bit depth buffer를 사용합니다.
-그렇지 않은, 99%의 기기들은 24bit depth buffer를 사용하므로 걱정하지 않아도 됩니다.
+정말 오래된 일부 기기들은 16비트 깊이 버퍼를 사용합니다.
+그렇지 않은, 99%의 기기들은 24비트 깊이 버퍼를 사용하므로 걱정하지 않아도 됩니다.
 
 ## readPixels 포맷/타입 조합
 
-특정 format/type 조합만 작동이 보장됩니다.
+특정 포맷/타입 조합만 작동이 보장됩니다.
 다른 조합들은 선택적인데요.
 이 내용은 [이 글](webgl-readpixels.html)에서 다룹니다.
 
@@ -182,37 +182,35 @@ WebGL2는 몇 가지 더 추가합니다.
 
 WebGL1에서는 3개의 어태치먼트 조합만 동작이 보장됩니다.
 
-1. a single format = `RGBA`, type = `UNSIGNED_BYTE` texture as `COLOR_ATTACHMENT0`
-2. a format = `RGBA`, type = `UNSIGNED_BYTE` texture as `COLOR_ATTACHMENT0` and a
-   format = `DEPTH_COMPONENT` renderbuffer attached as `DEPTH_ATTACHMENT`
-3. a format = `RGBA`, type = `UNSIGNED_BYTE` texture as `COLOR_ATTACHMENT0` and a
-   format = `DEPTH_STENCIL` renderbuffer attached as `DEPTH_STENCIL_ATTACHMENT`
+1. 단일 포맷 = `RGBA`, 타입 = `UNSIGNED_BYTE` 텍스처는 `COLOR_ATTACHMENT0`로 첨부
+2. 포맷 = `RGBA`, 타입 = `UNSIGNED_BYTE` 텍스처는 `COLOR_ATTACHMENT0`로 그리고 포맷 = `DEPTH_COMPONENT` 렌더 버퍼는 `DEPTH_ATTACHMENT`로 첨부
+3. 포맷 = `RGBA`, 타입 = `UNSIGNED_BYTE` 텍스처는 `COLOR_ATTACHMENT0`로 그리고 포맷 = `DEPTH_STENCIL` 렌더 버퍼는 `DEPTH_STENCIL_ATTACHMENT`로 첨부
 
 다른 모든 조합은 `gl.checkFramebufferStatus`를 호출하여 `FRAMEBUFFER_COMPLETE`를 반환했는지 확인하는 구현에 따라 달라집니다.
 
 WebGL2는 더 많은 포맷을 쓸 수 있도록 보장하지만 **어떤 조합이 실패할 수 있다**는 한계는 여전한데요.
 1개보다 많이 첨부한다면 모든 색상 어태치먼트가 같은 포맷일 경우가 가장 안전한 방법일 수 있습니다.
 
-## Extension
+## 확장
 
 WebGL1과 WebGL2의 많은 기능들이 선택적인데요.
-`getExtension`라는 API가 갖는 요점은 extension이 존재하지 않으면 실패할 수 있으므로 실패를 확인하고 맹목적으로 성공할 것이라 가정하지 말아야 합니다.
+`getExtension`라는 API가 갖는 요점은 확장이 존재하지 않으면 실패할 수 있으므로 실패를 확인하고 맹목적으로 성공할 것이라 가정하지 말아야 합니다.
 
-아마 WebGL1과 WebGL2에서 가장 흔하게 누락되는 extension은 floating point texture를 필터링할 수 있는 `OES_texture_float_linear`인데, 이는 `TEXTURE_MIN_FILTER`와 `TEXTURE_MAX_FILTER`를 `NEAREST`를 제외한 모든 항목으로 설정하도록 지원하는 기능을 의미합니다.
+아마 WebGL1과 WebGL2에서 가장 흔하게 누락되는 확장은 부동 소수점 텍스처를 필터링할 수 있는 `OES_texture_float_linear`인데, 이는 `TEXTURE_MIN_FILTER`와 `TEXTURE_MAX_FILTER`를 `NEAREST`를 제외한 모든 항목으로 설정하도록 지원하는 기능을 의미합니다.
 많은 모바일 기기들이 이걸 지원하지 않습니다.
 
-WebGL1에서 종종 누락되는 또 다른 extension은 2개 이상의 색상 어태치먼트를 프레임 버퍼로 첨부할 수 있는 기능인 `WEBGL_draw_buffers`이며 여전히 데스크탑의 경우 70% 정도이고 스마트폰의 경우 거의 없습니다.
+WebGL1에서 종종 누락되는 또 다른 확장은 2개 이상의 색상 어태치먼트를 프레임 버퍼로 첨부할 수 있는 기능인 `WEBGL_draw_buffers`이며 여전히 데스크탑의 경우 70% 정도이고 스마트폰의 경우 거의 없습니다.
 기본적으로 WebGL2를 실행할 수 있는 모든 기기는 WebGL1에서 `WEBGL_draw_buffers`도 지원해야 하지만 여전히 문제가 있는데요.
 여러 텍스처를 한 번에 렌더링해야 한다면 고사양 GPU로도 시간이 필요할 수 있습니다.
 그래도 사용자 기기가 지원하는지 확인하고, 지원하지 않는다면 친절한 설명을 제공해야 합니다.
 
-WebGL1의 경우 다음의 3개의 extension이 거의 보편적으로 지원되는 것처럼 보이므로 사용자에게 이들이 누락되면 페이지가 작동하지 않을 것이라 경고하고 싶을 수 있지만 사용자가 페이지를 제대로 실행하지 못 할만큼 아주 오래된 기기를 가지고 있을 수 있습니다.
+WebGL1의 경우 다음의 3개의 확장이 거의 보편적으로 지원되는 것처럼 보이므로 사용자에게 이들이 누락되면 페이지가 작동하지 않을 것이라 경고하고 싶을 수 있지만 사용자가 페이지를 제대로 실행하지 못 할만큼 아주 오래된 기기를 가지고 있을 수 있습니다.
 
-`ANGLE_instance_arrays`([instanced drawing](webgl-instanced-drawing.html)에 사용하는 기능), `OES_vertex_array_object`(단일 함수 호출로 모든 상태를 바꿀 수 있도록 모든 [attribute](webgl-attributes.html) 상태를 객체에 저장하는 기능), `OES_element_index_uint`([`drawElements`](webgl-indexed-vertices.html)로 `UNSIGNED_INT` 32비트 인덱스를 사용하는 기능)
+`ANGLE_instance_arrays`([instanced drawing](webgl-instanced-drawing.html)에 사용하는 기능), `OES_vertex_array_object`(단일 함수 호출로 모든 상태를 바꿀 수 있도록 모든 [속성](webgl-attributes.html) 상태를 객체에 저장하는 기능), `OES_element_index_uint`([`drawElements`](webgl-indexed-vertices.html)로 `UNSIGNED_INT` 32비트 인덱스를 사용하는 기능)
 
-## attribute location
+## 속성 위치
 
-버그는 attribute location을 찾지 못하는 겁니다.
+버그는 속성 위치를 찾지 못하는 겁니다.
 예를 들어 이런 정점 셰이더가 있다면
 
 ```glsl
@@ -229,15 +227,15 @@ void main() {
 }
 ```
 
-코드는 `position`이 attribute 0 그리고 `texcoord`는 attribute 1이 될 것이라 가정하지만 이는 보장되지 않습니다.
+코드는 `position`이 속성 0 그리고 `texcoord`는 속성 1이 될 것이라 가정하지만 이는 보장되지 않습니다.
 그래서 여러분은 작동되지만 다른 사람은 실패할 수 있죠.
-의도적으로 하지 않았지만 코드의 오류로 인해 location은 일반 통행이고 다른 것들은 아닐 때 작동한다는 점은 종종 버그가 될 수 있습니다.
+의도적으로 하지 않았지만 코드의 오류로 인해 위치는 일반 통행이고 다른 것들은 아닐 때 작동한다는 점은 종종 버그가 될 수 있습니다.
 
 3가지 해결법이 있습니다.
 
-1. 항상 location을 탐색
-2. `gl.linkProgram` 호출 전에 `gl.bindAttribLocation`을 호출하여 location 할당
-3. WebGL2 한정, 다음과 같이 셰이더에서 location을 설정
+1. 항상 위치를 탐색
+2. `gl.linkProgram` 호출 전에 `gl.bindAttribLocation`을 호출하여 위치 할당
+3. WebGL2 한정, 다음과 같이 셰이더에서 위치를 설정
 
    ```glsl
    #version 300 es
@@ -251,7 +249,7 @@ void main() {
 ## GLSL 정의되지 않은 동작
 
 여러 GLSL 함수는 정의되지 않은 동작을 가집니다.
-예를 들어 `pow(x, y)`는 `x < 0`일 경우 undefined입니다.
+예를 들어 `pow(x, y)`는 `x < 0`일 경우는 정의되지 않았습니다.
 [스포트라이트](webgl-3d-lighting-spot.html)에 대한 글의 하단에 더 긴 목록이 있습니다
 
 ## 셰이더 정밀도 문제
@@ -260,14 +258,14 @@ void main() {
 
 자세한 내용은 [이 글](webgl-precision-issues.html)을 봐주세요.
 
-## Points, Lines, Viewport, Scissor 동작
+## 점, 선, 뷰포트, 시저 동작
 
 WebGL의 `POINTS`와 `LINES`는 최대 크기 1을 가질 수 있고 현재 가장 일반적인 제한인 `LINES`의 경우입니다.
-또한 중심이 viewport 외부에 있을 때 포인트의 클리핑 여부는 구현에 정의됩니다.
+또한 중심이 뷰포트 외부에 있을 때 포인트의 클리핑 여부는 구현에 정의됩니다.
 [이 글의 하단](webgl-drawing-without-data.html#pointissues)을 봐주세요.
 
 마찬가지로, 뷰포트가 정점만 클리핑을 하는지 혹은 픽셀도 클리핑을 하는지 여부는 정의되지 않았습니다.
-Scissor는 항상 픽셀 클리핑하기 때문에 시저 테스트를 켜고, 그리려는 것들과 그리고 있는 LINES나 POINTS보다 viewport를 작게 설정했다면 scissor 크기를 설정하세요.
+시저는 항상 픽셀 클리핑하기 때문에 시저 테스트를 켜고, 그리려는 것들과 그리고 있는 LINES나 POINTS보다 뷰포트를 작게 설정했다면 시저 크기를 설정하세요.
 
 ## 사파리 버그
 
@@ -277,9 +275,9 @@ Scissor는 항상 픽셀 클리핑하기 때문에 시저 테스트를 켜고, �
 
 * toDataURL(그리고 toBlob)이 premultipledAlpha = false인 경우 거꾸로 결과를 반환하는 [버그](https://bugs.webkit.org/show_bug.cgi?id=156129) (4년 전)
 
-* 현재 iOS에서 preserveDrawingBuffer = true일 때 잘못된 double-buffer [버그](https://bugs.webkit.org/show_bug.cgi?id=159608) (4년 전)
+* 현재 iOS에서 preserveDrawingBuffer = true일 때 잘못된 이중 버퍼 [버그](https://bugs.webkit.org/show_bug.cgi?id=159608) (4년 전)
 
-* `OES_texture_float` 구현이 non-ArrayBufferView entry point를 지원해야 하는 [버그](https://bugs.webkit.org/show_bug.cgi?id=51015) (10년 전)
+* `OES_texture_float` 구현이 non-ArrayBufferView 엔트리 포인트를 지원해야 하는 [버그](https://bugs.webkit.org/show_bug.cgi?id=51015) (10년 전)
 
 * readPixels가 RGBA/UNSIGNED_BYTE에 대해 INVALID_ENUM를 생성하는 [버그](https://bugs.webkit.org/show_bug.cgi?id=170341) (3년 전)
 

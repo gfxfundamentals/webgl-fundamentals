@@ -12,7 +12,7 @@ attribute에 관한 [비슷한 글](webgl-attributes.html)이 있습니다.
 
 WebGL에는 텍스처가 있습니다.
 텍스처는 대부분 셰이더에 전달할 수 있는 데이터의 2D 배열인데요.
-셰이더에서 이렇게 *uniform sampler*를 선언하면
+셰이더에서 이렇게 *유니폼 샘플러*를 선언하면
 
 ```glsl
 uniform sampler2D someTexture;
@@ -42,7 +42,7 @@ const gl = {
 ```
 
 위에서 `textureUnits`가 배열인 걸 볼 수 있는데요.
-해당 텍스처 유닛 배열에서 *bind point* 중 하나를 텍스처에 할당합니다.
+해당 텍스처 유닛 배열에서 *바인드 포인트* 중 하나를 텍스처에 할당합니다.
 `ourTexture`를 텍스처 유닛 5에 할당해봅시다.
 
 ```js
@@ -58,13 +58,13 @@ gl.activeTexture(gl.TEXTURE0 + indexOfTextureUnit);
 gl.bindTexture(gl.TEXTURE_2D, ourTexture);
 ```
 
-그런 다음 아래와 같이 호출하여 텍스처를 바인딩한 텍스처 유닛을 셰이더에 알리는데
+그런 다음 아래와 같이 호출하여 텍스처를 바인딩한 텍스처 유닛을 셰이더에 알리는데,
 
 ```js
 gl.uniform1i(someTextureUniformLocation, indexOfTextureUnit);
 ```
 
-`activeTexture` 및 `bindTexture` WebGL 함수가 자바스크립트로 구현된다면 
+`activeTexture` 및 `bindTexture` WebGL 함수가 자바스크립트로 구현된다면,
 
 ```js
 // 의사 코드!!!
@@ -103,21 +103,21 @@ gl.texParameteri = function(target, pname, value) {
 ## 최대 텍스처 유닛
 
 WebGL은 적어도 8개의 텍스처 유닛을 지원하는 구현이 필요합니다.
-얼마나 많이 지원되는지 쿼리할 수 있는데
+얼마나 많이 지원되는지 쿼리할 수 있는데요.
 
 ```js
 const maxTextureUnits = gl.getParameter(gl.MAX_COMBINED_TEXTURE_IMAGE_UNITS);
 ```
 
-참고로 정점 셰이더와 프래그먼트 셰이더는 각각 사용할 수 있는 unit 수에 대한 제한이 다를 수 있습니다.
-각각의 제한을 쿼리할 수 있는데
+참고로 정점 셰이더와 프래그먼트 셰이더는 각각 사용할 수 있는 유닛 수에 대한 제한이 다를 수 있습니다.
+각각의 제한을 쿼리할 수 있는데,
 
 ```js
 const maxVertexShaderTextureUnits = gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS);
 const maxFragmentShaderTextureUnits = gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS);
 ```
 
-이렇다고 말해보면
+이렇다고 가정하겠습니다.
 
 ```js
 maxTextureUnits = 8

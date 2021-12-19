@@ -372,7 +372,7 @@ uniform vec2 u_resolution;
 uniform vec2 u_mouse;
 uniform float u_time;
 
-//---insert shadertoy code here--
+//---여기에 shadertoy 코드 삽입--
 
 void main() {
   mainImage(gl_FragColor, gl_FragCoord.xy);
@@ -391,7 +391,7 @@ precision highp float;
 +uniform vec2 iMouse;
 +uniform float iTime;
 
-//---insert shadertoy code here--
+//---여기에 shadertoy 코드 삽입--
 
 void main() {
   mainImage(gl_FragColor, gl_FragCoord.xy);
@@ -410,7 +410,7 @@ void main() {
 +const timeLocation = gl.getUniformLocation(program, "iTime");
 ```
 
-[이 shadertoy 셰이더](https://www.shadertoy.com/view/3l23Rh)를 가져가서 위 셰이더의 `//---insert shadertoy code here--`에 붙여넣으면 다음과 같이 표시됩니다.
+[이 shadertoy 셰이더](https://www.shadertoy.com/view/3l23Rh)를 가져가서 위 셰이더의 `//---여기에 shadertoy 코드 삽입--`에 붙여넣으면 다음과 같이 표시됩니다.
 
 {{{example url="../webgl-shadertoy.html"}}}
 
@@ -451,7 +451,7 @@ Shadertoy에 있는 예제들은 데이터가 거의 없는 극한의 제약 아
 다음은 Shadertoy가 제공하는 유니폼 목록입니다.
 
 <div class="webgl_center"><table  class="tabular-data tabular-data1">
-<thead><tr><td>type</td><td>name</td><td>where</td><td>description</td></tr></thead>
+<thead><tr><td>타입</td><td>이름</td><td>위치</td><td>설명</td></tr></thead>
 <tbody>
 <tr><td><b>vec3</b></td><td><b>iResolution</b></td><td>image / buffer</td><td>뷰포트 해상도 (z는 픽셀 종횡비, 일반적으로 1.0)</td></tr>
 <tr><td><b>float</b></td><td><b>iTime</b></td><td>image / sound / buffer</td><td>초 단위 현재 시간</td></tr>
@@ -472,7 +472,7 @@ Shadertoy에 있는 예제들은 데이터가 거의 없는 극한의 제약 아
 
 또한 Shadertoy로 여러 셰이더를 사용하여 오프스크린 텍스처를 렌더링할 수 있으므로 셰이더에 이런 게 필요할 경우 [렌더링할 텍스처](webgl-render-to-texture.html)를 설정해야 합니다.
 
-"where" 열은 어느 셰이더에서 어떤 유니폼을 사용할 수 있는지 나타냅니다.
+"위치" 열은 어느 셰이더에서 어떤 유니폼을 사용할 수 있는지 나타냅니다.
 "image"는 캔버스에 렌더링하는 셰이더입니다.
 "buffer"는 오프스크린 텍스처에 렌더링하는 셰이더입니다.
 "sound"는 [사운드 데이터를 텍스처로 생성할 것으로 예상되는 셰이더](https://stackoverflow.com/questions/34859701/how-do-shadertoys-audio-shaders-work)입니다.

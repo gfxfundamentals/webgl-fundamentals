@@ -1,16 +1,16 @@
-Title: WebGL 최적화 - Instanced Drawing
-Description: 동일한 객체의 여러 Instance 그리기
-TOC: Instanced Drawing
+Title: WebGL 최적화 - 색인된 그리기
+Description: 동일한 객체의 여러 인스턴스 그리기
+TOC: 색인된 그리기
 
 
-WebGL은 *instanced drawing*이라는 기능을 가지고 있습니다.
+WebGL은 *색인된 그리기*라는 기능을 가지고 있습니다.
 기본적으로 개별적으로 그릴 때보다 빠르게 같은 걸 여러 번 그리는 방법입니다.
 
-참고로 이 기능은 WebGL1의 선택적 extension이지만 [거의 모든 브라우저와 기기에서 사용 가능](https://webglstats.com/webgl/extension/ANGLE_instanced_arrays)합니다.
+참고로 이 기능은 WebGL1의 선택적 확장이지만 [거의 모든 브라우저와 기기에서 사용 가능](https://webglstats.com/webgl/extension/ANGLE_instanced_arrays)합니다.
 
-먼저 동일한 항목의 여러 instance를 그리는 예제부터 만들어 봅시다.
+먼저 동일한 항목의 여러 인스턴스를 그리는 예제부터 만들어 봅시다.
 
-[Orthographic projection](webgl-3d-orthographic.html)에 관한 글의 마지막 부분과 유사한 코드로 출발하여 다음과 같은 두 셰이더로 시작합니다.
+[직교 투영](webgl-3d-orthographic.html)에 관한 글의 마지막 부분과 유사한 코드로 출발하여 다음과 같은 두 셰이더로 시작합니다.
 
 ```html
 <!-- 정점 셰이더 -->
@@ -41,9 +41,9 @@ void main() {
 ```
 
 정점 셰이더는 각 정점을 [해당 글](webgl-3d-orthographic.html)에서 다룬 상당히 유연한 배열인 단일 행렬로 곱합니다.
-프래그먼트 셰이더는 uniform을 통해 전달한 색상을 사용합니다.
+프래그먼트 셰이더는 유니폼을 통해 전달한 색상을 사용합니다.
 
-그리기 위해서는 shader를 컴파일하고 서로 연결한 다음 attribute와 uniform의 location을 찾아야 합니다.
+그리기 위해서는 세이더를 컴파일하고 서로 연결한 다음 속성과 유니폼의 위치를 찾아야 합니다.
 
 ```js
 const program = webglUtils.createProgramFromScripts(gl, ['vertex-shader-3d', 'fragment-shader-3d']);
@@ -75,8 +75,8 @@ gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
 const numVertices = 12;
 ```
 
-5개의 instance를 그려봅시다.
-각 instance에 대해 5개의 행렬과 5개의 색상을 만들겁니다.
+5개의 인스턴스를 그려봅시다.
+각 인스턴스에 대해 5개의 행렬과 5개의 색상을 만들겁니다.
 
 ```js
 const numInstances = 5;
@@ -89,15 +89,15 @@ const matrices = [
 ];
 
 const colors = [
-  [ 1, 0, 0, 1, ],  // 빨강
-  [ 0, 1, 0, 1, ],  // 초록
-  [ 0, 0, 1, 1, ],  // 파랑
+  [ 1, 0, 0, 1, ],  // 빨간색
+  [ 0, 1, 0, 1, ],  // 초록색
+  [ 0, 0, 1, 1, ],  // 파란색
   [ 1, 0, 1, 1, ],  // 자주색
   [ 0, 1, 1, 1, ],  // 청록색
 ];
 ```
 
-그리기 위해서는 먼저 셰이더 프로그램을 사용해서, 속성을 설정하고, 5개의 instance를 반복한 다음, 각각에 대한 새로운 행렬을 계산하고, 행렬의 uniform과 색상을 설정 후 그립니다.
+그리기 위해서는 먼저 셰이더 프로그램을 사용해서, 속성을 설정하고, 5개의 인스턴스를 반복한 다음, 각각에 대한 새로운 행렬을 계산하고, 행렬의 유니폼과 색상을 설정 후 그립니다.
 
 ```js
 function render(time) {
@@ -105,16 +105,16 @@ function render(time) {
 
   gl.useProgram(program);
 
-  // position attribute 설정
+  // 위치 속성 설정
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
   gl.enableVertexAttribArray(positionLoc);
   gl.vertexAttribPointer(
-    positionLoc,  // location
+    positionLoc,  // 위치
     2,            // 크기 (반복마다 버퍼에서 가져오는 값의 개수)
-    gl.FLOAT,     // buffer data type
+    gl.FLOAT,     // 버퍼 데이터 타입
     false,        // 정규화
-    0,            // stride (0 = 위 크기와 type으로 계산)
-    0,            // buffer offset
+    0,            // 스트라이드 (0 = 위 크기와 타입으로 계산)
+    0,            // 버퍼 오프셋
   );
 
   matrices.forEach((mat, ndx) => {
@@ -128,8 +128,8 @@ function render(time) {
 
     gl.drawArrays(
       gl.TRIANGLES,
-      0,             // offset
-      numVertices,   // instance당 정점 수
+      0,             // 오프셋
+      numVertices,   // 인스턴스당 정점 수
     );
   });
 
@@ -149,12 +149,12 @@ requestAnimationFrame(render);
 셰이더가 더 복잡하다면, [스포트라이트](webgl-3d-lighting-spot.html)의 셰이더처럼, 6번의 `gl.uniformXXX` 호출과 한 번의 `gl.drawArrays` 호출로, 객체당 최소 7번의 호출을 가집니다.
 400개의 객체를 그린다면 2800 WebGL 호출이 될 겁니다.
 
-Instancing은 이러한 호출을 줄이는 방법입니다.
+색인화은 이러한 호출을 줄이는 방법입니다.
 이는 동일한 항목을 몇 번 그려야 하는지 WebGL에 알려주는 방식으로 작동합니다.
-각 attribute에 대해 정점 셰이더가 호출될 때마다 해당 attribute를 할당된 버퍼에서 *다음 값*으로 진행할지(기본값), 또는 일반적으로 N이 1인 모든 N instance만 진행할지 지정합니다.
+각 속성에 대해 정점 셰이더가 호출될 때마다 해당 속성을 할당된 버퍼에서 *다음 값*으로 진행할지(기본값), 또는 일반적으로 N이 1인 모든 N 인스턴스만 진행할지 지정합니다.
 
-예를 들어 uniform에서 `matrix`와 `color`를 제공하는 대신, `attribute`를 통해 제공할 수 있는데요.
-각 instance의 행렬과 색상을 버퍼에 넣고, attribute가 해당 버퍼에서 데이터를 가져오도록 설정한 다음, instance당 한 번만 다음 값으로 진행하도록 WebGL에 지시할 겁니다.
+예를 들어 유니폼에서 `matrix`와 `color`를 제공하는 대신, `attribute`를 통해 제공할 수 있는데요.
+각 인스턴스의 행렬과 색상을 버퍼에 넣고, 속성이 해당 버퍼에서 데이터를 가져오도록 설정한 다음, 인스턴스당 한 번만 다음 값으로 진행하도록 WebGL에 지시할 겁니다.
 
 해봅시다!
 
@@ -174,7 +174,7 @@ if (!gl) {
 +}
 ```
 
-다음은 `matrix`와 `color`에 대해 uniform 대신 attribute를 사용하도록 셰이더를 수정할 겁니다.
+다음은 `matrix`와 `color`에 대해 유니폼 대신 속성을 사용하도록 셰이더를 수정할 겁니다.
 
 ```html
 <!-- 정점 셰이더 -->
@@ -214,9 +214,9 @@ void main() {
 </script>  
 ```
 
-속성은 정점 셰이더에서만 작동하므로 정점 셰이더의 attribute에서 색상을 가져와서 베링을 통해 프래그먼트 셰이더로 전달해야 합니다.
+속성은 정점 셰이더에서만 작동하므로 정점 셰이더의 속성에서 색상을 가져와서 베링을 통해 프래그먼트 셰이더로 전달해야 합니다.
 
-다음으로 해당 attribute의 location을 찾아야 합니다.
+다음으로 해당 속성의 위치를 찾아야 합니다.
 
 ```js
 const program = webglUtils.createProgramFromScripts(gl, ['vertex-shader-3d', 'fragment-shader-3d']);
@@ -228,7 +228,7 @@ const positionLoc = gl.getAttribLocation(program, 'a_position');
 +const matrixLoc = gl.getAttribLocation(program, 'matrix');
 ```
 
-이제, attribute에 적용될 행렬을 넣을 버퍼가 필요합니다.
+이제, 속성에 적용될 행렬을 넣을 버퍼가 필요합니다.
 버퍼는 하나의 *chuck*에서 가장 잘 업데이트되기 때문에 모든 행렬을 동일한 `Float32Array`에 넣을 겁니다.
 
 ```js
@@ -282,20 +282,20 @@ gl.bufferData(gl.ARRAY_BUFFER, matrixData.byteLength, gl.DYNAMIC_DRAW);
 
 ```js
 -const colors = [
--  [ 1, 0, 0, 1, ],  // 빨강
--  [ 0, 1, 0, 1, ],  // 초록
--  [ 0, 0, 1, 1, ],  // 파랑
+-  [ 1, 0, 0, 1, ],  // 빨간색
+-  [ 0, 1, 0, 1, ],  // 초록색
+-  [ 0, 0, 1, 1, ],  // 파란색
 -  [ 1, 0, 1, 1, ],  // 자주색
 -  [ 0, 1, 1, 1, ],  // 청록색
 -];
-+// Instance당 하나씩, 행렬 설정
++// 인스턴스당 하나씩, 행렬 설정
 +const colorBuffer = gl.createBuffer();
 +gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
 +gl.bufferData(gl.ARRAY_BUFFER,
 +  new Float32Array([
-+    1, 0, 0, 1,  // 빨강
-+    0, 1, 0, 1,  // 초록
-+    0, 0, 1, 1,  // 파랑
++    1, 0, 0, 1,  // 빨간색
++    0, 1, 0, 1,  // 초록색
++    0, 0, 1, 1,  // 파란색
 +    1, 0, 1, 1,  // 자주색
 +    0, 1, 1, 1,  // 청록색
 +  ]),
@@ -317,8 +317,8 @@ matrices.forEach((mat, ndx) => {
 -
 -  gl.drawArrays(
 -    gl.TRIANGLES,
--    0,             // offset
--    numVertices,   // instance당 정점 수
+-    0,             // 오프셋
+-    numVertices,   // 인스턴스당 정점 수
 -  );
 });
 ```
@@ -331,55 +331,55 @@ gl.bindBuffer(gl.ARRAY_BUFFER, matrixBuffer);
 gl.bufferSubData(gl.ARRAY_BUFFER, 0, matrixData);
 ```
 
-이제 행렬과 색상에 대한 attribute를 설정해야 합니다.
-행렬 attribute는 `mat4`인데요.
-`mat4`는 실제로 4개의 attribute slot을 사용합니다.
+이제 행렬과 색상에 대한 속성을 설정해야 합니다.
+행렬 속성은 `mat4`인데요.
+`mat4`는 실제로 4개의 속성 슬롯을 사용합니다.
 
 ```js
 const bytesPerMatrix = 4 * 16;
 for (let i = 0; i < 4; ++i) {
   const loc = matrixLoc + i;
   gl.enableVertexAttribArray(loc);
-  // stride과 offset에 유의
-  const offset = i * 16;  // row당 4float, float당 4byte
+  // 스트라이드와 오프셋에 유의
+  const offset = i * 16;  // 행당 4float, float당 4byte
   gl.vertexAttribPointer(
-    loc,              // location
+    loc,              // 위치
     4,                // 크기 (반복마다 버퍼에서 가져오는 값의 개수)
-    gl.FLOAT,         // buffer data type
+    gl.FLOAT,         // 버퍼 데이터 타입
     false,            // 정규화
-    bytesPerMatrix,   // stride, 다음 값 세트를 가져오기 위해 진행할 num byte
-    offset,           // buffer offset
+    bytesPerMatrix,   // 스트라이드, 다음 값 세트를 가져오기 위해 진행할 바이트 수
+    offset,           // 버퍼 오프셋
   );
-  // 이 줄은 각 1개의 instance에 대해서만 attribute가 변경됨을 나타냄
+  // 이 줄은 각 1개의 인스턴스에 대해서만 속성이 변경됨을 나타냄
   ext.vertexAttribDivisorANGLE(loc, 1);
 }
 ```
 
-Instanced drawing과 관련하여 가장 중요한 점은 `ext.vertexAttribDivisorANGLE`에 대한 호출입니다.
-Instance당 한 번만 다음 값으로 진행하도록 이 attribute를 설정하는데요.
-이는 `matrix` attribute가 첫 번째 instance에 대한 모든 정점에 대해 첫 번째 행렬을, 두 번째 instance에 대해 두 번째 행렬을 사용하는 식입니다.
+색인된 그리기와 관련하여 가장 중요한 점은 `ext.vertexAttribDivisorANGLE`에 대한 호출입니다.
+인스턴스당 한 번만 다음 값으로 진행하도록 이 속성을 설정하는데요.
+이는 `matrix` 속성이 첫 번째 인스턴스에 대한 모든 정점에 대해 첫 번째 행렬을, 두 번째 인스턴스에 대해 두 번째 행렬을 사용하는 식입니다.
 
-색상 attribute도 설정해야 하는데
+색상 속성도 설정해야 하는데,
 
 ```js
-// 색상에 대한 attribute 설정
+// 색상에 대한 속성 설정
 gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
 gl.enableVertexAttribArray(colorLoc);
 gl.vertexAttribPointer(colorLoc, 4, gl.FLOAT, false, 0, 0);
-// 이 줄은 각 1개의 instance에 대해서만 attribute가 변경됨을 나타냄
+// 이 줄은 각 1개의 인스턴스에 대해서만 속성이 변경됨을 나타냄
 ext.vertexAttribDivisorANGLE(colorLoc, 1);
 ```
 
-이 두 attribute를 사용하여 다른 걸 그리고 싶다면 divisor를 기본값인 0으로 다시 설정하거나, [vertex array object](webgl-attributes.html#vaos)를 사용해야 합니다.
+이 두 속성을 사용하여 다른 걸 그리고 싶다면 약수를 기본값인 0으로 다시 설정하거나, [정점 배열 객체](webgl-attributes.html#vaos)를 사용해야 합니다.
 
-드디어 단일 그리기 호출로 모든 instance를 그릴 수 있습니다.
+드디어 단일 그리기 호출로 모든 인스턴스를 그릴 수 있습니다.
 
 ```js
 ext.drawArraysInstancedANGLE(
   gl.TRIANGLES,
-  0,             // offset
-  numVertices,   // instance당 정점 수
-  numInstances,  // instance 수
+  0,             // 오프셋
+  numVertices,   // 인스턴스당 정점 수
+  numInstances,  // 인스턴스 수
 );
 ```
 
@@ -393,10 +393,10 @@ ext.drawArraysInstancedANGLE(
 말할 필요도 없다고 느껴지지만 하긴 저는 너무 많이 했기 때문에 당연한 것일 수도 있습니다.
 위 코드는 캔버스적인 측면을 고려하지 않았는데요.
 [투영 행렬](webgl-3d-orthographic.html)이나 [뷰 행렬](webgl-3d-camera.html)을 사용하지 않습니다.
-오로지 instanced drawing을 보여주기 위한 것입니다.
+오로지 색인된 그리기를 보여주기 위한 것입니다.
 투영 행렬이나 뷰 행렬을 원한다면 자바스크립트에 계산을 추가할 수 있습니다.
 이는 자바스크립트의 작업이 더 많아짐을 의미합니다.
-좀 더 확실한 방법은 1개 혹은 2개 이상의 uniform을 정점 셰이더에 추가하는 겁니다.
+좀 더 확실한 방법은 1개 혹은 2개 이상의 유니폼을 정점 셰이더에 추가하는 겁니다.
 
 ```html
 <!-- 정점 셰이더 -->
@@ -420,7 +420,7 @@ void main() {
 </script>
 ```
 
-그런 다음 초기화할 때 location을 찾고
+그런 다음 초기화할 때 위치를 찾고,
 
 ```js
 const positionLoc = gl.getAttribLocation(program, 'a_position');
@@ -435,7 +435,7 @@ const matrixLoc = gl.getAttribLocation(program, 'matrix');
 ```js
 gl.useProgram(program);
 
-+// 모든 instance에 공유되므로 view 및 projection matrix 설정
++// 모든 인스턴스에 공유되므로 뷰와 투영 행렬 설정
 +const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
 +gl.uniformMatrix4fv(projectionLoc, false, m4.orthographic(-aspect, aspect, -1, 1, -1, 1));
 +gl.uniformMatrix4fv(viewLoc, false, m4.zRotation(time * .1));
