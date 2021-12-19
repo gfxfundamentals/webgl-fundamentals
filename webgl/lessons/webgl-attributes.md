@@ -73,7 +73,7 @@ gl.vertexAttribPointer = function(location, size, type, normalize, stride, offse
 };
 ```
 
-Notice that when we call `gl.vertexAttribPointer` that `attrib.buffer` 
+Notice that when we call `gl.vertexAttribPointer`, `attrib.buffer` 
 is set to whatever the current `gl.arrayBuffer` is set to. 
 `gl.arrayBuffer` in the pseudo code above would be set by 
 calling `gl.bindBuffer(gl.ARRAY_BUFFER, someBuffer)`.
