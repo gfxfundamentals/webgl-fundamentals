@@ -41,7 +41,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <meta name="keywords" content="webgl graphics">
 <meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-pulling-vertices_ko.jpg">
 
-<meta property="og:title" content="WebGL Pulling Vertices">
+<meta property="og:title" content="WebGL 정점 풀링">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-pulling-vertices_ko.jpg">
 <meta property="og:description" content="독립적인 인덱스 사용">
@@ -51,7 +51,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <meta name="twitter:site" content="@greggman">
 <meta name="twitter:creator" content="@greggman">
 <meta name="twitter:domain" content="webglfundamentals.org">
-<meta name="twitter:title" content="WebGL Pulling Vertices">
+<meta name="twitter:title" content="WebGL 정점 풀링">
 <meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-pulling-vertices.html">
 <meta name="twitter:description" content="독립적인 인덱스 사용">
 <meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-pulling-vertices_ko.jpg">
@@ -78,7 +78,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-pulling-vertices.html#webpage",
       "url":"https://webglfundamentals.org/webgl/lessons/ko/webgl-pulling-vertices.html",
       "inLanguage":"ko",
-      "name":"WebGL Pulling Vertices",
+      "name":"WebGL 정점 풀링",
       "keywords":"webgl graphics programming",
       "isPartOf":{
         "@id":"https://webglfundamentals.org/#website"
@@ -92,7 +92,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </script>
 
 
-<title>WebGL Pulling Vertices</title>
+<title>WebGL 정점 풀링</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
 <link rel="stylesheet" href="/webgl/lessons/lang.css">
 <link rel="stylesheet" href="/webgl/lessons/ko/lang.css">
@@ -236,7 +236,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL Pulling Vertices</h1>
+    <h1>WebGL 정점 풀링</h1>
   </div>
   <div class="lesson">
     <div class="lesson-main">
@@ -371,7 +371,7 @@ if (!gl) {
   gl.bindTexture(gl.TEXTURE_2D, tex);
   gl.texImage2D(
       gl.TEXTURE_2D,
-      0,            // mip level
+      0,            // 밉 레벨
       gl.RGBA,      // 포맷
       numElements,  // 너비
       1,            // 높이
@@ -459,7 +459,7 @@ gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
   return texelFetch(tex, texSize, vec2(col, row));
 }
 </code></pre>
-<p>So given those 2 functions here is our shader.</p>
+<p>여기 두 함수가 작성된 셰이더입니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">attribute vec2 positionAndTexcoordIndices;
 
 uniform sampler2D positionTexture;
@@ -603,14 +603,14 @@ GPU에 따라 기존의 방식보다 느릴 수 있습니다.</p>
 <p>WebGL에서 해결하려는 문제가 있을 때 WebGL은 셰이더를 실행하고 이러한 셰이더는 유니폼(전역 변수), 속성(정점 셰이더의 반복마다 가져오는 데이터), 텍스처(무작위 접근 2차원 배열)를 통해 데이터에 접근 가능함을 기억하세요.
 사용한 기존의 방법으로 인해 WebGL이 가지는 유연성을 못 보는 일이 없으시길 바랍니다.</p>
 <div class="webgl_bottombar">
-<h3>왜 Vertex Pulling이라고 부르나요?</h3>
+<h3>왜 정점 풀링이라고 부르나요?</h3>
 <p>
 저는 이전부터 이 기술을 사용했음에도 최근(2019년 7월)에서야 이 용어를 들었습니다.
 Daniel Rakos의 <a href='https://www.google.com/search?q=OpenGL+Insights+"Programmable+Vertex+Pulling"+article+by+Daniel+Rakos'>OpenGL Insights "Programmable Vertex Pulling"</a>이라는 글에서 가져왔는데요.
 </p>
 <p>
-It's called vertex *pulling* since it's the vertex shader that decides which vertex data to read vs the traditional way where vertex data is supplied automatically via attributes.
-사실상 정점 셰이더는 메모리에서 데이터를 *pulling*합니다.
+어떤 데이터를 읽을지 결정하는 정점 셰이더 vs 속성을 통해 자동으로 정점 데이터가 제공되는 전통적인 방식이기 때문에 정점 *풀링*이라고 부릅니다.
+사실상 정점 셰이더는 메모리에서 데이터를 *풀링*합니다.
 </p>
 </div>
 
@@ -696,7 +696,7 @@ It's called vertex *pulling* since it's the vertex shader that decides which ver
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-2d-drawimage.html">2D - DrawImage</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-matrix-stack.html">2D - 행렬 스택</a></li>
-<li><a href="/webgl/lessons/ko/webgl-sprites.html">Sprite</a></li>
+<li><a href="/webgl/lessons/ko/webgl-sprites.html">스프라이트</a></li>
         </ul>
   <li>3D</li>
         <ul>
@@ -728,12 +728,12 @@ It's called vertex *pulling* since it's the vertex shader that decides which ver
           <li><a href="/webgl/lessons/ko/webgl-smallest-programs.html">최소 프로그램</a></li>
 <li><a href="/webgl/lessons/ko/webgl-drawing-without-data.html">데이터 없이 그리기</a></li>
 <li><a href="/webgl/lessons/ko/webgl-shadertoy.html">Shadertoy</a></li>
-<li><a href="/webgl/lessons/ko/webgl-pulling-vertices.html">Pulling Vertices</a></li>
+<li><a href="/webgl/lessons/ko/webgl-pulling-vertices.html">정점 풀링</a></li>
         </ul>
   <li>최적화</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-indexed-vertices.html">색인된 정점 (gl.drawElements)</a></li>
-<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">Instanced Drawing</a></li>
+<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">색인된 그리기</a></li>
         </ul>
   <li>Misc</li>
         <ul>
@@ -784,8 +784,8 @@ It's called vertex *pulling* since it's the vertex shader that decides which ver
         <script>
             /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
             var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
-            var disqus_identifier = 'WebGL Pulling Vertices';
-            var disqus_title = 'WebGL Pulling Vertices';
+            var disqus_identifier = 'WebGL 정점 풀링';
+            var disqus_title = 'WebGL 정점 풀링';
 
             /* * * DON'T EDIT BELOW THIS LINE * * */
             (function() {

@@ -421,7 +421,7 @@ function drawScene(time) {
   // u_texture에 텍스처 유닛 0을 사용하도록 셰이더에 지시
   gl.uniform1i(textureLocation, 0);
 
-  // 안개색, near, far 설정
+  // 안개색, 근거리, 원거리 설정
   gl.uniform4fv(fogColorLocation, fogColor);
 +  gl.uniform1f(fogNearLocation, settings.fogNear);
 +  gl.uniform1f(fogFarLocation, settings.fogFar);
@@ -479,13 +479,13 @@ for (let i = 0; i &lt;= numCubes; ++i) {
 </div>
 
 </p>
-<p>Above there is a ring of 8 cubes directly around the camera.
-The camera in spinning in place.
-That means the cubes are always the same distance from the camera but a different distance from the Z plane and so our fog amount calculation results in the cubes near the edge coming out of the fog.</p>
-<p>The fix is to instead compute the distance from the camera which will be the same for all cubes.</p>
+<p>위를 보면 카메라 바로 주위에 8개의 큐브가 원을 형성하고 있습니다.
+카메라가 제자리에서 회전하고 있는데요.
+즉 큐브는 항상 카메라와 같은 거리에 있지만 Z평면과는 다른 거리이기 때문에 안개량 계산 결과 가장자리 근처의 큐브가 안개 밖으로 나오게 됩니다.</p>
+<p>대신에 모든 큐브에 대해 동일한 카메라와의 거리를 계산하여 고칠 수 있습니다.</p>
 <div class="webgl_center"><img src="../resources/fog-distance.svg" style="width: 600px;"></div>
 
-<p>To do this we just need to pass the vertex position in view space from the vertex shader to the fragment shader.</p>
+<p>이를 위해 뷰 공간의 정점 위치를 정점 셰이더에서 프래그먼트 셰이더로 전달해야 합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">attribute vec4 a_position;
 attribute vec2 a_texcoord;
 
@@ -541,7 +541,7 @@ void main() {
 
 </p>
 <p>지금까지 모든 안개는 선형 계산을 사용했습니다.
-다시 말해 안개색은 near와 far 사이에 선형적으로 적용됩니다.
+다시 말해 안개색은 근거리와 원거리 사이에 선형적으로 적용됩니다.
 현실 세계에서 보여지는 것처럼 안개는 기하급수적으로 작용하는데요.
 뷰어로부터의 거리의 제곱에 따라 더 짙어집니다.
 다음은 기하급수적인 안개에 대한 일반적인 방정식입니다.</p>
@@ -583,7 +583,7 @@ void main() {
 </div>
 
 </p>
-<p>밀도 기반의 안개에 대해 한 가지 주의해야 할 점은 near와 far 설정이 없다는 겁니다.
+<p>밀도 기반의 안개에 대해 한 가지 주의해야 할 점은 근거리와 원거리 설정이 없다는 겁니다.
 이게 더 현실적일 수 있지만 심미적 요구 사항에는 안 맞을 수도 있습니다.
 어느 걸 선호하는 것은 디자인적인 결정입니다.</p>
 <p>안개를 계산하는 다른 많은 방법이 있습니다.
@@ -591,7 +591,7 @@ void main() {
 <code class="notranslate" translate="no">gl_FragCoord</code>는 WebGL이 설정하는 전역 변수입니다.
 <code class="notranslate" translate="no">x</code> 그리고 <code class="notranslate" translate="no">y</code> 컴포넌트는 그려지는 픽셀의 좌표입니다.
 <code class="notranslate" translate="no">z</code> 좌표는 0에서 1사이 해당 픽셀의 깊이입니다.
-바로 거리로 변환할 수는 없지만 near와 far에 대한 0에서 1사이의 값을 선택해서 안개처럼 보이도록 할 수 있습니다.
+바로 거리로 변환할 수는 없지만 근거리와 원거리에 대한 0에서 1사이의 값을 선택해서 안개처럼 보이도록 할 수 있습니다.
 정점 셰이더에서 아무것도 프래그먼트 셰이더로 전달하지 않아도 되며 거리 계산이 필요하지 않으므로 이건 저전력 GPU에서 저렴한 안개 효과를 만드는 한 가지 방법입니다.</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-fog-depth-based-gl_FragCoord.html"></iframe>
@@ -681,7 +681,7 @@ void main() {
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-2d-drawimage.html">2D - DrawImage</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-matrix-stack.html">2D - 행렬 스택</a></li>
-<li><a href="/webgl/lessons/ko/webgl-sprites.html">Sprite</a></li>
+<li><a href="/webgl/lessons/ko/webgl-sprites.html">스프라이트</a></li>
         </ul>
   <li>3D</li>
         <ul>
@@ -713,12 +713,12 @@ void main() {
           <li><a href="/webgl/lessons/ko/webgl-smallest-programs.html">최소 프로그램</a></li>
 <li><a href="/webgl/lessons/ko/webgl-drawing-without-data.html">데이터 없이 그리기</a></li>
 <li><a href="/webgl/lessons/ko/webgl-shadertoy.html">Shadertoy</a></li>
-<li><a href="/webgl/lessons/ko/webgl-pulling-vertices.html">Pulling Vertices</a></li>
+<li><a href="/webgl/lessons/ko/webgl-pulling-vertices.html">정점 풀링</a></li>
         </ul>
   <li>최적화</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-indexed-vertices.html">색인된 정점 (gl.drawElements)</a></li>
-<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">Instanced Drawing</a></li>
+<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">색인된 그리기</a></li>
         </ul>
   <li>Misc</li>
         <ul>

@@ -511,12 +511,11 @@ float hash(float p) {
 <p>그런 다음 원의 가장자리에 숫자가 필요합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">0, 1, ?, 1, 2, ?, 2, 3, ?, ...
 </code></pre><p>위 다이어그램을 보면 3번째 값이 항상 중앙(0,0)이여서 값에 관계없이 0으로 곱할 수 있기 때문에 ?는 중요하지 않습니다.</p>
-<p>To get the pattern above this would work</p>
+<p>위 패턴을 얻기 위해 이렇게 작업할 겁니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">float triVertexId = mod(vertexId, 3.0);
 float edge = triVertexId + sliceId;
 </code></pre>
-<p>가장자리의 점과 중앙의 점의 경우 이 패턴이 필요한데.
-가장자리의 2개 다음 중앙에 1개를 반복합니다.</p>
+<p>가장자리의 점과 중앙의 점의 경우 이 패턴이 필요한데, 가장자리의 2개 다음 중앙에 1개를 반복합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">1, 1, 0, 1, 1, 0, 1, 1, 0, ...
 </code></pre><p>아래 코드를 이용해 해당 패턴을 얻을 수 있습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">float radius = step(1.5, triVertexId);
@@ -642,7 +641,7 @@ gl_Position = vec4(pos * scale, 0, 1);
 </p>
 <p>물론 원 모양의 비를 만들기 위해 위에서 했던 걸 적용할 수 있습니다.
 아마 의미가 없을 것이기 때문에 다루지는 않겠지만 정점 셰이더에서 데이터 없이 삼각형 만드는 방법을 보여줍니다.</p>
-<p>위 기술은 직사각형이나 정사각형을 만든 다음, UV 좌표를 생성하고, passing those the fragment shader and texture mapping our generated geometry.
+<p>위 기술은 직사각형이나 정사각형을 만든 다음, UV 좌표를 생성하고, 프래그먼트 셰이더로 전달하여 생성된 지오메트리를 텍스처 매핑합니다.
 이는 <a href="webgl-3d-perspective.html">3D 원근법</a>에 대한 글에서 사용한 3D 기술을 적용하여 뒤집어지는 눈송이와 나뭇잎이 떨어지는 효과에 유용할 수 있습니다.</p>
 <p><strong>이러한 기술</strong>이 일반적이지 않다는 점을 강조하고 싶습니다.
 간단한 파티클 시스템을 만드는 것은 반쯤 일반적이거나 위의 비 효과일 수 있지만 엄청나게 복잡한 계산을 하면 성능이 저하됩니다.
@@ -772,7 +771,7 @@ OpenGL ES 1.0 스펙에 따르면 32x32 픽셀의 15개 열이 여전히 캔버�
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-2d-drawimage.html">2D - DrawImage</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-matrix-stack.html">2D - 행렬 스택</a></li>
-<li><a href="/webgl/lessons/ko/webgl-sprites.html">Sprite</a></li>
+<li><a href="/webgl/lessons/ko/webgl-sprites.html">스프라이트</a></li>
         </ul>
   <li>3D</li>
         <ul>
@@ -804,12 +803,12 @@ OpenGL ES 1.0 스펙에 따르면 32x32 픽셀의 15개 열이 여전히 캔버�
           <li><a href="/webgl/lessons/ko/webgl-smallest-programs.html">최소 프로그램</a></li>
 <li><a href="/webgl/lessons/ko/webgl-drawing-without-data.html">데이터 없이 그리기</a></li>
 <li><a href="/webgl/lessons/ko/webgl-shadertoy.html">Shadertoy</a></li>
-<li><a href="/webgl/lessons/ko/webgl-pulling-vertices.html">Pulling Vertices</a></li>
+<li><a href="/webgl/lessons/ko/webgl-pulling-vertices.html">정점 풀링</a></li>
         </ul>
   <li>최적화</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-indexed-vertices.html">색인된 정점 (gl.drawElements)</a></li>
-<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">Instanced Drawing</a></li>
+<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">색인된 그리기</a></li>
         </ul>
   <li>Misc</li>
         <ul>

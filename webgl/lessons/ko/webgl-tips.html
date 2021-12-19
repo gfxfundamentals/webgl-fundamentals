@@ -246,7 +246,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <h1 id="-">캔버스 스크린샷 찍기</h1>
 <p>브라우저에는 스크린샷을 찍는 2개의 함수가 있는데요.
 오래된 함수인 <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toDataURL"><code class="notranslate" translate="no">canvas.toDataURL</code></a>과 좀 더 나은 새로운 함수인 <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob"><code class="notranslate" translate="no">canvas.toBlob</code></a>입니다.</p>
-<p>그래서 이렇게 약간의 코드를 추가하여 스크린샷을 쉽게 찍을 수 있을 것이라 생각하실텐데</p>
+<p>그래서 이렇게 약간의 코드를 추가하여 스크린샷을 쉽게 찍을 수 있을 것이라 생각하실텐데요.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;canvas id=&quot;c&quot;&gt;&lt;/canvas&gt;
 +&lt;button id=&quot;screenshot&quot; type=&quot;button&quot;&gt;Save...&lt;/button&gt;
 </code></pre>
@@ -269,19 +269,19 @@ const saveBlob = (function() {
   };
 }());
 </code></pre>
-<p>다음은 위 코드와 버튼을 배치하기 위한 CSS가 추가된 <a href="webgl-animation.html">애니메이션에 관한 글</a>의 예제로</p>
+<p>다음은 위 코드와 버튼을 배치하기 위한 CSS가 추가된 <a href="webgl-animation.html">애니메이션에 관한 글</a>의 예제로,</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-tips-screenshot-bad.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-tips-screenshot-bad.html" target="_blank">새 창을 열려면 여기를 클릭</a>
 </div>
 
 </p>
-<p>시도해보면 이런 스크린샷을 얻게 되는데</p>
+<p>시도해보면 이런 스크린샷을 얻게 되는데,</p>
 <div class="webgl_center"><img src="../resources/screencapture-398x298.png"></div>
 
-<p>네, 그냥 빈 이미지입니다.</p>
+<p>네 그냥 빈 이미지입니다.</p>
 <p>브라우저/OS에 따라 작동할 수도 있지만 아마 일반적으로는 작동하지 않을 겁니다.</p>
-<p>해당 문제는 성능과 호환성 이유로, 기본적으로 브라우저는 WebGL canvas에 그린 뒤 drawing buffer를 지우는데요.</p>
+<p>해당 문제는 성능과 호환성 이유로, 기본적으로 브라우저는 WebGL 캔버스에 그린 뒤 드로잉 버퍼를 지우는데요.</p>
 <p>3가지 해결법이 있습니다.</p>
 <ol>
 <li><p>캡처 직전에 렌더링 코드 호출</p>
@@ -317,7 +317,7 @@ elem.addEventListener(&#39;click&#39;, () =&gt; {
 }
 </code></pre>
 </li>
-<li><p>WebGL context를 만들 때 <code class="notranslate" translate="no">preserveDrawingBuffer: true</code>로 설정</p>
+<li><p>WebGL 컨텍스트를 만들 때 <code class="notranslate" translate="no">preserveDrawingBuffer: true</code>로 설정</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js"> const gl = someCanvas.getContext(&#39;webgl&#39;, {preserveDrawingBuffer: true});
 </code></pre>
 <p> 이건 나머지 페이지와 합성 후 WebGL이 캔버스를 지우지 않게 만들지만 일부 <em>가능한</em> 최적화를 막습니다.</p>
@@ -338,7 +338,7 @@ elem.addEventListener(&#39;click&#39;, () =&gt; {
 +    // 다음 프레임을 위해 현재 시간을 기억합니다.
 +    then = now;
 +
-+    // 모든 프레임은 rotation을 약간 증가시킵니다.
++    // 모든 프레임은 회전을 약간 증가시킵니다.
 +    rotation[1] += rotationSpeed * deltaTime;
 +
 +    drawScene();
@@ -357,7 +357,7 @@ elem.addEventListener(&#39;click&#39;, () =&gt; {
 -    // 다음 프레임을 위해 현재 시간을 기억합니다.
 -    then = now;
 -
--    // 모든 프레임은 rotation을 약간 증가시킵니다.
+-    // 모든 프레임은 회전을 약간 증가시킵니다.
 -    rotation[1] += rotationSpeed * deltaTime;
 
     webglUtils.resizeCanvasToDisplaySize(gl.canvas);
@@ -389,17 +389,17 @@ elem.addEventListener(&#39;click&#39;, () =&gt; {
 <p><a id="preservedrawingbuffer" data-toc="캔버스 지우기 방지"></a></p>
 <h1 id="-">캔버스 지우기 방지</h1>
 <p>사용자가 애니메이션 개체로 그리도록 하고 싶다고 해봅시다.
-먼저 webgl context를 만들 때 <code class="notranslate" translate="no">preserveDrawingBuffer: true</code>를 전달해야 합니다.
+먼저 WebGL 컨텍스트를 만들 때 <code class="notranslate" translate="no">preserveDrawingBuffer: true</code>를 전달해야 합니다.
 이는 브라우저가 캔버스를 지우는 걸 방지합니다.</p>
 <p><a href="webgl-animation.html">애니메이션에 관한 글</a>의 마지막 예제를 가져오고</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">var canvas = document.querySelector(&quot;#canvas&quot;);
 -var gl = canvas.getContext(&quot;webgl&quot;);
 +var gl = canvas.getContext(&quot;webgl&quot;, {preserveDrawingBuffer: true});
 </code></pre>
-<p><code class="notranslate" translate="no">gl.clear</code> 호출을 수정해서 depth buffer만 지우는데</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-js">-// 캔버스와 the depth buffer 지우기
+<p><code class="notranslate" translate="no">gl.clear</code> 호출을 수정해서 깊이 버퍼만 지우는데</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">-// 캔버스와 깊이 버퍼 지우기
 -gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-+// depth buffer 지우기
++// 깊이 버퍼 지우기
 +gl.clear(gl.DEPTH_BUFFER_BIT);
 </code></pre>
 <p><div class="webgl_example_container">
@@ -424,22 +424,22 @@ elem.addEventListener(&#39;click&#39;, () =&gt; {
 </code></pre>
 <p>이로 인해 새로운 문제가 발생합니다.
 <code class="notranslate" translate="no">tabindex</code>가 설정된 모든 항목은 포커스될 때 하이라이팅이 되는데요.
-이를 수정하기 위해 focus CSS outline을 none으로 설정하고</p>
+이를 수정하기 위해 &quot;focus CSS outline&quot;을 <code class="notranslate" translate="no">none</code>으로 설정하고,</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-css">canvas:focus {
   outline:none;
 }
 </code></pre>
-<p>증명을 위해 3개의 캔버스를 만들고</p>
+<p>증명을 위해 3개의 캔버스를 만든 다음,</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;canvas id=&quot;c1&quot;&gt;&lt;/canvas&gt;
 &lt;canvas id=&quot;c2&quot; tabindex=&quot;0&quot;&gt;&lt;/canvas&gt;
 &lt;canvas id=&quot;c3&quot; tabindex=&quot;1&quot;&gt;&lt;/canvas&gt;
 </code></pre>
-<p>마지막 캔버스에 대한 css를 추가한 뒤</p>
+<p>마지막 캔버스에 대한 css를 추가한 뒤,</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-css">#c3:focus {
     outline: none;
 }
 </code></pre>
-<p>모두에 동일한 이벤트 리스너를 등록하는데</p>
+<p>모두에 동일한 이벤트 리스너를 등록합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">document.querySelectorAll(&#39;canvas&#39;).forEach((canvas) =&gt; {
   const ctx = canvas.getContext(&#39;2d&#39;);
 
@@ -479,7 +479,7 @@ elem.addEventListener(&#39;click&#39;, () =&gt; {
 <p>공통적인 질문은 어떻게 WebGL 애니메이션을 웹 페이지의 배경으로 만드는가 입니다.</p>
 <p>2가지 확실한 방법이 있는데요.</p>
 <ul>
-<li>다음처럼 canvas CSS <code class="notranslate" translate="no">position</code>을 <code class="notranslate" translate="no">fixed</code>로 설정</li>
+<li>다음처럼 캔버스의 CSS <code class="notranslate" translate="no">position</code>을 <code class="notranslate" translate="no">fixed</code>로 설정</li>
 </ul>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-css">#canvas {
  position: fixed;
@@ -495,13 +495,13 @@ elem.addEventListener(&#39;click&#39;, () =&gt; {
 <li><code class="notranslate" translate="no">iframe</code> 사용</li>
 </ul>
 <p>이건 이 사이트의 <a href="/">첫 페이지</a>에 사용된 해결법입니다.</p>
-<p>웹 페이지에 iframe을 삽입하면 되는데, 예를 들어</p>
+<p>웹 페이지에 iframe을 삽입하면 되는데요.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;iframe id=&quot;background&quot; src=&quot;background.html&quot;&gt;&lt;/iframe&gt;
 &lt;div&gt;
   Your content goes here.
 &lt;/div&gt;
 </code></pre>
-<p>그런 다음 iframe이 창을 가득 채우고, iframe이 기본적으로 테두리를 가지기 때문에 <code class="notranslate" translate="no">border</code>를 <code class="notranslate" translate="no">none</code>으로 설정해야 한다는 걸 제외하면, 위에서 캔버스에 사용한 것과 동일한 코드로 뒤에 있도록 style을 설정합니다.</p>
+<p>그런 다음 iframe이 창을 가득 채우고, iframe이 기본적으로 테두리를 가지기 때문에 <code class="notranslate" translate="no">border</code>를 <code class="notranslate" translate="no">none</code>으로 설정해야 한다는 걸 제외하면, 위에서 캔버스에 사용한 것과 동일한 코드로 뒤에 있도록 스타일을 설정합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-css">#background {
     position: fixed;
     width: 100vw;
@@ -601,7 +601,7 @@ elem.addEventListener(&#39;click&#39;, () =&gt; {
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-2d-drawimage.html">2D - DrawImage</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-matrix-stack.html">2D - 행렬 스택</a></li>
-<li><a href="/webgl/lessons/ko/webgl-sprites.html">Sprite</a></li>
+<li><a href="/webgl/lessons/ko/webgl-sprites.html">스프라이트</a></li>
         </ul>
   <li>3D</li>
         <ul>
@@ -633,12 +633,12 @@ elem.addEventListener(&#39;click&#39;, () =&gt; {
           <li><a href="/webgl/lessons/ko/webgl-smallest-programs.html">최소 프로그램</a></li>
 <li><a href="/webgl/lessons/ko/webgl-drawing-without-data.html">데이터 없이 그리기</a></li>
 <li><a href="/webgl/lessons/ko/webgl-shadertoy.html">Shadertoy</a></li>
-<li><a href="/webgl/lessons/ko/webgl-pulling-vertices.html">Pulling Vertices</a></li>
+<li><a href="/webgl/lessons/ko/webgl-pulling-vertices.html">정점 풀링</a></li>
         </ul>
   <li>최적화</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-indexed-vertices.html">색인된 정점 (gl.drawElements)</a></li>
-<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">Instanced Drawing</a></li>
+<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">색인된 그리기</a></li>
         </ul>
   <li>Misc</li>
         <ul>

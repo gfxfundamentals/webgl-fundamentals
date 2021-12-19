@@ -245,21 +245,21 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <p>프레임 버퍼는 그냥 <em>어태치먼트 모음</em>입니다.
 그게 전부에요!
 텍스처와 렌더 버퍼로 렌더링하는데 사용되죠.</p>
-<p>이런식으로 프레임 버퍼 객체를 생각하실 수 있으며</p>
+<p>이런식으로 프레임 버퍼 객체를 생각하실 수 있으며,</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">class Framebuffer {
   constructor() {
     this.attachments = new Map();  // 어태치먼트 포인트별 어태치먼트
   }
 }
 </code></pre>
-<p>그리고 <code class="notranslate" translate="no">WebGLRenderingContext</code>(<code class="notranslate" translate="no">gl</code> 객체)는 이렇게</p>
+<p><code class="notranslate" translate="no">WebGLRenderingContext</code>(<code class="notranslate" translate="no">gl</code> 객체)는 이렇게 합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 의사 코드
 gl = {
   framebuffer: defaultFramebufferForCanvas,
 }
 </code></pre>
 <p>바인딩 포인트는 2개입니다.
-이런식으로 설정되는데</p>
+이런식으로 설정되는데,</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">gl.bindFramebuffer(target, framebuffer) {
   framebuffer = framebuffer || defaultFramebufferForCanvas; // null이면 캔버스 사용
   switch (target) {
@@ -272,7 +272,7 @@ gl = {
 }
 </code></pre>
 <p><code class="notranslate" translate="no">framebufferTexture2D</code>, <code class="notranslate" translate="no">framebufferRenderbuffer</code>, 두 함수를 통해 어태치먼트를 프레임 버퍼에 추가할 수 있습니다.</p>
-<p>구현이 이런식으로 되어 있을 것이라 상상할 수 있는데</p>
+<p>구현이 이런식으로 되어 있을 것이라 상상할 수 있는데요.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 의사 코드
 gl._getFramebufferByTarget(target) {
   switch (target) {
@@ -293,7 +293,7 @@ gl.framebufferRenderbuffer(target, attachmentPoint, renderbufferTarget, renderbu
   });
 }
 </code></pre>
-<p><a href="https://www.khronos.org/registry/webgl/extensions/WEBGL_draw_buffers/"><code class="notranslate" translate="no">WEBGL_draw_buffers</code></a> extension이 있고 활성화된 경우 <code class="notranslate" translate="no">Framebuffer</code>는 개념적으로 이렇게 확장되는데</p>
+<p><a href="https://www.khronos.org/registry/webgl/extensions/WEBGL_draw_buffers/"><code class="notranslate" translate="no">WEBGL_draw_buffers</code></a> 확장이 있고 활성화된 경우 <code class="notranslate" translate="no">Framebuffer</code>는 개념적으로 이렇게 확장됩니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">class Framebuffer {
   constructor() {
     this.attachments = new Map();
@@ -301,7 +301,7 @@ gl.framebufferRenderbuffer(target, attachmentPoint, renderbufferTarget, renderbu
   }
 }
 </code></pre>
-<p>이렇게 구현되어 있을 것이라 상상할 수 있는 <code class="notranslate" translate="no">gl.drawBuffers</code>로 drawing buffer 배열을 설정할 수 있는데</p>
+<p>이렇게 구현되어 있을 것이라 상상할 수 있는 <code class="notranslate" translate="no">gl.drawBuffers</code>로 드로잉 버퍼 배열을 설정할 수 있습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 의사 코드
 ext.drawBuffersWebGL(drawBuffers) {
   const framebuffer = gl._getFramebufferByTarget(gl.FRAMEBUFFER);
@@ -315,7 +315,7 @@ ext.drawBuffersWebGL(drawBuffers) {
 <p>요점은 <em>프레임 버퍼</em>가 단순한 어태치먼트 모음이라는 겁니다.
 문제는 어태치먼트가 될 수 있는 것들과 작동하는 조합에 대한 제한인데요.
 예를 들어 플로팅 포인트 텍스처 어태치먼트는 기본적으로 렌더링될 수 없습니다.
-extension은 <code class="notranslate" translate="no">WEBGL_color_buffer_float</code>같은 걸 활성화할 수 있습니다.
+확장은 <code class="notranslate" translate="no">WEBGL_color_buffer_float</code>같은 걸 활성화할 수 있습니다.
 마찬가지로 2개 이상의 어태치먼트가 있다면 모두 동일한 넓이여야 합니다.</p>
 
     </div>
@@ -399,7 +399,7 @@ extension은 <code class="notranslate" translate="no">WEBGL_color_buffer_float</
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-2d-drawimage.html">2D - DrawImage</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-matrix-stack.html">2D - 행렬 스택</a></li>
-<li><a href="/webgl/lessons/ko/webgl-sprites.html">Sprite</a></li>
+<li><a href="/webgl/lessons/ko/webgl-sprites.html">스프라이트</a></li>
         </ul>
   <li>3D</li>
         <ul>
@@ -431,12 +431,12 @@ extension은 <code class="notranslate" translate="no">WEBGL_color_buffer_float</
           <li><a href="/webgl/lessons/ko/webgl-smallest-programs.html">최소 프로그램</a></li>
 <li><a href="/webgl/lessons/ko/webgl-drawing-without-data.html">데이터 없이 그리기</a></li>
 <li><a href="/webgl/lessons/ko/webgl-shadertoy.html">Shadertoy</a></li>
-<li><a href="/webgl/lessons/ko/webgl-pulling-vertices.html">Pulling Vertices</a></li>
+<li><a href="/webgl/lessons/ko/webgl-pulling-vertices.html">정점 풀링</a></li>
         </ul>
   <li>최적화</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-indexed-vertices.html">색인된 정점 (gl.drawElements)</a></li>
-<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">Instanced Drawing</a></li>
+<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">색인된 그리기</a></li>
         </ul>
   <li>Misc</li>
         <ul>

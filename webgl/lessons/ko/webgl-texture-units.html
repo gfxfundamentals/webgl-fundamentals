@@ -246,7 +246,7 @@ attribute에 관한 <a href="webgl-attributes.html">비슷한 글</a>이 있습�
 <h2 id="-">텍스처 유닛</h2>
 <p>WebGL에는 텍스처가 있습니다.
 텍스처는 대부분 셰이더에 전달할 수 있는 데이터의 2D 배열인데요.
-셰이더에서 이렇게 <em>uniform sampler</em>를 선언하면</p>
+셰이더에서 이렇게 <em>유니폼 샘플러</em>를 선언하면</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">uniform sampler2D someTexture;
 </code></pre>
 <p>하지만 셰이더는 <code class="notranslate" translate="no">someTexture</code>에 사용할 텍스처를 어떻게 아는 걸까요?</p>
@@ -269,7 +269,7 @@ WebGL이 자바스크립트로 작성되었다면 다음과 같은 전역 상태
 }
 </code></pre>
 <p>위에서 <code class="notranslate" translate="no">textureUnits</code>가 배열인 걸 볼 수 있는데요.
-해당 텍스처 유닛 배열에서 <em>bind point</em> 중 하나를 텍스처에 할당합니다.
+해당 텍스처 유닛 배열에서 <em>바인드 포인트</em> 중 하나를 텍스처에 할당합니다.
 <code class="notranslate" translate="no">ourTexture</code>를 텍스처 유닛 5에 할당해봅시다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 초기화할 때
 const ourTexture = gl.createTexture();
@@ -282,10 +282,10 @@ const indexOfTextureUnit = 5;
 gl.activeTexture(gl.TEXTURE0 + indexOfTextureUnit);
 gl.bindTexture(gl.TEXTURE_2D, ourTexture);
 </code></pre>
-<p>그런 다음 아래와 같이 호출하여 텍스처를 바인딩한 텍스처 유닛을 셰이더에 알리는데</p>
+<p>그런 다음 아래와 같이 호출하여 텍스처를 바인딩한 텍스처 유닛을 셰이더에 알리는데,</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">gl.uniform1i(someTextureUniformLocation, indexOfTextureUnit);
 </code></pre>
-<p><code class="notranslate" translate="no">activeTexture</code> 및 <code class="notranslate" translate="no">bindTexture</code> WebGL 함수가 자바스크립트로 구현된다면 </p>
+<p><code class="notranslate" translate="no">activeTexture</code> 및 <code class="notranslate" translate="no">bindTexture</code> WebGL 함수가 자바스크립트로 구현된다면,</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 의사 코드!!!
 gl.activeTexture = function(unit) {
   gl.activeTextureUnit = unit - gl.TEXTURE0;  // 0 기반 index로 변환
@@ -316,15 +316,15 @@ gl.texParameteri = function(target, pname, value) {
 해당 시점부터, 다른 모든 텍스처 함수는 <code class="notranslate" translate="no">target</code>을 받고, 모든 텍스처 함수의 첫 매개변수이며, 현재 텍스처 유닛의 바인딩 포인트를 참조합니다.</p>
 <h2 id="-">최대 텍스처 유닛</h2>
 <p>WebGL은 적어도 8개의 텍스처 유닛을 지원하는 구현이 필요합니다.
-얼마나 많이 지원되는지 쿼리할 수 있는데</p>
+얼마나 많이 지원되는지 쿼리할 수 있는데요.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">const maxTextureUnits = gl.getParameter(gl.MAX_COMBINED_TEXTURE_IMAGE_UNITS);
 </code></pre>
-<p>참고로 정점 셰이더와 프래그먼트 셰이더는 각각 사용할 수 있는 unit 수에 대한 제한이 다를 수 있습니다.
-각각의 제한을 쿼리할 수 있는데</p>
+<p>참고로 정점 셰이더와 프래그먼트 셰이더는 각각 사용할 수 있는 유닛 수에 대한 제한이 다를 수 있습니다.
+각각의 제한을 쿼리할 수 있는데,</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">const maxVertexShaderTextureUnits = gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS);
 const maxFragmentShaderTextureUnits = gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS);
 </code></pre>
-<p>이렇다고 말해보면</p>
+<p>이렇다고 가정하겠습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">maxTextureUnits = 8
 maxVertexShaderTextureUnits = 4
 maxFragmentShaderTextureUnits = 8
@@ -415,7 +415,7 @@ maxFragmentShaderTextureUnits = 8
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-2d-drawimage.html">2D - DrawImage</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-matrix-stack.html">2D - 행렬 스택</a></li>
-<li><a href="/webgl/lessons/ko/webgl-sprites.html">Sprite</a></li>
+<li><a href="/webgl/lessons/ko/webgl-sprites.html">스프라이트</a></li>
         </ul>
   <li>3D</li>
         <ul>
@@ -447,12 +447,12 @@ maxFragmentShaderTextureUnits = 8
           <li><a href="/webgl/lessons/ko/webgl-smallest-programs.html">최소 프로그램</a></li>
 <li><a href="/webgl/lessons/ko/webgl-drawing-without-data.html">데이터 없이 그리기</a></li>
 <li><a href="/webgl/lessons/ko/webgl-shadertoy.html">Shadertoy</a></li>
-<li><a href="/webgl/lessons/ko/webgl-pulling-vertices.html">Pulling Vertices</a></li>
+<li><a href="/webgl/lessons/ko/webgl-pulling-vertices.html">정점 풀링</a></li>
         </ul>
   <li>최적화</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-indexed-vertices.html">색인된 정점 (gl.drawElements)</a></li>
-<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">Instanced Drawing</a></li>
+<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">색인된 그리기</a></li>
         </ul>
   <li>Misc</li>
         <ul>

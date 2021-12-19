@@ -278,10 +278,10 @@ function makeTextCanvas(text, width, height) {
 var fBufferInfo = primitives.create3DFBufferInfo(gl);
 // &#39;text&#39;에 대한 단위 사각형 생성
 var textBufferInfo = primitives.createPlaneBufferInfo(gl, 1, 1, 1, 1, m4.xRotation(Math.PI / 2));
-</code></pre><p>단위 사각형은 1단위 크기의 사각형입니다.
+</code></pre><p>단위 사각형은 크기가 1유닛인 사각형입니다.
 이는 원점의 중심에 있습니다.
-<code class="notranslate" translate="no">createPlaneBufferInfo</code>는 xz plane에 평면을 생성하는데요.
-행렬을 전달하여 회전시키고 xy plane unit quad를 제공합니다.</p>
+<code class="notranslate" translate="no">createPlaneBufferInfo</code>는 xz 평면의 평면을 생성하는데요.
+행렬을 전달하여 회전시키고 xy 평면 유닛 쿼드를 제공합니다.</p>
 <p>다음으로 2개의 셰이더를 생성합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// GLSL 프로그램 설정
 var fProgramInfo = createProgramInfo(gl, [&quot;vertex-shader-3d&quot;, &quot;fragment-shader-3d&quot;]);
@@ -298,7 +298,7 @@ gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textCanvas);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-</code></pre><p>&#39;F&#39;와 텍스트의 uniform을 설정합니다.</p>
+</code></pre><p>&#39;F&#39;와 텍스트의 유니폼을 설정합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var fUniforms = {
   u_matrix: m4.identity(),
 };
@@ -307,7 +307,7 @@ var textUniforms = {
   u_matrix: m4.identity(),
   u_texture: textTex,
 };
-</code></pre><p>이제 F의 행렬을 계산할 때 F의 view matrix를 따로 저장합니다.</p>
+</code></pre><p>이제 F의 행렬을 계산할 때 F의 뷰 행렬을 따로 저장합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var fViewMatrix = m4.translate(viewMatrix,
     translation[0] + xx * spread, translation[1] + yy * spread, translation[2]);
 fViewMatrix = m4.xRotate(fViewMatrix, rotation[0]);
@@ -328,8 +328,8 @@ webglUtils.setUniforms(fProgramInfo, fUniforms);
 gl.drawElements(gl.TRIANGLES, fBufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
 </code></pre><p>텍스트의 경우 F의 원점 위치만 있으면 됩니다.
 또한 텍스처의 넓이에 맞도록 단위 사각형의 크기를 조정해야 합니다.
-마지막으로 projection matrix로 곱해야 합니다.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 텍스트에 &#39;F&#39;의 view position만 사용
+마지막으로 투영 행렬로 곱해야 합니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 텍스트에 &#39;F&#39;의 뷰 위치만 사용
 var textMatrix = m4.translate(projectionMatrix,
     fViewMatrix[12], fViewMatrix[13], fViewMatrix[14]);
 // 사각형을 필요한 크기로 조정
@@ -358,10 +358,10 @@ gl.drawElements(gl.TRIANGLES, textBufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
 이 대신에 픽셀을 섞을 수 있습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.enable(gl.BLEND);
 gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-</code></pre><p>이는 source pixel(프래그먼트 셰이더의 색상)을 가져와 blend 함수를 이용해 dest pixel(캔버스의 색상)과 결합합니다.
-Blend 함수에서 source는 <code class="notranslate" translate="no">SRC_ALPHA</code>로, dest는 <code class="notranslate" translate="no">ONE_MINUS_SRC_ALPHA</code>로 설정했습니다.</p>
+</code></pre><p>이는 원본 픽셀(프래그먼트 셰이더의 색상)을 가져와 혼합 함수를 이용해 결과 픽셀(캔버스의 색상)과 결합합니다.
+혼합 함수에서 원본은 <code class="notranslate" translate="no">SRC_ALPHA</code>로, 결과는 <code class="notranslate" translate="no">ONE_MINUS_SRC_ALPHA</code>로 설정했습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">result = dest * (1 - src_alpha) + src * src_alpha
-</code></pre><p>다음은 dest가 녹색(<code class="notranslate" translate="no">0,1,0,1</code>)이고 source가 빨간색(<code class="notranslate" translate="no">1,0,0,1</code>)인 예시입니다.</p>
+</code></pre><p>다음은 결과가 녹색(<code class="notranslate" translate="no">0,1,0,1</code>)이고 원본은 빨간색(<code class="notranslate" translate="no">1,0,0,1</code>)인 예시입니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">src = [1, 0, 0, 1]
 dst = [0, 1, 0, 1]
 src_alpha = src[3]
@@ -389,11 +389,11 @@ result = dst
 <p><img class="webgl_center" src="../resources/text-zbuffer-issue.png" /></p>
 <p>무슨 일이 일어난 걸까요?
 현재 F를 그린 다음 텍스트를 그리고, 다음 F와 텍스트 그리기를 반복하고 있는데요.
-<a href="webgl-3d-orthographic.html">Depth buffer</a>가 있기 때문에, F의 텍스트를 그릴 때 블렌딩으로 일부 픽셀이 배경색을 유지하더라도, depth buffer는 여전히 업데이트됩니다.
+<a href="webgl-3d-orthographic.html">Depth buffer</a>가 있기 때문에, F의 텍스트를 그릴 때 블렌딩으로 일부 픽셀이 배경색을 유지하더라도, 깊이 버퍼는 여전히 업데이트됩니다.
 다음 F를 그릴 때 F의 일부가 이전에 그려진 텍스트의 픽셀 뒤에 있다면 그려지지 않을 겁니다.</p>
 <p>GPU에서 3D 렌더링할 때 겪는 가장 어려운 문제 중 하나에 직면했습니다.
 <strong>바로 투명도 문제입니다.</strong></p>
-<p>대부분의 투명도 렌더링 문제에 가장 일반적인 해결책은 모든 불투명체를 먼저 그리고, depth buffer testing은 켜고 depth buffer updating은 끈 상태에서, z거리로 정렬된 투명한 물체를 모두 그리는 겁니다.</p>
+<p>대부분의 투명도 렌더링 문제에 가장 일반적인 해결책은 모든 불투명체를 먼저 그리고, 깊이 버퍼 테스트를 켜고 깊이 버퍼 업데이트는 끈 상태에서, z거리로 정렬된 투명한 물체를 모두 그리는 겁니다.</p>
 <p>먼저 불투명한 것(F)과 투명한 것(텍스트)을 분리해봅시다.
 우선 텍스트 위치를 저장할 배열을 선언할 겁니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var textPositions = [];
@@ -405,12 +405,12 @@ fViewMatrix = m4.yRotate(fViewMatrix, rotation[1] + yy * xx * 0.2);
 fViewMatrix = m4.zRotate(fViewMatrix, rotation[2] + now + (yy * 3 + xx) * 0.1);
 fViewMatrix = m4.scale(fViewMatrix, scale[0], scale[1], scale[2]);
 fViewMatrix = m4.translate(fViewMatrix, -50, -75, 0);
-+// f의 view position 저장
++// f의 뷰 위치 저장
 +textPositions.push([fViewMatrix[12], fViewMatrix[13], fViewMatrix[14]]);
-</code></pre><p>&#39;F&#39;를 그리기 전에 블렌딩을 비활성화하고 depth buffer 작성을 켜겠습니다.</p>
+</code></pre><p>&#39;F&#39;를 그리기 전에 블렌딩을 비활성화하고 깊이 버퍼 작성을 켜겠습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.disable(gl.BLEND);
 gl.depthMask(true);
-</code></pre><p>텍스트 그리기의 경우 블렌딩을 활성화하고 depth buffer 작성을 끌겁니다.</p>
+</code></pre><p>텍스트 그리기의 경우 블렌딩을 활성화하고 깊이 버퍼 작성을 끌겁니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.enable(gl.BLEND);
 gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 gl.depthMask(false);
@@ -423,7 +423,7 @@ gl.depthMask(false);
 +textPositions.forEach(function(pos) {
   // 텍스트 그리기
 
-  // 텍스트에 &#39;F&#39;의 view position만 사용
+  // 텍스트에 &#39;F&#39;의 뷰 위치만 사용
 *  var textMatrix = m4.translate(projectionMatrix, pos[0], pos[1], pos[2]);
   // 필요한 크기로 사각형의 크기를 조정
   textMatrix = m4.scale(textMatrix, textWidth, textHeight, 1);
@@ -449,9 +449,9 @@ gl.depthMask(false);
 항상 플레이어 위에 있기에 충분한 단위의 수만큼 +Y로 이동시킵니다.</p>
 <p>카메라 앞쪽으로 이동시킬 수도 있는데요.
 그냥 여기에서 해봅시다.
-&#39;pos&#39;는 view space에 있기 때문에 눈(view space의 0,0,0)에 상대적입니다.
+&#39;pos&#39;는 뷰 공간에 있기 때문에 눈(뷰 공간의 0,0,0)에 상대적입니다.
 따라서 정규화하면 눈에서 해당 지점을 가리키는 단위 벡터를 얻은 다음, 텍스트를 눈에서 멀어지거나 가까워지도록 특정 단위의 수만큼 이동하기 위해 일정량을 곱할 수 있습니다.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">+// pos가 view space에 있기 때문에 눈에서 특정 위치까지의 벡터를 의미합니다.
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">+// &quot;pos&quot;가 뷰 공간에 있기 때문에 눈에서 특정 위치까지의 벡터를 의미합니다.
 +// 따라서 벡터를 따라 눈을 향해 약간의 거리를 다시 이동합니다.
 +var fromEye = m4.normalize(pos);
 +var amountToMoveTowardEye = 150;  // F는 150단위의 길이
@@ -518,7 +518,7 @@ var textMatrix = m4.translate(projectionMatrix, viewX, viewY, viewZ);
 </div>
 
 </p>
-<p>각 F에 다른 텍스트를 그리고 싶다면 F마다 새로운 텍스처를 만들고 F의 text uniform을 업데이트해야 합니다.</p>
+<p>각 F에 다른 텍스트를 그리고 싶다면 F마다 새로운 텍스처를 만들고 F의 텍스트 유니폼을 업데이트해야 합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 각 F마다 하나씩, 텍스트 텍스처 생성
 var textTextures = [
   &quot;anna&quot;,   // 0
@@ -564,7 +564,7 @@ var textTextures = [
   var textMatrix = m4.translate(projectionMatrix, viewX, viewY, viewZ);
   // 원하는 크기로 사각형의 크기를 조정
   *textMatrix = m4.scale(textMatrix, tex.width * scale, tex.height * scale, 1);
-</code></pre><p>그리고 그리기 전에 텍스처에 대한 uniform을 설정합니다.</p>
+</code></pre><p>그리고 그리기 전에 텍스처에 대한 유니폼을 설정합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  *textUniforms.u_texture = tex.texture;
 </code></pre><p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-text-texture-different-text.html"></iframe>
@@ -607,7 +607,7 @@ var colors = [
   [0.0, 5.0, 5.0, 1], // 15,
 ];
 </code></pre><p>그릴 때 색상을 선택합니다.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// uniform 색상 설정
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 유니폼 색상 설정
 textUniforms.u_color = colors[ndx];
 </code></pre><p>다음은 여러 색상을 적용한 예제입니다.</p>
 <p><div class="webgl_example_container">
@@ -639,7 +639,7 @@ HTML 컨텐츠와 적용한 다양한 스타일로 텍스처를 생성하고, �
 <li>
 다양한 해상도의 글꼴로 다양한 크기의 텍스처를 만듭니다.
 그런 다음 텍스트가 더 커질수록 더 높은 해상도의 텍스처를 사용하는데요.
-이를 LODing(다양한 Levels of Detail 사용)이라고 합니다.
+이를 LODing(다양한 세부 레벨 사용)이라고 합니다.
 </li>
 <li>
 다른 방법은 매 프레임마다 정확한 텍스트 크기로 텍스처를 렌더링하는 겁니다.
@@ -738,7 +738,7 @@ HTML 컨텐츠와 적용한 다양한 스타일로 텍스처를 생성하고, �
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-2d-drawimage.html">2D - DrawImage</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-matrix-stack.html">2D - 행렬 스택</a></li>
-<li><a href="/webgl/lessons/ko/webgl-sprites.html">Sprite</a></li>
+<li><a href="/webgl/lessons/ko/webgl-sprites.html">스프라이트</a></li>
         </ul>
   <li>3D</li>
         <ul>
@@ -770,12 +770,12 @@ HTML 컨텐츠와 적용한 다양한 스타일로 텍스처를 생성하고, �
           <li><a href="/webgl/lessons/ko/webgl-smallest-programs.html">최소 프로그램</a></li>
 <li><a href="/webgl/lessons/ko/webgl-drawing-without-data.html">데이터 없이 그리기</a></li>
 <li><a href="/webgl/lessons/ko/webgl-shadertoy.html">Shadertoy</a></li>
-<li><a href="/webgl/lessons/ko/webgl-pulling-vertices.html">Pulling Vertices</a></li>
+<li><a href="/webgl/lessons/ko/webgl-pulling-vertices.html">정점 풀링</a></li>
         </ul>
   <li>최적화</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-indexed-vertices.html">색인된 정점 (gl.drawElements)</a></li>
-<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">Instanced Drawing</a></li>
+<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">색인된 그리기</a></li>
         </ul>
   <li>Misc</li>
         <ul>

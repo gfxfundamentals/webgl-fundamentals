@@ -287,16 +287,16 @@ gl.colorMask(true, true, true, false);
 <h3 id="-5-">#5) 이미지 처리</h3>
 <p>알파가 있는 이미지를 WebGL로 로딩하는 경우 저의 기본값입니다.
 WebGL은 미리 곱하지 않은 색상 값인 PNG 파일 그대로의 값을 제공할 겁니다.
-pre-multiplied는 손실인 반면 이건 무손실이기 때문에 일반적으로 OpenGL 프로그램에 사용됩니다.</p>
+<code class="notranslate" translate="no">pre-multiplied</code>는 손실인 반면 이건 무손실이기 때문에 일반적으로 OpenGL 프로그램에 사용됩니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">1, 0.5, 0.5, 0  // RGBA
-</code></pre><p><code class="notranslate" translate="no">r</code>, <code class="notranslate" translate="no">g</code>, <code class="notranslate" translate="no">b</code>가 0이 되는 걸 의미하는 <code class="notranslate" translate="no">a = 0</code>이기 때문에 un-premultiplied는 가능한 값인 반면 pre-multiplied는 불가능한 값입니다.</p>
+</code></pre><p><code class="notranslate" translate="no">r</code>, <code class="notranslate" translate="no">g</code>, <code class="notranslate" translate="no">b</code>가 0이 되는 걸 의미하는 <code class="notranslate" translate="no">a = 0</code>이기 때문에 <code class="notranslate" translate="no">un-premultiplied</code>는 가능한 값인 반면 <code class="notranslate" translate="no">pre-multiplied</code>는 불가능한 값입니다.</p>
 <p>원한다면 WebGL이 알파를 미리 곱하도록 할 수 있습니다.
 이렇게 <code class="notranslate" translate="no">UNPACK_PREMULTIPLY_ALPHA_WEBGL</code>를 true로 설정하여 이를 수행하는데</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
 </code></pre><p>기본값은 un-premultiplied 입니다.</p>
 <p>대부분의 Canvas 2D 구현은 pre-multiplied 알파로 작동한다는 점에 유의하세요.
-이는 WebGL로 전송하고 <code class="notranslate" translate="no">UNPACK_PREMULTIPLY_ALPHA_WEBGL</code>이 false일 때 WebGL이 다시 un-premultipiled로 전환할 것임을 의미합니다.</p>
-<h3 id="-6-pre-multiplied-blending-equation-">#6) pre-multiplied 알파와 함께 작동하는 blending equation 사용</h3>
+이는 WebGL로 전송하고 <code class="notranslate" translate="no">UNPACK_PREMULTIPLY_ALPHA_WEBGL</code>이 false일 때 WebGL이 다시 <code class="notranslate" translate="no">un-premultipiled</code>로 전환할 것임을 의미합니다.</p>
+<h3 id="-6-pre-multiplied-">#6) pre-multiplied 알파와 함께 작동하는 혼합 방정식 사용</h3>
 <p>제가 작성하거나 작업한 거의 모든 OpenGL 앱들이 사용 중인데</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 </code></pre><p>non-premultiplied 알파 텍스처에서 작동합니다.</p>
@@ -386,7 +386,7 @@ pre-multiplied는 손실인 반면 이건 무손실이기 때문에 일반적으
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-2d-drawimage.html">2D - DrawImage</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-matrix-stack.html">2D - 행렬 스택</a></li>
-<li><a href="/webgl/lessons/ko/webgl-sprites.html">Sprite</a></li>
+<li><a href="/webgl/lessons/ko/webgl-sprites.html">스프라이트</a></li>
         </ul>
   <li>3D</li>
         <ul>
@@ -418,12 +418,12 @@ pre-multiplied는 손실인 반면 이건 무손실이기 때문에 일반적으
           <li><a href="/webgl/lessons/ko/webgl-smallest-programs.html">최소 프로그램</a></li>
 <li><a href="/webgl/lessons/ko/webgl-drawing-without-data.html">데이터 없이 그리기</a></li>
 <li><a href="/webgl/lessons/ko/webgl-shadertoy.html">Shadertoy</a></li>
-<li><a href="/webgl/lessons/ko/webgl-pulling-vertices.html">Pulling Vertices</a></li>
+<li><a href="/webgl/lessons/ko/webgl-pulling-vertices.html">정점 풀링</a></li>
         </ul>
   <li>최적화</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-indexed-vertices.html">색인된 정점 (gl.drawElements)</a></li>
-<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">Instanced Drawing</a></li>
+<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">색인된 그리기</a></li>
         </ul>
   <li>Misc</li>
         <ul>

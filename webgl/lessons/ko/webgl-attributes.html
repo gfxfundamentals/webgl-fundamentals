@@ -244,10 +244,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 텍스처 유닛에 관한 <a href="webgl-texture-units.html">비슷한 글</a>이 있습니다.</p>
 <p>이 글을 읽기 전에 <a href="webgl-how-it-works.html">WebGL 작동 방식</a>와 <a href="https://webglfundamentals.org/webgl/lessons/webgl-shaders-and-glsl.html">WebGL 셰이더와 GLSL</a>을 읽어보시길 바랍니다.</p>
 <h2 id="-">속성</h2>
-<p>WebGL의 attribute는 버퍼에서 데이터를 가져오는 정점 셰이더에 대한 입력 값입니다.
+<p>WebGL의 속성은 버퍼에서 데이터를 가져오는 정점 셰이더에 대한 입력 값입니다.
 WebGL은 <code class="notranslate" translate="no">gl.drawArrays</code>나 <code class="notranslate" translate="no">gl.drawElements</code>가 호출될 때 사용자가 제공한 정점 셰이더를 N번 실행하는데요.
-각 반복마다 attribute는 바인딩된 버퍼에서 데이터를 가져와 정점 셰이더 내부의 attribute에 제공하는 방법을 정의합니다.</p>
-<p>자바스크립트로 구현되었다면 이런식으로</p>
+각 반복마다 속성은 바인딩된 버퍼에서 데이터를 가져와 정점 셰이더 내부의 속성에 제공하는 방법을 정의합니다.</p>
+<p>자바스크립트로 구현되었다면 이런식으로,</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 의사 코드
 const gl = {
   arrayBuffer: null,
@@ -266,8 +266,8 @@ const gl = {
   },
 }
 </code></pre>
-<p>위에서 볼 수 있듯이 8개의 attribute가 있습니다.</p>
-<p><code class="notranslate" translate="no">gl.enableVertexAttribArray(location)</code>나 <code class="notranslate" translate="no">gl.disableVertexAttribArray</code>를 호출한다면 이렇게 생각할 수 있는데</p>
+<p>위에서 볼 수 있듯이 8개의 속성이 있습니다.</p>
+<p><code class="notranslate" translate="no">gl.enableVertexAttribArray(location)</code>나 <code class="notranslate" translate="no">gl.disableVertexAttribArray</code>를 호출한다면 이렇게 생각할 수 있는데,</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 의사 코드
 gl.enableVertexAttribArray = function(location) {
   const attrib = gl.vertexArray.attributes[location];
@@ -279,9 +279,9 @@ gl.disableVertexAttribArray = function(location) {
   attrib.enable = false;
 };
 </code></pre>
-<p>즉 location은 attributes의 index를 직접 참조합니다.</p>
-<p>마찬가지로 <code class="notranslate" translate="no">gl.vertexAttribPointer</code>는 attribute의 거의 모든 설정에 사용됩니다.
-다음과 같이 구현되는데</p>
+<p>즉 위치는 속성의 인덱스를 직접 참조합니다.</p>
+<p>마찬가지로 <code class="notranslate" translate="no">gl.vertexAttribPointer</code>는 속성의 거의 모든 설정에 사용됩니다.
+다음과 같이 구현되는데요.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 의사 코드
 gl.vertexAttribPointer = function(location, size, type, normalize, stride, offset) {
   const attrib = gl.vertexArray.attributes[location];
@@ -307,8 +307,8 @@ gl.bindBuffer = function(target, buffer) {
   ...
 };
 </code></pre>
-<p>자, 다음은 정점 셰이더입니다.
-정점 셰이더에서는 attribute를 선언합니다.
+<p>다음은 정점 셰이더입니다.
+정점 셰이더에서는 속성을 선언합니다.
 예를 들어:</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">attribute vec4 position;
 attribute vec2 texcoord;
@@ -320,24 +320,23 @@ void main() {
   ...
 }
 </code></pre>
-<p><code class="notranslate" translate="no">gl.linkProgram(someProgram)</code>를 호출하여 정점 셰이더와 프래그먼트 셰이더를 연결할 때 WebGL(driver/GPU/browser)은 각 attribute에 사용할 index/location를 자체적으로 결정하는데요.
-수동(아래 참조)으로 location을 지정하지 않는 한 어떤 location을 선택할지 알 수 없습니다.
-오직 browser/driver/GPU에 달려있죠.
-따라서 위치, 텍스처 좌표, 법선에 어떤 속성을 사용했는지 물어봐야 합니다.
-<code class="notranslate" translate="no">gl.getAttribLocation</code>을 호출하면 되는데</p>
+<p><code class="notranslate" translate="no">gl.linkProgram(someProgram)</code>를 호출하여 정점 셰이더와 프래그먼트 셰이더를 연결할 때 WebGL(driver/GPU/browser)은 각 속성에 사용할 인덱스/위치를 자체적으로 결정하는데요.
+수동(아래 참조)으로 위치를 지정하지 않는 한 어떤 위치를 선택할지 알 수 없습니다.
+오직 브라우저/드라이버/GPU에 달려있죠.
+따라서 위치, 텍스처 좌표, 법선에 어떤 속성을 사용했는지 물어봐야 하는데 <code class="notranslate" translate="no">gl.getAttribLocation</code>을 호출하면 됩니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">const positionLoc = gl.getAttribLocation(program, &#39;position&#39;);
 const texcoordLoc = gl.getAttribLocation(program, &#39;texcoord&#39;);
 const normalLoc = gl.getAttribLocation(program, &#39;normal&#39;);
 </code></pre>
 <p><code class="notranslate" translate="no">positionLoc</code> = <code class="notranslate" translate="no">5</code>라고 해봅시다.
-이건 정점 셰이더가 실행될 때(<code class="notranslate" translate="no">gl.drawArrays</code>나 <code class="notranslate" translate="no">gl.drawElements</code>를 호출할 때) 정점 셰이더는 여러분이 알맞은 type, size, offset, stride, buffer 등으로 attribute 5를 설정할 것이라 예상한다는 걸 의미합니다.</p>
-<p>참고로 프로그램을 연결하기 전에는 <code class="notranslate" translate="no">gl.bindAttribLocation(program, location, nameOfAttribute)</code>을 호출하여 location을 선택할 수 있습니다.
+이건 정점 셰이더가 실행될 때(<code class="notranslate" translate="no">gl.drawArrays</code>나 <code class="notranslate" translate="no">gl.drawElements</code>를 호출할 때) 정점 셰이더는 여러분이 알맞은 타입, 크기, 오프셋, 스트라이드, 버퍼 등으로 속성 5를 설정할 것이라 예상한다는 걸 의미합니다.</p>
+<p>참고로 프로그램을 연결하기 전에는 <code class="notranslate" translate="no">gl.bindAttribLocation(program, location, nameOfAttribute)</code>을 호출하여 위치를 선택할 수 있습니다.
 예제:</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 속성 #7을 사용해 &quot;position&quot;을 할당하도록 &quot;gl.linkProgram&quot;에 지시
 gl.bindAttribLocation(program, 7, &#39;position&#39;);
 </code></pre>
-<h2 id="full-attribute-state">Full Attribute State</h2>
-<p>위 설명에서 누락된 것이 있는데 각 attribute에도 기본값이 있다는 겁니다.
+<h2 id="-">속성 상태</h2>
+<p>위 설명에서 누락된 것이 있는데 각 속성에도 기본값이 있다는 겁니다.
 사용하는 경우가 드물기 때문에 위 설명에서 생략했는데요.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">attributes: [
    { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ?,
@@ -346,29 +345,28 @@ gl.bindAttribLocation(program, 7, &#39;position&#39;);
    　divisor: 0, value: [0, 0, 0, 1], },
    ..
 </code></pre>
-<p>다양한 <code class="notranslate" translate="no">gl.vertexAttribXXX</code> 함수로 각 attribute의 값을 설정할 수 있습니다.
+<p>다양한 <code class="notranslate" translate="no">gl.vertexAttribXXX</code> 함수로 각 속성의 값을 설정할 수 있습니다.
 그 값은 <code class="notranslate" translate="no">enable</code>이 false일 때 사용되는데요.
-enable이 true면 attribute의 데이터는 할당된 버퍼에서 가져옵니다.</p>
+<code class="notranslate" translate="no">enable</code>이 true면 속성의 데이터는 할당된 버퍼에서 가져옵니다.</p>
 <p><a id="vaos"></a></p>
 <h2 id="vertex-array-object-vao-">Vertex Array Object (VAO)</h2>
-<p>WebGL에는 <code class="notranslate" translate="no">OES_vertex_array_object</code>라는 extension이 있습니다.</p>
-<p>위 다이어그램에서 <code class="notranslate" translate="no">OES_vertex_array_object</code> extension으로 <code class="notranslate" translate="no">vertexArray</code>를 대체할 수 있습니다.
-다시 말해</p>
+<p>WebGL에는 <code class="notranslate" translate="no">OES_vertex_array_object</code>라는 확장이 있습니다.</p>
+<p>위 다이어그램에서 <code class="notranslate" translate="no">OES_vertex_array_object</code> 확장으로 <code class="notranslate" translate="no">vertexArray</code>를 대체할 수 있습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">const vao = ext.createVertexArrayOES();
 </code></pre>
 <p>위 <em>의사 코드</em>에서 <code class="notranslate" translate="no">gl.vertexArray</code>에 첨부된 객체를 생성하는데요.
-<code class="notranslate" translate="no">ext.bindVertexArrayOES(vao)</code>를 호출하면 생성된 vertex array object가 current vertex array로 할당됩니다.</p>
+<code class="notranslate" translate="no">ext.bindVertexArrayOES(vao)</code>를 호출하면 생성된 정점 배열 객체가 현재 정점 배열로 할당됩니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 의사 코드
 ext.bindVertexArrayOES = function(vao) {
   gl.vertexArray = vao ? vao : defaultVAO;
 };
 </code></pre>
-<p>이렇게 하면 현재 VAO의 모든 attribute와 <code class="notranslate" translate="no">ELEMENT_ARRAY_BUFFER</code>를 설정할 수 있으므로 특정한 모양을 그리고 싶을 때 <code class="notranslate" translate="no">ext.bindVertexArrayOES</code> 호출 한 번으로 모든 attribute를 효과적으로 설정하는 반면 extension이 없으면 <strong>attribute마다</strong> <code class="notranslate" translate="no">gl.bindBuffer</code>, <code class="notranslate" translate="no">gl.vertexAttribPointer</code> 모두 최대 한 번씩 호출할 수 있습니다.</p>
-<p>vertex array object를 사용하는 게 확실히 좋다는 걸 보실 수 있을텐데요.
-이것들을 사용하려면 종종 더 많은 organization이 합니다.
+<p>이렇게 하면 현재 VAO의 모든 속성과 <code class="notranslate" translate="no">ELEMENT_ARRAY_BUFFER</code>를 설정할 수 있으므로 특정한 모양을 그리고 싶을 때 <code class="notranslate" translate="no">ext.bindVertexArrayOES</code> 호출 한 번으로 모든 속성을 효과적으로 설정하는 반면 확장이 없으면 <strong>속성마다</strong> <code class="notranslate" translate="no">gl.bindBuffer</code>, <code class="notranslate" translate="no">gl.vertexAttribPointer</code> 모두 최대 한 번씩 호출할 수 있습니다.</p>
+<p>정점 배열 객체를 사용하는 게 확실히 좋다는 걸 보실 수 있을텐데요.
+이것들을 사용하려면 종종 더 많은 편성이 필요한데요.
 예를 들어 하나의 셰이더와 <code class="notranslate" translate="no">gl.TRIANGLES</code>로 큐브를 그리고 다른 셰이더와 <code class="notranslate" translate="no">gl.LINES</code>로 다시 그리고 싶다고 해봅시다.
-삼각형으로 그릴 때 조명에 법선을 사용하여 아래처럼 셰이더에 attribute를 선언한다고 가정하면:</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">// lighting-shader
+삼각형으로 그릴 때 조명에 법선을 사용하여 아래처럼 셰이더에 속성을 선언한다고 가정하겠습니다.</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">// 조명 셰이더
 // 삼각형으로 그려진 큐브의 셰이더
 
 attribute vec4 a_position;
@@ -376,34 +374,34 @@ attribute vec3 a_normal;
 </code></pre>
 <p>그런 다음 <a href="webgl-3d-lighting-directional.html">조명에 관한 첫 번째 글</a>에서 다룬 것처럼 위치와 법선을 사용합니다.</p>
 <p>조명을 원하지 않는 선의 경우, 단색이 필요하므로 튜토리얼 <a href="webgl-fundamentals.html">첫 페이지</a>에 있는 첫 번째 셰이더와 비슷한 작업을 수행합니다.
-color에 대한 uniform을 선언하는데요.
-이건 정점 셰이더에서 position만 필요함을 뜻합니다.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">// solid-shader
+색상에 대한 유니폼을 선언하는데요.
+이건 정점 셰이더에서 위치만 필요하다는 뜻입니다</p>
+<pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">// 솔리드 셰이더
 // 선으로 이루어진 큐브용 셰이더
 
 attribute vec4 a_position;
 </code></pre>
-<p>각 셰이더의 attribute가 어떤 location으로 결정될지 알 수 없습니다.
-위 lighting-shader의 location으로 가정해보면</p>
+<p>각 셰이더의 속성이 어떤 위치로 결정될지 알 수 없습니다.
+위 조명 세이더의 위치로 가정해봅시다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">a_position location = 1
 a_normal location = 0
-</code></pre><p>그리고 attribute를 한 개만 가지는 solid-shader의 경우</p>
+</code></pre><p>그리고 속성을 한 개만 가지는 솔리드 셰이더의 경우,</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">a_position location = 0
-</code></pre><p>셰이더를 전환할 때 attribute를 다르게 설정해야 한다는 건 분명합니다.
-어떤 셰이더는 <code class="notranslate" translate="no">a_position</code>의 데이터가 attribute 0에 나타날 것이라 예상하죠.
-다른 셰이더는 attribute 1에 나타날 것이라 예상합니다.</p>
-<p>attribute 재설정은 추가 작업입니다.
-더 나쁜 건, vertex array object 사용하는 것의 요점은 해당 작업을 할 필요가 없다는 겁니다.
-이 문제를 고치기 위해 shader program을 연결하기 전에 location을 할당하겠습니다.</p>
+</code></pre><p>셰이더를 전환할 때 속성을 다르게 설정해야 한다는 건 분명합니다.
+어떤 셰이더는 <code class="notranslate" translate="no">a_position</code>의 데이터가 속성 0에 나타날 것이라 예상하죠.
+다른 셰이더는 속성 1에 나타날 것이라 예상합니다.</p>
+<p>속성 재설정은 추가 작업입니다.
+더 나쁜 건, 정점 배열 객체를 사용하는 것의 요점은 해당 작업을 할 필요가 없다는 겁니다.
+이 문제를 고치기 위해 셰이더 프로그램을 연결하기 전에 위치를 할당하겠습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">gl.bindAttribLocation(solidProgram, 0, &#39;a_position&#39;);
 gl.bindAttribLocation(lightingProgram, 0, &#39;a_position&#39;);
 gl.bindAttribLocation(lightingProgram, 1, &#39;a_normal&#39;);
 </code></pre>
 <p><strong>gl.linkProgram을 호출하기 전입니다.</strong>
-이건 셰이더를 연결할 때 WebGL에 할당할 location을 알려주는데요.
+이건 셰이더를 연결할 때 WebGL에 할당할 위치를 알려주는데요.
 이제 양쪽 셰이더에서 동일한 VAO를 사용할 수 있습니다.</p>
-<h2 id="maximum-attribute">Maximum Attribute</h2>
-<p>WebGL은 적어도 8개의 attribute가 지원되어야 하지만 특정 computer / browser / implementation / driver는 더 많이 지원할 수 있습니다.
+<h2 id="-">최대 속성 수</h2>
+<p>WebGL은 적어도 8개의 속성가 지원되어야 하지만 특정 컴퓨터 / 브라우저 / 구현 / 드라이버는 더 많이 지원할 수 있습니다.
 아래 호출을 통해 얼마나 많이 지원되는지 확인할 수 있는데</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">const maxAttributes = gl.getParameter(gl.MAX_VERTEX_ATTRIBS);
 </code></pre>
@@ -490,7 +488,7 @@ gl.bindAttribLocation(lightingProgram, 1, &#39;a_normal&#39;);
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-2d-drawimage.html">2D - DrawImage</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-matrix-stack.html">2D - 행렬 스택</a></li>
-<li><a href="/webgl/lessons/ko/webgl-sprites.html">Sprite</a></li>
+<li><a href="/webgl/lessons/ko/webgl-sprites.html">스프라이트</a></li>
         </ul>
   <li>3D</li>
         <ul>
@@ -522,12 +520,12 @@ gl.bindAttribLocation(lightingProgram, 1, &#39;a_normal&#39;);
           <li><a href="/webgl/lessons/ko/webgl-smallest-programs.html">최소 프로그램</a></li>
 <li><a href="/webgl/lessons/ko/webgl-drawing-without-data.html">데이터 없이 그리기</a></li>
 <li><a href="/webgl/lessons/ko/webgl-shadertoy.html">Shadertoy</a></li>
-<li><a href="/webgl/lessons/ko/webgl-pulling-vertices.html">Pulling Vertices</a></li>
+<li><a href="/webgl/lessons/ko/webgl-pulling-vertices.html">정점 풀링</a></li>
         </ul>
   <li>최적화</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-indexed-vertices.html">색인된 정점 (gl.drawElements)</a></li>
-<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">Instanced Drawing</a></li>
+<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">색인된 그리기</a></li>
         </ul>
   <li>Misc</li>
         <ul>

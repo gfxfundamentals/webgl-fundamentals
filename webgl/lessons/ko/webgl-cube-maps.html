@@ -245,7 +245,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 이 글은 <a href="webgl-3d-textures.html">텍스처에 관한 글</a>에서 이어집니다.
 또한 <a href="webgl-3d-lighting-directional.html">조명에 대한 글</a>에서 다룬 개념을 사용합니다.
 아직 읽지 않으셨다면 해당 글들을 먼저 읽어주세요.</p>
-<p><a href="webgl-3d-textures.html">이전 글</a>에서는 텍스처를 사용하는 방법, 텍스처를 가로지르는 0부터 1까지의 텍스처 좌표로 참조하는 방법, mip을 사용하여 선택적으로 필터링하는 방법 등을 다뤘습니다.</p>
+<p><a href="webgl-3d-textures.html">이전 글</a>에서는 텍스처를 사용하는 방법, 텍스처를 가로지르는 0부터 1까지의 텍스처 좌표로 참조하는 방법, 밉을 사용하여 선택적으로 필터링하는 방법 등을 다뤘습니다.</p>
 <p><em>큐브맵</em>은 또 다른 종류의 텍스처입니다.
 큐브의 여섯 면을 나타내는 6개의 면으로 구성됩니다.
 2차원을 가지는 전통적인 텍스처 좌표 대신에, 큐브맵은 법선, 즉 3D 방향을 사용합니다.
@@ -272,7 +272,7 @@ gl.TEXTURE_CUBE_MAP_NEGATIVE_Z
 }
 </code></pre>
 <p>그리고 여기 6개의 이미지를 생성하기 위해 호출하는 코드입니다.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 2D Context 가져오기
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 2D Context 얻기
 /** @type {Canvas2DRenderingContext} */
 const ctx = document.createElement(&quot;canvas&quot;).getContext(&quot;2d&quot;);
 
@@ -355,7 +355,7 @@ void main() {
 var texture = gl.createTexture();
 gl.bindTexture(gl.TEXTURE_CUBE_MAP, texture);
 
-// 2D Context 가져오기
+// 2D Context 얻기
 /** @type {Canvas2DRenderingContext} */
 const ctx = document.createElement(&quot;canvas&quot;).getContext(&quot;2d&quot;);
 
@@ -400,8 +400,8 @@ gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LI
 <li><p>각 면은 사각형입니다.
 위에서 크기는 128x128입니다.</p>
 <p>큐브맵은 사각형 텍스처가 필요합니다.
-그리고 2D 텍스처처럼 두 차원에서 2의 거듭제곱이 아니면 필터링하거나 mip을 사용할 수 없습니다.
-이 경우에는 2의 거듭제곱(128)이기 때문에 mip을 생성하고 필터링을 활성화하여 mip을 사용합니다.</p>
+그리고 2D 텍스처처럼 두 차원에서 2의 거듭제곱이 아니면 필터링하거나 밉을 사용할 수 없습니다.
+이 경우에는 2의 거듭제곱(128)이기 때문에 밉을 생성하고 필터링을 활성화하여 밉을 사용합니다.</p>
 </li>
 </ul>
 <p><div class="webgl_example_container">
@@ -496,7 +496,7 @@ gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LI
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-2d-drawimage.html">2D - DrawImage</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-matrix-stack.html">2D - 행렬 스택</a></li>
-<li><a href="/webgl/lessons/ko/webgl-sprites.html">Sprite</a></li>
+<li><a href="/webgl/lessons/ko/webgl-sprites.html">스프라이트</a></li>
         </ul>
   <li>3D</li>
         <ul>
@@ -528,12 +528,12 @@ gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LI
           <li><a href="/webgl/lessons/ko/webgl-smallest-programs.html">최소 프로그램</a></li>
 <li><a href="/webgl/lessons/ko/webgl-drawing-without-data.html">데이터 없이 그리기</a></li>
 <li><a href="/webgl/lessons/ko/webgl-shadertoy.html">Shadertoy</a></li>
-<li><a href="/webgl/lessons/ko/webgl-pulling-vertices.html">Pulling Vertices</a></li>
+<li><a href="/webgl/lessons/ko/webgl-pulling-vertices.html">정점 풀링</a></li>
         </ul>
   <li>최적화</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-indexed-vertices.html">색인된 정점 (gl.drawElements)</a></li>
-<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">Instanced Drawing</a></li>
+<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">색인된 그리기</a></li>
         </ul>
   <li>Misc</li>
         <ul>

@@ -294,7 +294,7 @@ const attachmentPoint = gl.COLOR_ATTACHMENT0;
 const level = 0;
 gl.framebufferTexture2D(gl.FRAMEBUFFER, attachmentPoint, gl.TEXTURE_2D, targetTexture, level);
 
-// 깊이 버퍼를 targetTexture와 같은 크기로 만들기
+// 깊이 버퍼를 대상 텍스처와 같은 크기로 만들기
 gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, depthBuffer);
 </code></pre>
 <p>텍스처와 깊이 렌더 버퍼의 크기를 설정하는 코드를 함수에 넣어 캔버스의 크기에 맞게 크기를 조정하도록 호출할 수 있습니다.</p>
@@ -535,7 +535,7 @@ function drawScene(time) {
 개념적으로는 가장 쉬운 작업입니다.</p>
 <p>하지만 마우스 아래에 있는 픽셀만 렌더링할 수도 있습니다.
 이를 위해 수식이 해당 1픽셀만 포함하도록 절두체를 사용합니다.</p>
-<p>지금까지는 3D의 경우 Z평면에 대한 시야, 종횡비, near/far 값을 입력으로 사용하고, 이러한 값들로 정의된 절두체를 클립 공간으로 변환하기 위한 원근 투영 행렬을 만드는 <code class="notranslate" translate="no">perspective</code> 함수를 사용했습니다.</p>
+<p>지금까지는 3D의 경우 Z평면에 대한 시야, 종횡비, 근거리/원거리 값을 입력으로 사용하고, 이러한 값들로 정의된 절두체를 클립 공간으로 변환하기 위한 원근 투영 행렬을 만드는 <code class="notranslate" translate="no">perspective</code> 함수를 사용했습니다.</p>
 <p>대부분의 3D 수학 라이브러리는 Z평면에 대한 left, right, top, bottom, z-near, z-far, 6개의 값을 받아 원근 행렬을 생성하는 <code class="notranslate" translate="no">frustum</code> 함수가 가지고 있습니다.</p>
 <p>이를 사용하여 마우스 아래에 있는 1픽셀에 대한 원근 행렬을 생성할 수 있습니다.</p>
 <p>먼저 <code class="notranslate" translate="no">perspective</code> 함수를 사용하는 경우 근거리 평면의 가장자리와 크기를 계산합니다.</p>
@@ -884,7 +884,7 @@ drawObjects(objectsToDraw);
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-2d-drawimage.html">2D - DrawImage</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-matrix-stack.html">2D - 행렬 스택</a></li>
-<li><a href="/webgl/lessons/ko/webgl-sprites.html">Sprite</a></li>
+<li><a href="/webgl/lessons/ko/webgl-sprites.html">스프라이트</a></li>
         </ul>
   <li>3D</li>
         <ul>
@@ -916,12 +916,12 @@ drawObjects(objectsToDraw);
           <li><a href="/webgl/lessons/ko/webgl-smallest-programs.html">최소 프로그램</a></li>
 <li><a href="/webgl/lessons/ko/webgl-drawing-without-data.html">데이터 없이 그리기</a></li>
 <li><a href="/webgl/lessons/ko/webgl-shadertoy.html">Shadertoy</a></li>
-<li><a href="/webgl/lessons/ko/webgl-pulling-vertices.html">Pulling Vertices</a></li>
+<li><a href="/webgl/lessons/ko/webgl-pulling-vertices.html">정점 풀링</a></li>
         </ul>
   <li>최적화</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-indexed-vertices.html">색인된 정점 (gl.drawElements)</a></li>
-<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">Instanced Drawing</a></li>
+<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">색인된 그리기</a></li>
         </ul>
   <li>Misc</li>
         <ul>

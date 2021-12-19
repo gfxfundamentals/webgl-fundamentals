@@ -244,19 +244,19 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 주어진 텍스처 내부 포맷(프레임 버퍼에 첨부된)의 경우, 단 2개의 포맷/타입 조합만 유효합니다</p>
 <p>명세서을 보면:</p>
 <blockquote>
-<p>normalized fixed-point rendering surface의 경우, 포맷 <code class="notranslate" translate="no">RGBA</code>와 타입 <code class="notranslate" translate="no">UNSIGNED_BYTE</code> 조합이 유효합니다.
-signed integer rendering surface의 경우, 포맷 <code class="notranslate" translate="no">RGBA_INTEGER</code>와 타입 <code class="notranslate" translate="no">INT</code> 조합이 유효합니다.
-unsigned integer rendering surface의 경우, 포맷 <code class="notranslate" translate="no">RGBA_INTEGER</code>와 타입 <code class="notranslate" translate="no">UNSIGNED_INT</code>가 유효합니다.</p>
+<p>정규화된 고정 소수점 렌더링 표면의 경우, 포맷 <code class="notranslate" translate="no">RGBA</code>와 타입 <code class="notranslate" translate="no">UNSIGNED_BYTE</code> 조합이 유효합니다.
+부호있는 정수형 렌더링 표면의 경우, 포맷 <code class="notranslate" translate="no">RGBA_INTEGER</code>와 타입 <code class="notranslate" translate="no">INT</code> 조합이 유효합니다.
+부호없는 정수형 렌더링 표면의 경우, 포맷 <code class="notranslate" translate="no">RGBA_INTEGER</code>와 타입 <code class="notranslate" translate="no">UNSIGNED_INT</code>가 유효합니다.</p>
 </blockquote>
 <p>두 번째 조합은 구현이 정의되어 있으므로 <span style="color:red;">코드를 이식 가능하게 하려면 사용하지 않아야 합니다.</span>
-format/type 조합이 뭔지 물어볼 수 있는데</p>
+포맷/타입 조합이 뭔지 물어볼 수 있는데</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 첨부된 읽기 텍스처와 함께 프레임 버퍼가 바인딩되어 있다고 가정
 const format = gl.getParameter(gl.IMPLEMENTATION_COLOR_READ_FORMAT);
 const type = gl.getParameter(gl.IMPLEMENTATION_COLOR_READ_TYPE);
 </code></pre>
-<p>또한 프레임 버퍼에 첨부하고 렌더링할 수 있음을 의미하는, 렌더링 가능한 texture format도, 어느정도 구현이 정의되어 있는지 확인하세요.
+<p>또한 프레임 버퍼에 첨부하고 렌더링할 수 있음을 의미하는, 렌더링 가능한 텍스처 포맷도, 어느정도 구현이 정의되어 있는지 확인하세요.
 WebGL1은 렌더링할 수 있는 <code class="notranslate" translate="no">RGBA</code>/<code class="notranslate" translate="no">UNSIGNED_BYTE</code> 조합, 하나만을 필요로 합니다.
-나머지는 모두 선택 사항(예를 들어 <code class="notranslate" translate="no">LUMINANCE</code>)이며, 일부(예를 들어 <code class="notranslate" translate="no">RGBA</code>/<code class="notranslate" translate="no">FLOAT</code>)는 extension으로 렌더링할 수 있습니다.</p>
+나머지는 모두 선택 사항(예를 들어 <code class="notranslate" translate="no">LUMINANCE</code>)이며, 일부(예를 들어 <code class="notranslate" translate="no">RGBA</code>/<code class="notranslate" translate="no">FLOAT</code>)는 확장으로 렌더링할 수 있습니다.</p>
 <p><strong>아래 표는 라이브입니다.</strong>
 아마 기기, OS, GPU, 브라우저에 따라 다른 결과를 준다는 걸 눈치채셨을 겁니다.
 제 컴퓨터에선 Chrome과 Firefox가 일부 구현 정의 값에 대해 다른 결과를 제공하고 있습니다.</p>
@@ -347,7 +347,7 @@ WebGL1은 렌더링할 수 있는 <code class="notranslate" translate="no">RGBA<
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-2d-drawimage.html">2D - DrawImage</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-matrix-stack.html">2D - 행렬 스택</a></li>
-<li><a href="/webgl/lessons/ko/webgl-sprites.html">Sprite</a></li>
+<li><a href="/webgl/lessons/ko/webgl-sprites.html">스프라이트</a></li>
         </ul>
   <li>3D</li>
         <ul>
@@ -379,12 +379,12 @@ WebGL1은 렌더링할 수 있는 <code class="notranslate" translate="no">RGBA<
           <li><a href="/webgl/lessons/ko/webgl-smallest-programs.html">최소 프로그램</a></li>
 <li><a href="/webgl/lessons/ko/webgl-drawing-without-data.html">데이터 없이 그리기</a></li>
 <li><a href="/webgl/lessons/ko/webgl-shadertoy.html">Shadertoy</a></li>
-<li><a href="/webgl/lessons/ko/webgl-pulling-vertices.html">Pulling Vertices</a></li>
+<li><a href="/webgl/lessons/ko/webgl-pulling-vertices.html">정점 풀링</a></li>
         </ul>
   <li>최적화</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-indexed-vertices.html">색인된 정점 (gl.drawElements)</a></li>
-<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">Instanced Drawing</a></li>
+<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">색인된 그리기</a></li>
         </ul>
   <li>Misc</li>
         <ul>

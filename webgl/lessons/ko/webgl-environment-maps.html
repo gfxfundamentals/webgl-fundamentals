@@ -329,12 +329,12 @@ gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LI
 다시 말해 즉시 렌더링할 수 있고, 이미지가 다운로드되면 큐브맵의 면이 한 번에 하나씩 이미지로 채워지며, 6개가 모두 로드되지 않아도 렌더링할 수 있습니다.</p>
 <p>하지만 이미지를 로딩하는 것만으로는 부족합니다.
 <a href="webgl-3d-lighting-point.html">조명</a>처럼 약간의 수식이 필요합니다.</p>
-<p>이 경우 눈/카메라에서 객체의 표면까지의 벡터가 주어지면, 그려지는 각 fragment가 해당 표면에서 반사되는 방향을 알고 싶습니다.
+<p>이 경우 눈/카메라에서 객체의 표면까지의 벡터가 주어지면, 그려지는 각 프래그먼트가 해당 표면에서 반사되는 방향을 알고 싶습니다.
 그러면 해당 방향을 사용하여 큐브맵의 색상을 가져올 수 있습니다.</p>
 <p>반사에 대한 공식은 다음과 같습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">reflectionDir = eyeToSurfaceDir – 
     2 ∗ dot(surfaceNormal, eyeToSurfaceDir) ∗ surfaceNormal
-</code></pre><p><a href="webgl-3d-lighting-directional.html">조명에 대한 글</a>을 떠올려보면 두 벡터의 스칼라곱은 두 벡터 사이 각도의 cosine을 반환합니다.
+</code></pre><p><a href="webgl-3d-lighting-directional.html">조명에 대한 글</a>을 떠올려보면 두 벡터의 스칼라곱은 두 벡터 사이 각도의 코사인을 반환합니다.
 벡터를 추가하면 새로운 벡터가 생기므로 평평한 표면을 수직으로 보는 눈을 예제를 들어봅시다.</p>
 <div class="webgl_center"><img src="../resources/reflect-180-01.svg" style="width: 400px"></div>
 
@@ -374,7 +374,7 @@ gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LI
 <div class="webgl_center"><img src="../resources/reflect-45-06.svg" style="width: 400px"></div>
 
 <p><span style="color: red">반사된 방향</span>을 이용하여 큐브맵을 보고 물체의 표면을 채색합니다.</p>
-<p>다음은 surface의 rotation을 설정하고 방정식의 다양한 부분을 볼 수 있는 다이어그램입니다.
+<p>다음은 표면의 회전을 설정하고 방정식의 다양한 부분을 볼 수 있는 다이어그램입니다.
 또한 반사 벡터가 큐브맵의 다른 면을 가리켜서 표면 색상에 영향을 주는 것도 볼 수 있습니다.</p>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 400px;" src="/webgl/lessons/resources/environment-mapping.html"></iframe>
@@ -382,7 +382,7 @@ gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LI
 
 </p>
 <p>이제 반사가 어떻게 작동하는지 알고, 큐브맵에서 값을 찾기 위해 사용할 수 있으므로, 셰이더를 변경해봅시다.</p>
-<p>먼저 정점 셰이더에서 정점의 world position과 world oriented normal을 계산하고 이를 프래그먼트 셰이더에 베링으로 전달할 겁니다.
+<p>먼저 정점 셰이더에서 정점의 월드 위치와 월드를 향하는 법선을 계산하고 이를 프래그먼트 셰이더에 베링으로 전달할 겁니다.
 이는 <a href="webgl-3d-lighting-spot.html">스포트라이트에 대한 글</a>에서 했던 것과 유사합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">attribute vec4 a_position;
 attribute vec3 a_normal;
@@ -398,7 +398,7 @@ void main() {
   // 위치에 행렬 곱하기
   gl_Position = u_projection * u_view * u_world * a_position;
 
-  // View position을 프래그먼트 셰이더로 보내기
+  // 뷰 위치를 프래그먼트 셰이더로 보내기
   v_worldPosition = (u_world * a_position).xyz;
 
   // 법선의 방향을 정하고 프래그먼트 셰이더로 전달
@@ -406,7 +406,7 @@ void main() {
 }
 </code></pre>
 <p>그런 다음 프래그먼트 셰이더에서 <code class="notranslate" translate="no">worldNormal</code>이 정점 사이의 표면을 가로질러 보간되므로 정규화합니다.
-카메라의 world position을 전달하고 표면의 world position에서 이를 빼면 <code class="notranslate" translate="no">eyeToSurfaceDir</code>이 됩니다.</p>
+카메라의 월드 위치를 전달하고 표면의 월드 위치에서 이를 빼면 <code class="notranslate" translate="no">eyeToSurfaceDir</code>이 됩니다.</p>
 <p>마지막으로 위에서 살펴본 공식을 구현하는 GLSL 내장 함수 <code class="notranslate" translate="no">reflect</code>를 사용합니다.
 그리고 결과를 이용하여 큐브맵에서 색상을 가져옵니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">precision highp float;
@@ -444,7 +444,7 @@ setNormals(gl);
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 법선 버퍼 바인딩
 gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
 
-// Tell the attribute how to get data out of normalBuffer (ARRAY_BUFFER)
+// normalBuffer(ARRAY_BUFFER)에서 데이터 가져오는 방법을 속성에 지시
 var size = 3;          // 반복마다 3개의 컴포넌트
 var type = gl.FLOAT;   // 데이터는 32비트 부동 소수점 값
 var normalize = false; // 데이터 정규화 (0-255에서 0-1로 전환)
@@ -452,7 +452,7 @@ var stride = 0;        // 0 = 다음 위치를 가져오기 위해 반복마다 
 var offset = 0;        // 버퍼의 처음부터 시작
 gl.vertexAttribPointer(normalLocation, size, type, normalize, stride, offset);
 </code></pre>
-<p>물론 초기화할 때 uniform location을 찾아야 합니다.</p>
+<p>물론 초기화할 때 유니폼 위치를 찾아야 합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">var projectionLocation = gl.getUniformLocation(program, &quot;u_projection&quot;);
 var viewLocation = gl.getUniformLocation(program, &quot;u_view&quot;);
 var worldLocation = gl.getUniformLocation(program, &quot;u_world&quot;);
@@ -460,7 +460,7 @@ var textureLocation = gl.getUniformLocation(program, &quot;u_texture&quot;);
 var worldCameraPositionLocation = gl.getUniformLocation(program, &quot;u_worldCameraPosition&quot;);
 </code></pre>
 <p>그리고 렌더링할 때 이들을 설정합니다.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// projection matrix 계산
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 투영 행렬 계산
 var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
 var projectionMatrix = m4.perspective(fieldOfViewRadians, aspect, 1, 2000);
 gl.uniformMatrix4fv(projectionLocation, false, projectionMatrix);
@@ -477,7 +477,7 @@ var viewMatrix = m4.inverse(cameraMatrix);
 var worldMatrix = m4.xRotation(modelXRotationRadians);
 worldMatrix = m4.yRotate(worldMatrix, modelYRotationRadians);
 
-// Uniform 설정
+// 유니폼 설정
 gl.uniformMatrix4fv(projectionLocation, false, projectionMatrix);
 gl.uniformMatrix4fv(viewLocation, false, viewMatrix);
 gl.uniformMatrix4fv(worldLocation, false, worldMatrix);
@@ -575,7 +575,7 @@ gl.uniform1i(textureLocation, 0);
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-2d-drawimage.html">2D - DrawImage</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-matrix-stack.html">2D - 행렬 스택</a></li>
-<li><a href="/webgl/lessons/ko/webgl-sprites.html">Sprite</a></li>
+<li><a href="/webgl/lessons/ko/webgl-sprites.html">스프라이트</a></li>
         </ul>
   <li>3D</li>
         <ul>
@@ -607,12 +607,12 @@ gl.uniform1i(textureLocation, 0);
           <li><a href="/webgl/lessons/ko/webgl-smallest-programs.html">최소 프로그램</a></li>
 <li><a href="/webgl/lessons/ko/webgl-drawing-without-data.html">데이터 없이 그리기</a></li>
 <li><a href="/webgl/lessons/ko/webgl-shadertoy.html">Shadertoy</a></li>
-<li><a href="/webgl/lessons/ko/webgl-pulling-vertices.html">Pulling Vertices</a></li>
+<li><a href="/webgl/lessons/ko/webgl-pulling-vertices.html">정점 풀링</a></li>
         </ul>
   <li>최적화</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-indexed-vertices.html">색인된 정점 (gl.drawElements)</a></li>
-<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">Instanced Drawing</a></li>
+<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">색인된 그리기</a></li>
         </ul>
   <li>Misc</li>
         <ul>

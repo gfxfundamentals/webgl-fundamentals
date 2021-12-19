@@ -323,14 +323,14 @@ var count = 6;
 예를 들어 큐브의 각 면에 다른 색상을 주고 싶다면 위치와 함께 해당 색상을 제공해야 합니다.
 따라서 정점에 닿는 각 면에 한 번씩 동일한 위치가 세 번 사용되더라도, 각자 다른 색상이 결합된 각 면마다 한 번씩 위치를 반복해야 합니다.
 이는 큐브의 각 면에 4개씩 총 24개의 정점이, 필요한 12개의 삼각형을 그리려면 36개의 색인이 필요하다는 걸 의미합니다.</p>
-<p>WebGL1에서 위의 <code class="notranslate" translate="no">indexType</code>에 유효한 type은 색인을 0에서 255까지만 가질 수 있는 <code class="notranslate" translate="no">gl.UNSIGNED_BYTE</code>와 최대 색인이 65535인 <code class="notranslate" translate="no">gl.UNSIGNED_SHORT</code>임에 주의하세요.
-<code class="notranslate" translate="no">gl.UNSIGNED_INT</code>와 최대 4294967296까지 색인을 허용하는 <code class="notranslate" translate="no">OES_element_index_uint</code> extension이 있는지 확인하고 활성화할 수 있습니다.</p>
+<p>WebGL1에서 위의 <code class="notranslate" translate="no">indexType</code>에 유효한 타입은 색인을 0에서 255까지만 가질 수 있는 <code class="notranslate" translate="no">gl.UNSIGNED_BYTE</code>와 최대 색인이 65535인 <code class="notranslate" translate="no">gl.UNSIGNED_SHORT</code>임에 주의하세요.
+<code class="notranslate" translate="no">gl.UNSIGNED_INT</code>와 최대 4294967296까지 색인을 허용하는 <code class="notranslate" translate="no">OES_element_index_uint</code> 확장이 있는지 확인하고 활성화할 수 있습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">const ext = gl.getExtension(&#39;OES_element_index_uint&#39;);
 if (!ext) {
   // gl.UNSIGNED_SHORT 사용으로 되돌아 가거나 사용자에게 알림
 }
 </code></pre>
-<p><a href="https://webglstats.com/webgl/extension/OES_element_index_uint">WebGLStats</a>에 따르면 거의 모든 기기에서 이 extension을 지원합니다.</p>
+<p><a href="https://webglstats.com/webgl/extension/OES_element_index_uint">WebGLStats</a>에 따르면 거의 모든 기기에서 이 확장을 지원합니다.</p>
 <div class="webgl_bottombar">
 <p>
 참고: 위에서 색인을 버퍼에 넣을 때 <code class="notranslate" translate="no">indexBuffer</code>를 <code class="notranslate" translate="no">ELEMENT_ARRAY_BUFFER</code> 바인딩 포인트로 바인딩한 다음 나중에 다시 바인딩합니다.
@@ -427,7 +427,7 @@ if (!ext) {
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-2d-drawimage.html">2D - DrawImage</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-matrix-stack.html">2D - 행렬 스택</a></li>
-<li><a href="/webgl/lessons/ko/webgl-sprites.html">Sprite</a></li>
+<li><a href="/webgl/lessons/ko/webgl-sprites.html">스프라이트</a></li>
         </ul>
   <li>3D</li>
         <ul>
@@ -459,12 +459,12 @@ if (!ext) {
           <li><a href="/webgl/lessons/ko/webgl-smallest-programs.html">최소 프로그램</a></li>
 <li><a href="/webgl/lessons/ko/webgl-drawing-without-data.html">데이터 없이 그리기</a></li>
 <li><a href="/webgl/lessons/ko/webgl-shadertoy.html">Shadertoy</a></li>
-<li><a href="/webgl/lessons/ko/webgl-pulling-vertices.html">Pulling Vertices</a></li>
+<li><a href="/webgl/lessons/ko/webgl-pulling-vertices.html">정점 풀링</a></li>
         </ul>
   <li>최적화</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-indexed-vertices.html">색인된 정점 (gl.drawElements)</a></li>
-<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">Instanced Drawing</a></li>
+<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">색인된 그리기</a></li>
         </ul>
   <li>Misc</li>
         <ul>

@@ -253,11 +253,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 WebGL에서 대부분의 숫자는 32비트에 불과한데요.
 더 적은 비트 = 더 빠름, 더 많은 비트 = 더 정확하고 더 넓은 범위입니다.</p>
 <p>이걸 잘 설명할 수 있을지 모르겠습니다.
-정밀도 문제의 다른 예시로 <a href="https://www.google.com/search?q=double+vs+float">double vs float</a>를 찾아볼 수도 있지만 이를 설명하는 한 가지 방법은 byte와 short 또는 자바스크립트의 <code class="notranslate" translate="no">Uint8Array</code> vs <code class="notranslate" translate="no">Uint16Array</code>의 차이와 같다는 겁니다.</p>
+정밀도 문제의 다른 예시로 <a href="https://www.google.com/search?q=double+vs+float">double vs float</a>를 찾아볼 수도 있지만 이를 설명하는 한 가지 방법은 <code class="notranslate" translate="no">byte</code>와 <code class="notranslate" translate="no">short</code> 또는 자바스크립트의 <code class="notranslate" translate="no">Uint8Array</code> vs <code class="notranslate" translate="no">Uint16Array</code>의 차이와 같다는 겁니다.</p>
 <ul>
-<li><code class="notranslate" translate="no">Uint8Array</code>는 unsigned 8bit integer 배열입니다. 8비트는 0에서 255까지 2<sup>8</sup>개의 값을 포함할 수 있습니다.</li>
-<li><code class="notranslate" translate="no">Uint16Array</code>는 unsigned 16bit integer 배열입니다. 16비트는 0에서 65535까지 2<sup>16</sup>개의 값을 포함할 수 있습니다.</li>
-<li><code class="notranslate" translate="no">Uint32Array</code>는 unsigned 32bit integer 배열입니다. 32비트는 0에서 4294967295까지 2<sup>32</sup>개의 값을 포함할 수 있습니다.</li>
+<li><code class="notranslate" translate="no">Uint8Array</code>는 부호없는 8비트 정수형 배열입니다. 8비트는 0에서 255까지 2<sup>8</sup>개의 값을 포함할 수 있습니다.</li>
+<li><code class="notranslate" translate="no">Uint16Array</code>는 부호없는 16비트 정수형 배열입니다. 16비트는 0에서 65535까지 2<sup>16</sup>개의 값을 포함할 수 있습니다.</li>
+<li><code class="notranslate" translate="no">Uint32Array</code>는 부호없는 32비트 정수형 배열입니다. 32비트는 0에서 4294967295까지 2<sup>32</sup>개의 값을 포함할 수 있습니다.</li>
 </ul>
 <p><code class="notranslate" translate="no">lowp</code>, <code class="notranslate" translate="no">mediump</code>, <code class="notranslate" translate="no">highp</code>도 비슷합니다.</p>
 <ul>
@@ -353,16 +353,16 @@ void main() {
 }
 </code></pre>
 <p>참고: 이것만으로는 충분하지 않습니다.
-정점 셰이더에는</p>
+정점 셰이더에는,</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">  // 조명에 대한 표면의 벡터를 계산하고 프래그먼트 셰이더로 전달
   v_surfaceToLight = u_lightWorldPosition - surfaceWorldPosition;
 </code></pre>
 <p>조명이 표면에서 1000단위 떨어져 있다고 해봅시다.
-그런 다음 프래그먼트 셰이더와 이 줄에 도달하는데</p>
+그런 다음 프래그먼트 셰이더와 이 줄에 도달하는데,</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">  vec3 surfaceToLightDirection = normalize(v_surfaceToLight);
 </code></pre>
 <p>충분히 문제없어 보입니다.
-해당 방법을 제외하고 벡터를 정규화하는 일반적인 방법은 길이로 나누는 건데</p>
+해당 방법을 제외하고 벡터를 정규화하는 일반적인 방법은 길이로 나누는 것인데,</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  float length = sqrt(v.x * v.x + v.y * v.y * v.z * v.z);
 </code></pre><p>x, y, z 중 하나라도 1000이면 1000*1000은 1000000인데요.
 1000000은 <code class="notranslate" translate="no">mediump</code>의 범위를 벗어납니다.</p>
@@ -386,7 +386,7 @@ void main() {
 그렇게 하지 않는다면 아마 신경 쓸 이유가 없을 겁니다.</p>
 <h2 id="-highp-mediump-"><code class="notranslate" translate="no">highp</code> 및 <code class="notranslate" translate="no">mediump</code> 정밀도 지원 감지</h2>
 <p>이건 비교적 쉬울 것 같네요.
-<code class="notranslate" translate="no">gl.getShaderPrecisionFormat</code>을 호출하여, shader type인 <code class="notranslate" translate="no">VERTEX_SHADER</code>나 <code class="notranslate" translate="no">FRAGMENT_SHADER</code>를 전달하고, <code class="notranslate" translate="no">LOW_FLOAT</code>, <code class="notranslate" translate="no">MEDIUM_FLOAT</code>, <code class="notranslate" translate="no">HIGH_FLOAT</code>, <code class="notranslate" translate="no">LOW_INT</code>, <code class="notranslate" translate="no">MEDIUM_INT</code>, <code class="notranslate" translate="no">HIGH_INT</code> 중 하나를 전달하면, <a href="../../webgl-precision-lowp-mediump-highp.html">정밀도 정보를 반환</a>합니다.</p>
+<code class="notranslate" translate="no">gl.getShaderPrecisionFormat</code>을 호출하여, 셰이더 타입인 <code class="notranslate" translate="no">VERTEX_SHADER</code>나 <code class="notranslate" translate="no">FRAGMENT_SHADER</code>를 전달하고, <code class="notranslate" translate="no">LOW_FLOAT</code>, <code class="notranslate" translate="no">MEDIUM_FLOAT</code>, <code class="notranslate" translate="no">HIGH_FLOAT</code>, <code class="notranslate" translate="no">LOW_INT</code>, <code class="notranslate" translate="no">MEDIUM_INT</code>, <code class="notranslate" translate="no">HIGH_INT</code> 중 하나를 전달하면, <a href="../../webgl-precision-lowp-mediump-highp.html">정밀도 정보를 반환</a>합니다.</p>
 <p>불행히도 사파리는 여기에 버그가 있어, 최소한 2020년 4월 기준 이 방법은 아이폰에서 실패할 겁니다.</p>
 <p>그래서 모든 장치에서 <code class="notranslate" translate="no">highp</code>를 지원하는 지원하는지 확인하기 위해, <code class="notranslate" translate="no">highp</code>를 사용하는 프래그먼트 셰이더를 만들어, 컴파일하고, 연결하고, 에러를 확인하면 됩니다.
 실패한다면 <code class="notranslate" translate="no">highp</code>가 지원되지 않는 겁니다.
@@ -395,7 +395,7 @@ void main() {
 연결하고 <code class="notranslate" translate="no">LINK_STATUS</code>를 확인해야 합니다.</p>
 <p><code class="notranslate" translate="no">mediump</code>이 정말로 고정밀도가 아니라 중간 정밀도인지 확인하기 위해서는 렌더 테스트를 해야 합니다.
 기본적으로 <code class="notranslate" translate="no">mediump</code>를 사용하는 셰이더를 만들고 <code class="notranslate" translate="no">highp</code>에서는 작동하지만 <code class="notranslate" translate="no">mediump</code>에서는 실패하는 몇 가지 계산을 한 뒤 결과를 확인하면 되는데요.
-결과가 정확하다면 driver/gpu/device가 <code class="notranslate" translate="no">mediump</code>에 <code class="notranslate" translate="no">highp</code>를 사용하는 겁니다.
+결과가 정확하다면 드라이버/GPU/디바이스가 <code class="notranslate" translate="no">mediump</code>에 <code class="notranslate" translate="no">highp</code>를 사용하는 겁니다.
 결과가 부정확하다면 <code class="notranslate" translate="no">mediump</code>는 <code class="notranslate" translate="no">mediump</code>인 겁니다.</p>
 <p>다음은 프래그먼트 셰이더의 <code class="notranslate" translate="no">mediump</code>이 실제로 <code class="notranslate" translate="no">mediump</code>인지 확인하는 예제이고</p>
 <p><div class="webgl_example_container">
@@ -419,7 +419,7 @@ void main() {
 <code class="notranslate" translate="no">lowp</code>에 대해 9비트를 사용하는 기기를 사용한 적이 있는지 없어서 어떤 문제가 발생하는지 확실하지 않습니다. </p>
 <p>이 글을 통해서 우리는 프래그먼트 셰이더의 기본 정밀도를 지정했습니다.
 또한 어떤 개별 변수의 정밀도라도 지정할 수 있는데요.
-예를 들어</p>
+예를 들어,</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">uniform mediump vec4 color;  // 유니폼
 attribute lowp vec4 normal;  // 속성
 varying lowp vec4 texcoord;  // 베링
@@ -427,13 +427,13 @@ lowp float foo;              // 변수
 </code></pre>
 <h2 id="-">캔버스 정밀도 문제</h2>
 <p>명세서에는 캔버스가 32비트 대신 16비트가 될 수 있습니다.</p>
-<p>아래처럼 호출하여 확인할 수 있는데</p>
+<p>아래처럼 호출하여 확인할 수 있는데,</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">const bitsInCanvas =
     gl.getParameter(gl.RED_BITS) +
     gl.getParameter(gl.GREEN_BITS) +
     gl.getParameter(gl.BLUE_BITS) +
     gl.getParameter(gl.ALPHA_BITS);
-</code></pre><p>이건 실제로 현재 바인딩된 프레임 버퍼 색상 어태치먼트나, 프레임 버퍼가 첨부되지 않았다면 캔버스에서, 채널의 bit depth를 반환합니다.</p>
+</code></pre><p>이건 실제로 현재 바인딩된 프레임 버퍼 색상 어태치먼트나, 프레임 버퍼가 첨부되지 않았다면 캔버스에서, 채널의 비트 깊이를 반환합니다.</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-precision-check-canvas-bits.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-precision-check-canvas-bits.html" target="_blank">새 창을 열려면 여기를 클릭</a>
@@ -444,18 +444,18 @@ lowp float foo;              // 변수
 2011년 WebGL이 출시되었을 때 파이어폭스가 모바일 기기에서 속도를 높이기 위해 16비트 캔버스를 실험했던 걸로 알고 있습니다.
 이는 일반적으로 이미지 이외의 항목에 대해 캔버스에서 픽셀을 읽는 경우를 제외하고는 무시할 수 있습니다. 
 또한, 캔버스가 16비트라고 하더라도 32비트 렌더 대상(<a href="webgl-render-to-texture.html">프레임 버퍼에 첨부된 텍스처</a>)을 만들 수 있습니다.</p>
-<h2 id="texture-format">Texture Format</h2>
+<h2 id="-">텍스처 포맷</h2>
 <p>텍스처는 명세서에서 실제 사용된 정밀도는 요청된 정밀도보다 더 클 수 있다고 말하는 또 다른 것입니다.</p>
-<p>예를 들어 다음과 같이 채널당 4비트씩, 16비트 텍스처를 요청할 수 있는데 </p>
+<p>예를 들어 다음과 같이 채널당 4비트씩, 16비트 텍스처를 요청할 수 있는데 ,</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.texImage2D(
   gl.TEXTURE_2D,               // 대상
-  0,                           // mip 레벨
-  gl.RGBA,                     // 내부 format
+  0,                           // 밉 레벨
+  gl.RGBA,                     // 내부 포맷
   width,                       // 너비
   height,                      // 높이
-  0,                           // border
-  gl.RGBA,                     // format
-  gl.UNSIGNED_SHORT_4_4_4_4,   // type
+  0,                           // 테두리
+  gl.RGBA,                     // 포맷
+  gl.UNSIGNED_SHORT_4_4_4_4,   // 타입
   null,
 );
 </code></pre><p>하지만 구현은 실제로 더 높은 해상도를 내부적으로 사용할 수 있습니다.
@@ -479,7 +479,7 @@ lowp float foo;              // 변수
 <div class="webgl_center"><img src="../resources/desktop-4-4-4-4-texture-no-dither.png" style="image-rendering: pixelated; width: 600px;"></div>
 
 <p>한 가지 주목할 점은 기본적으로 WebGL은 결과를 디더링하여 이와 같은 그라데이션을 더 부드럽게 만들 수 있다는 겁니다.
-다음과 같이 디더링을 끌 수 있으며</p>
+다음과 같이 디더링을 끌 수 있으며,</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">gl.disable(gl.DITHER);
 </code></pre>
 <p>디더링을 끄지 않는다면 스마트폰에서는 이런 게 나타납니다.</p>
@@ -569,7 +569,7 @@ lowp float foo;              // 변수
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-2d-drawimage.html">2D - DrawImage</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-matrix-stack.html">2D - 행렬 스택</a></li>
-<li><a href="/webgl/lessons/ko/webgl-sprites.html">Sprite</a></li>
+<li><a href="/webgl/lessons/ko/webgl-sprites.html">스프라이트</a></li>
         </ul>
   <li>3D</li>
         <ul>
@@ -601,12 +601,12 @@ lowp float foo;              // 변수
           <li><a href="/webgl/lessons/ko/webgl-smallest-programs.html">최소 프로그램</a></li>
 <li><a href="/webgl/lessons/ko/webgl-drawing-without-data.html">데이터 없이 그리기</a></li>
 <li><a href="/webgl/lessons/ko/webgl-shadertoy.html">Shadertoy</a></li>
-<li><a href="/webgl/lessons/ko/webgl-pulling-vertices.html">Pulling Vertices</a></li>
+<li><a href="/webgl/lessons/ko/webgl-pulling-vertices.html">정점 풀링</a></li>
         </ul>
   <li>최적화</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-indexed-vertices.html">색인된 정점 (gl.drawElements)</a></li>
-<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">Instanced Drawing</a></li>
+<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">색인된 그리기</a></li>
         </ul>
   <li>Misc</li>
         <ul>

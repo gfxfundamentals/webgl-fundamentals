@@ -292,7 +292,7 @@ void main() {
 gl.bindTexture(gl.TEXTURE_2D, tex);
 gl.texImage2D(
     gl.TEXTURE_2D,     // 대상
-    0,                 // mip 레벨
+    0,                 // 밉 레벨
     gl.LUMINANCE,      // 내부 포맷
     2,                 // 너비
     1,                 // 높이
@@ -358,7 +358,7 @@ gl.uniform1i(rampLocation, 0);
 
 <p>보간없이 양쪽에 0.5픽셀이 있습니다.
 텍스처에서 <code class="notranslate" translate="no">TEXTURE_WRAP_S</code>가 <code class="notranslate" translate="no">REPEAT</code>로 설정되었다고 상상해보세요.
-We&#39;d then expect the left most half of a red pixel to linearly blend toward green as though the green repeated to the left. 
+그러면 초록색이 왼쪽으로 반복되는 것처럼 빨간색 픽셀이 초록색을 향해 선형적 혼합될 것이라 예상했는데요.
 하지만 <code class="notranslate" translate="no">CLAMP_TO_EDGE</code>를 사용하고 있기 때문에 왼쪽이 더 빨갛습니다.</p>
 <p>램프를 실제로 얻으려면 해당 중심 범위에서 값을 선택하면 됩니다.
 셰이더에서 약간의 수식으로 이를 수행할 수 있습니다.</p>
@@ -489,7 +489,7 @@ gl.uniform2fv(rampSizeLocation, [2, 1]);
 안타깝지만 코드는 <a href="webgl-less-code-more-fun.html">외부 도우미 라이브러리</a>를 사용하고 있지 않기 때문에 2개의 셰이더 프로그램을 지원하기 위해 꽤 많이 바뀔 겁니다.
 각 프로그램은 고유한 위치 세트가 필요합니다.
 하지만 그렇게 많이 변경하면 이 글의 요점에서 벗어날 수 있기 때문에 여기서는 조건문을 사용하기로 결정했습니다.
-In general though I try avoid conditionals to select features in shaders and instead create different shaders for different features.</p>
+일반적으로 저는 셰이더에서 기능을 선택하는 조건문을 피하고 대신에 다른 기능을 위한 다른 셰이더를 생성합니다.</p>
 </blockquote>
 <p>참고: 이 수식은 <code class="notranslate" translate="no">LINEAR</code> 필터링을 사용하는 경우에만 중요합니다.
 <code class="notranslate" translate="no">NEAREST</code> 필터링을 사용하고 있다면 원래 수식이 필요합니다.</p>
@@ -537,7 +537,7 @@ In general though I try avoid conditionals to select features in shaders and ins
 +  const width = data.length / elementsForFormat[format];
   gl.texImage2D(
       gl.TEXTURE_2D,     // 대상
-      0,                 // mip 레벨
+      0,                 // 밉 레벨
 *      format,            // 내부 포맷
 *      width,             // 너비
       1,                 // 높이
@@ -751,7 +751,7 @@ uniform float threshold;
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-2d-drawimage.html">2D - DrawImage</a></li>
 <li><a href="/webgl/lessons/ko/webgl-2d-matrix-stack.html">2D - 행렬 스택</a></li>
-<li><a href="/webgl/lessons/ko/webgl-sprites.html">Sprite</a></li>
+<li><a href="/webgl/lessons/ko/webgl-sprites.html">스프라이트</a></li>
         </ul>
   <li>3D</li>
         <ul>
@@ -783,12 +783,12 @@ uniform float threshold;
           <li><a href="/webgl/lessons/ko/webgl-smallest-programs.html">최소 프로그램</a></li>
 <li><a href="/webgl/lessons/ko/webgl-drawing-without-data.html">데이터 없이 그리기</a></li>
 <li><a href="/webgl/lessons/ko/webgl-shadertoy.html">Shadertoy</a></li>
-<li><a href="/webgl/lessons/ko/webgl-pulling-vertices.html">Pulling Vertices</a></li>
+<li><a href="/webgl/lessons/ko/webgl-pulling-vertices.html">정점 풀링</a></li>
         </ul>
   <li>최적화</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-indexed-vertices.html">색인된 정점 (gl.drawElements)</a></li>
-<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">Instanced Drawing</a></li>
+<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">색인된 그리기</a></li>
         </ul>
   <li>Misc</li>
         <ul>
