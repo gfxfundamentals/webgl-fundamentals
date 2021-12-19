@@ -68,8 +68,8 @@ To that last point, unlike values in a `Uint8Array` or `Uint16Array`, a `lowp`
 or `mediump` value or for that matter even a `highp` value is allowed to use
 higher precision (more bits). So for example on a desktop GPU if you put
 `mediump` in your shader it will still most likely use 32bits internally. This
-has the problem of making it hard to test your shaders. To see if the your
-shaders actually work correctly with `lowp` or `mediump` you have to test on a
+has the problem of making it hard to test your shaders. To see if your
+shaders actually work correctly with `lowp` or `mediump`, you have to test on a
 device that actually uses 8bits for `lowp` and 16bits for `highp`.
 
 So, what do you do?
