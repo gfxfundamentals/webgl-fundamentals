@@ -28,9 +28,9 @@ Em seguida, você deve instalar um pequeno servidor web. Eu sei que o "servidor 
 Os servidores são realmente extremamente simples](https://games.greggman.com/game/saving-and-loading-files-in-a-web-page/).
 
 Se você estiver no Chrome, aqui está uma solução simples.
-[Aqui está uma pequena extensão cromada que é um servidor web](https://chrome.google.com/webstore/detail/web-server-for-chrome/ofhbbkphhbklhfoeikjpcbhemlocgigb?hl=pt-br)
+[Aqui está uma pequena extensão cromada que é um servidor web](https://greggman.github.io/servez)
 
-{{{image url = "resources/chrome-webserver.png"}}}
+{{{image url="resources/servez.gif"}}}
 
 Basta apontá-lo para a pasta onde você descompactou os arquivos e clique em um dos URLs do servidor web.
 
@@ -56,7 +56,7 @@ Deve imprimir algo como
 
 Então, no seu navegador, acesse [`http://localhost:8080`](http://localhost:8080).
 
-Se você não especificar um caminho, então servez será o servidor da pasta atual. Baixe-o aqui](https://github.com/gfxfundamentals/webgl-fundamentals/).
+Se você não especificar um caminho, então servez será o servidor da pasta atual.
 
 ## Usando as Ferramentas de Desenvolvimento dos Navegadores
 
