@@ -12,6 +12,15 @@ function getPrefix(url) {
   return prefix;
 }
 
+const lessonHelperScriptRE = /<script src="[^"]+lessons-helper\.js"><\/script>/;
+const webglDebugHelperScriptRE = /<script src="[^"]+webgl-debug-helper\.js"><\/script>/;
+
+function fixHTMLForCodeSite(html) {
+  html = html.replace(lessonHelperScriptRE, '');
+  html = html.replace(webglDebugHelperScriptRE, '');
+  return html;
+}
+
 /**
  * Fix any local URLs into fully qualified urls.
  *
@@ -141,14 +150,36 @@ function requestCORSIfNotSameOrigin(img, url) {
   return js;
 }
 
+function prepHTML(source, prefix) {
+  source = source.replace('<head>', `<head>
+  <link rel="stylesheet" href="${prefix}/resources/lesson-helper.css" type="text/css">
+  <script match="false">self.lessonSettings = ${JSON.stringify(lessonSettings)}</script>`);
+
+  source = source.replace('</head>', `<script src="${prefix}/resources/webgl-debug-helper.js"></script>
+<script src="${prefix}/resources/lessons-helper.js"></script>
+  </head>`);
+  return source;
+}
+
+function getWorkerPreamble(scriptInfo) {
+  return `self.lessonSettings = ${JSON.stringify(lessonSettings)};
+import '${dirname(scriptInfo.fqURL)}/resources/webgl-debug-helper.js';
+import '${dirname(scriptInfo.fqURL)}/resources/lessons-worker-helper.js';`;
+}
+
+const lessonSettings = {
+  glDebug: true,
+};
+
 window.lessonEditorSettings = {
   extraHTMLParsing,
   fixSourceLinks,
   fixJSForCodeSite,
+  fixHTMLForCodeSite,
   runOnResize: true,
-  lessonSettings: {
-    glDebug: true,
-  },
+  lessonSettings,
+  prepHTML,
+  getWorkerPreamble,
   tags: ['webgl', 'webglfundamentals.org'],
   name: 'WebGLFundamentals',
   icon: '/webgl/lessons/resources/webglfundamentals-icon-256.png',

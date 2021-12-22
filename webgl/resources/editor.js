@@ -6,13 +6,12 @@
 const {
   fixSourceLinks,
   fixJSForCodeSite,
+  fixHTMLForCodeSite,
   extraHTMLParsing,
   runOnResize,
-  lessonSettings,
+  getWorkerPreamble,
+  prepHTML,
 } = lessonEditorSettings;
-
-const lessonHelperScriptRE = /<script src="[^"]+lessons-helper\.js"><\/script>/;
-const webglDebugHelperScriptRE = /<script src="[^"]+webgl-debug-helper\.js"><\/script>/;
 
 function getQuery(s) {
   s = s === undefined ? window.location.search : s;
@@ -146,7 +145,25 @@ function getHTMLPart(re, obj, tag) {
     part = p1;
     return tag;
   });
-  return part.replace(/\s*/, '');
+  const lines = part.replace(/\r\n/g, '\n').split('\n');
+  // remove leading blank lines
+  while (lines.length && !lines[0].length) {
+    lines.shift();
+  }
+  // remove common indentation
+  if (lines.length) {
+    const firstLine = lines[0];
+    const m = /(\s*)\S/.exec(firstLine);
+    if (m) {
+      const indent = m[1];
+      lines.forEach((line, ndx) => {
+        if (line.startsWith(indent)) {
+          lines[ndx] = line.substring(indent.length);
+        }
+      });
+    }
+  }
+  return lines.join('\n');
 }
 
 // doesn't handle multi-line comments or comments with { or } in them
@@ -156,7 +173,8 @@ function formatCSS(css) {
     let currIndent = indent;
     if (line.includes('{')) {
       indent = indent + '  ';
-    } else if (line.includes('}')) {
+    }
+    if (line.includes('}')) {
       indent = indent.substring(0, indent.length - 2);
       currIndent = indent;
     }
@@ -372,11 +390,9 @@ function makeBlobURLsForSources(scriptInfo) {
       });
       scriptInfo.numLinesBeforeScript = 0;
       if (scriptInfo.isWorker) {
-        const extra = `self.lessonSettings = ${JSON.stringify(lessonSettings)};
-import '${dirname(scriptInfo.fqURL)}/resources/webgl-debug-helper.js';
-import '${dirname(scriptInfo.fqURL)}/resources/lessons-worker-helper.js';`;
-        scriptInfo.numLinesBeforeScript = extra.split('\n').length;
-        text = `${extra}\n${text}`;
+        const workerPreamble = getWorkerPreamble(scriptInfo);
+        scriptInfo.numLinesBeforeScript = workerPreamble.split('\n').length;
+        text = `${workerPreamble}\n${text}`;
       }
       scriptInfo.blobUrl = getJavaScriptBlob(text);
       scriptInfo.munged = text;
@@ -399,13 +415,7 @@ function getSourceBlob(htmlParts) {
   source = source.replace('${html}', htmlParts.html);
   source = source.replace('${css}', htmlParts.css);
   source = source.replace('${js}', g.rootScriptInfo.munged); //htmlParts.js);
-  source = source.replace('<head>', `<head>
-  <link rel="stylesheet" href="${prefix}/resources/lesson-helper.css" type="text/css">
-  <script match="false">self.lessonSettings = ${JSON.stringify(lessonSettings)}</script>`);
-
-  source = source.replace('</head>', `<script src="${prefix}/resources/webgl-debug-helper.js"></script>
-<script src="${prefix}/resources/lessons-helper.js"></script>
-  </head>`);
+  source = prepHTML(source, prefix);
   const scriptNdx = source.search(/<script(\s+type="module"\s*)?>/);
   g.rootScriptInfo.numLinesBeforeScript = (source.substring(0, scriptNdx).match(/\n/g) || []).length;
 
@@ -537,12 +547,6 @@ function makeScriptsForWorkers(scriptInfo) {
     js: init,
     html,
   };
-}
-
-function fixHTMLForCodeSite(html) {
-  html = html.replace(lessonHelperScriptRE, '');
-  html = html.replace(webglDebugHelperScriptRE, '');
-  return html;
 }
 
 function openInCodepen() {
