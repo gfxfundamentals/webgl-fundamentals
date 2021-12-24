@@ -354,7 +354,7 @@ After all that we can finally ask WebGL to execute our GLSL program.
     gl.drawArrays(primitiveType, offset, count);
 
 Because the count is 3 this will execute our vertex shader 3 times. The first time `a_position.x` and `a_position.y`
-in our vertex shader attribute will be set to the first 2 values from the positionBuffer.
+in our vertex shader attribute will be set to the first 2 values from the `positionBuffer`.
 The second time `a_position.x` and `a_position.y` will be set to the second 2 values. The last time they will be
 set to the last 2 values.
 
@@ -362,7 +362,7 @@ Because we set `primitiveType` to `gl.TRIANGLES`, each time our vertex shader is
 WebGL will draw a triangle based on the 3 values we set `gl_Position` to. No matter what size
 our canvas is those values are in clip space coordinates that go from -1 to 1 in each direction.
 
-Because our vertex shader is simply copying our positionBuffer values to `gl_Position` the
+Because our vertex shader is simply copying our `positionBuffer` values to `gl_Position` the
 triangle will be drawn at clip space coordinates
 
       0, 0,
@@ -601,7 +601,7 @@ rotation and scale and eventually 3D then [start here](webgl-2d-translation.html
 <code>&lt;script&gt;</code> tags default to having JavaScript in them.
 You can put no type or you can put <code>type="javascript"</code> or
 <code>type="text/javascript"</code> and the browser will interpret the
-contents as JavaScript. If you put anything for else for <code>type</code> the browser ignores the
+contents as JavaScript. If you put anything else for <code>type</code> the browser ignores the
 contents of the script tag. In other words <code>type="notjs"</code>
 or <code>type="foobar"</code> have no meaning as far as the browser
 is concerned.</p>
