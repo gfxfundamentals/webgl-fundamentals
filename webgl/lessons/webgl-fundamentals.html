@@ -517,13 +517,13 @@ var offset = 0;
 var count = 3;
 gl.drawArrays(primitiveType, offset, count);
 </code></pre><p>Because the count is 3 this will execute our vertex shader 3 times. The first time <code class="notranslate" translate="no">a_position.x</code> and <code class="notranslate" translate="no">a_position.y</code>
-in our vertex shader attribute will be set to the first 2 values from the positionBuffer.
+in our vertex shader attribute will be set to the first 2 values from the <code class="notranslate" translate="no">positionBuffer</code>.
 The second time <code class="notranslate" translate="no">a_position.x</code> and <code class="notranslate" translate="no">a_position.y</code> will be set to the second 2 values. The last time they will be
 set to the last 2 values.</p>
 <p>Because we set <code class="notranslate" translate="no">primitiveType</code> to <code class="notranslate" translate="no">gl.TRIANGLES</code>, each time our vertex shader is run 3 times
 WebGL will draw a triangle based on the 3 values we set <code class="notranslate" translate="no">gl_Position</code> to. No matter what size
 our canvas is those values are in clip space coordinates that go from -1 to 1 in each direction.</p>
-<p>Because our vertex shader is simply copying our positionBuffer values to <code class="notranslate" translate="no">gl_Position</code> the
+<p>Because our vertex shader is simply copying our <code class="notranslate" translate="no">positionBuffer</code> values to <code class="notranslate" translate="no">gl_Position</code> the
 triangle will be drawn at clip space coordinates</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  0, 0,
   0, 0.5,
@@ -739,7 +739,7 @@ rotation and scale and eventually 3D then <a href="webgl-2d-translation.html">st
 <code class="notranslate" translate="no">&lt;script&gt;</code> tags default to having JavaScript in them.
 You can put no type or you can put <code class="notranslate" translate="no">type="javascript"</code> or
 <code class="notranslate" translate="no">type="text/javascript"</code> and the browser will interpret the
-contents as JavaScript. If you put anything for else for <code class="notranslate" translate="no">type</code> the browser ignores the
+contents as JavaScript. If you put anything else for <code class="notranslate" translate="no">type</code> the browser ignores the
 contents of the script tag. In other words <code class="notranslate" translate="no">type="notjs"</code>
 or <code class="notranslate" translate="no">type="foobar"</code> have no meaning as far as the browser
 is concerned.</p>
