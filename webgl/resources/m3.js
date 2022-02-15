@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 GFXFundamentals.
+ * Copyright 2021, GFXFundamentals.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -46,20 +46,42 @@
   "use strict";
 
   /**
-   * An array or typed array with 9 values.
+   * An array or typed array with 2 values.
+   * @typedef {number[]|TypedArray} Vector2
+   * @memberOf module:webgl-2d-math
+   */
+
+  /**
+   * An array or typed array with 16 values.
    * @typedef {number[]|TypedArray} Matrix3
    * @memberOf module:webgl-2d-math
    */
+
+
+  let MatType = Float32Array;
+
+  /**
+   * Sets the type this library creates for a Mat3
+   * @param {constructor} Ctor the constructor for the type. Either `Float32Array` or `Array`
+   * @return {constructor} previous constructor for Mat3
+   */
+  function setDefaultType(Ctor) {
+    const OldType = MatType;
+    MatType = Ctor;
+    return OldType;
+  }
 
   /**
    * Takes two Matrix3s, a and b, and computes the product in the order
    * that pre-composes b with a.  In other words, the matrix returned will
    * @param {module:webgl-2d-math.Matrix3} a A matrix.
    * @param {module:webgl-2d-math.Matrix3} b A matrix.
+   * @param {module:webgl-2d-math.Matrix4} [dst] optional matrix to store result
    * @return {module:webgl-2d-math.Matrix3} the result.
    * @memberOf module:webgl-2d-math
    */
-  function multiply(a, b) {
+  function multiply(a, b, dst) {
+    dst = dst || new MatType(9);
     var a00 = a[0 * 3 + 0];
     var a01 = a[0 * 3 + 1];
     var a02 = a[0 * 3 + 2];
@@ -79,46 +101,63 @@
     var b21 = b[2 * 3 + 1];
     var b22 = b[2 * 3 + 2];
 
-    return [
-      b00 * a00 + b01 * a10 + b02 * a20,
-      b00 * a01 + b01 * a11 + b02 * a21,
-      b00 * a02 + b01 * a12 + b02 * a22,
-      b10 * a00 + b11 * a10 + b12 * a20,
-      b10 * a01 + b11 * a11 + b12 * a21,
-      b10 * a02 + b11 * a12 + b12 * a22,
-      b20 * a00 + b21 * a10 + b22 * a20,
-      b20 * a01 + b21 * a11 + b22 * a21,
-      b20 * a02 + b21 * a12 + b22 * a22,
-    ];
+    dst[0] = b00 * a00 + b01 * a10 + b02 * a20;
+    dst[1] = b00 * a01 + b01 * a11 + b02 * a21;
+    dst[2] = b00 * a02 + b01 * a12 + b02 * a22;
+    dst[3] = b10 * a00 + b11 * a10 + b12 * a20;
+    dst[4] = b10 * a01 + b11 * a11 + b12 * a21;
+    dst[5] = b10 * a02 + b11 * a12 + b12 * a22;
+    dst[6] = b20 * a00 + b21 * a10 + b22 * a20;
+    dst[7] = b20 * a01 + b21 * a11 + b22 * a21;
+    dst[8] = b20 * a02 + b21 * a12 + b22 * a22;
+
+    return dst;
   }
 
 
   /**
    * Creates a 3x3 identity matrix
+   * @param {module:webgl-2d-math.Matrix4} [dst] optional matrix to store result
    * @return {module:webgl2-2d-math.Matrix3} an identity matrix
    */
-  function identity() {
-    return [
-      1, 0, 0,
-      0, 1, 0,
-      0, 0, 1,
-    ];
+  function identity(dst) {
+    dst = dst || new MatType(9);
+    dst[0] = 1;
+    dst[1] = 0;
+    dst[2] = 0;
+    dst[3] = 0;
+    dst[4] = 1;
+    dst[5] = 0;
+    dst[6] = 0;
+    dst[7] = 0;
+    dst[8] = 1;
+
+    return dst;
   }
 
   /**
    * Creates a 2D projection matrix
    * @param {number} width width in pixels
    * @param {number} height height in pixels
+   * @param {module:webgl-2d-math.Matrix4} [dst] optional matrix to store result
    * @return {module:webgl-2d-math.Matrix3} a projection matrix that converts from pixels to clipspace with Y = 0 at the top.
    * @memberOf module:webgl-2d-math
    */
-  function projection(width, height) {
+  function projection(width, height, dst) {
+    dst = dst || new MatType(9);
     // Note: This matrix flips the Y axis so 0 is at the top.
-    return [
-      2 / width, 0, 0,
-      0, -2 / height, 0,
-      -1, 1, 1,
-    ];
+    
+    dst[0] = 2 / width;
+    dst[1] = 0;
+    dst[2] = 0;
+    dst[3] = 0;
+    dst[4] = -2 / height;
+    dst[5] = 0;
+    dst[6] = -1;
+    dst[7] = 1;
+    dst[8] = 1;
+
+    return dst;
   }
 
   /**
@@ -126,26 +165,36 @@
    * @param {module:webgl-2d-math.Matrix3} the matrix to be multiplied
    * @param {number} width width in pixels
    * @param {number} height height in pixels
+   * @param {module:webgl-2d-math.Matrix4} [dst] optional matrix to store result
    * @return {module:webgl-2d-math.Matrix3} the result
    * @memberOf module:webgl-2d-math
    */
-  function project(m, width, height) {
-    return multiply(m, projection(width, height));
+  function project(m, width, height, dst) {
+    return multiply(m, projection(width, height), dst);
   }
 
   /**
    * Creates a 2D translation matrix
    * @param {number} tx amount to translate in x
    * @param {number} ty amount to translate in y
+   * @param {module:webgl-2d-math.Matrix4} [dst] optional matrix to store result
    * @return {module:webgl-2d-math.Matrix3} a translation matrix that translates by tx and ty.
    * @memberOf module:webgl-2d-math
    */
-  function translation(tx, ty) {
-    return [
-      1, 0, 0,
-      0, 1, 0,
-      tx, ty, 1,
-    ];
+  function translation(tx, ty, dst) {
+    dst = dst || new MatType(9);
+
+    dst[0] = 1;
+    dst[1] = 0;
+    dst[2] = 0;
+    dst[3] = 0;
+    dst[4] = 1;
+    dst[5] = 0;
+    dst[6] = tx;
+    dst[7] = ty;
+    dst[8] = 1;
+
+    return dst;
   }
 
   /**
@@ -153,53 +202,74 @@
    * @param {module:webgl-2d-math.Matrix3} the matrix to be multiplied
    * @param {number} tx amount to translate in x
    * @param {number} ty amount to translate in y
+   * @param {module:webgl-2d-math.Matrix4} [dst] optional matrix to store result
    * @return {module:webgl-2d-math.Matrix3} the result
    * @memberOf module:webgl-2d-math
    */
-  function translate(m, tx, ty) {
-    return multiply(m, translation(tx, ty));
+  function translate(m, tx, ty, dst) {    
+    return multiply(m, translation(tx, ty), dst);
   }
 
   /**
    * Creates a 2D rotation matrix
    * @param {number} angleInRadians amount to rotate in radians
+   * @param {module:webgl-2d-math.Matrix4} [dst] optional matrix to store result
    * @return {module:webgl-2d-math.Matrix3} a rotation matrix that rotates by angleInRadians
    * @memberOf module:webgl-2d-math
    */
-  function rotation(angleInRadians) {
+  function rotation(angleInRadians, dst) {
     var c = Math.cos(angleInRadians);
     var s = Math.sin(angleInRadians);
-    return [
-      c, -s, 0,
-      s, c, 0,
-      0, 0, 1,
-    ];
+
+    dst = dst || new MatType(9);
+
+    dst[0] = c;
+    dst[1] = -s;
+    dst[2] = 0;
+    dst[3] = s;
+    dst[4] = c;
+    dst[5] = 0;
+    dst[6] = 0;
+    dst[7] = 0;
+    dst[8] = 1;
+
+    return dst;
   }
 
   /**
    * Multiplies by a 2D rotation matrix
    * @param {module:webgl-2d-math.Matrix3} the matrix to be multiplied
    * @param {number} angleInRadians amount to rotate in radians
+   * @param {module:webgl-2d-math.Matrix4} [dst] optional matrix to store result
    * @return {module:webgl-2d-math.Matrix3} the result
    * @memberOf module:webgl-2d-math
    */
-  function rotate(m, angleInRadians) {
-    return multiply(m, rotation(angleInRadians));
+  function rotate(m, angleInRadians, dst) {
+    return multiply(m, rotation(angleInRadians), dst);
   }
 
   /**
    * Creates a 2D scaling matrix
    * @param {number} sx amount to scale in x
    * @param {number} sy amount to scale in y
+   * @param {module:webgl-2d-math.Matrix4} [dst] optional matrix to store result
    * @return {module:webgl-2d-math.Matrix3} a scale matrix that scales by sx and sy.
    * @memberOf module:webgl-2d-math
    */
-  function scaling(sx, sy) {
-    return [
-      sx, 0, 0,
-      0, sy, 0,
-      0, 0, 1,
-    ];
+  function scaling(sx, sy, dst) {
+    dst = dst || new MatType(9);
+
+    dst[0] = sx;
+    dst[1] = 0;
+    dst[2] = 0;
+    dst[3] = 0;
+    dst[4] = sy;
+    dst[5] = 0;
+    dst[6] = 0;
+    dst[7] = 0;
+    dst[8] = 1;
+
+    return dst;
   }
 
   /**
@@ -207,11 +277,12 @@
    * @param {module:webgl-2d-math.Matrix3} the matrix to be multiplied
    * @param {number} sx amount to scale in x
    * @param {number} sy amount to scale in y
+   * @param {module:webgl-2d-math.Matrix4} [dst] optional matrix to store result
    * @return {module:webgl-2d-math.Matrix3} the result
    * @memberOf module:webgl-2d-math
    */
-  function scale(m, sx, sy) {
-    return multiply(m, scaling(sx, sy));
+  function scale(m, sx, sy, dst) {
+    return multiply(m, scaling(sx, sy), dst);
   }
 
   function dot(x1, y1, x2, y2) {
@@ -262,20 +333,42 @@
     ];
   }
 
-  function inverse(m) {
-    var t00 = m[1 * 3 + 1] * m[2 * 3 + 2] - m[1 * 3 + 2] * m[2 * 3 + 1];
-    var t10 = m[0 * 3 + 1] * m[2 * 3 + 2] - m[0 * 3 + 2] * m[2 * 3 + 1];
-    var t20 = m[0 * 3 + 1] * m[1 * 3 + 2] - m[0 * 3 + 2] * m[1 * 3 + 1];
-    var d = 1.0 / (m[0 * 3 + 0] * t00 - m[1 * 3 + 0] * t10 + m[2 * 3 + 0] * t20);
-    return [
-       d * t00, -d * t10, d * t20,
-      -d * (m[1 * 3 + 0] * m[2 * 3 + 2] - m[1 * 3 + 2] * m[2 * 3 + 0]),
-       d * (m[0 * 3 + 0] * m[2 * 3 + 2] - m[0 * 3 + 2] * m[2 * 3 + 0]),
-      -d * (m[0 * 3 + 0] * m[1 * 3 + 2] - m[0 * 3 + 2] * m[1 * 3 + 0]),
-       d * (m[1 * 3 + 0] * m[2 * 3 + 1] - m[1 * 3 + 1] * m[2 * 3 + 0]),
-      -d * (m[0 * 3 + 0] * m[2 * 3 + 1] - m[0 * 3 + 1] * m[2 * 3 + 0]),
-       d * (m[0 * 3 + 0] * m[1 * 3 + 1] - m[0 * 3 + 1] * m[1 * 3 + 0]),
-    ];
+  function inverse(m, dst) {
+    dst = dst || new MatType(9);
+
+    const m00 = m[0 * 4 + 0];
+    const m01 = m[0 * 4 + 1];
+    const m02 = m[0 * 4 + 2];
+    const m10 = m[1 * 4 + 0];
+    const m11 = m[1 * 4 + 1];
+    const m12 = m[1 * 4 + 2];
+    const m20 = m[2 * 4 + 0];
+    const m21 = m[2 * 4 + 1];
+    const m22 = m[2 * 4 + 2];
+
+    const m11_x_m22 = m11 * m22;
+    const m21_x_m12 = m21 * m12;
+    const m01_x_m22 = m01 * m22;
+    const m21_x_m02 = m21 * m02;
+    const m01_x_m12 = m01 * m12;
+    const m11_x_m02 = m11 * m02;
+
+    const invDet = 1 / (
+        m00 * (m11_x_m22 - m21_x_m12) -
+        m10 * (m01_x_m22 - m21_x_m02) +
+        m20 * (m01_x_m12 - m11_x_m02));
+
+    dst[ 0] = +(m11_x_m22 - m21_x_m12) * invDet;
+    dst[ 1] = -(m10 * m22 - m20 * m12) * invDet;
+    dst[ 2] = +(m10 * m21 - m20 * m11) * invDet;
+    dst[ 3] = -(m01_x_m22 - m21_x_m02) * invDet;
+    dst[ 4] = +(m00 * m22 - m20 * m02) * invDet;
+    dst[ 5] = -(m00 * m21 - m20 * m01) * invDet;
+    dst[ 6] = +(m01_x_m12 - m11_x_m02) * invDet;
+    dst[ 7] = -(m00 * m12 - m10 * m02) * invDet;
+    dst[ 8] = +(m00 * m11 - m10 * m01) * invDet;
+
+    return dst;
   }
 
   return {
