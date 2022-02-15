@@ -27,7 +27,7 @@ TOC: 点、線、三角形
    頂点シェーダによって出力された２つのクリップ空間の頂点に対して、その2点を繋いだ線を描画する。
    もしA,B,C,D,E,F という点があれば、3本の線が引けるだろう。
 
-   <div class="webgl_center"><img src="../resources/gl-lines.svg" style="width: 400px;"></div>
+   <div class="webgl_center"><img src="resources/gl-lines.svg" style="width: 400px;"></div>
 
    仕様では`gl.lineWidth`を実行して幅をピクセルで指定すれば、線の太さを変えることができる。
    だが実際には最大幅は実装に依存し、大抵の場合1である。
@@ -42,33 +42,33 @@ TOC: 点、線、三角形
 
    つまり、A,B,C,D,E,Fという点があれば5本の線が引けるだろう。
 
-   <div class="webgl_center"><img src="../resources/gl-line-strip.svg" style="width: 400px;"></div>
+   <div class="webgl_center"><img src="resources/gl-line-strip.svg" style="width: 400px;"></div>
 
 * `LINE_LOOP`
 
    `LINE_STRIP`の例と同じで、最後の点から最初の点へ向かってさらにもう1本線を引く。
 
-   <div class="webgl_center"><img src="../resources/gl-line-loop.svg" style="width: 400px;"></div>
+   <div class="webgl_center"><img src="resources/gl-line-loop.svg" style="width: 400px;"></div>
 
 * `TRIANGLES`
 
    頂点シェーダによって出力された各クリップ空間の頂点３つに対して、その3点を使った三角形を描画する。大抵の場合このモードが使用される。
 
-   <div class="webgl_center"><img src="../resources/gl-triangles.svg" style="width: 400px;"></div>
+   <div class="webgl_center"><img src="resources/gl-triangles.svg" style="width: 400px;"></div>
 
 * `TRIANGLE_STRIP`
 
    頂点シェーダによって出力された各クリップ空間の頂点に対して、最新の３点ずつを使用した三角形を描画する。
    言い換えると、もしA,B,C,D,E,Fという6点があればA,B,C、B,C,D、C,D,E、そしてD,E,Fというように4つの三角形が描画される。
 
-   <div class="webgl_center"><img src="../resources/gl-triangle-strip.svg" style="width: 400px;"></div>
+   <div class="webgl_center"><img src="resources/gl-triangle-strip.svg" style="width: 400px;"></div>
 
 * `TRIANGLE_FAN`
 
    頂点シェーダによって出力された各クリップ空間の頂点に対して、最初の頂点1と最新の2点を使用した三角形を描画する。
    言い換えると、もしA,B,C,D,E,Fという6点があればA,B,C、A,C,D、A,D,E、そしてA,E,Fというように4つの三角形が描画される。
 
-   <div class="webgl_center"><img src="../resources/gl-triangle-fan.svg" style="width: 400px;"></div>
+   <div class="webgl_center"><img src="resources/gl-triangle-fan.svg" style="width: 400px;"></div>
 
 他の人たちの意見もあるが、私の経験上`TRIANGLE_FAN`や`TRIANGLE_STRIP`は避けた方が良いと考えている。
 これらは一部の例外的ケースにしか利用できず、これらのケースを処理するためにすべてを三角形で描画するのはそもそも割に合わない。
@@ -82,7 +82,7 @@ TOC: 点、線、三角形
 `TRIANGLE_FAN`を`TRIANGLE_STRIP`と同じように、これらを使うような状況はとても珍しい。
 例えば4つの点を繋いだ直線を4本描きたい場合を考えてみよう。
 
-<div class="webgl_center"><img src="../resources/4-lines-4-points.svg" style="width: 400px;"></div>
+<div class="webgl_center"><img src="resources/4-lines-4-points.svg" style="width: 400px;"></div>
 
 もし`LINE_STRIP`を使ったとしたら`gl.drawArrays`を4回実行し、さらにそれぞれの線の属性を設定するためにより多くの処理が必要になる。
 
