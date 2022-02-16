@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- this file is auto-generated from webgl/lessons/ja/langinfo.hanson. Do not edited directly -->
+<!-- this file is auto-generated from webgl/lessons/ja/webgl-points-lines-triangles.md. Do not edited directly -->
 <!--
 Copyright 2021 GFXFundamentals.
 All rights reserved.
@@ -8,15 +8,17 @@ Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
 met:
 
-    * Redistributions of source code must retain the above copyright
-notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above
-copyright notice, this list of conditions and the following disclaimer
-in the documentation and/or other materials provided with the
-distribution.
-    * Neither the name of GFXFundamentals. nor the names of his
-contributors may be used to endorse or promote products derived from
-this software without specific prior written permission.
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of GFXFundamentals. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -34,25 +36,79 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta property="og:title" content="WebGL Points, Lines, and Triangles" />
-<meta property="og:type" content="website" />
-<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
-<meta property="og:description" content="Details on drawing Points, Lines, and Triangles" />
-<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/ja/webgl-points-lines-triangles.html" />
 
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:site" content="@greggman" />
-<meta name="twitter:creator" content="@greggman" />
-<meta name="twitter:domain" content="webglfundamentals.org" />
-<meta name="twitter:title" content="WebGL Points, Lines, and Triangles" />
-<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ja/webgl-points-lines-triangles.html" />
-<meta name="twitter:description" content="Details on drawing Points, Lines, and Triangles" />
-<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
+<meta name="description" content="点、線、三角形の描画の詳細">
+<meta name="keywords" content="webgl graphics">
+<meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-points-lines-triangles_ja.jpg">
+
+<meta property="og:title" content="WebGLの点、線、三角形">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-points-lines-triangles_ja.jpg">
+<meta property="og:description" content="点、線、三角形の描画の詳細">
+<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/ja/webgl-points-lines-triangles.html">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@greggman">
+<meta name="twitter:creator" content="@greggman">
+<meta name="twitter:domain" content="webglfundamentals.org">
+<meta name="twitter:title" content="WebGLの点、線、三角形">
+<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ja/webgl-points-lines-triangles.html">
+<meta name="twitter:description" content="点、線、三角形の描画の詳細">
+<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-points-lines-triangles_ja.jpg">
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {
+      "@type":"WebSite",
+      "@id":"https://webglfundamentals.org/#website",
+      "url":"https://webglfundamentals.org/",
+      "name":"WebglFundamentals"
+    },
+    {
+      "@type":"ImageObject",
+      "@id":"https://webglfundamentals.org/webgl/lessons/ja/webgl-points-lines-triangles.html#primaryimage",
+      "url":"https://webglfundamentals.org/webgl/lessons/screenshots/webgl-points-lines-triangles_ja.jpg",
+      "width":1200,
+      "height":630
+    },
+    {
+      "@type":"WebPage",
+      "@id":"https://webglfundamentals.org/webgl/lessons/ja/webgl-points-lines-triangles.html#webpage",
+      "url":"https://webglfundamentals.org/webgl/lessons/ja/webgl-points-lines-triangles.html",
+      "inLanguage":"ja",
+      "name":"WebGLの点、線、三角形",
+      "keywords":"webgl graphics programming",
+      "isPartOf":{
+        "@id":"https://webglfundamentals.org/#website"
+      },
+      "primaryImageOfPage":{
+        "@id":"https://webglfundamentals.org/webgl/lessons/ja/webgl-points-lines-triangles.html#primaryimage"
+      }
+    }
+  ]
+}
+</script>
 
 
-<title>WebGL Points, Lines, and Triangles</title>
+<title>WebGLの点、線、三角形</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
-<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
+<link rel="stylesheet" href="/webgl/lessons/lang.css">
+<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css">
+
+  <link rel="alternate" hreflang="en" href="https://webglfundamentals.org/webgl/lessons/webgl-points-lines-triangles.html">
+  <link rel="alternate" hreflang="fr" href="https://webglfundamentals.org/webgl/lessons/fr/webgl-points-lines-triangles.html">
+  <link rel="alternate" hreflang="ja" href="https://webglfundamentals.org/webgl/lessons/ja/webgl-points-lines-triangles.html">
+  <link rel="alternate" hreflang="ko" href="https://webglfundamentals.org/webgl/lessons/ko/webgl-points-lines-triangles.html">
+  <link rel="alternate" hreflang="pl" href="https://webglfundamentals.org/webgl/lessons/pl/webgl-points-lines-triangles.html">
+  <link rel="alternate" hreflang="pt-br" href="https://webglfundamentals.org/webgl/lessons/pt-br/webgl-points-lines-triangles.html">
+  <link rel="alternate" hreflang="ru" href="https://webglfundamentals.org/webgl/lessons/ru/webgl-points-lines-triangles.html">
+  <link rel="alternate" hreflang="zh_cn" href="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-points-lines-triangles.html">
+
+
+
+
 </head>
 <body>
 <div class="webgl_navbar">
@@ -179,12 +235,76 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL Points, Lines, and Triangles</h1>
+    <h1>WebGLの点、線、三角形</h1>
   </div>
   <div class="lesson">
     <div class="lesson-main">
-      <p>ごめん！この記事はまだ翻訳されていない。<a href="https://github.com/gfxfundamentals/webgl-fundamentals">翻訳してくれますか？</a>! 😄</p>
-<p><a href="/webgl/lessons/webgl-points-lines-triangles.html">ここに英語版がある</a>.</p>
+      <p>このサイトの大多数が三角形を用いて描画されている。
+99%のWebGLプログラムが三角形を用いて描画されているぐらい、まず間違いなく標準的なことだ。
+しかし、より完璧に突き詰めていくために、他の例をいくつか調べてみよう。</p>
+<p><a href="webgl-fundamentals.html">最初の記事</a>ですでに述べたように、WebGLは点(points)、線(lines)、三角形(triangles)を描画する。そしてこの描画は <code class="notranslate" translate="no">gl.drawArrays</code>か <code class="notranslate" translate="no">gl.drawElements</code>を呼び出したときに実行される。
+頂点シェーダによってクリップ空間座標が出力され、WebGLは<code class="notranslate" translate="no">gl.drawArrays</code>もしくは<code class="notranslate" translate="no">gl.drawElements</code>の第一引数に基づいて点や線、三角形を描画する。</p>
+<p><code class="notranslate" translate="no">gl.drawArrays</code>や<code class="notranslate" translate="no">gl.drawElements</code>の第一引数として指定できる有効値は以下のとおり。</p>
+<ul>
+<li><p><code class="notranslate" translate="no">POINTS</code></p>
+<p> 頂点シェーダによって出力された各クリップ空間の頂点に対して、その頂点を中心とする正方形を描画する。
+ 正方形の大きさは、頂点シェーダ内にある特殊変数<code class="notranslate" translate="no">gl_PointSize</code>にピクセル単位で必要な数値を設定することで指定できる。</p>
+<p> メモ: 正方形がとれる最大サイズ（最小サイズ）は実装に依存しており、次のコードで取得できる。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  const [minSize, maxSize] = gl.getParameter(gl.ALIASED_POINT_SIZE_RANGE);
+</code></pre><p> その他の問題は <a href="webgl-drawing-without-data.html#pointsissues">ここ</a>を確認しよう。</p>
+</li>
+<li><p><code class="notranslate" translate="no">LINES</code></p>
+<p> 頂点シェーダによって出力された２つのクリップ空間の頂点に対して、その2点を繋いだ線を描画する。
+ もしA,B,C,D,E,F という点があれば、3本の線が引けるだろう。</p>
+ <div class="webgl_center"><img src="../resources/gl-lines.svg" style="width: 400px;"></div>
+
+<p> 仕様では<code class="notranslate" translate="no">gl.lineWidth</code>を実行して幅をピクセルで指定すれば、線の太さを変えることができる。
+ だが実際には最大幅は実装に依存し、大抵の場合1である。</p>
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  const [minSize, maxSize] = gl.getParameter(gl.ALIASED_LINE_WIDTH_RANGE);
+</code></pre><blockquote>
+<p>これは大抵コアデスクトップOpenGLで値が１以上が非推奨となっているからである。</p>
+</blockquote>
+</li>
+<li><p><code class="notranslate" translate="no">LINE_STRIP</code></p>
+<p> 頂点シェーダによって出力された各クリップ空間の頂点に対して、その１つ前に出力された頂点から線を描画する。</p>
+<p> つまり、A,B,C,D,E,Fという点があれば5本の線が引けるだろう。</p>
+ <div class="webgl_center"><img src="../resources/gl-line-strip.svg" style="width: 400px;"></div>
+</li>
+<li><p><code class="notranslate" translate="no">LINE_LOOP</code></p>
+<p> <code class="notranslate" translate="no">LINE_STRIP</code>の例と同じで、最後の点から最初の点へ向かってさらにもう1本線を引く。</p>
+ <div class="webgl_center"><img src="../resources/gl-line-loop.svg" style="width: 400px;"></div>
+</li>
+<li><p><code class="notranslate" translate="no">TRIANGLES</code></p>
+<p> 頂点シェーダによって出力された各クリップ空間の頂点３つに対して、その3点を使った三角形を描画する。大抵の場合このモードが使用される。</p>
+ <div class="webgl_center"><img src="../resources/gl-triangles.svg" style="width: 400px;"></div>
+</li>
+<li><p><code class="notranslate" translate="no">TRIANGLE_STRIP</code></p>
+<p> 頂点シェーダによって出力された各クリップ空間の頂点に対して、最新の３点ずつを使用した三角形を描画する。
+ 言い換えると、もしA,B,C,D,E,Fという6点があればA,B,C、B,C,D、C,D,E、そしてD,E,Fというように4つの三角形が描画される。</p>
+ <div class="webgl_center"><img src="../resources/gl-triangle-strip.svg" style="width: 400px;"></div>
+</li>
+<li><p><code class="notranslate" translate="no">TRIANGLE_FAN</code></p>
+<p> 頂点シェーダによって出力された各クリップ空間の頂点に対して、最初の頂点1と最新の2点を使用した三角形を描画する。
+ 言い換えると、もしA,B,C,D,E,Fという6点があればA,B,C、A,C,D、A,D,E、そしてA,E,Fというように4つの三角形が描画される。</p>
+ <div class="webgl_center"><img src="../resources/gl-triangle-fan.svg" style="width: 400px;"></div>
+
+</li>
+</ul>
+<p>他の人たちの意見もあるが、私の経験上<code class="notranslate" translate="no">TRIANGLE_FAN</code>や<code class="notranslate" translate="no">TRIANGLE_STRIP</code>は避けた方が良いと考えている。
+これらは一部の例外的ケースにしか利用できず、これらのケースを処理するためにすべてを三角形で描画するのはそもそも割に合わない。
+特に、おそらくあなたは法線を生成したりテクスチャ座標を生成したり頂点データを使っていろいろなことができる手法をもっていて、<code class="notranslate" translate="no">TRIANGLES</code>を使えばそれらの機能が正しく動くだろう。</p>
+<p><code class="notranslate" translate="no">TRIANGLE_FAN</code>や<code class="notranslate" translate="no">TRIANGLE_STRIP</code>を使い始めるとすぐに、これらのハンドリングのために多くの関数が必要になってくる。
+別にあなたがどのように考えて実行するかは自由だが、これが私の経験であり、AAAゲームの開発者数人からも聞いたことがある。</p>
+<p>同様に <code class="notranslate" translate="no">LINE_LOOP</code>や<code class="notranslate" translate="no">LINE_STRIP</code>も似た問題を抱えていてあまり便利ではない。
+<code class="notranslate" translate="no">TRIANGLE_FAN</code>を<code class="notranslate" translate="no">TRIANGLE_STRIP</code>と同じように、これらを使うような状況はとても珍しい。
+例えば4つの点を繋いだ直線を4本描きたい場合を考えてみよう。</p>
+<div class="webgl_center"><img src="../resources/4-lines-4-points.svg" style="width: 400px;"></div>
+
+<p>もし<code class="notranslate" translate="no">LINE_STRIP</code>を使ったとしたら<code class="notranslate" translate="no">gl.drawArrays</code>を4回実行し、さらにそれぞれの線の属性を設定するためにより多くの処理が必要になる。</p>
+<p>一方<code class="notranslate" translate="no">LINES</code>を使えば、<code class="notranslate" translate="no">gl.drawArrays</code>の1回の実行で、全ての4本の線の描画に必要な点を挿入できる。
+この方がずっと速いだろう。</p>
+<p>さらに<code class="notranslate" translate="no">LINES</code>はデバッグや単純なエフェクトとして使うなら良いが、大抵のプラットフォームにおいて1pxの幅が限界となるため、良くない手法となる場合がある。
+もしグラフのグリッド線や三次元モデリングのポリゴンのアウトラインを引きたい場合は<code class="notranslate" translate="no">LINES</code>で良いかもしれない。しかしSVGやAdobeのイラストレーターのような構造化された図を描画したい場合はうまくいかないため<a href="https://mattdesl.svbtle.com/drawing-lines-is-hard">違う方法で線をレンダリングしなければならない。普通は三角形を使用する</a>。</p>
 
     </div>
     <div class="lesson-sidebar">
@@ -200,7 +320,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </select>
 
 
-        <ul>  <li>基本</li>
+        <div id="toc">
+          <ul>  <li>基本</li>
         <ul>
           <li><a href="/webgl/lessons/ja/webgl-fundamentals.html">基本</a></li>
 <li><a href="/webgl/lessons/ja/webgl-how-it-works.html">WebGLの仕組み</a></li>
@@ -311,7 +432,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <li><a href="/webgl/lessons/ja/webgl-boilerplate.html">WebGLのひな型コード</a></li>
 <li><a href="/webgl/lessons/ja/webgl-resizing-the-canvas.html">WebGLとcanvasのリサイズ</a></li>
 <li><a href="/webgl/lessons/ja/webgl-animation.html">アニメーション</a></li>
-<li><a href="/webgl/lessons/ja/webgl-points-lines-triangles.html">Points, Lines, and Triangles</a></li>
+<li><a href="/webgl/lessons/ja/webgl-points-lines-triangles.html">点、線、三角形</a></li>
 <li><a href="/webgl/lessons/ja/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
 <li><a href="/webgl/lessons/ja/webgl-visualizing-the-camera.html">Visualizing the Camera</a></li>
 <li><a href="/webgl/lessons/ja/webgl-and-alpha.html">WebGL and Alpha</a></li>
@@ -339,13 +460,45 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <li><a href="https://twgljs.org">TWGL, A tiny WebGL helper library</a></li>
   <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">github</a></li>
 </ul>
+        </div>
+    </div>
+    <div class="lesson-comments">
+        <div>問題点/バグ? <a href="https://github.com/gfxfundamentals/webgl-fundamentals/issues">githubでissueを作成</a>.</div>
+
+        <div id="disqus_thread"></div>
+        <script>
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'WebGLの点、線、三角形';
+            var disqus_title = 'WebGLの点、線、三角形';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
     </div>
   </div>
 </div>
 </body>
+<script>
+const settings = {
+  contribTemplate: "Thank you <a href=\"${html_url}\"><img src=\"${avatar_url}\"> ${login}</a><br>for <a href=\"https://github.com/${owner}/${repo}/commits?author=${login}\">${contributions} contributions</a>",
+  owner: "gfxfundamentals",
+  repo: "webgl-fundamentals",
+};
+</script>
+<script src="/contributors.js"></script>
 <script src="/3rdparty/jquery-1.11.2.min.js"></script>
 <script src="/webgl/lessons/resources/prettify.js"></script>
-<script src="/webgl/lessons/resources/lesson.js"></script>
+<script src="/webgl/lessons/resources/lesson.js" type="module"></script>
 <script>
 (function() {
   if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
