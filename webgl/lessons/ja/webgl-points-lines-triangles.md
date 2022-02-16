@@ -7,7 +7,7 @@ TOC: 点、線、三角形
 しかし、より完璧に突き詰めていくために、他の例をいくつか調べてみよう。
 
 [最初の記事](webgl-fundamentals.html)ですでに述べたように、WebGLは点(points)、線(lines)、三角形(triangles)を描画する。そしてこの描画は `gl.drawArrays`か `gl.drawElements`を呼び出したときに実行される。
-頂点シェーダによってクリップ空間座標が出力され、WebGLは`gl.drawArrays` or `gl.drawElements`の第一引数に基づいて点や線、三角形を描画する。
+頂点シェーダによってクリップ空間座標が出力され、WebGLは`gl.drawArrays`もしくは`gl.drawElements`の第一引数に基づいて点や線、三角形を描画する。
 
 `gl.drawArrays`や`gl.drawElements`の第一引数として指定できる有効値は以下のとおり。
 
