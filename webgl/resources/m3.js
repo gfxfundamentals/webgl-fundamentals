@@ -336,37 +336,32 @@
   function inverse(m, dst) {
     dst = dst || new MatType(9);
 
-    const m00 = m[0 * 4 + 0];
-    const m01 = m[0 * 4 + 1];
-    const m02 = m[0 * 4 + 2];
-    const m10 = m[1 * 4 + 0];
-    const m11 = m[1 * 4 + 1];
-    const m12 = m[1 * 4 + 2];
-    const m20 = m[2 * 4 + 0];
-    const m21 = m[2 * 4 + 1];
-    const m22 = m[2 * 4 + 2];
+    const m00 = m[0];
+    const m01 = m[1];
+    const m02 = m[2];
+    const m10 = m[3];
+    const m11 = m[4];
+    const m12 = m[5];
+    const m20 = m[6];
+    const m21 = m[7];
+    const m22 = m[8];
 
-    const m11_x_m22 = m11 * m22;
-    const m21_x_m12 = m21 * m12;
-    const m01_x_m22 = m01 * m22;
-    const m21_x_m02 = m21 * m02;
-    const m01_x_m12 = m01 * m12;
-    const m11_x_m02 = m11 * m02;
+    const b01 =  m22 * m11 - m12 * m21;
+    const b11 = -m22 * m10 + m12 * m20;
+    const b21 =  m21 * m10 - m11 * m20;
 
-    const invDet = 1 / (
-        m00 * (m11_x_m22 - m21_x_m12) -
-        m10 * (m01_x_m22 - m21_x_m02) +
-        m20 * (m01_x_m12 - m11_x_m02));
+    const invDet = m00 * b01 + m01 * b11 + m02 * b21;
+    const det = 1.0 / invDet;
 
-    dst[ 0] = +(m11_x_m22 - m21_x_m12) * invDet;
-    dst[ 1] = -(m10 * m22 - m20 * m12) * invDet;
-    dst[ 2] = +(m10 * m21 - m20 * m11) * invDet;
-    dst[ 3] = -(m01_x_m22 - m21_x_m02) * invDet;
-    dst[ 4] = +(m00 * m22 - m20 * m02) * invDet;
-    dst[ 5] = -(m00 * m21 - m20 * m01) * invDet;
-    dst[ 6] = +(m01_x_m12 - m11_x_m02) * invDet;
-    dst[ 7] = -(m00 * m12 - m10 * m02) * invDet;
-    dst[ 8] = +(m00 * m11 - m10 * m01) * invDet;
+    dst[0] = b01 * det;
+    dst[1] = (-m22 * m01 + m02 * m21) * det;
+    dst[2] = ( m12 * m01 - m02 * m11) * det;
+    dst[3] = b11 * det;
+    dst[4] = ( m22 * m00 - m02 * m20) * det;
+    dst[5] = (-m12 * m00 + m02 * m10) * det;
+    dst[6] = b21 * det;
+    dst[7] = (-m21 * m00 + m01 * m20) * det;
+    dst[8] = ( m11 * m00 - m01 * m10) * det;
 
     return dst;
   }
