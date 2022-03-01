@@ -336,15 +336,15 @@
   function inverse(m, dst) {
     dst = dst || new MatType(9);
 
-    const m00 = m[0];
-    const m01 = m[1];
-    const m02 = m[2];
-    const m10 = m[3];
-    const m11 = m[4];
-    const m12 = m[5];
-    const m20 = m[6];
-    const m21 = m[7];
-    const m22 = m[8];
+    const m00 = m[0 * 3 + 0];
+    const m01 = m[0 * 3 + 1];
+    const m02 = m[0 * 3 + 2];
+    const m10 = m[1 * 3 + 0];
+    const m11 = m[1 * 3 + 1];
+    const m12 = m[1 * 3 + 2];
+    const m20 = m[2 * 3 + 0];
+    const m21 = m[2 * 3 + 1];
+    const m22 = m[2 * 3 + 2];
 
     const b01 =  m22 * m11 - m12 * m21;
     const b11 = -m22 * m10 + m12 * m20;
