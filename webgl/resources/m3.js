@@ -350,18 +350,18 @@
     const b11 = -m22 * m10 + m12 * m20;
     const b21 =  m21 * m10 - m11 * m20;
 
-    const invDet = m00 * b01 + m01 * b11 + m02 * b21;
-    const det = 1.0 / invDet;
+    const det = m00 * b01 + m01 * b11 + m02 * b21;
+    const invDet = 1.0 / det;
 
-    dst[0] = b01 * det;
-    dst[1] = (-m22 * m01 + m02 * m21) * det;
-    dst[2] = ( m12 * m01 - m02 * m11) * det;
-    dst[3] = b11 * det;
-    dst[4] = ( m22 * m00 - m02 * m20) * det;
-    dst[5] = (-m12 * m00 + m02 * m10) * det;
-    dst[6] = b21 * det;
-    dst[7] = (-m21 * m00 + m01 * m20) * det;
-    dst[8] = ( m11 * m00 - m01 * m10) * det;
+    dst[0] = b01 * invDet;
+    dst[1] = (-m22 * m01 + m02 * m21) * invDet;
+    dst[2] = ( m12 * m01 - m02 * m11) * invDet;
+    dst[3] = b11 * invDet;
+    dst[4] = ( m22 * m00 - m02 * m20) * invDet;
+    dst[5] = (-m12 * m00 + m02 * m10) * invDet;
+    dst[6] = b21 * invDet;
+    dst[7] = (-m21 * m00 + m01 * m20) * invDet;
+    dst[8] = ( m11 * m00 - m01 * m10) * invDet;
 
     return dst;
   }
