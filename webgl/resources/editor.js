@@ -231,9 +231,17 @@ async function getWorkerScripts(text, baseUrl, scriptInfos = {}) {
     return `${prefix}${quote}${fqURL}${quote}`;
   }
 
+  function replaceWithUUIDModule(match, prefix, quote, url) {
+    // modules are either relative, fully qualified, or a module name
+    // Skip it if it's a module name
+    return (url.startsWith('.') || url.includes('://'))
+        ? replaceWithUUID(match, prefix, quote, url)
+        : match.toString();
+  }
+
   text = text.replace(workerRE, replaceWithUUID);
   text = text.replace(importScriptsRE, replaceWithUUID);
-  text = text.replace(importRE, replaceWithUUID);
+  text = text.replace(importRE, replaceWithUUIDModule);
 
   await Promise.all(newScripts.map((url) => {
     return getScript(url, scriptInfos);
@@ -262,8 +270,8 @@ async function parseHTML(url, html) {
   const bodyRE = /<body>([^]*?)<\/body>/i;
   const inlineScriptRE = /<script>([^]*?)<\/script>/i;
   const inlineModuleScriptRE = /<script type="module">([^]*?)<\/script>/i;
-  const externalScriptRE = /(<!--(?:(?!-->)[\s\S])*?-->\n){0,1}<script\s+(type="module"\s+)?src\s*=\s*"(.*?)"\s*>\s*<\/script>/ig;
-  const dataScriptRE = /(<!--(?:(?!-->)[\s\S])*?-->\n){0,1}<script(.*?id=".*?)>([^]*?)<\/script>/ig;
+  const externalScriptRE = /(<!--(?:(?!-->)[\s\S])*?-->\n){0,1}<script\s+([^>]*?)(type="module"\s+)?src\s*=\s*"(.*?)"(.*?)>\s*<\/script>/ig;
+  const dataScriptRE = /(<!--(?:(?!-->)[\s\S])*?-->\n){0,1}<script([^>]*?type="(?!module).*?".*?)>([^]*?)<\/script>/ig;
   const cssLinkRE = /<link ([^>]+?)>/g;
   const isCSSLinkRE = /type="text\/css"|rel="stylesheet"/;
   const hrefRE = /href="([^"]+)"/;
@@ -296,18 +304,50 @@ async function parseHTML(url, html) {
   if (tm) {
     g.title = tm[1];
   }
+  
+  if (!g.title) {
+    g.title = basename(new URL(getFQUrl(url)).pathname).replace(/-/g, ' ').replace(/\.html$/, '');
+  }
 
   const scripts = [];
-  html = html.replace(externalScriptRE, function(p0, p1, type, p2) {
-    p1 = p1 || '';
-    scripts.push(`${p1}<script ${safeStr(type)}src="${p2}"></script>`);
+  html = html.replace(externalScriptRE, function(match, blockComment, beforeType, type, src, afterType) {
+    blockComment = blockComment || '';
+    scripts.push(`${blockComment}<${kScript} ${beforeType}${safeStr(type)}src="${src}"${afterType}></${kScript}>`);
     return '';
   });
 
+  const prefix = getPrefix(url);
+  const rootPrefix = getRootPrefix(url);
+
+  function addCorrectPrefix(href) {
+    return (href.startsWith('/'))
+       ? `${rootPrefix}${href}`
+       : removeDotDotSlash((`${prefix}/${href}`).replace(/\/.\//g, '/'));
+  }
+
+  function addPrefix(url) {
+    return url.indexOf('://') < 0 && !url.startsWith('data:') && url[0] !== '?'
+        ? removeDotDotSlash(addCorrectPrefix(url))
+        : url;
+  }
+
+  const importMapRE = /type\s*=["']importmap["']/;
   const dataScripts = [];
-  html = html.replace(dataScriptRE, function(p0, p1, p2, p3) {
-    p1 = p1 || '';
-    dataScripts.push(`${p1}<script ${p2}>${p3}</script>`);
+  html = html.replace(dataScriptRE, function(p0, blockComments, scriptTagAttrs, content) {
+    blockComments = blockComments || '';
+    if (importMapRE.test(scriptTagAttrs)) {
+      const imap = JSON.parse(content);
+      const imports = imap.imports;
+      if (imports) {
+        for (let [k, url] of Object.entries(imports)) {
+          if (url.indexOf('://') < 0 && !url.startsWith('data:')) {
+            imports[k] = addPrefix(url);
+          }
+        }
+      }
+      content = JSON.stringify(imap, null, '\t');
+    }
+    dataScripts.push(`${blockComments}<${kScript} ${scriptTagAttrs}>${content}</${kScript}>`);
     return '';
   });
 
@@ -327,15 +367,15 @@ async function parseHTML(url, html) {
   html = extraHTMLParsing(html, htmlParts);
 
   let links = '';
-  html = html.replace(cssLinkRE, function(p0, p1) {
-    if (isCSSLinkRE.test(p1)) {
-      const m = hrefRE.exec(p1);
+  html = html.replace(cssLinkRE, function(match, link) {
+    if (isCSSLinkRE.test(link)) {
+      const m = hrefRE.exec(link);
       if (m) {
         links += `@import url("${m[1]}");\n`;
       }
       return '';
     } else {
-      return p0;
+      return match;
     }
   });
 
@@ -467,6 +507,26 @@ function dirname(path) {
 function basename(path) {
   const ndx = path.lastIndexOf('/');
   return path.substring(ndx + 1);
+}
+
+function getRootPrefix(url) {
+  const u = new URL(url, window.location.href);
+  return u.origin;
+}
+
+function removeDotDotSlash(href) {
+  // assumes a well formed URL. In other words: 'https://..//foo.html" is a bad URL and this code would fail.
+  const url = new URL(href, window.location.href);
+  const parts = url.pathname.split('/');
+  for (;;) {
+    const dotDotNdx = parts.indexOf('..');
+    if (dotDotNdx < 0) {
+      break;
+    }
+    parts.splice(dotDotNdx - 1, 2);
+  }
+  url.pathname = parts.join('/');
+  return url.toString();
 }
 
 function resize() {
