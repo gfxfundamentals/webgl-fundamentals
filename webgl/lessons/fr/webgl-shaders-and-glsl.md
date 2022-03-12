@@ -2,32 +2,30 @@ Title: Shaders et GLSL
 Description: Présentation des shaders et de GLSL
 TOC: WebGL - Shaders et GLSL
 
-
 Cet article est la suite de [WebGL Les bases](webgl-fundamentals.html).
 Si vous ne connaissez pas le fonctionnement de WebGL vous voulez peut-être [lire ça d'abord](webgl-how-it-works.html).
 
 On a parlé des shaders et de GLSL mais sans vraiment donner de détails précis.
 Je pense que les exemples parlent d'eux-mêmes, mais essayons de clarifier un peu plus.
 
-Comme mentionné dans [Comment ça marche](webgl-how-it-works.html) WebGL exige 2 shaders pour chaque rendu. 
-Un *shader de vertex* et un *shader de fragment*. Chaque shader est une *fonction*. 
-Shader de vertex et shader de fragment sont liés ensemble par un programme de shader (ou juste programme). 
+Comme mentionné dans [Comment ça marche](webgl-how-it-works.html) WebGL exige 2 shaders pour chaque rendu.
+Un _shader de vertex_ et un _shader de fragment_. Chaque shader est une _fonction_.
+Shader de vertex et shader de fragment sont liés ensemble par un programme de shader (ou juste programme).
 Une application WebGL classique a plusieurs programmes de shader.
 
-##Le shader de vertex
+## Le shader de vertex
 
-Le rôle d'un shader de vertex est de générer des coordonnées dans l'espace de projection (clipspace). 
+Le rôle d'un shader de vertex est de générer des coordonnées dans l'espace de projection (clipspace).
 Il prend toujours la forme
 
     void main() {
        gl_Position = quelquesOperationsPourTransformerLesCoordonnées
     }
 
-Ce shader est appelé une fois par vertex. Chaque fois qu'il est exécuté la variable globale `gl_Position` 
+Ce shader est appelé une fois par vertex. Chaque fois qu'il est exécuté la variable globale `gl_Position`
 doit être renseignée avec des coordonnées.
 
-Les shaders de vertex ont besoin de données. Ils peuvent la recevoir à partir de trois espèces d'entrées : 
-
+Les shaders de vertex ont besoin de données. Ils peuvent la recevoir à partir de trois espèces d'entrées :
 
 1.  Les [attributs](#les-attributs) (données fournies par les tampons)
 2.  Les [uniforms](#les-uniforms-dans-les-shaders-de-vertex) (valeurs qui restent identiques pour tous les vertices d'un appel de rendu)
@@ -35,8 +33,8 @@ Les shaders de vertex ont besoin de données. Ils peuvent la recevoir à partir 
 
 ### Les attributs
 
-La principale façon est celle des *attributs* associés aux tampons. Les tampons et attributs ont été évoqués dans 
-[WebGL - Comment ça marche](webgl-how-it-works.html). On créé les tampons,
+La principale façon est celle des _attributs_ associés aux tampons. Les tampons et attributs ont été évoqués dans
+[WebGL - Comment ça marche](webgl-how-it-works.html). On crée les tampons,
 
     var tampon = gl.createBuffer();
 
@@ -45,13 +43,13 @@ on y met des données
     gl.bindBuffer(gl.ARRAY_BUFFER, tampon);
     gl.bufferData(gl.ARRAY_BUFFER, mesDonnees, gl.STATIC_DRAW);
 
-Ensuite, étant donné un programme de shader créé plus tôt, on créé l'emplacement de ces attributs
+Ensuite, étant donné un programme de shader créé plus tôt, on crée l'emplacement de ces attributs
 
     var emplacementPosition = gl.getAttribLocation(programme, "a_position");
 
-et on dit à WebGL comment envoyer ces données des tampons vers ces attributs
+et on dit à WebGL comment envoyer ses données des tampons vers ses attributs
 
-    // activer l'extraction de données depuis un tampon pour cet attribut 
+    // activer l'extraction de données depuis un tampon pour cet attribut
     gl.enableVertexAttribArray(emplacementPosition);
 
     var composantes = 3;  // (x, y, z)
@@ -63,7 +61,7 @@ et on dit à WebGL comment envoyer ces données des tampons vers ces attributs
 
     gl.vertexAttribPointer(emplacementPosition, composantes, type, normalisation, tailleDeLaFenetre, decalage);
 
-Dans [WebGL -Les Bases](webgl-fundamentals.html) on a vu qu'on pouvait se passer d'opération dans 
+Dans [WebGL -Les Bases](webgl-fundamentals.html) on a vu qu'on pouvait se passer d'opération dans
 le shader de vertex et juste lui envoyer des données.
 
     attribute vec4 a_position;
@@ -78,7 +76,7 @@ Les attributs peuvent être de type `float`, `vec2`, `vec3`, `vec4`, `mat2`, `ma
 
 ### Les uniforms dans les shaders de vertex
 
-Pour un vertex shader les uniforms sont des valeurs qui restent identiques pour tous les vertices d'un appel de rendu. 
+Pour un vertex shader les uniforms sont des valeurs qui restent identiques pour tous les vertices d'un appel de rendu.
 Un exemple très simple est d'ajouter un décalage dans le shader de vertex précédent :
 
     attribute vec4 a_position;
@@ -88,7 +86,7 @@ Un exemple très simple est d'ajouter un décalage dans le shader de vertex pré
        gl_Position = a_position + u_decalage;
     }
 
-Et maintenant on pourrait décaler chaque vertex d'une certaine distance. D'abord 
+Et maintenant on pourrait décaler chaque vertex d'une certaine distance. D'abord
 on définit un emplacement pour la uniform :
 
     var emplacementDecalage = gl.getUniformLocation(programme, "u_decalage");
@@ -97,7 +95,7 @@ Ensuite, on renseigne la valeur avant l'appel de rendu.
 
     gl.uniform4fv(emplacementDecalage, [1, 0, 0, 0]);  // décale vers la droite de la moitié de l'écran
 
-Les uniforms peuvent avoir de nombreux types. Pour chaque type il faut appeler une fonction spéciale pour la renseigner. 
+Les uniforms peuvent avoir de nombreux types. Pour chaque type il faut appeler une fonction spéciale pour la renseigner.
 
     gl.uniform1f (emplacementFloat, v);                 // pour les float
     gl.uniform1fv(emplacementFloat, [v]);               // pour les float ou tableaux de float
@@ -129,7 +127,7 @@ Les uniforms peuvent avoir de nombreux types. Pour chaque type il faut appeler u
 
 Il y a aussi les types `bool`, `bvec2`, `bvec3` et `bvec4`. Ils utilisent les fonctions `gl.uniform?f?` ou `gl.uniform?i?`.
 
-Notons que pour un tableau vous pouvez indiquez toutes les uniforms d'un coup. Par exemple :
+Notons que pour un tableau vous pouvez indiquer toutes les uniforms d'un coup. Par exemple :
 
     // dans le shader
     uniform vec2 u_monVec2[3];
@@ -171,7 +169,7 @@ Voire [Les textures dans les shaders de fragment](#les-textures-dans-les-shaders
 
 ## Les shaders de fragment
 
-Le rôle d'un shader de fragment est de colorier le pixel en cours. 
+Le rôle d'un shader de fragment est de colorier le pixel en cours.
 Il prend toujours la forme
 
     precision mediump float;
@@ -194,7 +192,7 @@ Voire [Les uniforms dans les shaders de vertex](#les-uniforms-dans-les-shaders-d
 
 ### Les textures dans les shaders de fragment
 
-Pour obtenir une valeur depuis une texture dans un shader, on créé une uniform de type `sampler2D`et 
+Pour obtenir une valeur depuis une texture dans un shader, on créé une uniform de type `sampler2D`et
 on utilise la fonction `texture2D`.
 
     precision mediump float;
@@ -234,11 +232,11 @@ Et de dire au shader à quelle unité on a lié notre texture
 
 ### Les varyings
 
-Une varying est un moyen de passer une valeur d'un shader de vertex à un shader de fragment 
+Une varying est un moyen de passer une valeur d'un shader de vertex à un shader de fragment
 comment nous l'avons vu [WebGL - Comment ça marche](webgl-how-it-works.html).
 
-Pour utiliser une varying on doit effectuer la même déclaration dans les deux shaders. 
-On la renseigne dans le shader de vertex. Quand WebGL colore les pixels les valeurs interpolées 
+Pour utiliser une varying on doit effectuer la même déclaration dans les deux shaders.
+On la renseigne dans le shader de vertex. Quand WebGL colore les pixels les valeurs interpolées
 sont envoyées au shader de fragment.
 
 Shader de vertex
@@ -266,16 +264,16 @@ Shader de fragment
     +  gl_FragColor = color;
     }
 
-L'exemple ci-dessus n'a pas vraiment d'intérêt. Copier les valeurs en espace de projection d'un shader à l'autre 
+L'exemple ci-dessus n'a pas vraiment d'intérêt. Copier les valeurs en espace de projection d'un shader à l'autre
 pour les utiliser comme couleurs n'a pas de sens. Mais ça fonctionne et les couleurs sont renseignées.
 
 ## GLSL
 
-GLSL signifie Graphics Library Shader Language. C'est le langage dans lequel les shaders 
-sont écrits. Il a des façons de faire qui n'ont rien à voir avec le javascript. Il est 
-conçu pour les opérations propres aux calculs graphiques. Par exemple il a des types 
-natifs comme `vec2`, `vec3`, et `vec4` qui représentent respectivement 2 valeurs, 3 valeurs et 4 valeurs. 
-De même il a `mat2`, `mat3` et `mat4` qui représentent des matrices carrées 2x2, 3x3, et 4x4. 
+GLSL signifie Graphics Library Shader Language. C'est le langage dans lequel les shaders
+sont écrits. Il a des façons de faire qui n'ont rien à voir avec le javascript. Il est
+conçu pour les opérations propres aux calculs graphiques. Par exemple il a des types
+natifs comme `vec2`, `vec3`, et `vec4` qui représentent respectivement 2 valeurs, 3 valeurs et 4 valeurs.
+De même il a `mat2`, `mat3` et `mat4` qui représentent des matrices carrées 2x2, 3x3, et 4x4.
 On peut faire nativement des opérations comme multiplier un `vec` par un scalaire.
 
     vec4 a = vec4(1, 2, 3, 4);
@@ -295,12 +293,12 @@ Il a aussi plusieurs sélecteurs pour choisir facilement les valeurs d'un vec. P
 
     vec4 v;
 
-*   `v.x` est identique à `v.s`, à `v.r` et à `v[0]`.
-*   `v.y` est identique à `v.t`, à `v.g` et à `v[1]`.
-*   `v.z` est identique à `v.p`, à `v.b` et à `v[2]`.
-*   `v.w` est identique à `v.q`, à `v.a` et à `v[3]`.
+- `v.x` est identique à `v.s`, à `v.r` et à `v[0]`.
+- `v.y` est identique à `v.t`, à `v.g` et à `v[1]`.
+- `v.z` est identique à `v.p`, à `v.b` et à `v[2]`.
+- `v.w` est identique à `v.q`, à `v.a` et à `v[3]`.
 
-Ce qui permet de *mixer* les composantes d'un vec, donc de les exclure ou de les répéter
+Ce qui permet de _mixer_ les composantes d'un vec, donc de les exclure ou de les répéter
 
     v.yyyy
 
@@ -333,15 +331,15 @@ La bonne façon de faire pour ça :
     float f = 1.0;      // indiquer une décimale bien sûr
     float f = float(1)  // ou transformer l'entier en décimale
 
-L'exemple précédent de `vec4(v.rgb, 1)` reste valide car `vec4` convertit naturellement ses composantes en décimales, 
+L'exemple précédent de `vec4(v.rgb, 1)` reste valide car `vec4` convertit naturellement ses composantes en décimales,
 comme `float(1)`.
 
-GLSL a aussi un tas de fonctions natives. Nombre d'entre elles agissent sur plusieurs composantes 
+GLSL a aussi un tas de fonctions natives. Nombre d'entre elles agissent sur plusieurs composantes
 d'un coup. Par exemple :
 
     T sin(T angle)
 
-T signifie que la valeur peut être un `float`, un `vec2`, un `vec3` ou un `vec4`. Si on lui donne un `vec4` on reçoit un `vec4` en retour, 
+T signifie que la valeur peut être un `float`, un `vec2`, un `vec3` ou un `vec4`. Si on lui donne un `vec4` on reçoit un `vec4` en retour,
 avec le sinus de chacun de ses composants. En d'autres termes si `v` est un `vec4` alors
 
     vec4 s = sin(v);
@@ -350,7 +348,7 @@ est identique à
 
     vec4 s = vec4(sin(v.x), sin(v.y), sin(v.z), sin(v.w));
 
-Parfois un argument est un float est le reste `T`. Ca signifie que le float sera appliqué à tous les composants. 
+Parfois un argument est un float est le reste `T`. Ca signifie que le float sera appliqué à tous les composants.
 Par exemple si `v1` et `v2` sont des `vec4` et `f` est un float
 
     vec4 m = mix(v1, v2, f);
@@ -363,19 +361,19 @@ est identique à
       mix(v1.z, v2.z, f),
       mix(v1.w, v2.w, f));
 
-Il y a une liste de toutes les fonctions GLSL sur la dernière page  de [la référence WebGL](https://www.khronos.org/files/webgl/webgl-reference-card-1_0.pdf). Si vous aimez les bon gros contenus bruts vous pouvez tenter [la spéc GLSL](https://www.khronos.org/files/opengles_shading_language.pdf).
+Il y a une liste de toutes les fonctions GLSL sur la dernière page de [la référence WebGL](https://www.khronos.org/files/webgl/webgl-reference-card-1_0.pdf). Si vous aimez les bon gros contenus bruts vous pouvez tenter [la spéc GLSL](https://www.khronos.org/files/opengles_shading_language.pdf).
 
 ## Conclusion
 
-C'est le bout de cette série d'articles. WebGL c'est surtout écrire des shaders, 
-fournir les données à ces shaders et enfin exécuter `gl.drawArrays` ou `gl.drawElements` 
-pour que WebGL en déduise les vertices en appelant le shader de vertex pour chacun d'entre eux, et 
+C'est le bout de cette série d'articles. WebGL c'est surtout écrire des shaders,
+fournir les données à ces shaders et enfin exécuter `gl.drawArrays` ou `gl.drawElements`
+pour que WebGL en déduise les vertices en appelant le shader de vertex pour chacun d'entre eux, et
 colorie les pixels avec le fragment shader.
 
-En fait les shaders demandent plusieurs lignes de code. Ces lignes sont les mêmes dans la plupart des programmes 
+En fait les shaders demandent plusieurs lignes de code. Ces lignes sont les mêmes dans la plupart des programmes
 et une fois écrites on peut les oublier [comme les méthodes décrites ici, pour compiler des shaders et les lier à un programme](webgl-boilerplate.html).
 
-Arrivé ici vous avez deux choix : si vous êtes intéressé par le traitement 
+Arrivé ici vous avez deux choix : si vous êtes intéressé par le traitement
 d'image je vais vous montrer [comment faire du traitement d'images 2D](webgl-image-processing.html).
-Si vous voulez apprendre les translations, rotations et changements d'échelle alors 
+Si vous voulez apprendre les translations, rotations et changements d'échelle alors
 [c'est par ici](webgl-2d-translation.html).
