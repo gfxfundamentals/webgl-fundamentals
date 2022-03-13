@@ -52,7 +52,7 @@ TOC: WebGL 3D - Текстуры
 
     // получаем ссылку на данные вершины
     var positionLocation = gl.getAttribLocation(program, "a_position");
-    *var texcoordLocation = gl.getAttribLocation(program, "a_texcoords");
+    *var texcoordLocation = gl.getAttribLocation(program, "a_texcoord");
 
     ...
 

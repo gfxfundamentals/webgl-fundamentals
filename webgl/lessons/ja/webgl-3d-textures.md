@@ -52,7 +52,7 @@ WebGLでテクスチャを使用するにはどうすればよいだろう。
 
     // テクスチャ座標の書き込み先となる、シェーダーのattributeのロケーションを得る。
     var positionLocation = gl.getAttribLocation(program, "a_position");
-    *var texcoordLocation = gl.getAttribLocation(program, "a_texcoords");
+    *var texcoordLocation = gl.getAttribLocation(program, "a_texcoord");
 
     ...
 

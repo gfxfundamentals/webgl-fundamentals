@@ -48,7 +48,7 @@ WebGL에서 어떻게 텍스처를 적용할까요?
 
     // 정점 데이터가 어디로 가야하는지 탐색
     var positionLocation = gl.getAttribLocation(program, "a_position");
-    *var texcoordLocation = gl.getAttribLocation(program, "a_texcoords");
+    *var texcoordLocation = gl.getAttribLocation(program, "a_texcoord");
 
     ...
 

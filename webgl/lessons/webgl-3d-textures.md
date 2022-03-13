@@ -53,7 +53,7 @@ We need to setup the texture coordinates
 
     // look up where the vertex data needs to go.
     var positionLocation = gl.getAttribLocation(program, "a_position");
-    *var texcoordLocation = gl.getAttribLocation(program, "a_texcoords");
+    *var texcoordLocation = gl.getAttribLocation(program, "a_texcoord");
 
     ...
 

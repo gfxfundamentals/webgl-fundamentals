@@ -47,7 +47,7 @@ TOC: WebGL 三维纹理
 
     // 找到顶点坐标中的属性
     var positionLocation = gl.getAttribLocation(program, "a_position");
-    *var texcoordLocation = gl.getAttribLocation(program, "a_texcoords");
+    *var texcoordLocation = gl.getAttribLocation(program, "a_texcoord");
 
     ...
 
