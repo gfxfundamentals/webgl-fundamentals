@@ -143,7 +143,6 @@ export default function main({webglVersion, examples}) {
   globals.globalUI = createGlobalUI(document.querySelector('#global-state'));
   moveToFront(defaultVAOInfo.ui.elem.parentElement);
 
-
   function getUIById(id) {
     const [base, part] = id.split('.');
     switch (base) {
@@ -457,17 +456,25 @@ export default function main({webglVersion, examples}) {
     const {ui} = getCurrentVAOInfo();
     ui.updateAttributes();
     globals.globalUI.attribValueState.updateAttribValue(args[0]);
+    const prog = gl.getParameter(gl.CURRENT_PROGRAM);
+    updateProgramAttributesAndUniforms(prog);
   });
   wrapFn('disableVertexAttribArray', function(origFn, ...args) {
     origFn.call(this, ...args);
     const {ui} = getCurrentVAOInfo();
     ui.updateAttributes();
     globals.globalUI.attribValueState.updateAttribValue(args[0]);
+    const prog = gl.getParameter(gl.CURRENT_PROGRAM);
+    updateProgramAttributesAndUniforms(prog);
   });
   wrapFn('vertexAttribPointer', function(origFn, ...args) {
     origFn.call(this, ...args);
     const {ui} = getCurrentVAOInfo();
     ui.updateAttributes();
+  });
+  wrapFn('vertexAttrib4fv', function(origFn, ...args) {
+    origFn.call(this, ...args);
+    globals.globalUI.attribValueState.updateAttribValue(args[0]);
   });
   wrapFn('activeTexture', function(origFn, unit) {
     origFn.call(this, unit);
