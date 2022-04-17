@@ -170,6 +170,123 @@ function createTextureUnits(parent, maxUnits = 8) {
   };
 }
 
+function createAttribValues(parent, maxAttribs = 8) {
+  const expander = createExpander(parent, 'Attribute Values', {}, `
+  Each attribute has a value that is used if it is NOT
+  enabled via --gl.enableVertexAttribArray--. 
+
+  For example you have a shader with position and color attributes
+
+  ---glsl
+  attribute vec4 position;
+  attribute vec4 color;
+  ---
+
+  To draw a shape where every vertex gets a different color you'd setup
+  the color attribute with a buffer 
+
+  ---js
+  gl.bindBuffer(gl.ARRAY_BUFFER, bufferWithColorData);
+  gl.vertexAttribPointer(colorLoc, 4, gl.FLOAT, false, 0, 0);
+  gl.enableVertexAttribArray(colorLoc);  // use the data from the buffer
+  ---
+
+  To draw a shape where every vertex gets the same color you can
+  disable the attribute and set its value
+
+  ---js
+  gl.disableVertexAttribArray(colorLoc);
+  gl.vertexAttrib4fv(colorLoc, colorForAllVertices);
+  ---
+
+  > Note: Only 8 attribute values are shown here for space reasons but 
+  the actual number of attribute available you can look up with
+  --gl.getParameter(gl.MAX_VERTEX_ATTRIBS)--
+  which will be a minimum of ${globals.isWebGL2 ? 16 : 8}.
+
+  > Note: It's arguably
+  confusing that this value is not part of a vertex array
+  since the flag to use it or not is in the vertex array.
+
+  `);
+
+  const tbody = createTable(expander, ['value']);
+  tbody.parentElement.classList.add('attrib-values');
+  const arrows = [];
+
+  for (let i = 0; i < maxAttribs; ++i) {
+    arrows.push({});
+    const tr = addElem('tr', tbody);
+    addElem('td', tr, {
+      className: 'used-when-disabled',
+      textContent: '0, 0, 0, 1',
+      dataset: {
+        help: helpToMarkdown(`
+          value for this attribute when disabled (the default)
+
+          ---js
+          const loc = gl.getAttribLocation(program, 'someAttrib'); // ${i};
+          gl.disableVertexAttribArray(loc);       // disable if it's not already disabled
+          gl.vertexAttrib4fv(loc, [1, 2, 3, 4]);  // set the value
+          ---
+
+          note that the enabled/disabled state is part of
+          the current vertex array but the values when disabled
+          are global state.
+        `),
+      },
+    });
+  }
+
+  const updateAttribValue = loc => {
+    const row = tbody.rows[loc];
+    const cell = row.cells[0];
+    const enabled = gl.getVertexAttrib(loc, gl.VERTEX_ATTRIB_ARRAY_ENABLED);
+    row.classList.toggle('attrib-enable', enabled);
+
+    const value = gl.getVertexAttrib(loc, gl.CURRENT_VERTEX_ATTRIB).join(', ');
+    if (updateElemAndFlashExpanderIfClosed(cell, value)) {
+      /*
+        Note: This code is copied and pasted from the texture unit code above
+        so it would have to be adapted but, None of the examples use these
+        values, even for a moment, I haven't bothered to make the arrows work.
+
+        To work, arrows from the current program to an attribute need to change
+        so if enabled they connect as they do now but if disable they connect
+        to these values.
+
+        const oldArrow = arrows[unit][targetBinding];
+        if (oldArrow) {
+          arrowManager.remove(oldArrow);
+          arrows[unit][targetBinding] = null;
+        }
+        if (texture) {
+          const targetInfo = getWebGLObjectInfo(texture);
+          if (!targetInfo.deleted) {
+            arrows[unit][targetBinding] = arrowManager.add(
+                cell,
+                targetInfo.ui.elem.querySelector('.name'),
+                getColorForWebGLObject(texture, targetInfo.ui.elem, unit / maxUnits),
+                {offset: { start: {x: 0, y: colNdx * 2 - 4}}});
+          }
+        }
+      */
+    }
+  };
+
+  const updateAttribValues = () => {
+    for (let i = 0; i < maxAttribs; ++i) {
+      updateAttribValue(i);
+    }
+  };
+
+  return {
+    elem: expander,
+    updateAttribValue,
+    updateAttribValues,
+  };
+}
+
 function createUniformBufferBindings(parent, maxUnits = 8) {
   const expander = createExpander(parent, 'Uniform Buffer Bindings', {}, `
   In each program you tell each uniform block which index to find
@@ -336,6 +453,7 @@ export function createGlobalUI(globalStateElem) {
     commonState: createStateUI(globalState.commonState, globalStateElem, 'common state', globalStateQuery),
     textureUnits: createTextureUnits(globalStateElem, 8),
     clearState: createStateUI(globalState.clearState, globalStateElem, 'clear state', globalStateQuery),
+    attribValueState: createAttribValues(globalStateElem, 8),
     ...globals.isWebGL2 && {
       transformFeedbackState: createStateUI(globalState.transformFeedbackState, globalStateElem, 'transform feedback', globalStateQuery),
       uniformBufferBindingsState: createUniformBufferBindings(globalStateElem, Math.min(8, gl.getParameter(gl.MAX_UNIFORM_BUFFER_BINDINGS))),

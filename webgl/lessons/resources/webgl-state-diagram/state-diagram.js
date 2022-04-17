@@ -456,11 +456,13 @@ export default function main({webglVersion, examples}) {
     origFn.call(this, ...args);
     const {ui} = getCurrentVAOInfo();
     ui.updateAttributes();
+    globals.globalUI.attribValueState.updateAttribValue(args[0]);
   });
   wrapFn('disableVertexAttribArray', function(origFn, ...args) {
     origFn.call(this, ...args);
     const {ui} = getCurrentVAOInfo();
     ui.updateAttributes();
+    globals.globalUI.attribValueState.updateAttribValue(args[0]);
   });
   wrapFn('vertexAttribPointer', function(origFn, ...args) {
     origFn.call(this, ...args);
@@ -488,6 +490,7 @@ export default function main({webglVersion, examples}) {
     const {ui} = getCurrentVAOInfo();
     moveToFront(ui.elem);
     updateProgramAttributesAndUniforms(gl.getParameter(gl.CURRENT_PROGRAM));
+    globals.globalUI.attribValueState.updateAttribValues();
   });
   wrapFn('useProgram', function(origFn, vao) {
     const oldProg = gl.getParameter(gl.CURRENT_PROGRAM);
