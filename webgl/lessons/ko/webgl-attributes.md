@@ -132,12 +132,17 @@ gl.bindAttribLocation(program, 7, 'position');
 사용하는 경우가 드물기 때문에 위 설명에서 생략했는데요.
 
 ```js
+attributeValues: [
+  [0, 0, 0, 1],
+  [0, 0, 0, 1],
+  ...
+];
 attributes: [
    { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ?,
-   　divisor: 0, value: [0, 0, 0, 1], },
+   　divisor: 0, },
    { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ?,
-   　divisor: 0, value: [0, 0, 0, 1], },
-   ..
+   　divisor: 0, },
+   ...
 ```
 
 다양한 `gl.vertexAttribXXX` 함수로 각 속성의 값을 설정할 수 있습니다.

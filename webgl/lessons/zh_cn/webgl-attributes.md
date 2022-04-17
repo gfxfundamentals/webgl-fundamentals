@@ -129,12 +129,17 @@ gl.bindAttribLocation(program, 7, 'position');
 上面没有提到的是，每个属性都有默认值。没有提到是因为通常不这么使用。
 
 ```js
+attributeValues: [
+  [0, 0, 0, 1],
+  [0, 0, 0, 1],
+  ...
+];
 attributes: [
    { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ?,
-   　divisor: 0, value: [0, 0, 0, 1], },
+   　divisor: 0, },
    { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ?,
-   　divisor: 0, value: [0, 0, 0, 1], },
-   ..
+   　divisor: 0, },
+   ...
 ```
 
 可以通过各个 `gl.vertexAttribXXX` 函数来设置每个属性的值。当 `enable` 为 false 时，该值被使用。

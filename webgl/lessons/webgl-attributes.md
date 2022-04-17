@@ -138,12 +138,17 @@ Missing from the description above is that each attribute also has a default
 value. It is left out above because it is uncommon to use it.
 
 ```js
+attributeValues: [
+  [0, 0, 0, 1],
+  [0, 0, 0, 1],
+  ...
+];
 attributes: [
    { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ?,
-   　divisor: 0, value: [0, 0, 0, 1], },
+   　divisor: 0, },
    { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ?,
-   　divisor: 0, value: [0, 0, 0, 1], },
-   ..
+   　divisor: 0, },
+   ...
 ```
 You can set each attribute's value with the various `gl.vertexAttribXXX`
 functions. The value is used when `enable` is false. When `enable` is true, data for
@@ -254,3 +259,8 @@ const maxAttributes = gl.getParameter(gl.MAX_VERTEX_ATTRIBS);
 If you decide to use more than 8 you probably want to check how
 many are actually supported and inform the user if their
 machine doesn't have enough or else fallback to simpler shaders.
+
+## State Diagram
+
+If all of this is hard to follow this [state diagram](/webgl/lessons/resources/webgl-state-diagram.html)
+might help visualize what's happening.
