@@ -133,13 +133,15 @@ attributeValues: [
   [0, 0, 0, 1],
   [0, 0, 0, 1],
   ...
-];
-attributes: [
+],
+vertexArray: {
+  attributes: [
    { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ?,
    　divisor: 0, },
    { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ?,
    　divisor: 0, },
    ...
+
 ```
 
 可以通过各个 `gl.vertexAttribXXX` 函数来设置每个属性的值。当 `enable` 为 false 时，该值被使用。

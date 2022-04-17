@@ -142,13 +142,15 @@ attributeValues: [
   [0, 0, 0, 1],
   [0, 0, 0, 1],
   ...
-];
-attributes: [
+],
+vertexArray: {
+  attributes: [
    { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ?,
    　divisor: 0, },
    { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ?,
    　divisor: 0, },
    ...
+
 ```
 You can set each attribute's value with the various `gl.vertexAttribXXX`
 functions. The value is used when `enable` is false. When `enable` is true, data for

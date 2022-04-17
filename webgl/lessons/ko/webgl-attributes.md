@@ -136,13 +136,15 @@ attributeValues: [
   [0, 0, 0, 1],
   [0, 0, 0, 1],
   ...
-];
-attributes: [
+],
+vertexArray: {
+  attributes: [
    { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ?,
    　divisor: 0, },
    { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ?,
    　divisor: 0, },
    ...
+
 ```
 
 다양한 `gl.vertexAttribXXX` 함수로 각 속성의 값을 설정할 수 있습니다.
