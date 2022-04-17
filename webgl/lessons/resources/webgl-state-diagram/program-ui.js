@@ -96,7 +96,10 @@ function createProgramAttributes(parent, gl, program) {
       addElem('td', tr, {textContent: index, dataset: {help}});
 
       if (isCurrent) {
-        const target = vaoInfo.ui.elem.querySelector('tbody').rows[index]; /*.cells[bindPointIndex]; */
+        const enabled = gl.getVertexAttrib(ii, gl.VERTEX_ATTRIB_ARRAY_ENABLED);
+        const target = enabled
+            ? vaoInfo.ui.elem.querySelector('tbody').rows[index] /*.cells[bindPointIndex]; */
+            : globals.globalUI.attribValueState.elem.querySelector('tbody').rows[index];
         arrows.push(arrowManager.add(
             tr,
             target,

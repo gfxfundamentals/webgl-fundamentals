@@ -3,6 +3,7 @@
 import {
   addElem,
   createTable,
+  formatUniformValue,
   getColorForWebGLObject,
   helpToMarkdown,
 } from './utils.js';
@@ -244,8 +245,8 @@ function createAttribValues(parent, maxAttribs = 8) {
     const enabled = gl.getVertexAttrib(loc, gl.VERTEX_ATTRIB_ARRAY_ENABLED);
     row.classList.toggle('attrib-enable', enabled);
 
-    const value = gl.getVertexAttrib(loc, gl.CURRENT_VERTEX_ATTRIB).join(', ');
-    if (updateElemAndFlashExpanderIfClosed(cell, value)) {
+    const value = gl.getVertexAttrib(loc, gl.CURRENT_VERTEX_ATTRIB);
+    if (updateElemAndFlashExpanderIfClosed(cell, formatUniformValue(value))) {
       /*
         Note: This code is copied and pasted from the texture unit code above
         so it would have to be adapted but, None of the examples use these

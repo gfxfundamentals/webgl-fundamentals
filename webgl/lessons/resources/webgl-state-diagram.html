@@ -1339,6 +1339,147 @@ gl.useProgram(prog2);
 // draw 9 points
 gl.drawArrays(gl.POINTS, 0, 9);
 </script>
+<script id="disabled-vertex-attrib" type="not-js">
+'use strict';
+
+const canvas = document.querySelector('canvas');
+const gl = canvas.getContext('webgl');
+
+const vsGLSL = `
+  attribute vec4 position;
+  attribute vec4 color;
+
+  uniform vec4 offset;
+
+  varying vec4 v_color;
+
+  void main() {
+    gl_Position = position + offset;
+    v_color = color;
+  }
+`;
+
+const fsGLSL = `
+  precision highp float;
+  varying vec4 v_color;
+  void main() {
+    gl_FragColor = v_color;
+  }
+`;
+
+const createShader = function(gl, type, glsl) {
+  const shader = gl.createShader(type)
+  gl.shaderSource(shader, glsl)
+  gl.compileShader(shader)
+  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+    throw new Error(gl.getShaderInfoLog(shader))
+  }
+  return shader
+};
+
+const compileShadersAndLinkProgram = function(gl, prg, vsGLSL, fsGLSL) {
+  const vertexShader = createShader(gl, gl.VERTEX_SHADER, vsGLSL)
+  const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fsGLSL)
+  gl.attachShader(prg, vertexShader)
+  gl.attachShader(prg, fragmentShader)
+  gl.linkProgram(prg)
+  if (!gl.getProgramParameter(prg, gl.LINK_STATUS)) {
+    throw new Error(gl.getProgramInfoLog(prg))
+  }
+  // NOTE! These are only here to unclutter the diagram.
+  // It is safe to detach and delete shaders once
+  // a program is linked though it is arguably not common.
+  // and I usually don't do it.
+  gl.detachShader(prg, vertexShader)
+  gl.deleteShader(vertexShader)
+  gl.detachShader(prg, fragmentShader)
+  gl.deleteShader(fragmentShader)
+  return prg
+};
+
+const prog = gl.createProgram();
+compileShadersAndLinkProgram(gl, prog, vsGLSL, fsGLSL);
+const positionLoc = gl.getAttribLocation(prog, 'position');
+const colorLoc = gl.getAttribLocation(prog, 'color');
+const offsetLoc = gl.getUniformLocation(prog, 'offset');
+
+// vertex positions for triangle
+const vertexPositions = new Float32Array([
+   0.0,  0.4,
+  -0.4, -0.4,
+   0.4, -0.4,
+]);
+
+const vertexColors = new Float32Array([
+  1, 1, 0, 1,  // yellow
+  0, 1, 1, 1,  // cyan
+  1, 0, 1, 1,  // magenta
+]);
+
+const positionBuffer = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+gl.bufferData(gl.ARRAY_BUFFER, vertexPositions, gl.STATIC_DRAW);
+
+const colorBuffer = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+gl.bufferData(gl.ARRAY_BUFFER, vertexColors, gl.STATIC_DRAW);
+
+// this is not needed. It's just here to unclutter the diagram
+gl.bindBuffer(gl.ARRAY_BUFFER, null);
+
+// above this line is initialization code
+// --------------------------------------
+// below is rendering code.
+
+// --------------------------------------
+// First draw a triangle with a different color for each vertex
+
+// set the attributes
+gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+gl.enableVertexAttribArray(positionLoc);
+gl.vertexAttribPointer(
+    positionLoc, // location
+    2,           // size (components per iteration)
+    gl.FLOAT,    // type of to get from buffer
+    false,       // normalize
+    0,           // stride (bytes to advance each iteration)
+    0,           // offset (bytes from start of buffer)
+);
+
+gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+gl.enableVertexAttribArray(colorLoc);
+gl.vertexAttribPointer(
+    colorLoc, // location
+    4,        // size (components per iteration)
+    gl.FLOAT, // type of to get from buffer
+    false,    // normalize
+    0,        // stride (bytes to advance each iteration)
+    0,        // offset (bytes from start of buffer)
+);
+
+// this is not needed. It's just here to unclutter the diagram
+gl.bindBuffer(gl.ARRAY_BUFFER, null);
+
+gl.useProgram(prog);
+
+// draw on left
+gl.uniform4fv(offsetLoc, [-0.5, 0, 0, 0]);
+
+// draw 3 vertices (1 triangle)
+gl.drawArrays(gl.TRIANGLES, 0, 3);
+
+// Now draw the triangle again in a solid color 
+// by turning off the color attribute and setting
+// an attribute values
+gl.disableVertexAttribArray(colorLoc);
+gl.vertexAttrib4fv(colorLoc, [0.3, 0.6, 0.9, 1]);
+
+// draw on right
+gl.uniform4fv(offsetLoc, [0.5, 0, 0, 0]);
+
+// draw 3 vertices (1 triangle)
+gl.drawArrays(gl.TRIANGLES, 0, 3);
+</script>
 <script src="/webgl/resources/chroma.min.js"></script>
 <script src="/3rdparty/showdown.min.js"></script>
 <script src="/3rdparty/prism.js" data-manual></script>
@@ -1444,6 +1585,22 @@ webglStateDiagram({
         { note: 'p1-buffer',    base: 'canvas',         x: 'left:left+70',   y: 'top:bottom+10', },
         { note: 'p2-buffer',    base: 'position1Buffer',x: 'left:left+0',    y: 'top:bottom+10', },
         { note: 'c-buffer',     base: 'position2Buffer',x: 'left:left-0',    y: 'top:bottom+10', },
+      ],
+    },
+    'disabled-vertex-attrib': {
+      name: 'Disabled Vertex Attrib',
+      adjust: [
+        {cmd: 'expand',   id: 'globalUI.attribValueState'},
+      ],
+      windowPositions: [
+        { note: 'canvas',       base: '#diagram',       x: 'right:right-10', y: 'top:top+10', },
+        { note: 'vertex-array', base: '#diagram',       x: 'left:left+460',   y: 'bottom:bottom-10', },
+        { note: 'global-state', base: '#diagram',       x: 'left:left+10',   y: 'top:top+10', },
+        { note: 'program',      base: 'global state',   x: 'left:right+60',  y: 'top:top+0', },
+        { note: 'v-shader',     base: 'canvas',         x: 'left:left-50',   y: 'top:bottom+10', },
+        { note: 'f-shader',     base: 'vertexShader',   x: 'left:left-10',   y: 'top:bottom-90', },
+        { note: 'p-buffer',     base: 'canvas',         x: 'left:left+70',   y: 'top:bottom+10', },
+        { note: 'c-buffer',     base: 'positionBuffer', x: 'left:left-0',    y: 'top:bottom+10', },
       ],
     },
   },
