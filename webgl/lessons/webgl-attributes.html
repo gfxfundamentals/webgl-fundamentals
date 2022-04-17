@@ -343,12 +343,18 @@ gl.bindAttribLocation(program, 7, &#39;position&#39;);
 <h2 id="full-attribute-state">Full Attribute State</h2>
 <p>Missing from the description above is that each attribute also has a default
 value. It is left out above because it is uncommon to use it.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-js">attributes: [
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">attributeValues: [
+  [0, 0, 0, 1],
+  [0, 0, 0, 1],
+  ...
+],
+vertexArray: {
+  attributes: [
    { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ?,
-   　divisor: 0, value: [0, 0, 0, 1], },
+   　divisor: 0, },
    { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ?,
-   　divisor: 0, value: [0, 0, 0, 1], },
-   ..
+   　divisor: 0, },
+   ...
 </code></pre>
 <p>You can set each attribute&#39;s value with the various <code class="notranslate" translate="no">gl.vertexAttribXXX</code>
 functions. The value is used when <code class="notranslate" translate="no">enable</code> is false. When <code class="notranslate" translate="no">enable</code> is true, data for
@@ -424,6 +430,9 @@ how many are supported by calling</p>
 <p>If you decide to use more than 8 you probably want to check how
 many are actually supported and inform the user if their
 machine doesn&#39;t have enough or else fallback to simpler shaders.</p>
+<h2 id="state-diagram">State Diagram</h2>
+<p>If all of this is hard to follow this <a href="/webgl/lessons/resources/webgl-state-diagram.html">state diagram</a>
+might help visualize what&#39;s happening.</p>
 
     </div>
     <div class="lesson-sidebar">

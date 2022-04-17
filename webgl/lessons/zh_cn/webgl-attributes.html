@@ -335,12 +335,18 @@ gl.bindAttribLocation(program, 7, &#39;position&#39;);
 </code></pre>
 <h2 id="-">完整的属性状态</h2>
 <p>上面没有提到的是，每个属性都有默认值。没有提到是因为通常不这么使用。</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-js">attributes: [
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">attributeValues: [
+  [0, 0, 0, 1],
+  [0, 0, 0, 1],
+  ...
+],
+vertexArray: {
+  attributes: [
    { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ?,
-   　divisor: 0, value: [0, 0, 0, 1], },
+   　divisor: 0, },
    { enable: ?, type: ?, size: ?, normalize: ?, stride: ?, offset: ?, buffer: ?,
-   　divisor: 0, value: [0, 0, 0, 1], },
-   ..
+   　divisor: 0, },
+   ...
 </code></pre>
 <p>可以通过各个 <code class="notranslate" translate="no">gl.vertexAttribXXX</code> 函数来设置每个属性的值。当 <code class="notranslate" translate="no">enable</code> 为 false 时，该值被使用。
 当 <code class="notranslate" translate="no">enable</code> 为 true 时，属性从分配的缓冲取值。</p>
