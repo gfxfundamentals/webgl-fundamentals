@@ -63,26 +63,12 @@ export function createVertexArrayDisplay(parent, name /*, webglObject */) {
       dataset: {
         help: helpToMarkdown(`
         * --true-- this attribute uses data from a buffer.
-        * --false-- it uses --value--.
+        * --false-- it uses the corresponding global state attribute value.
 
         ---js
         const index = gl.getAttribLocation(program, 'someAttrib'); // ${i}
         gl.enableVertexAttribArray(index);   // turn on
         gl.disableVertexAttribArray(index);  // turn off
-        ---
-
-        ${vaoNote}`),
-      },
-    });
-    addElem('td', tr, {
-      className: 'used-when-disabled',
-      dataset: {
-        help: helpToMarkdown(`
-        The value used if this attribute is disabled.
-
-        ---js
-        const index = gl.getAttribLocation(program, 'someAttrib'); // ${i}
-        gl.vertexAttrib4fv(index, [1, 2, 3, 4]);
         ---
 
         ${vaoNote}`),
@@ -248,7 +234,6 @@ export function createVertexArrayDisplay(parent, name /*, webglObject */) {
   const formatters = globals.isWebGL2
       ? [
           formatBoolean,      // enable
-          formatUniformValue, // value
           formatUniformValue, // size
           formatEnum,         // type
           formatBoolean,      // integer
@@ -260,7 +245,6 @@ export function createVertexArrayDisplay(parent, name /*, webglObject */) {
         ]
       : [
           formatBoolean,      // enable
-          formatUniformValue, // value
           formatUniformValue, // size
           formatEnum,         // type
           formatBoolean,      // normalize
@@ -277,7 +261,6 @@ export function createVertexArrayDisplay(parent, name /*, webglObject */) {
       const data = globals.isWebGL2
           ? [
               gl.getVertexAttrib(i, gl.VERTEX_ATTRIB_ARRAY_ENABLED),
-              gl.getVertexAttrib(i, gl.CURRENT_VERTEX_ATTRIB),
               gl.getVertexAttrib(i, gl.VERTEX_ATTRIB_ARRAY_SIZE),
               gl.getVertexAttrib(i, gl.VERTEX_ATTRIB_ARRAY_TYPE),
               gl.getVertexAttrib(i, gl.VERTEX_ATTRIB_ARRAY_INTEGER),
@@ -289,7 +272,6 @@ export function createVertexArrayDisplay(parent, name /*, webglObject */) {
             ]
           : [
               gl.getVertexAttrib(i, gl.VERTEX_ATTRIB_ARRAY_ENABLED),
-              gl.getVertexAttrib(i, gl.CURRENT_VERTEX_ATTRIB),
               gl.getVertexAttrib(i, gl.VERTEX_ATTRIB_ARRAY_SIZE),
               gl.getVertexAttrib(i, gl.VERTEX_ATTRIB_ARRAY_TYPE),
               gl.getVertexAttrib(i, gl.VERTEX_ATTRIB_ARRAY_NORMALIZED),
@@ -298,12 +280,8 @@ export function createVertexArrayDisplay(parent, name /*, webglObject */) {
               gl.getVertexAttrib(i, gl.VERTEX_ATTRIB_ARRAY_DIVISOR),
               gl.getVertexAttrib(i, gl.VERTEX_ATTRIB_ARRAY_BUFFER_BINDING),
             ];
-      if (data[0]) {
-        row.classList.add('attrib-enable');
-      } else {
-        row.classList.remove('attrib-enable');
-      }
-      const bufferNdx = globals.isWebGL2 ? 9 : 8;  // FIXME
+      row.classList.toggle('attrib-enable', data[0]);
+      const bufferNdx = globals.isWebGL2 ? 8 : 7;  // FIXME
       data.forEach((value, cellNdx) => {
         const cell = row.cells[cellNdx];
         const newValue = formatters[cellNdx](value);
