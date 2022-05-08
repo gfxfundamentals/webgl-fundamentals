@@ -634,8 +634,8 @@ objects.forEach(function(object) {
 
   const subLeft = left + pixelX * width / gl.canvas.width;
   const subBottom = bottom + pixelY * height / gl.canvas.height;
-  const subWidth = 1 / gl.canvas.width;
-  const subHeight = 1 / gl.canvas.height;
+  const subWidth = width / gl.canvas.width;
+  const subHeight = height / gl.canvas.height;
 
   // make a frustum for that 1 pixel
   const projectionMatrix = m4.frustum(
