@@ -257,7 +257,7 @@ gl = {
   framebuffer: defaultFramebufferForCanvas,
 }
 </code></pre>
-<p>There are 2 binding points. They are set like this</p>
+<p>There is only 1 binding point in WebGL1. It is set like this</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">gl.bindFramebuffer(target, framebuffer) {
   framebuffer = framebuffer || defaultFramebufferForCanvas; // if null use canvas
   switch (target) {
@@ -306,7 +306,7 @@ imagine is implemented like this</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">// pseudo code
 ext.drawBuffersWebGL(drawBuffers) {
   const framebuffer = gl._getFramebufferByTarget(gl.FRAMEBUFFER);
-  for (let i = 0; i &gt; maxDrawBuffers; ++i) {
+  for (let i = 0; i &lt; maxDrawBuffers; ++i) {
     framebuffer.drawBuffers[i] = i &lt; drawBuffers.length
         ? drawBuffers[i]
         : gl.NONE
