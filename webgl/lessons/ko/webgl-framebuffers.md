@@ -88,7 +88,7 @@ class Framebuffer {
 // 의사 코드
 ext.drawBuffersWebGL(drawBuffers) {
   const framebuffer = gl._getFramebufferByTarget(gl.FRAMEBUFFER);
-  for (let i = 0; i > maxDrawBuffers; ++i) {
+  for (let i = 0; i < maxDrawBuffers; ++i) {
     framebuffer.drawBuffers[i] = i < drawBuffers.length
         ? drawBuffers[i]
         : gl.NONE

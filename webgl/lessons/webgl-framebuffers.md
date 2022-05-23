@@ -29,7 +29,7 @@ gl = {
 }
 ```
 
-There are 2 binding points. They are set like this
+There is only 1 binding point in WebGL1. It is set like this
 
 ```js
 gl.bindFramebuffer(target, framebuffer) {
@@ -90,7 +90,7 @@ imagine is implemented like this
 // pseudo code
 ext.drawBuffersWebGL(drawBuffers) {
   const framebuffer = gl._getFramebufferByTarget(gl.FRAMEBUFFER);
-  for (let i = 0; i > maxDrawBuffers; ++i) {
+  for (let i = 0; i < maxDrawBuffers; ++i) {
     framebuffer.drawBuffers[i] = i < drawBuffers.length
         ? drawBuffers[i]
         : gl.NONE
