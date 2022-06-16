@@ -65,7 +65,9 @@
         // eslint-disable-line
       }
       try {
-        document.body.className = 'iframe';
+        if (document.body) {
+          document.body.className = 'iframe';
+        }
       } catch (e) {
         // eslint-disable-line
       }
@@ -334,7 +336,7 @@
         super(url);
         let listener;
         this.onmessage = function(e) {
-          if (!e || !e.data || !e.data.type === '___editor___') {
+          if (!e || !e.data || e.data.type !== '___editor___') {
             if (listener) {
               listener(e);
             }
