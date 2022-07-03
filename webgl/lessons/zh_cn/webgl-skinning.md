@@ -255,7 +255,7 @@ webglUtils.drawBufferInfo(gl, bufferInfo, gl.LINES);
 
 另一个需要注意的小事，上面的例子权重和骨骼下标使用的是浮点数，可以使用`UNSIGNED_BYTE`来节省一些空间。
 
-不幸的是着色器中可以使用的全局变量的数量是有限制的。对WebGL比较低的限制是64个vec4，即8个mat4 你可能需要一些全局变量用于其他的事情像片断着色器中的`color` 以及`projection`和`view`这意味着如果我们在一个限制为64个vec4的设备上，我们只能有5个骨骼！查看
+不幸的是着色器中可以使用的全局变量的数量是有限制的。对WebGL比较低的限制是64个vec4，即8个mat4 你可能需要一些全局变量用于其他的事情像片段着色器中的`color` 以及`projection`和`view`这意味着如果我们在一个限制为64个vec4的设备上，我们只能有5个骨骼！查看
 [WebGLStats](https://webglstats.com/webgl/parameter/MAX_VERTEX_UNIFORM_VECTORS)
 大多数设备支持128个vec4，其中70%支持256个vec4 但是对于上面的例子，这分别只有13个骨骼和29个骨骼。13对于90年代VR战士1风格的角色尚且不够，29与现代游戏中使用的数字相距甚远。
 
@@ -765,7 +765,7 @@ void main() {
 }
 ```
 
-片断着色器中我们使用一个简单的平行光
+片段着色器中我们使用一个简单的平行光
 
 ```
 precision mediump float;
@@ -1083,7 +1083,7 @@ animSkin(gltf.skins[0], Math.sin(time) * .5);
   gl_Position = u_projection * u_view *  a_POSITION;
 ```
 
-在片断着色器中，我改变了它，仅仅在末尾添加这个来画纯色的
+在片段着色器中，我改变了它，仅仅在末尾添加这个来画纯色的
 
 ```
 gl_FragColor = vec4(1, 0, 0, 1);
@@ -1100,7 +1100,7 @@ const target = [0, 0, 0];
 
 <div class="webgl_center"><img src="resources/skinning-debug-01.png"></div>
 
-接下来我让片断着色器显示法线
+接下来我让片段着色器显示法线
 
 ```
 gl_FragColor = vec4(normalize(v_normal) * .5 + .5, 1);
@@ -1126,7 +1126,7 @@ v_normal = a_NORMAL;
 v_normal = a_WEIGHTS_0.xyz * 2. - 1.;
 ```
 
-权重从0到1，但是因为片断着色器需要法线，我仅仅改变权重从-1到1
+权重从0到1，但是因为片段着色器需要法线，我仅仅改变权重从-1到1
 
 这最初产生了一种混乱的颜色。一旦我发现了这个bug，我得到了这样的图像
 

@@ -48,7 +48,7 @@ TOC: WebGL 三维聚光灯
 
 让我们来实现它。
 
-首先修改[上文](webgl-3d-lighting-point.html)的片断着色器。
+首先修改[上文](webgl-3d-lighting-point.html)的片段着色器。
 
 ```
 precision mediump float;

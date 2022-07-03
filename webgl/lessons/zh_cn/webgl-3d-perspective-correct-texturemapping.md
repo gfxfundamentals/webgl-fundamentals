@@ -9,7 +9,7 @@ TOC: WebGL 纹理映射的透视纠正
 
 在"[工作原理](webgl-how-it-works.html)"中我们讲过了可变量的工作原理，
 顶点着色器可以声明可变量并给它赋值，一旦顶点着色器被引用 3 次就会画一个三角形。
-绘制这个三角形的每个像素都会调用片断着色器获得像素颜色，
+绘制这个三角形的每个像素都会调用片段着色器获得像素颜色，
 在三个顶点之间的点会得到差之后的可变量。
 
 {{{diagram url="resources/fragment-shader-anim.html" width="600" height="400" caption="v_color is interpolated between v0, v1 and v2" }}}
@@ -27,14 +27,14 @@ TOC: WebGL 纹理映射的透视纠正
         gl_Position = a_position;
       }
 
-还有一个简单的片断着色器提供固定的颜色
+还有一个简单的片段着色器提供固定的颜色
 
-      // 片断着色器没有默认的精度，
+      // 片段着色器没有默认的精度，
       // 中等精度是个不错的默认值
       precision mediump float;
 
       void main() {
-        // gl_FragColor 是片断着色器需要设置的一个特殊变量
+        // gl_FragColor 是片段着色器需要设置的一个特殊变量
         gl_FragColor = vec4(1, 0, 0.5, 1); // 返回红紫色
       }
 
@@ -60,7 +60,7 @@ TOC: WebGL 纹理映射的透视纠正
 
 {{{example url="../webgl-clipspace-rectangles.html" }}}
 
-再添加一个浮点型可变量，并把它从顶点着色器直接传递到片断着色器
+再添加一个浮点型可变量，并把它从顶点着色器直接传递到片段着色器
 
       attribute vec4 a_position;
     +  attribute float a_brightness;
@@ -70,11 +70,11 @@ TOC: WebGL 纹理映射的透视纠正
       void main() {
         gl_Position = a_position;
 
-    +    // 直接传递亮度到片断着色器
+    +    // 直接传递亮度到片段着色器
     +    v_brightness = a_brightness;
       }
 
-在片断着色器中使用可变量设置颜色
+在片段着色器中使用可变量设置颜色
 
       precision mediump float;
 
@@ -183,7 +183,7 @@ TOC: WebGL 纹理映射的透视纠正
 
 事实是WebGL使用 `W` 实现纹理映射或者可变量插值的透视投影。
 
-如果将片断着色器改成这样就更容以看出效果
+如果将片段着色器改成这样就更容以看出效果
 
     gl_FragColor = vec4(fract(v_brightness * 10.), 0, 0, 1);  // 红色
 
@@ -231,7 +231,7 @@ void main() {
 +  // 手工除以 W
 +  gl_Position /= gl_Position.w;
 
-  // 将纹理坐标传到片断着色器
+  // 将纹理坐标传到片段着色器
   v_texcoord = a_texcoord;
 }
 ```

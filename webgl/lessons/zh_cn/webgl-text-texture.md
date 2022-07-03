@@ -136,7 +136,7 @@ TOC: WebGL 文字 - 使用纹理
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
-这样将源像素（片断着色器产生的颜色）和目标像素（画布上的颜色）的颜色根据混合方法进行混合，
+这样将源像素（片段着色器产生的颜色）和目标像素（画布上的颜色）的颜色根据混合方法进行混合，
 我们设置混合方法为 `SRC_ALPHA` 对源，`ONE_MINUS_SRC_ALPHA` 对目标。
 
     result = dest * (1 - src_alpha) + src * src_alpha
