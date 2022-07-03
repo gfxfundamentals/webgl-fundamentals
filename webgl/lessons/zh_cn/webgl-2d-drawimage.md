@@ -51,7 +51,7 @@ WebGL需要上传`x, y`, `x + width, y`, `x, y + height`, 和
        v_texcoord = a_texcoord;
     }
 
-和一个简单的片断着色器
+和一个简单的片段着色器
 
     precision mediump float;
 

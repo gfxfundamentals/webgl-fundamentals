@@ -122,7 +122,7 @@ void main() {
   // 将 x y z 除以 zToDivideBy
 *  gl_Position = vec4(position.xyz, zToDivideBy);
 
-  // 传递颜色到给片断着色器
+  // 传递颜色到给片段着色器
   v_color = a_color;
 }
 </script>

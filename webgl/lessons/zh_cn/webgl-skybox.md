@@ -53,7 +53,7 @@ gl.vertexAttribPointer(
     positionLocation, size, type, normalize, stride, offset)
 ```
 
-接下来对于顶点着色器，我们直接将`gl_Position`设置为四边形顶点。不需要任何矩阵变换因为位置已经在裁剪空间中，被设定为覆盖整个画布。我们设置 `gl_Position.z`为1 确保像素有最远的深度。接下来我们传递位置给片断着色器。
+接下来对于顶点着色器，我们直接将`gl_Position`设置为四边形顶点。不需要任何矩阵变换因为位置已经在裁剪空间中，被设定为覆盖整个画布。我们设置 `gl_Position.z`为1 确保像素有最远的深度。接下来我们传递位置给片段着色器。
 
 ```
 attribute vec4 a_position;
@@ -65,7 +65,7 @@ void main() {
 }
 ```
 
-在片断着色器中我们将position和视图投影矩阵的逆相乘，除以w转换4D到3D。
+在片段着色器中我们将position和视图投影矩阵的逆相乘，除以w转换4D到3D。
 
 ```
 precision mediump float;

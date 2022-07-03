@@ -242,7 +242,7 @@ function setNormals(gl) {
 
 现在让着色器使用它
 
-首先在顶点着色器中只将法向量传递给片断着色器
+首先在顶点着色器中只将法向量传递给片段着色器
 
     attribute vec4 a_position;
     -attribute vec4 a_color;
@@ -257,14 +257,14 @@ function setNormals(gl) {
       // 将位置和矩阵相乘
       gl_Position = u_matrix * a_position;
 
-    -  // 将颜色传到片断着色器
+    -  // 将颜色传到片段着色器
     -  v_color = a_color;
 
-    +  // 将法向量传到片断着色器
+    +  // 将法向量传到片段着色器
     +  v_normal = a_normal;
     }
 
-然后在片断着色器中将法向量和光照方向点乘
+然后在片段着色器中将法向量和光照方向点乘
 
 ```
 precision mediump float;
@@ -344,7 +344,7 @@ void main() {
   // 将位置和矩阵相乘
 *  gl_Position = u_worldViewProjection * a_position;
 
-*  // 重定向法向量并传递给片断着色器
+*  // 重定向法向量并传递给片段着色器
 *  v_normal = mat3(u_world) * a_normal;
 }
 ```
@@ -413,7 +413,7 @@ void main() {
   // 将位置和矩阵相乘
   gl_Position = u_worldViewProjection * a_position;
 
-  // 重定向法向量并传递给片断着色器
+  // 重定向法向量并传递给片段着色器
 *  v_normal = mat3(u_worldInverseTranspose) * a_normal;
 }
 ```
