@@ -27,7 +27,7 @@ in JavaScript as well.
 Finally WebGL requires vertices to operate on. [Functions to generate vertices
 for common shapes like spheres, cubes, planes, cones, etc can be found here](/docs/module-primitives.html).
 
-#JSDoc3 Plea
+# JSDoc3 Plea
 
 These docs are generated with [JSDoc3](https://usejsdoc.org/). I find them very confusing to look at
 and in some places frustratingly verbose. If you have any experience with JSDoc3 and know how to
