@@ -726,7 +726,7 @@ export function getStateTables(isWebGL2) {
           help: `
           The current **draw** framebuffer (--null-- = the canvas).
           This is framebuffer pixels are written to when calling
-          --gl.clear--, --gl.drawXXX---, --gl.blitFramebuffer--.
+          --gl.clear--, --gl.drawXXX--, --gl.blitFramebuffer--.
 
           Set with
 
