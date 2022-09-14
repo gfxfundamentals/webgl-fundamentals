@@ -248,15 +248,15 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <p>The issue is the top right triangle has no knowledge of the bottom left corner so the top right triangle is not including any of the blue from the bottom left (and visa versa)</p>
 <p>A couple of ways to fix that. </p>
 <p>One is to use a 2x2 texture with linear sampling. You have to do some extra math to get the interpolation correct because a texture only interpolates between pixels</p>
-<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">+-------+-------+
-|       |       |
-|   +-------+   |
-|   |   |   |   |
-+---|---+---|---+
-|   |   |   |   |
-|   +-------+   |
-|       |       |
-+-------+-------+
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no"> +-------+-------+
+ |       |       |
+ |   +-------+   |
+ |   |   |   |   |
+ +---|---+---|---+
+ |   |   |   |   |
+ |   +-------+   |
+ |       |       |
+ +-------+-------+
 </code></pre><p>Above is a 4 pixel texture stretched to 14 by 6. Sampling happens between pixels so only this center area will get the gradient. Outside that area would be sampled with pixels outside the texture so using <a href="https://webglfundamentals.org/webgl/lessons/webgl-3d-textures.html">CLAMP_TO_EDGE</a> or on the opposite side of the texture using REPEAT.</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-qna-how-to-blend-colors-across-2-triangles-example-1.html"></iframe>

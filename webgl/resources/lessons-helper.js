@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 GFXFundamentals.
+ * Copyright 2021, GFXFundamentals.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
