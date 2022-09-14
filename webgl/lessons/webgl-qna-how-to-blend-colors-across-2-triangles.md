@@ -24,15 +24,15 @@ A couple of ways to fix that.
 One is to use a 2x2 texture with linear sampling. You have to do some extra math to get the interpolation correct because a texture only interpolates between pixels
 
 ```
-+-------+-------+
-|       |       |
-|   +-------+   |
-|   |   |   |   |
-+---|---+---|---+
-|   |   |   |   |
-|   +-------+   |
-|       |       |
-+-------+-------+
+ +-------+-------+
+ |       |       |
+ |   +-------+   |
+ |   |   |   |   |
+ +---|---+---|---+
+ |   |   |   |   |
+ |   +-------+   |
+ |       |       |
+ +-------+-------+
 ```
 
 Above is a 4 pixel texture stretched to 14 by 6. Sampling happens between pixels so only this center area will get the gradient. Outside that area would be sampled with pixels outside the texture so using [CLAMP_TO_EDGE](https://webglfundamentals.org/webgl/lessons/webgl-3d-textures.html) or on the opposite side of the texture using REPEAT.
