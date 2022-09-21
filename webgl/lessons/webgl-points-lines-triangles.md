@@ -10,7 +10,7 @@ of completeness let's go over a few other cases.
 As mentioned in [the first article](webgl-fundamentals.html)
 WebGL draws points, lines, and triangles. It does this
 when we call `gl.drawArrays` or `gl.drawElements`.
-We provide a vertex shader what outputs clip space
+We provide a vertex shader that outputs clip space
 coordinates and then, based on the first argument
 to `gl.drawArrays` or `gl.drawElements` WebGL will
 draw points, lines, or triangles.
