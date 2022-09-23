@@ -310,7 +310,7 @@ It's returned this way because the result is asynchronous. The "compositor" ment
 above runs asynchronously from the page. It can figure out the size it's actually going to use and then send you that size *out of band*.
 
 Unfortunately while the `ResizeObserver` is available in all modern browser the
-`devicePixelContentBoxSize` is only available in Chrome/Edge so far. Here's how
+`devicePixelContentBoxSize` is not available in Safari yet. Here's how
 to use it.
 
 We create a `ResizeObserver` and we pass it a function to call anytime any elements
@@ -329,7 +329,7 @@ important and a little confusing. We could ask it to tell us when the
 is some percentage size of the window like the common 100% of our line example
 above. In that case our canvas will always be the same number of device pixels
 regardless of zoom level. The window hasn't changed size when we zoom so there's
-still the same number of device pixels. On the otherhand the `content-box` will
+still the same number of device pixels. On the other hand the `content-box` will
 change as we zoom because it's measured in CSS pixels and so as we zoom, more or
 less CSS pixels fit in the number of device pixels.
 
@@ -436,16 +436,16 @@ on the right.
 
 Resize this window, or better, open it in a new window and zoom in an out using
 the keys mentioned above. At different zoom levels resize the window, and notice
-only the bottom one works in all cases (in Chrome/Edge). Note the higher your
+only the bottom one works in all cases (in Chrome/Edge/Firefox). Note the higher your
 device's `devicePixelRatio` the harder it may be to see problems. What you
 should see is an unvarying pattern on left and on the right. If you see harsh
 patterns or you see differing darkness like a gradient then it's not working.
-Since it will only work in Chrome/Edge you'll need to try it there to see it
+Since it will only work in Chrome/Edge/Firefox you'll need to try it there to see it
 work.
 
 Also note, some OSes (MacOS) provide an OS level scaling option that is mostly
 hidden from apps. In this case you'll see a slight pattern on the bottom example
-(assuming your in Chrome/Edge) but it will be a regular pattern.
+(assuming your in Chrome/Edge/Firefox) but it will be a regular pattern.
 
 This brings up the issue that there is no good solution on the other browsers but, do you
 need a real solution? The majority of WebGL apps do something like draw some things in 3D
