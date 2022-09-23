@@ -501,7 +501,7 @@ the <code class="notranslate" translate="no">clientWidth</code>, <code class="no
 <p>It&#39;s returned this way because the result is asynchronous. The &quot;compositor&quot; mentioned
 above runs asynchronously from the page. It can figure out the size it&#39;s actually going to use and then send you that size <em>out of band</em>.</p>
 <p>Unfortunately while the <code class="notranslate" translate="no">ResizeObserver</code> is available in all modern browser the
-<code class="notranslate" translate="no">devicePixelContentBoxSize</code> is not available in Safari yet. Here&#39;s how
+<code class="notranslate" translate="no">devicePixelContentBoxSize</code> is only available in Chrome/Edge so far. Here&#39;s how
 to use it.</p>
 <p>We create a <code class="notranslate" translate="no">ResizeObserver</code> and we pass it a function to call anytime any elements
 we&#39;re observing change size. In our case that&#39;s our canvas.</p>
@@ -516,7 +516,7 @@ important and a little confusing. We could ask it to tell us when the
 is some percentage size of the window like the common 100% of our line example
 above. In that case our canvas will always be the same number of device pixels
 regardless of zoom level. The window hasn&#39;t changed size when we zoom so there&#39;s
-still the same number of device pixels. On the other hand the <code class="notranslate" translate="no">content-box</code> will
+still the same number of device pixels. On the otherhand the <code class="notranslate" translate="no">content-box</code> will
 change as we zoom because it&#39;s measured in CSS pixels and so as we zoom, more or
 less CSS pixels fit in the number of device pixels.</p>
 <p>If we don&#39;t care about the zoom level then we could just observe <code class="notranslate" translate="no">device-pixel-content-box</code>.
@@ -616,15 +616,15 @@ on the right.</p>
 </p>
 <p>Resize this window, or better, open it in a new window and zoom in an out using
 the keys mentioned above. At different zoom levels resize the window, and notice
-only the bottom one works in all cases (in Chrome/Edge/Firefox). Note the higher your
+only the bottom one works in all cases (in Chrome/Edge). Note the higher your
 device&#39;s <code class="notranslate" translate="no">devicePixelRatio</code> the harder it may be to see problems. What you
 should see is an unvarying pattern on left and on the right. If you see harsh
 patterns or you see differing darkness like a gradient then it&#39;s not working.
-Since it will only work in Chrome/Edge/Firefox you&#39;ll need to try it there to see it
+Since it will only work in Chrome/Edge you&#39;ll need to try it there to see it
 work.</p>
 <p>Also note, some OSes (MacOS) provide an OS level scaling option that is mostly
 hidden from apps. In this case you&#39;ll see a slight pattern on the bottom example
-(assuming your in Chrome/Edge/Firefox) but it will be a regular pattern.</p>
+(assuming your in Chrome/Edge) but it will be a regular pattern.</p>
 <p>This brings up the issue that there is no good solution on the other browsers but, do you
 need a real solution? The majority of WebGL apps do something like draw some things in 3D
 with textures and or lighting on them. As such it&#39;s often not noticeable to either use
