@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- this file is auto-generated from webgl/lessons/ja/langinfo.hanson. Do not edited directly -->
+<!-- this file is auto-generated from webgl/lessons/ja/webgl-qna-how-to-achieve-moving-line-with-trail-effects.md. Do not edited directly -->
 <!--
 Copyright 2021 GFXFundamentals.
 All rights reserved.
@@ -8,15 +8,17 @@ Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
 met:
 
-    * Redistributions of source code must retain the above copyright
-notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above
-copyright notice, this list of conditions and the following disclaimer
-in the documentation and/or other materials provided with the
-distribution.
-    * Neither the name of GFXFundamentals. nor the names of his
-contributors may be used to endorse or promote products derived from
-this software without specific prior written permission.
+*   Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+*   Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+
+*   Neither the name of GFXFundamentals. nor the names of his
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -34,25 +36,79 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<meta property="og:title" content="How to Achieve Moving Line with Trail Effects" />
-<meta property="og:type" content="website" />
-<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
-<meta property="og:description" content="How to Achieve Moving Line with Trail Effects" />
-<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/ja/webgl-qna-how-to-achieve-moving-line-with-trail-effects.html" />
 
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:site" content="@greggman" />
-<meta name="twitter:creator" content="@greggman" />
-<meta name="twitter:domain" content="webglfundamentals.org" />
-<meta name="twitter:title" content="How to Achieve Moving Line with Trail Effects" />
-<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ja/webgl-qna-how-to-achieve-moving-line-with-trail-effects.html" />
-<meta name="twitter:description" content="How to Achieve Moving Line with Trail Effects" />
-<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
+<meta name="description" content="トレイル効果を使った動く線を書く方法">
+<meta name="keywords" content="webgl graphics">
+<meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-qna-how-to-achieve-moving-line-with-trail-effects_ja.jpg">
+
+<meta property="og:title" content="トレイル効果を使った動く線を書く方法">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-qna-how-to-achieve-moving-line-with-trail-effects_ja.jpg">
+<meta property="og:description" content="トレイル効果を使った動く線を書く方法">
+<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/ja/webgl-qna-how-to-achieve-moving-line-with-trail-effects.html">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@greggman">
+<meta name="twitter:creator" content="@greggman">
+<meta name="twitter:domain" content="webglfundamentals.org">
+<meta name="twitter:title" content="トレイル効果を使った動く線を書く方法">
+<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ja/webgl-qna-how-to-achieve-moving-line-with-trail-effects.html">
+<meta name="twitter:description" content="トレイル効果を使った動く線を書く方法">
+<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-qna-how-to-achieve-moving-line-with-trail-effects_ja.jpg">
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {
+      "@type":"WebSite",
+      "@id":"https://webglfundamentals.org/#website",
+      "url":"https://webglfundamentals.org/",
+      "name":"WebglFundamentals"
+    },
+    {
+      "@type":"ImageObject",
+      "@id":"https://webglfundamentals.org/webgl/lessons/ja/webgl-qna-how-to-achieve-moving-line-with-trail-effects.html#primaryimage",
+      "url":"https://webglfundamentals.org/webgl/lessons/screenshots/webgl-qna-how-to-achieve-moving-line-with-trail-effects_ja.jpg",
+      "width":1200,
+      "height":630
+    },
+    {
+      "@type":"WebPage",
+      "@id":"https://webglfundamentals.org/webgl/lessons/ja/webgl-qna-how-to-achieve-moving-line-with-trail-effects.html#webpage",
+      "url":"https://webglfundamentals.org/webgl/lessons/ja/webgl-qna-how-to-achieve-moving-line-with-trail-effects.html",
+      "inLanguage":"ja",
+      "name":"トレイル効果を使った動く線を書く方法",
+      "keywords":"webgl graphics programming",
+      "isPartOf":{
+        "@id":"https://webglfundamentals.org/#website"
+      },
+      "primaryImageOfPage":{
+        "@id":"https://webglfundamentals.org/webgl/lessons/ja/webgl-qna-how-to-achieve-moving-line-with-trail-effects.html#primaryimage"
+      }
+    }
+  ]
+}
+</script>
 
 
-<title>How to Achieve Moving Line with Trail Effects</title>
+<title>トレイル効果を使った動く線を書く方法</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
-<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
+<link rel="stylesheet" href="/webgl/lessons/lang.css">
+<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css">
+
+  <link rel="alternate" hreflang="en" href="https://webglfundamentals.org/webgl/lessons/webgl-qna-how-to-achieve-moving-line-with-trail-effects.html">
+  <link rel="alternate" hreflang="fr" href="https://webglfundamentals.org/webgl/lessons/fr/webgl-qna-how-to-achieve-moving-line-with-trail-effects.html">
+  <link rel="alternate" hreflang="ja" href="https://webglfundamentals.org/webgl/lessons/ja/webgl-qna-how-to-achieve-moving-line-with-trail-effects.html">
+  <link rel="alternate" hreflang="ko" href="https://webglfundamentals.org/webgl/lessons/ko/webgl-qna-how-to-achieve-moving-line-with-trail-effects.html">
+  <link rel="alternate" hreflang="pl" href="https://webglfundamentals.org/webgl/lessons/pl/webgl-qna-how-to-achieve-moving-line-with-trail-effects.html">
+  <link rel="alternate" hreflang="pt-br" href="https://webglfundamentals.org/webgl/lessons/pt-br/webgl-qna-how-to-achieve-moving-line-with-trail-effects.html">
+  <link rel="alternate" hreflang="ru" href="https://webglfundamentals.org/webgl/lessons/ru/webgl-qna-how-to-achieve-moving-line-with-trail-effects.html">
+  <link rel="alternate" hreflang="zh_cn" href="https://webglfundamentals.org/webgl/lessons/zh_cn/webgl-qna-how-to-achieve-moving-line-with-trail-effects.html">
+
+
+
+
 </head>
 <body>
 <div class="webgl_navbar">
@@ -179,12 +235,35 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>How to Achieve Moving Line with Trail Effects</h1>
+    <h1>トレイル効果を使った動く線を書く方法</h1>
   </div>
   <div class="lesson">
     <div class="lesson-main">
-      <p>ごめん！この記事はまだ翻訳されていない。<a href="https://github.com/gfxfundamentals/webgl-fundamentals">翻訳してくれますか？</a>! 😄</p>
-<p><a href="/webgl/lessons/webgl-qna-how-to-achieve-moving-line-with-trail-effects.html">ここに英語版がある</a>.</p>
+      <h2 id="-">質問</h2>
+<p>どのように下記デモにあるような線を描くのか？トレイル効果(trailing effects)でシンプルな線を描くことは簡単に思えるかもしれません。しかし、これらの線は屈折しています。</p>
+<p><a href="http://uber.github.io/deck.gl/#/examples/custom-layers/trip-routes">http://uber.github.io/deck.gl/#/examples/custom-layers/trip-routes</a></p>
+<h2 id="-">回答</h2>
+<p>線のUV座標を渡すか、UV座標を生成し、それらを使用して線に色をつけることができます。時間を渡すと次のようなスクロールができます。</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-qna-how-to-achieve-moving-line-with-trail-effects-example-1.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-qna-how-to-achieve-moving-line-with-trail-effects-example-1.html" target="_blank">クリックして別のウインドウを開く</a>
+</div>
+
+</p>
+<p>もちろん、色のコードの代わりにテクスチャを使うこともできます。</p>
+<p><div class="webgl_example_container">
+  <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-qna-how-to-achieve-moving-line-with-trail-effects-example-2.html"></iframe>
+  <a class="webgl_center" href="/webgl/lessons/../webgl-qna-how-to-achieve-moving-line-with-trail-effects-example-2.html" target="_blank">クリックして別のウインドウを開く</a>
+</div>
+
+</p>
+<div class="so">
+  <div>質問とその引用箇所は
+    <a data-href="http://miaokaixiang.com">K.Miao</a>によるCC BY-SA 3.0
+    <a data-href="https://stackoverflow.com/questions/44768471">こちら</a>
+    です。
+  </div>
+</div>
 
     </div>
     <div class="lesson-sidebar">
@@ -200,7 +279,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </select>
 
 
-        <ul>  <li>基本</li>
+        <div id="toc">
+          <ul>  <li>基本</li>
         <ul>
           <li><a href="/webgl/lessons/ja/webgl-fundamentals.html">基本</a></li>
 <li><a href="/webgl/lessons/ja/webgl-how-it-works.html">WebGLの仕組み</a></li>
@@ -339,13 +419,45 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <li><a href="https://twgljs.org">TWGL, A tiny WebGL helper library</a></li>
   <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">github</a></li>
 </ul>
+        </div>
+    </div>
+    <div class="lesson-comments">
+        <div>問題点/バグ? <a href="https://github.com/gfxfundamentals/webgl-fundamentals/issues">githubでissueを作成</a>.</div>
+
+        <div id="disqus_thread"></div>
+        <script>
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
+            var disqus_identifier = 'トレイル効果を使った動く線を書く方法';
+            var disqus_title = 'トレイル効果を使った動く線を書く方法';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
+                    return;
+                }
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
     </div>
   </div>
 </div>
 </body>
+<script>
+const settings = {
+  contribTemplate: "Thank you <a href=\"${html_url}\"><img src=\"${avatar_url}\"> ${login}</a><br>for <a href=\"https://github.com/${owner}/${repo}/commits?author=${login}\">${contributions} contributions</a>",
+  owner: "gfxfundamentals",
+  repo: "webgl-fundamentals",
+};
+</script>
+<script src="/contributors.js"></script>
 <script src="/3rdparty/jquery-1.11.2.min.js"></script>
 <script src="/webgl/lessons/resources/prettify.js"></script>
-<script src="/webgl/lessons/resources/lesson.js"></script>
+<script src="/webgl/lessons/resources/lesson.js" type="module"></script>
 <script>
 (function() {
   if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
