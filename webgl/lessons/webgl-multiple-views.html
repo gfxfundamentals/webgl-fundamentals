@@ -588,13 +588,21 @@ run into the context limit.</p>
 <p>First let&#39;s make a canvas that goes in the background with some content
 that goes in front. First the HTML</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;body&gt;
-  &lt;canvas id=&quot;canvas&quot;&gt;&lt;/canvas&gt;
-  &lt;div id=&quot;content&quot;&gt;&lt;/div&gt;
+  &lt;div id=&quot;outer&quot;&gt;
+    &lt;canvas id=&quot;canvas&quot;&gt;&lt;/canvas&gt;
+    &lt;div id=&quot;content&quot;&gt;&lt;/div&gt;
+  &lt;/div&gt;
 &lt;/body&gt;
 </code></pre>
 <p>Then the CSS</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-css">body {
+<pre class="prettyprint notranslate" translate="no"><code class="lang-css">html, body {
   margin: 0;
+  height: 100%;
+}
+#outer {
+  position: absolute;
+  height: 100%;
+  overflow: auto;
 }
 #content {
   margin: 10px;
@@ -696,7 +704,9 @@ for each item. We loop over all the items one at a time and call
 and use the rectangle returned to see if that element intersects
 with the canvas. If it does we set the viewport and scissor to
 match and then draw that object.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-js">function render(time) {
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const outerElem = document.querySelector(&#39;#outer&#39;);
+
+function render(time) {
   time *= 0.001;  // convert to seconds
 
   webglUtils.resizeCanvasToDisplaySize(gl.canvas);
@@ -706,7 +716,7 @@ match and then draw that object.</p>
   gl.enable(gl.SCISSOR_TEST);
 
   // move the canvas to top of the current scroll position
-  gl.canvas.style.transform = `translateY(${window.scrollY}px)`;
+  gl.canvas.style.transform = `translateY(${outerElem.scrollTop}px)`;
 
   for (const {bufferInfo, element, color} of items) {
     const rect = element.getBoundingClientRect();
@@ -764,7 +774,7 @@ As long as you set the viewport and scissor correctly and then set up
 your projection matrix to match the aspect of the area it should work.</p>
 <p>One other notable thing about the code is we&#39;re moving the canvas
 with this line</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-js">gl.canvas.style.transform = `translateY(${window.scrollY}px)`;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">gl.canvas.style.transform = `translateY(${outerElem.scrollTop}px)`;
 </code></pre>
 <p>Why? We could instead set the canvas to <code class="notranslate" translate="no">position: fixed;</code> in which case
 it would not scroll with the page. The difference would be subtle.
@@ -785,10 +795,10 @@ a chance to draw.</p>
 </li>
 </ol>
 <p>If you want to handle horizontal scrolling just change this line</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-js">gl.canvas.style.transform = `translateY(${window.scrollY}px)`;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">gl.canvas.style.transform = `translateY(${outerElem.scrollTop}px)`;
 </code></pre>
 <p>to this</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-js">gl.canvas.style.transform = `translateX(${window.scrollX}px) translateY(${window.scrollY}px)`;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">gl.canvas.style.transform = `translateX(${outerElem.scrollLeft}px) translateY(${outerElem.scrollTop}px)`;
 </code></pre>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-multiple-views-items-horizontal-scrolling.html"></iframe>

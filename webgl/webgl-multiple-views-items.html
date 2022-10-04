@@ -10,6 +10,11 @@ html, body {
   margin: 0;
   height: 100%;
 }
+#outer {
+  position: absolute;
+  height: 100%;
+  overflow: auto;
+}
 #content {
   margin: 10px;
 }
@@ -37,8 +42,10 @@ html, body {
 </style>
 </head>
 <body>
-  <canvas id="canvas"></canvas>
-  <div id="content"></div>
+  <div id="outer">
+    <canvas id="canvas"></canvas>
+    <div id="content"></div>
+  </div>
 </body>
 <!--
 for most samples webgl-utils only provides shader compiling/linking and
@@ -161,6 +168,7 @@ function main() {
   }
 
   const fieldOfViewRadians = degToRad(60);
+  const outerElem = document.querySelector('#outer');
 
   function drawScene(projectionMatrix, cameraMatrix, worldMatrix, bufferInfo) {
     // Clear the canvas AND the depth buffer.
@@ -197,7 +205,7 @@ function main() {
     gl.enable(gl.SCISSOR_TEST);
 
     // move the canvas to top of the current scroll position
-    gl.canvas.style.transform = `translateY(${window.scrollY}px)`;
+    gl.canvas.style.transform = `translateY(${outerElem.scrollTop}px)`;
 
     for (const {bufferInfo, element, color} of items) {
       const rect = element.getBoundingClientRect();
