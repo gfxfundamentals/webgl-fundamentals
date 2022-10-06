@@ -358,24 +358,16 @@ function render() {
 
 ```html
 <body>
-  <div id="outer">
-    <canvas id="canvas"></canvas>
-    <div id="content"></div>
-  </div>
+  <canvas id="canvas"></canvas>
+  <div id="content"></div>
 </body>
 ```
 
 다음은 CSS입니다.
 
 ```css
-html, body {
+body {
   margin: 0;
-  height: 100%;
-}
-#outer {
-  position: absolute;
-  height: 100%;
-  overflow: auto;
 }
 #content {
   margin: 10px;
@@ -486,8 +478,6 @@ for (let i = 0; i < numItems; ++i) {
 그렇다면 뷰포트와 시저가 일치하도록 설정한 다음 해당 객체를 그립니다.
 
 ```js
-const outerElem = document.querySelector('#outer');
-
 function render(time) {
   time *= 0.001;  // 초 단위로 변환
 
@@ -498,7 +488,7 @@ function render(time) {
   gl.enable(gl.SCISSOR_TEST);
 
   // 캔버스를 현재 스크롤 위치의 상단으로 이동
-  gl.canvas.style.transform = `translateY(${outerElem.scrollTop}px)`;
+  gl.canvas.style.transform = `translateY(${window.scrollY}px)`;
 
   for (const {bufferInfo, element, color} of items) {
     const rect = element.getBoundingClientRect();
@@ -554,7 +544,7 @@ requestAnimationFrame(render);
 코드에서 한 가지 더 주목할 만한 점은 이 라인으로 캔버스를 움직이고 있다는 겁니다.
 
 ```js
-gl.canvas.style.transform = `translateY(${outerElem.scrollTop}px)`;
+gl.canvas.style.transform = `translateY(${window.scrollY}px)`;
 ```
 
 대신 캔버스를 `position: fixed;`로 설정할 수 있는데, 이 경우에는 페이지에 따라 스크롤되지 않습니다.
@@ -580,13 +570,13 @@ gl.canvas.style.transform = `translateY(${outerElem.scrollTop}px)`;
 가로 스크롤을 처리하고 싶다면 이 라인을 바꾸면 되는데요.
 
 ```js
-gl.canvas.style.transform = `translateY(${outerElem.scrollTop}px)`;
+gl.canvas.style.transform = `translateY(${window.scrollY}px)`;
 ```
 
 이렇게 변경합니다.
 
 ```js
-gl.canvas.style.transform = `translateX(${outerElem.scrollLeft}px) translateY(${outerElem.scrollTop}px)`;
+gl.canvas.style.transform = `translateX(${window.scrollX}px) translateY(${window.scrollY}px)`;
 ```
 
 {{{example url="../webgl-multiple-views-items-horizontal-scrolling.html"}}}
