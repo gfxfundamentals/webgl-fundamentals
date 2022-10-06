@@ -548,21 +548,13 @@ render();
 <p>먼저 앞으로 갈 일부 콘텐츠와 함께 배경으로 할 캔버스를 만들어봅시다.
 첫 번째는 HTML입니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;body&gt;
-  &lt;div id=&quot;outer&quot;&gt;
-    &lt;canvas id=&quot;canvas&quot;&gt;&lt;/canvas&gt;
-    &lt;div id=&quot;content&quot;&gt;&lt;/div&gt;
-  &lt;/div&gt;
+  &lt;canvas id=&quot;canvas&quot;&gt;&lt;/canvas&gt;
+  &lt;div id=&quot;content&quot;&gt;&lt;/div&gt;
 &lt;/body&gt;
 </code></pre>
 <p>다음은 CSS입니다.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-css">html, body {
+<pre class="prettyprint notranslate" translate="no"><code class="lang-css">body {
   margin: 0;
-  height: 100%;
-}
-#outer {
-  position: absolute;
-  height: 100%;
-  overflow: auto;
 }
 #content {
   margin: 10px;
@@ -661,9 +653,7 @@ for (let i = 0; i &lt; numItems; ++i) {
 <p><code class="notranslate" translate="no">items</code> 배열은 각 항목에 대한 <code class="notranslate" translate="no">bufferInfo</code>, <code class="notranslate" translate="no">color</code>, <code class="notranslate" translate="no">element</code>를 가집니다.
 모든 항목을 한 번에 하나씩 반복하여 <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect"><code class="notranslate" translate="no">element.getBoundingClientRect</code></a>를 호출하고 반환된 사각형을 사용하여 해당 요소가 캔버스와 교차하는지 확인합니다.
 그렇다면 뷰포트와 시저가 일치하도록 설정한 다음 해당 객체를 그립니다.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-js">const outerElem = document.querySelector(&#39;#outer&#39;);
-
-function render(time) {
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">function render(time) {
   time *= 0.001;  // 초 단위로 변환
 
   webglUtils.resizeCanvasToDisplaySize(gl.canvas);
@@ -673,7 +663,7 @@ function render(time) {
   gl.enable(gl.SCISSOR_TEST);
 
   // 캔버스를 현재 스크롤 위치의 상단으로 이동
-  gl.canvas.style.transform = `translateY(${outerElem.scrollTop}px)`;
+  gl.canvas.style.transform = `translateY(${window.scrollY}px)`;
 
   for (const {bufferInfo, element, color} of items) {
     const rect = element.getBoundingClientRect();
@@ -728,7 +718,7 @@ requestAnimationFrame(render);
 <p>물론 각 항목에 대한 전체 3D 장면이나 그 비슷한 무엇이든 그릴 수 있습니다.
 뷰포트와 시저를 정확하게 설정한 다음 영역의 비율이 일치하도록 투영 행렬을 설정하는 한 작동합니다.</p>
 <p>코드에서 한 가지 더 주목할 만한 점은 이 라인으로 캔버스를 움직이고 있다는 겁니다.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-js">gl.canvas.style.transform = `translateY(${outerElem.scrollTop}px)`;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">gl.canvas.style.transform = `translateY(${window.scrollY}px)`;
 </code></pre>
 <p>대신 캔버스를 <code class="notranslate" translate="no">position: fixed;</code>로 설정할 수 있는데, 이 경우에는 페이지에 따라 스크롤되지 않습니다.
 차이는 미묘할 겁니다.
@@ -747,10 +737,10 @@ requestAnimationFrame(render);
 </li>
 </ol>
 <p>가로 스크롤을 처리하고 싶다면 이 라인을 바꾸면 되는데요.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-js">gl.canvas.style.transform = `translateY(${outerElem.scrollTop}px)`;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">gl.canvas.style.transform = `translateY(${window.scrollY}px)`;
 </code></pre>
 <p>이렇게 변경합니다.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="lang-js">gl.canvas.style.transform = `translateX(${outerElem.scrollLeft}px) translateY(${outerElem.scrollTop}px)`;
+<pre class="prettyprint notranslate" translate="no"><code class="lang-js">gl.canvas.style.transform = `translateX(${window.scrollX}px) translateY(${window.scrollY}px)`;
 </code></pre>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-multiple-views-items-horizontal-scrolling.html"></iframe>
