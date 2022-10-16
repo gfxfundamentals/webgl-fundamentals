@@ -1,4 +1,5 @@
 /* Licensed under a BSD license. See license.html for license */
+/* eslint strict: off */
 "use strict";
 
 var vertexShaderSource = `
@@ -100,11 +101,9 @@ function main() {
     return d * Math.PI / 180;
   }
 
-  var cameraAngleRadians = degToRad(0);
-  var fieldOfViewRadians = degToRad(40);
-  var cameraHeight = 40;
-  var zNear = 1;
-  var zFar  = 150;
+  const fieldOfViewRadians = degToRad(40);
+  const zNear = 1;
+  const zFar  = 150;
 
   var uniformsThatAreTheSameForAllObjects = {
     u_lightWorldPos:         [-50, 30, 100],
@@ -129,13 +128,51 @@ function main() {
     u_specularFactor:        1,
   };
 
-  requestAnimationFrame(drawScene);
+  let requestId;
+  let running;
+  let then = 0;
+  let time = 0;
+  function startAnimation() {
+    running = true;
+    requestAnimation();
+  }
+
+  function stopAnimation() {
+    running = false;
+  }
+
+  function requestAnimation() {
+    if (!requestId) {
+      requestId = requestAnimationFrame(drawScene);
+    }
+  }
+
+  const motionQuery = matchMedia('(prefers-reduced-motion)');
+  function handleReduceMotionChanged() {
+    if (motionQuery.matches) {
+      stopAnimation();
+    } else {
+      startAnimation();
+    }
+  }
+  motionQuery.addEventListener('change', handleReduceMotionChanged);
+  handleReduceMotionChanged();
+  requestAnimation();
+
+  const observer = new ResizeObserver(requestAnimation);
+  observer.observe(gl.canvas);
 
   // Draw the scene.
-  function drawScene(time) {
-    webglUtils.resizeCanvasToDisplaySize(canvas);
+  function drawScene(now) {
+    requestId = undefined;
 
-    time *= 0.001;  // convert to seconds
+    const elapsed = Math.min(now - then, 1000 / 10);
+    then = now;
+    if (running) {
+      time += elapsed * 0.001;
+    }
+
+    webglUtils.resizeCanvasToDisplaySize(canvas);
 
     // Set the viewport to match the canvas
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
@@ -145,21 +182,21 @@ function main() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     // Compute the projection matrix
-    var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
-    var projectionMatrix = m4.perspective(fieldOfViewRadians, aspect, 1, 150);
+    const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+    const projectionMatrix = m4.perspective(fieldOfViewRadians, aspect, 1, 150);
 
     // Compute the camera's matrix using look at.
-    var orbitRadius = 100;
-    var orbitTime = 1 + time * 0.05;
-    var cameraPosition = [Math.cos(orbitTime) * orbitRadius, Math.sin(orbitTime * 1.123) * orbitRadius, Math.sin(orbitTime) * orbitRadius];
-    var target = [0, 0, 0];
-    var up = [0, 1, 0];
-    var cameraMatrix = m4.lookAt(cameraPosition, target, up, uniformsThatAreTheSameForAllObjects.u_viewInverse);
+    const orbitRadius = 100;
+    const orbitTime = 1 + time * 0.05;
+    const cameraPosition = [Math.cos(orbitTime) * orbitRadius, Math.sin(orbitTime * 1.123) * orbitRadius, Math.sin(orbitTime) * orbitRadius];
+    const target = [0, 0, 0];
+    const up = [0, 1, 0];
+    const cameraMatrix = m4.lookAt(cameraPosition, target, up, uniformsThatAreTheSameForAllObjects.u_viewInverse);
 
     // Make a view matrix from the camera matrix.
-    var viewMatrix = m4.inverse(cameraMatrix);
+    const viewMatrix = m4.inverse(cameraMatrix);
 
-    var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
+    const viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 
     gl.useProgram(programInfo.program);
 
@@ -170,27 +207,27 @@ function main() {
     webglUtils.setUniforms(programInfo, uniformsThatAreTheSameForAllObjects);
 
     // Draw objects
-    var num = 4;
-    var spread = 20;
-    for (var zz = -num; zz <= num; ++zz) {
-      for (var yy = -num; yy <= num; ++yy) {
-        for (var xx = -num; xx <= num; ++xx) {
+    const num = 4;
+    const spread = 20;
+    for (let zz = -num; zz <= num; ++zz) {
+      for (let yy = -num; yy <= num; ++yy) {
+        for (let xx = -num; xx <= num; ++xx) {
           var worldMatrix = m4.translation(xx * spread, yy * spread, zz * spread);
 
           // Multiply the matrices.
           m4.multiply(
               viewProjectionMatrix, worldMatrix,
               uniformsThatAreComputedForEachObject.u_worldViewProjection);
-          var matrix = m4.multiply(viewMatrix, worldMatrix);
+          // var matrix = m4.multiply(viewMatrix, worldMatrix);
           m4.transpose(m4.inverse(worldMatrix), uniformsThatAreComputedForEachObject.u_worldInverseTranspose);
 
           // Set the uniforms we just computed
           webglUtils.setUniforms(programInfo, uniformsThatAreComputedForEachObject);
 
           // Set a color for this object.
-          materialUniforms.u_diffuse[0] = 1; xx / num * 0.5 + 0.5;
-          materialUniforms.u_diffuse[1] = 1; yy / num * 0.5 + 0.5;
-          materialUniforms.u_diffuse[2] = 1; zz / num * 0.5 + 0.5;
+          materialUniforms.u_diffuse[0] = 1; // xx / num * 0.5 + 0.5;
+          materialUniforms.u_diffuse[1] = 1; // yy / num * 0.5 + 0.5;
+          materialUniforms.u_diffuse[2] = 1; // zz / num * 0.5 + 0.5;
 
           // Set the uniforms that are specific to the this object.
           webglUtils.setUniforms(programInfo, materialUniforms);
@@ -200,8 +237,9 @@ function main() {
         }
       }
     }
-
-    requestAnimationFrame(drawScene);
+    if (running) {
+      requestAnimation(drawScene);
+    }
   }
 }
 
