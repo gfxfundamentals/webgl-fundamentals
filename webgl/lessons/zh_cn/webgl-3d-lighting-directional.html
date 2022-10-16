@@ -463,7 +463,7 @@ var positionLocation = gl.getAttribLocation(program, &quot;a_position&quot;);
 +gl.vertexAttribPointer(
 +    normalLocation, size, type, normalize, stride, offset)
 </code></pre><p>现在让着色器使用它</p>
-<p>首先在顶点着色器中只将法向量传递给片断着色器</p>
+<p>首先在顶点着色器中只将法向量传递给片段着色器</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec4 a_position;
 -attribute vec4 a_color;
 +attribute vec3 a_normal;
@@ -477,13 +477,13 @@ void main() {
   // 将位置和矩阵相乘
   gl_Position = u_matrix * a_position;
 
--  // 将颜色传到片断着色器
+-  // 将颜色传到片段着色器
 -  v_color = a_color;
 
-+  // 将法向量传到片断着色器
++  // 将法向量传到片段着色器
 +  v_normal = a_normal;
 }
-</code></pre><p>然后在片断着色器中将法向量和光照方向点乘</p>
+</code></pre><p>然后在片段着色器中将法向量和光照方向点乘</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">precision mediump float;
 
 // 从顶点着色器中传入的值
@@ -549,7 +549,7 @@ void main() {
   // 将位置和矩阵相乘
 *  gl_Position = u_worldViewProjection * a_position;
 
-*  // 重定向法向量并传递给片断着色器
+*  // 重定向法向量并传递给片段着色器
 *  v_normal = mat3(u_world) * a_normal;
 }
 </code></pre><p>注意到我们将 <code class="notranslate" translate="no">a_normal</code> 与 <code class="notranslate" translate="no">mat3(u_world)</code> 相乘，
@@ -607,7 +607,7 @@ void main() {
   // 将位置和矩阵相乘
   gl_Position = u_worldViewProjection * a_position;
 
-  // 重定向法向量并传递给片断着色器
+  // 重定向法向量并传递给片段着色器
 *  v_normal = mat3(u_worldInverseTranspose) * a_normal;
 }
 </code></pre><p>然后找到它</p>

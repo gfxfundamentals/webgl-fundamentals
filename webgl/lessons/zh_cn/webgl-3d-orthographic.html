@@ -510,7 +510,7 @@ function setGeometry(gl) {
 </p>
 <p>拖动滑块很难看出它是三维的，让我们给矩形上不同的颜色。
 需要在顶点着色器中添加一个属性和一个可变量，
-将颜色值传到片断着色器中。</p>
+将颜色值传到片段着色器中。</p>
 <p>这是新的顶点着色器</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-3d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec4 a_position;
@@ -524,11 +524,11 @@ void main() {
   // 将位置和矩阵相乘.
   gl_Position = u_matrix * a_position;
 
-+  // 将颜色传递给片断着色器
++  // 将颜色传递给片段着色器
 +  v_color = a_color;
 }
 &lt;/script&gt;
-</code></pre><p>然后在片断着色器中使用颜色</p>
+</code></pre><p>然后在片段着色器中使用颜色</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;fragment-shader-3d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
@@ -651,7 +651,7 @@ gl.vertexAttribPointer(
 Z 也在裁剪空间或者 (-1 到 +1) 。这个值会被转换到深度空间( 0 到 +1)，
 WebGL绘制一个着色像素之前会检查对应的深度像素，
 如果对应的深度像素中的深度值小于当前像素的深度值，WebGL就不会绘制新的颜色。
-反之它会绘制片断着色器提供的新颜色并更新深度像素中的深度值。
+反之它会绘制片段着色器提供的新颜色并更新深度像素中的深度值。
 这也意味着在其他像素后面的像素不会被绘制。</p>
 <p>我们可以像这样开启这个特性</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  gl.enable(gl.DEPTH_TEST);

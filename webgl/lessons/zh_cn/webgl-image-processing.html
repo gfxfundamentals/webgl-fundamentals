@@ -247,21 +247,21 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 渲染纹理时需要纹理坐标，而不是像素坐标。无论纹理是什么尺寸，纹理坐标范围始终是
 0.0 到 1.0 。</p>
 <p>因为我们只用画一个矩形（其实是两个三角形），所以需要告诉WebGL矩形中每个顶点对应的纹理坐标。
-我们将使用一种特殊的叫做&#39;varying&#39;的变量将纹理坐标从顶点着色器传到片断着色器，它叫做“可变量”
-是因为它的值有很多个，WebGL会用顶点着色器中值的进行插值，然后传给对应像素执行的片断着色器。</p>
+我们将使用一种特殊的叫做&#39;varying&#39;的变量将纹理坐标从顶点着色器传到片段着色器，它叫做“可变量”
+是因为它的值有很多个，WebGL会用顶点着色器中值的进行插值，然后传给对应像素执行的片段着色器。</p>
 <p>接着用<a href="webgl-fundamentals.html">上篇文章中最后一个顶点着色器</a>，
-我们需要添加一个属性，用它接收纹理坐标然后传给片断着色器。</p>
+我们需要添加一个属性，用它接收纹理坐标然后传给片段着色器。</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec2 a_texCoord;
 ...
 varying vec2 v_texCoord;
 
 void main() {
    ...
-   // 将纹理坐标传给片断着色器
+   // 将纹理坐标传给片段着色器
    // GPU会在点之间进行插值
    v_texCoord = a_texCoord;
 }
-</code></pre><p>然后用片断着色器寻找纹理上对应的颜色</p>
+</code></pre><p>然后用片段着色器寻找纹理上对应的颜色</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
@@ -343,7 +343,7 @@ gl_FragColor = texture2D(u_image, v_texCoord).bgra;
 <p>如果我们的图像处理需要其他像素的颜色值怎么办？
 由于WebGL的纹理坐标范围是 0.0 到 1.0 ， 那我们可以简单计算出移动一个像素对应的距离，
 <code class="notranslate" translate="no">onePixel = 1.0 / textureSize</code>。</p>
-<p>这个片断着色器将每个像素的值设置为与左右像素的均值。</p>
+<p>这个片段着色器将每个像素的值设置为与左右像素的均值。</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
@@ -389,7 +389,7 @@ gl.uniform2f(textureSizeLocation, image.width, image.height);
 相乘后将结果加起来除以内核权重（内核中所有值的和或 1.0 ，取二者中较大者），
 <a href="https://docs.gimp.org/2.6/en/plug-in-convmatrix.html">这有一个不错的相关文章</a>，
 <a href="https://www.codeproject.com/KB/graphics/ImageConvolution.aspx">这里是C++实现的一些具体代码</a>。</p>
-<p>我们将在片断着色器中计算卷积，所以创建一个新的片断着色器。</p>
+<p>我们将在片段着色器中计算卷积，所以创建一个新的片段着色器。</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;fragment-shader-2d&quot; type=&quot;x-shader/x-fragment&quot;&gt;
 precision mediump float;
 
@@ -488,7 +488,7 @@ gl.activeTexture(gl.TEXTURE0 + textureUnitIndex);
 gl.bindTexture(gl.TEXTURE_2D, someTexture);
 </pre>
 <p>
-所有支持WebGL的环境，在片断着色器中至少有8个纹理单元，顶点着色器中可以是0个。
+所有支持WebGL的环境，在片段着色器中至少有8个纹理单元，顶点着色器中可以是0个。
 所以如果你使用超过8个纹理单元就应该调用<code class="notranslate" translate="no">gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS)</code>
 查看单元个数，或者调用<code class="notranslate" translate="no">gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS)</code>
 查看顶点着色器中可以用几个纹理单元。超过 99% 的机器在顶点着色器中至少有4个纹理单元。

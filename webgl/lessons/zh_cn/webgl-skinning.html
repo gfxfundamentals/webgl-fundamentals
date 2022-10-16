@@ -438,7 +438,7 @@ webglUtils.drawBufferInfo(gl, bufferInfo, gl.LINES);
 </div>
 
 <p>另一个需要注意的小事，上面的例子权重和骨骼下标使用的是浮点数，可以使用<code class="notranslate" translate="no">UNSIGNED_BYTE</code>来节省一些空间。</p>
-<p>不幸的是着色器中可以使用的全局变量的数量是有限制的。对WebGL比较低的限制是64个vec4，即8个mat4 你可能需要一些全局变量用于其他的事情像片断着色器中的<code class="notranslate" translate="no">color</code> 以及<code class="notranslate" translate="no">projection</code>和<code class="notranslate" translate="no">view</code>这意味着如果我们在一个限制为64个vec4的设备上，我们只能有5个骨骼！查看
+<p>不幸的是着色器中可以使用的全局变量的数量是有限制的。对WebGL比较低的限制是64个vec4，即8个mat4 你可能需要一些全局变量用于其他的事情像片段着色器中的<code class="notranslate" translate="no">color</code> 以及<code class="notranslate" translate="no">projection</code>和<code class="notranslate" translate="no">view</code>这意味着如果我们在一个限制为64个vec4的设备上，我们只能有5个骨骼！查看
 <a href="https://webglstats.com/webgl/parameter/MAX_VERTEX_UNIFORM_VECTORS">WebGLStats</a>
 大多数设备支持128个vec4，其中70%支持256个vec4 但是对于上面的例子，这分别只有13个骨骼和29个骨骼。13对于90年代VR战士1风格的角色尚且不够，29与现代游戏中使用的数字相距甚远。</p>
 <p>关于这个问题有很多方法。一个是离线预处理模型并打破它们为多个部分，每个使用不超过N个骨骼。这很复杂并带来了自身的一系列问题。</p>
@@ -851,7 +851,7 @@ void main() {
   gl_Position = u_projection * u_view * u_world * a_POSITION;
   v_normal = mat3(u_world) * a_NORMAL;
 }
-</code></pre><p>片断着色器中我们使用一个简单的平行光</p>
+</code></pre><p>片段着色器中我们使用一个简单的平行光</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">precision mediump float;
 
 varying vec3 v_normal;
@@ -1108,7 +1108,7 @@ function animSkin(skin, a) {
 <p>当我第一次尝试让它工作时，就像大多数程序一样，屏幕上没有显示的东西。</p>
 <p>所以，首先做的是在蒙皮着色器的末尾添加这一行 </p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  gl_Position = u_projection * u_view *  a_POSITION;
-</code></pre><p>在片断着色器中，我改变了它，仅仅在末尾添加这个来画纯色的</p>
+</code></pre><p>在片段着色器中，我改变了它，仅仅在末尾添加这个来画纯色的</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl_FragColor = vec4(1, 0, 0, 1);
 </code></pre><p>这将删除所有蒙皮，仅仅在原点绘制网格。我调整相机位置直到我有了一个好的视角。</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">const cameraPosition = [5, 0, 5];
@@ -1116,7 +1116,7 @@ const target = [0, 0, 0];
 </code></pre><p>这显示了虎鲸的轮廓，所以我知道至少有一些数据正在发挥作用</p>
 <div class="webgl_center"><img src="../resources/skinning-debug-01.png"></div>
 
-<p>接下来我让片断着色器显示法线</p>
+<p>接下来我让片段着色器显示法线</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl_FragColor = vec4(normalize(v_normal) * .5 + .5, 1);
 </code></pre><p>法线从-1 到 1，所以 <code class="notranslate" translate="no">* .5 + .5</code>调整它们到0 到 1来观察颜色。</p>
 <p>回到顶点着色器我仅仅传递法线</p>
@@ -1127,7 +1127,7 @@ const target = [0, 0, 0];
 <p>我并没有觉得法线会出错，但是从我认为有效的开始，并确认它确实是有效的是很好的方法。</p>
 <p>接下来我想我应该检查权重。所有我需要做的就是像法线一样从顶点着色器传递权重</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">v_normal = a_WEIGHTS_0.xyz * 2. - 1.;
-</code></pre><p>权重从0到1，但是因为片断着色器需要法线，我仅仅改变权重从-1到1</p>
+</code></pre><p>权重从0到1，但是因为片段着色器需要法线，我仅仅改变权重从-1到1</p>
 <p>这最初产生了一种混乱的颜色。一旦我发现了这个bug，我得到了这样的图像</p>
 <div class="webgl_center"><img src="../resources/skinning-debug-03.png"></div>
 

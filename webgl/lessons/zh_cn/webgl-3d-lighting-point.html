@@ -282,20 +282,20 @@ void main() {
   // 将位置和矩阵相乘
   gl_Position = u_worldViewProjection * a_position;
 
-  // 重定向法向量并传递给片断着色器
+  // 重定向法向量并传递给片段着色器
   v_normal = mat3(u_worldInverseTranspose) * a_normal;
 
 +  // 计算表面的世界坐标
 +  vec3 surfaceWorldPosition = (u_world * a_position).xyz;
 +
 +  // 计算表面到光源的方向
-+  // 传递给片断着色器
++  // 传递给片段着色器
 +  v_surfaceToLight = u_lightWorldPosition - surfaceWorldPosition;
 }
-</code></pre><p>在片断着色器中需要将表面到光源的方向进行单位化，
+</code></pre><p>在片段着色器中需要将表面到光源的方向进行单位化，
 注意，虽然我们可以在顶点着色器中传递单位向量，
-但是 <code class="notranslate" translate="no">varying</code> 会进行插值再传给片断着色器，
-所以片断着色器中的向量基本上不是单位向量了。</p>
+但是 <code class="notranslate" translate="no">varying</code> 会进行插值再传给片段着色器，
+所以片段着色器中的向量基本上不是单位向量了。</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">precision mediump float;
 
 // 从顶点着色器中传入的值
@@ -371,7 +371,7 @@ void main() {
 
 </p>
 <p>所以首先我们需要传入相机位置，计算表面到相机的方向矢量，
-然后传递到片断着色器。</p>
+然后传递到片段着色器。</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec4 a_position;
 attribute vec3 a_normal;
 
@@ -391,21 +391,21 @@ void main() {
   // 将位置和矩阵相乘
   gl_Position = u_worldViewProjection * a_position;
 
-  // 重定向法向量并传递到片断着色器
+  // 重定向法向量并传递到片段着色器
   v_normal = mat3(u_worldInverseTranspose) * a_normal;
 
   // 计算表面的世界坐标
   vec3 surfaceWorldPosition = (u_world * a_position).xyz;
 
   // 计算表面到光源的方向
-  // 然后传递到片断着色器
+  // 然后传递到片段着色器
   v_surfaceToLight = u_lightWorldPosition - surfaceWorldPosition;
 
 +  // 计算表面到相机的方向
-+  // 然后传递到片断着色器
++  // 然后传递到片段着色器
 +  v_surfaceToView = u_viewWorldPosition - surfaceWorldPosition;
 }
-</code></pre><p>然后在片断着色器中计算表面到光源和相机之间的 <code class="notranslate" translate="no">halfVector</code>，
+</code></pre><p>然后在片段着色器中计算表面到光源和相机之间的 <code class="notranslate" translate="no">halfVector</code>，
 将它和法向量相乘，查看光线是否直接反射到眼前。</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 从顶点着色器中传入的值
 varying vec3 v_normal;

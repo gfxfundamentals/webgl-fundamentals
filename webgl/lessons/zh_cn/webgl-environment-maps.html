@@ -361,7 +361,7 @@ gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LI
 
 </p>
 <p>既然我们了解了反射是如何工作的，我们可以使用它从立方体纹理中选取颜色值，我们改变着色器来实现它.</p>
-<p>首先在顶点着色器中我们会计算世界坐标系中的顶点位置和顶点法线，然后用varing传递它们给片断着色器。这和<a href="webgl-3d-lighting-spot.html">三维聚光灯</a>文章中我们所做的相似。</p>
+<p>首先在顶点着色器中我们会计算世界坐标系中的顶点位置和顶点法线，然后用varing传递它们给片段着色器。这和<a href="webgl-3d-lighting-spot.html">三维聚光灯</a>文章中我们所做的相似。</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">attribute vec4 a_position;
 attribute vec3 a_normal;
 
@@ -376,14 +376,14 @@ void main() {
   // 将位置与矩阵相乘。
   gl_Position = u_projection * u_view * u_world * a_position;
 
-  // 传递世界位置给片断着色器
+  // 传递世界位置给片段着色器
   v_worldPosition = (u_world * a_position).xyz;
 
-  // 转换法线并传递给片断着色器
+  // 转换法线并传递给片段着色器
   v_worldNormal = mat3(u_world) * a_normal;
 }
 </code></pre>
-<p>接下来在片断着色器中我们单位化worldNormal，因为顶点之间的法线会被插值。我们传递了世界坐标系中的相机位置接着用世界坐标系中的表面位置减去它我们得到了eyeToSurfaceDir。</p>
+<p>接下来在片段着色器中我们单位化worldNormal，因为顶点之间的法线会被插值。我们传递了世界坐标系中的相机位置接着用世界坐标系中的表面位置减去它我们得到了eyeToSurfaceDir。</p>
 <p>最终我们用GLSL的内置函数<code class="notranslate" translate="no">reflect</code>，它实现了我们之前介绍的公式。我们使用这个结果从立方体纹理中获得一个颜色值。</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">precision highp float;
 

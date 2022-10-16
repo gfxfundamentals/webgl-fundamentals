@@ -255,12 +255,12 @@ gl.drawArrays(primitiveType, offset, count);
 这个变量就是该顶点转换到裁剪空间中的坐标值，GPU接收该值并将其保存起来。</p>
 <p>假设你正在画三角形，顶点着色器每完成三次顶点处理，WebGL就会用这三个顶点画一个三角形。
 它计算出这三个顶点对应的像素后，就会光栅化这个三角形，“光栅化”其实就是“用像素画出来”
-的花哨叫法。对于每一个像素，它会调用你的片断着色器询问你使用什么颜色。
-你通过给片断着色器的一个特殊变量<code class="notranslate" translate="no">gl_FragColor</code>设置一个颜色值，实现自定义像素颜色。</p>
+的花哨叫法。对于每一个像素，它会调用你的片段着色器询问你使用什么颜色。
+你通过给片段着色器的一个特殊变量<code class="notranslate" translate="no">gl_FragColor</code>设置一个颜色值，实现自定义像素颜色。</p>
 <p>使用它们可以做出非常有趣的东西，但如你所见，到目前为止的例子中，
-处理每个像素时片断着色器可用信息很少，幸运的是我们可以给它传递更多信息。
-想要从顶点着色器传值到片断着色器，我们可以定义“可变量（varyings）”。</p>
-<p>一个简单的例子，将顶点着色器计算出的裁剪空间坐标从顶点着色器传递到片断着色器。</p>
+处理每个像素时片段着色器可用信息很少，幸运的是我们可以给它传递更多信息。
+想要从顶点着色器传值到片段着色器，我们可以定义“可变量（varyings）”。</p>
+<p>一个简单的例子，将顶点着色器计算出的裁剪空间坐标从顶点着色器传递到片段着色器。</p>
 <p>我们来画一个简单的三角形，从<a href="webgl-2d-matrices.html">之前的例子</a>继续，让我们把矩形改成三角形。</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 定义一个三角形填充到缓冲里
 function setGeometry(gl) {
@@ -282,7 +282,7 @@ function drawScene() {
   var count = 3;
   gl.drawArrays(primitiveType, offset, count);
 }
-</code></pre><p>然后在我们的顶点着色器中定义一个<em>varying</em>（可变量）用来给片断着色器传值。</p>
+</code></pre><p>然后在我们的顶点着色器中定义一个<em>varying</em>（可变量）用来给片段着色器传值。</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">varying vec4 v_color;
 ...
 void main() {
@@ -294,7 +294,7 @@ void main() {
   // 颜色空间范围 0.0 到 1.0
 *  v_color = gl_Position * 0.5 + 0.5;
 }
-</code></pre><p>在片断着色器中定义同名<em>varying</em>变量。</p>
+</code></pre><p>在片段着色器中定义同名<em>varying</em>变量。</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">precision mediump float;
 
 *varying vec4 v_color;
@@ -302,7 +302,7 @@ void main() {
 void main() {
 *  gl_FragColor = v_color;
 }
-</code></pre><p>WebGL会将同名的可变量从顶点着色器输入到片断着色器中。</p>
+</code></pre><p>WebGL会将同名的可变量从顶点着色器输入到片段着色器中。</p>
 <p>下面是运行结果。</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-triangle-with-position-for-color.html"></iframe>
@@ -314,7 +314,7 @@ void main() {
 <p>回想一下，我们只计算了三个顶点，调用了三次顶点着色器，所以也只计算出了三个颜色值，
 但是我们的三角形却有很多颜色，这就是称之为可变量的<em>varying</em>的原因啦！</p>
 <p>WebGL先获得顶点着色器中计算的三个颜色值，在光栅化三角形时将会根据这三个值进行插值。
-每一个像素在调用片断着色器时，可变量的值是与之对应的插值。</p>
+每一个像素在调用片段着色器时，可变量的值是与之对应的插值。</p>
 <p>让我们从上例的三个顶点开始分析</p>
 <p><style>
 table.vertex_table {
@@ -366,16 +366,16 @@ table.vertex_table {
 </table>
 </div>
 
-<p>利用这三个值进行插值后传进每个像素运行的片断着色器中。</p>
+<p>利用这三个值进行插值后传进每个像素运行的片段着色器中。</p>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 600px; height: 400px;" src="/webgl/lessons/resources/fragment-shader-anim.html"></iframe>
   <div class="webgl_center">v_color is interpolated between v0, v1 and v2</div>
 </div>
 
 </p>
-<p>想要给片断着色器传值，我们可以先把值传递给顶点着色器然后再传给片断着色器。
+<p>想要给片段着色器传值，我们可以先把值传递给顶点着色器然后再传给片段着色器。
 让我们来画一个由两个不同颜色三角形组成的矩形。我们需要给顶点着色器添加一个属性值，
-把值通过属性传递给它后它再直接传递给片断着色器。</p>
+把值通过属性传递给它后它再直接传递给片段着色器。</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec2 a_position;
 +attribute vec4 a_color;
 ...
@@ -473,7 +473,7 @@ function setColors(gl) {
 </div>
 
 </p>
-<p>可能不值一提的是上例还演示了使用多个属性并且通过顶点着色器向片断着色器传值。
+<p>可能不值一提的是上例还演示了使用多个属性并且通过顶点着色器向片段着色器传值。
 如果你看了<a href="webgl-image-processing.html">处理图片的例子</a>，
 那里面还用了另外一个属性传递纹理坐标。</p>
 <h2 id="-buffer-attribute-">关于buffer和attribute的代码是干什么的？</h2>

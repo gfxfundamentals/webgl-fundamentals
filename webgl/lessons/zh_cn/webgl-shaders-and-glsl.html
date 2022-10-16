@@ -244,8 +244,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <p>我们之前提到过着色器和GLSL，但是没有涉及细节，你可能已经对此有所了解，
 但以防万一，这里将详细讲解着色器和GLSL。</p>
 <p>在<a href="webgl-how-it-works.html">工作原理</a>中我们提到，WebGL每次绘制需要两个着色器，
-一个<strong>顶点着色器</strong>和一个<strong>片断着色器</strong>，每一个着色器都是一个<strong>方法</strong>。
-一个顶点着色器和一个片断着色器链接在一起放入一个着色程序中（或者只叫程序）。
+一个<strong>顶点着色器</strong>和一个<strong>片段着色器</strong>，每一个着色器都是一个<strong>方法</strong>。
+一个顶点着色器和一个片段着色器链接在一起放入一个着色程序中（或者只叫程序）。
 一个典型的WebGL应用会有多个着色程序。</p>
 <h2 id="-">顶点着色器</h2>
 <p>一个顶点着色器的工作是生成裁剪空间坐标值，通常是以下的形式</p>
@@ -363,24 +363,24 @@ uniform SomeStruct u_someThing;
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var someThingActiveLoc = gl.getUniformLocation(someProgram, &quot;u_someThing.active&quot;);
 var someThingSomeVec2Loc = gl.getUniformLocation(someProgram, &quot;u_someThing.someVec2&quot;);
 </code></pre><h3 id="-">纹理（顶点着色器中）</h3>
-<p>同 <a href="#textures-">Textures 纹理（在片断着色器中）</a>。</p>
-<h2 id="-">片断着色器</h2>
-<p>一个片断着色器的工作是为当前光栅化的像素提供颜色值，通常是以下的形式</p>
+<p>同 <a href="#textures-">Textures 纹理（在片段着色器中）</a>。</p>
+<h2 id="-">片段着色器</h2>
+<p>一个片段着色器的工作是为当前光栅化的像素提供颜色值，通常是以下的形式</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">precision mediump float;
 
 void main() {
    gl_FragColor = doMathToMakeAColor;
 }
-</code></pre><p>每个像素都将调用一次片断着色器，每次调用需要从你设置的特殊全局变量<code class="notranslate" translate="no">gl_FragColor</code>中获取颜色信息。</p>
-<p>片断着色器所需的数据，可以通过以下三种方式获取</p>
+</code></pre><p>每个像素都将调用一次片段着色器，每次调用需要从你设置的特殊全局变量<code class="notranslate" translate="no">gl_FragColor</code>中获取颜色信息。</p>
+<p>片段着色器所需的数据，可以通过以下三种方式获取</p>
 <ol>
 <li><a href="#uniforms-">Uniforms 全局变量</a> (values that stay the same for every pixel of a single draw call)</li>
 <li><a href="#textures-">Textures 纹理</a> (data from pixels/texels)</li>
 <li><a href="#varyings-">Varyings 可变量</a> (data passed from the vertex shader and interpolated)</li>
 </ol>
-<h3 id="uniform-">Uniform 全局变量（片断着色器中）</h3>
+<h3 id="uniform-">Uniform 全局变量（片段着色器中）</h3>
 <p>同 <a href="#uniforms-">Uniforms 全局变量</a>.</p>
-<h3 id="textures-">Textures 纹理（片断着色器中）</h3>
+<h3 id="textures-">Textures 纹理（片段着色器中）</h3>
 <p>在着色器中获取纹理信息，可以先创建一个<code class="notranslate" translate="no">sampler2D</code>类型全局变量，然后用GLSL方法<code class="notranslate" translate="no">texture2D</code>
 从纹理中提取信息。</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">precision mediump float;
@@ -413,9 +413,9 @@ gl.bindTexture(gl.TEXTURE_2D, tex);
 </code></pre><p>然后告诉着色器你要使用的纹理在那个纹理单元</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.uniform1i(someSamplerLoc, unit);
 </code></pre><h3 id="varyings-">Varyings 可变量</h3>
-<p>在<a href="webgl-how-it-works.html">工作原理</a>提到过，可变量是一种顶点着色器给片断着色器传值的方式。</p>
+<p>在<a href="webgl-how-it-works.html">工作原理</a>提到过，可变量是一种顶点着色器给片段着色器传值的方式。</p>
 <p>为了使用可变量，要在两个着色器中定义同名的可变量。
-给顶点着色器中可变量设置的值，会作为参考值进行内插，在绘制像素时传给片断着色器的可变量。</p>
+给顶点着色器中可变量设置的值，会作为参考值进行内插，在绘制像素时传给片段着色器的可变量。</p>
 <p>顶点着色器</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec4 a_position;
 
@@ -427,7 +427,7 @@ void main() {
   gl_Position = a_position + u_offset;
 +  v_positionWithOffset = a_position + u_offset;
 }
-</code></pre><p>片断着色器</p>
+</code></pre><p>片段着色器</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">precision mediump float;
 
 +varying vec4 v_positionWithOffset;
@@ -437,7 +437,7 @@ void main() {
 +  vec4 color = v_positionWithOffset * 0.5 + 0.5
 +  gl_FragColor = color;
 }
-</code></pre><p>上方的示例几乎没有意义，通常情况下直接将裁剪空间的值传给片断着色器当作颜色值是没有意义的，
+</code></pre><p>上方的示例几乎没有意义，通常情况下直接将裁剪空间的值传给片段着色器当作颜色值是没有意义的，
 虽然它可以运行并且可以生成颜色值。</p>
 <h2 id="glsl">GLSL</h2>
 <p>GLSL全称是 Graphics Library Shader Language （图形库着色器语言），是着色器使用的语言。
@@ -512,7 +512,7 @@ float f = float(1)  // 转换integer为float
 <a href="https://www.khronos.org/files/opengles_shading_language.pdf">GLSL 规范</a>。</p>
 <h2 id="-">总结</h2>
 <p>这是当前系列文章的重点。WebGL的全部内容就是创建不同的着色器，向着色器提供数据然后调用<code class="notranslate" translate="no">gl.drawArrays</code>
- 或 <code class="notranslate" translate="no">gl.drawElements</code> 让WebGL调用当前顶点着色器处理每个顶点，调用当前片断着色器渲染每个像素。</p>
+ 或 <code class="notranslate" translate="no">gl.drawElements</code> 让WebGL调用当前顶点着色器处理每个顶点，调用当前片段着色器渲染每个像素。</p>
 <p>实际上创建着色器需要为数不多的几行代码，并且在大多数WebGL应用程序中都相似，
 因此一旦写完几乎可以不再关心它们了。<a href="webgl-boilerplate.html">在这里介绍如何编译GLSL并链接到着色程序</a>。</p>
 <p>如果你才开始学习WebGL，这里有两个方向可以选择。如果你对图像处理感兴趣我可以向你展示

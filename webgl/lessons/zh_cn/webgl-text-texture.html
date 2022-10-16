@@ -347,7 +347,7 @@ gl.drawElements(gl.TRIANGLES, textBufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
 然后我们将它绘制到矩形上了，我们可以混合像素。</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.enable(gl.BLEND);
 gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-</code></pre><p>这样将源像素（片断着色器产生的颜色）和目标像素（画布上的颜色）的颜色根据混合方法进行混合，
+</code></pre><p>这样将源像素（片段着色器产生的颜色）和目标像素（画布上的颜色）的颜色根据混合方法进行混合，
 我们设置混合方法为 <code class="notranslate" translate="no">SRC_ALPHA</code> 对源，<code class="notranslate" translate="no">ONE_MINUS_SRC_ALPHA</code> 对目标。</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">result = dest * (1 - src_alpha) + src * src_alpha
 </code></pre><p>所以加入目标像素是绿色 <code class="notranslate" translate="no">0,1,0,1</code>，源是红色 <code class="notranslate" translate="no">1,0,0,1</code> 就得到</p>

@@ -248,7 +248,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">gl_FragColor = originalColor + (fogColor - originalColor) * fogAmount;
 </code></pre>
 <p>让我们来写一个这样的着色器。我们会使用<a href="webgl-3d-textures.html">纹理</a>文章中的纹理立方体。</p>
-<p>让我们将混合函数添加到片断着色器</p>
+<p>让我们将混合函数添加到片段着色器</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">precision mediump float;
 
 // 由顶点着色器传入。
@@ -303,7 +303,7 @@ function drawScene(time) {
 </p>
 <p>所以现在我们真正需要做的是根据一些原则例如以相机为基准的深度来计算雾量代替传入雾量。</p>
 <p>回想关于<a href="webgl-3d-camera.html">相机</a>的文章，在我们应用视图矩阵之后，所有位置转换为相对于相机的位置。相机看向-z轴，所以如果我们只看z位置，在乘以世界和视图矩阵之后，我们会得到一个值代表相较于相机所在z平面的距离。</p>
-<p>让我们改变顶点着色器来传递那个数据给片断着色器，使我们能够用它来计算雾量。为此，我们将<code class="notranslate" translate="no">u_matrix</code>分成两部分。一个投影矩阵和一个世界视图矩阵。</p>
+<p>让我们改变顶点着色器来传递那个数据给片段着色器，使我们能够用它来计算雾量。为此，我们将<code class="notranslate" translate="no">u_matrix</code>分成两部分。一个投影矩阵和一个世界视图矩阵。</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">attribute vec4 a_position;
 attribute vec2 a_texcoord;
 
@@ -319,7 +319,7 @@ void main() {
 -  gl_Position = u_matrix * a_position;
 +  gl_Position = u_projection * u_worldView * a_position;
 
-  // 传递纹理坐标给片断着色器
+  // 传递纹理坐标给片段着色器
   v_texcoord = a_texcoord;
 
 +  // 传递相对于相机的负z位置
@@ -329,9 +329,9 @@ void main() {
 +  v_fogDepth = -(u_worldView * a_position).z;
 }
 </code></pre>
-<p>现在在片断着色器中我们希望如果深度小于某些值，不融合雾色(fogAmount = 0)。如果深度大于某个值则为100%雾色(fogAmount = 1)。在两个值之间则融合颜色。</p>
+<p>现在在片段着色器中我们希望如果深度小于某些值，不融合雾色(fogAmount = 0)。如果深度大于某个值则为100%雾色(fogAmount = 1)。在两个值之间则融合颜色。</p>
 <p>我们可以编写代码来实现这点，但GLSL有一个函数<code class="notranslate" translate="no">smoothstep</code>就是这样做的。你给定最小值，最大值，和要测试的值。如果测试值小于等于最小值返回0。如果测试值大于等于最大值返回1。如果测试值在两值之间，则根据测试值在最小值和最大值之间的位置返回0到1之间的插值。</p>
-<p>所以，在我们的片断着色器中使用它来计算雾量会是非常简单的。</p>
+<p>所以，在我们的片段着色器中使用它来计算雾量会是非常简单的。</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">precision mediump float;
 
 // 从顶点着色器传入的。
@@ -464,7 +464,7 @@ for (let i = 0; i &lt;= numCubes; ++i) {
 <p>修复方法是用计算到相机的距离代替，这对于所有的立方体都是相同的。</p>
 <div class="webgl_center"><img src="../resources/fog-distance.svg" style="width: 600px;"></div>
 
-<p>为此，我们只需将视图空间中的顶点位置从顶点着色器传递到片断着色器</p>
+<p>为此，我们只需将视图空间中的顶点位置从顶点着色器传递到片段着色器</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">attribute vec4 a_position;
 attribute vec2 a_texcoord;
 
@@ -479,7 +479,7 @@ void main() {
   // 给位置乘以矩阵。
   gl_Position = u_projection * u_worldView * a_position;
 
-  // 传递纹理坐标给片断着色器。
+  // 传递纹理坐标给片段着色器。
   v_texcoord = a_texcoord;
 
 -  // 传递相对于相机的负z位置
@@ -487,11 +487,11 @@ void main() {
 -  // 在相机前面的物体会有一个负Z位置
 -  // 取负我们得到一个正的深度
 -  v_fogDepth = -(u_worldView * a_position).z;
-+  // 传递视图位置给片断着色器
++  // 传递视图位置给片段着色器
 +  v_position = (u_worldView * a_position).xyz;
 }
 </code></pre>
-<p>然后在片断着色器中我们可以使用位置来计算距离</p>
+<p>然后在片段着色器中我们可以使用位置来计算距离</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">precision mediump float;
 
 // 从顶点着色器传入
@@ -527,7 +527,7 @@ void main() {
 fogAmount = 1. - exp2(-fogDensity * fogDensity * fogDistance * fogDistance * LOG2));
 fogAmount = clamp(fogAmount, 0., 1.);
 </code></pre>
-<p>要使用它，我们将片断着色器改成这样</p>
+<p>要使用它，我们将片段着色器改成这样</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">precision mediump float;
 
 // 从顶点着色器传入。
@@ -561,7 +561,7 @@ void main() {
 
 </p>
 <p>需要注意的是基于密度的雾没有最近值和最远值设置。它可能更符合真实情况但也可能不符合你的审美需求。你更喜欢哪一个是一个艺术问题。</p>
-<p>还有很多其他计算雾的方法。在低性能GPU上，你可能只使用<code class="notranslate" translate="no">gl_FragCoord.z</code>。<code class="notranslate" translate="no">gl_FragCoord</code>是WebGL内置的全局变量。<code class="notranslate" translate="no">x</code>和<code class="notranslate" translate="no">y</code>分量是被绘制像素的坐标。<code class="notranslate" translate="no">z</code>坐标是像素的深度，范围从0到1。虽然不能直接转换到距离，但你仍然可以选取从0到1的某些值作为最近值和最远值来获得看起来像雾的效果。没有需要从顶点着色器传递到片断着色器的值，也不需要距离计算，所以这是一个在低性能GPU上节省的方法。</p>
+<p>还有很多其他计算雾的方法。在低性能GPU上，你可能只使用<code class="notranslate" translate="no">gl_FragCoord.z</code>。<code class="notranslate" translate="no">gl_FragCoord</code>是WebGL内置的全局变量。<code class="notranslate" translate="no">x</code>和<code class="notranslate" translate="no">y</code>分量是被绘制像素的坐标。<code class="notranslate" translate="no">z</code>坐标是像素的深度，范围从0到1。虽然不能直接转换到距离，但你仍然可以选取从0到1的某些值作为最近值和最远值来获得看起来像雾的效果。没有需要从顶点着色器传递到片段着色器的值，也不需要距离计算，所以这是一个在低性能GPU上节省的方法。</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-fog-depth-based-gl_FragCoord.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-3d-fog-depth-based-gl_FragCoord.html" target="_blank">点此在新窗口中浏览</a>

@@ -270,7 +270,7 @@ void main() {
   v_surfaceToView = (u_viewInverse[3] - (u_world * a_position)).xyz;
   gl_Position = v_position;
 }
-</code></pre><p>片断着色器：</p>
+</code></pre><p>片段着色器：</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">precision mediump float;
 
 varying vec4 v_position;
@@ -633,9 +633,9 @@ var uniformSetters = webglUtils.createUniformSetters(program);
 // 绘制时
 uniformSetters.u_ambient([1, 0, 0, 1]); // 设置环境光为红色
 </pre>
-<p>这样做不好的原因就是，在使用GLSL的过程中经常会修改，调试。假设屏幕上什么都没有出现，首先我会简化着色器，例如我会尽可能简化片断着色器。</p>
+<p>这样做不好的原因就是，在使用GLSL的过程中经常会修改，调试。假设屏幕上什么都没有出现，首先我会简化着色器，例如我会尽可能简化片段着色器。</p>
 <pre class="prettyprint showlinemods">
-// 片断着色器
+// 片段着色器
 precision mediump float;
 
 varying vec4 v_position;
