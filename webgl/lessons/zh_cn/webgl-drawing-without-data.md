@@ -277,7 +277,7 @@ void main() {
 
 如此，我们便得到了：
 
-{{example url=".../webgl-no-data-point-rain.html"}}。
+{{{example url="../webgl-no-data-point-rain.html"}}}
 
 如果你非常仔细观察，你可以看到雨在重复进行。
 找到任意一组点，会发现它们从底部落下，又从顶部出现。
