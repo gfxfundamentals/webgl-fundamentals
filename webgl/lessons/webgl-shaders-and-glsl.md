@@ -210,7 +210,7 @@ function `texture2D` to extract a value from it.
     uniform sampler2D u_texture;
 
     void main() {
-       vec2 texcoord = vec2(0.5, 0.5)  // get a value from the middle of the texture
+       vec2 texcoord = vec2(0.5, 0.5);  // get a value from the middle of the texture
        gl_FragColor = texture2D(u_texture, texcoord);
     }
 

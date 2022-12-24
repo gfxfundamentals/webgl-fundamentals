@@ -217,7 +217,7 @@ Uniform-переменные могут быть многих типов. Для
     uniform sampler2D u_texture;
 
     void main() {
-       vec2 texcoord = vec2(0.5, 0.5)  // получение значение из центра текстуры
+       vec2 texcoord = vec2(0.5, 0.5);  // получение значение из центра текстуры
        gl_FragColor = texture2D(u_texture, texcoord);
     }
 

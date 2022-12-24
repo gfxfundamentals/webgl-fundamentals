@@ -219,7 +219,7 @@ TOC: 셰이더와 GLSL
     uniform sampler2D u_texture;
 
     void main() {
-      vec2 texcoord = vec2(0.5, 0.5)  // 텍스처 중앙에서 값 가져오기
+      vec2 texcoord = vec2(0.5, 0.5);  // 텍스처 중앙에서 값 가져오기
       gl_FragColor = texture2D(u_texture, texcoord);
     }
 
