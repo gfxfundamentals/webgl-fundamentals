@@ -7,14 +7,14 @@ TOC: How to make WebGL canvas transparent
 Is it possible to have **WebGL canvas** with transparent background?
 I want to have contents of web page visible through the canvas.
 
-This is what I have now: http://i50.tinypic.com/2vvq7h2.png
+This is what I have now: https://imgur.com/BMgHWsZ
 
 As you can see, the text behind the WebGL canvas is not visible. When I change style of Canvas element in CSS and add
 
     opacity: 0.5;
 
 The page will look like this:
-http://i47.tinypic.com/302ys9c.png
+https://imgur.com/hSu5tyM
 
 Which is almost what I want, but not entirely - the color of text due to the CSS alpha setting is of course not the same black and color of blue shape is not the same blue as in the first picture.
 
