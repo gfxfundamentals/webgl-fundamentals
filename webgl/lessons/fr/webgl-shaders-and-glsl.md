@@ -202,7 +202,7 @@ on utilise la fonction `texture2D`.
     uniform sampler2D u_texture;
 
     void main() {
-       vec2 coordonneesDeTexture = vec2(0.5, 0.5)  // valeur au milieu de la texture
+       vec2 coordonneesDeTexture = vec2(0.5, 0.5);  // valeur au milieu de la texture
        gl_FragColor = texture2D(u_texture, coordonneesDeTexture);
     }
 

@@ -201,7 +201,7 @@ TOC: WebGL 着色器和GLSL
     uniform sampler2D u_texture;
 
     void main() {
-       vec2 texcoord = vec2(0.5, 0.5)  // 获取纹理中心的值
+       vec2 texcoord = vec2(0.5, 0.5);  // 获取纹理中心的值
        gl_FragColor = texture2D(u_texture, texcoord);
     }
 
