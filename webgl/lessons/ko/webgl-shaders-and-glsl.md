@@ -281,7 +281,7 @@ WebGL이 픽셀을 그릴 때 이 값들 사이를 보간하고 프래그먼트 
 
     void main() {
     +  // 클립 공간에서 (-1 <-> +1) color space로 (0 -> 1) 변환
-    +  vec4 color = v_positionWithOffset * 0.5 + 0.5
+    +  vec4 color = v_positionWithOffset * 0.5 + 0.5;
     +  gl_FragColor = color;
     }
 
