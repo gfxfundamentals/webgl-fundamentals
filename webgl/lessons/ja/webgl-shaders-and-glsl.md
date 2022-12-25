@@ -315,7 +315,7 @@ varyingを利用するには、対(つい)になるvaryingを
 
     void main() {
     +  // 「クリップ空間座標の値」(-1 ～ +1) から「色空間座標の値」(0 ～ 1)へ変換する。
-    +  vec4 color = v_positionWithOffset * 0.5 + 0.5
+    +  vec4 color = v_positionWithOffset * 0.5 + 0.5;
     +  gl_FragColor = color;
     }
 

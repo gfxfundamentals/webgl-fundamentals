@@ -262,7 +262,7 @@ TOC: WebGL 着色器和GLSL
 
     void main() {
     +  // 从裁剪空间 (-1 <-> +1) 转换到颜色空间 (0 -> 1).
-    +  vec4 color = v_positionWithOffset * 0.5 + 0.5
+    +  vec4 color = v_positionWithOffset * 0.5 + 0.5;
     +  gl_FragColor = color;
     }
 

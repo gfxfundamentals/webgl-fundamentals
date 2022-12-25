@@ -281,7 +281,7 @@ varying-переменную во фрагментный шейдер.
 
     void main() {
     +  // конвертация из координат пространства отсечения (-1 <-> +1) в цвет (0 -> 1).
-    +  vec4 color = v_positionWithOffset * 0.5 + 0.5
+    +  vec4 color = v_positionWithOffset * 0.5 + 0.5;
     +  gl_FragColor = color;
     }
 
