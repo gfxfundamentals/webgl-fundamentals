@@ -287,7 +287,7 @@ the browser a script can not see the data inside the image. <a href="https://dev
 has a way to see inside the image. First you draw the image into the canvas</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">ctx.drawImage(someImg, 0, 0);
 </code></pre><p>Then you get the data</p>
-<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var data = ctx.getImageData(0, 0, width, heigh);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var data = ctx.getImageData(0, 0, width, height);
 </code></pre><p>But, if the image you drew came from a different domain the browser will mark the canvas as <em>tainted</em> and
 you&#39;ll get a security error when you call <code class="notranslate" translate="no">ctx.getImageData</code></p>
 <p>WebGL has to take it even one step further. In WebGL <code class="notranslate" translate="no">gl.readPixels</code> is the equivalent call to <code class="notranslate" translate="no">ctx.getImageData</code>

@@ -293,7 +293,7 @@ function loadImageAndCreateTextureInfo(url) {
 먼저 캔버스에 이미지를 그립니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">ctx.drawImage(someImg, 0, 0);
 </code></pre><p>그런 다음 데이터를 가져옵니다.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var data = ctx.getImageData(0, 0, width, heigh);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var data = ctx.getImageData(0, 0, width, height);
 </code></pre><p>하지만 다른 도메인에서 가져와 그린 이미지라면 브라우저는 캔버스를 <em>오염</em>되었다고 표시하고 <code class="notranslate" translate="no">ctx.getImageData</code>를 호출할 때 보안 오류가 발생합니다.</p>
 <p>WebGL은 한 단계 더 나아가야 합니다.
 WebGL에서 <code class="notranslate" translate="no">gl.readPixels</code>는 <code class="notranslate" translate="no">ctx.getImageData</code>와 같은 호출이니 막으면 충분하지 않냐고 생각하겠지만, 픽셀을 직접 읽을 수 없더라도 이미지의 색상에 따라 실행이 더 오래 걸리는 셰이더를 만들 수 있는데요.

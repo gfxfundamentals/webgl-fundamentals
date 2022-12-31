@@ -285,7 +285,7 @@ function loadImageAndCreateTextureInfo(url) {
 有一个方式可以读取图像信息，首先需要将图像绘制到画布</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">ctx.drawImage(someImg, 0, 0);
 </code></pre><p>然后就可以获取数据</p>
-<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var data = ctx.getImageData(0, 0, width, heigh);
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var data = ctx.getImageData(0, 0, width, height);
 </code></pre><p>但是如果绘制的图像来自不同的域名，浏览器就会将画布标记为<strong>被污染</strong>，
 然后当你调用 <code class="notranslate" translate="no">ctx.getImageData</code> 时就会得到一个安全错误。</p>
 <p>WebGL则更进一步，在WebGL中 <code class="notranslate" translate="no">gl.readPixels</code> 和 <code class="notranslate" translate="no">ctx.getImageData</code> 是相似的，
