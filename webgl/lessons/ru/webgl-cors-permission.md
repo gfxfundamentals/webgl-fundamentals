@@ -62,7 +62,7 @@ TOC: WebGL - Кросс-доменные изображения
 
 Затем получаем данные
 
-    var data = ctx.getImageData(0, 0, width, heigh);
+    var data = ctx.getImageData(0, 0, width, height);
 
 Но если изображение пришло с другого домена, браузер отметит canvas *запятнанным*
 и вы получите ошибку безопасности при вызове `ctx.getImageData`.

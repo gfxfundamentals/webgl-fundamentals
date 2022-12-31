@@ -57,7 +57,7 @@ TOC: WebGL 跨域图像
 
 然后就可以获取数据
 
-    var data = ctx.getImageData(0, 0, width, heigh);
+    var data = ctx.getImageData(0, 0, width, height);
 
 但是如果绘制的图像来自不同的域名，浏览器就会将画布标记为**被污染**，
 然后当你调用 `ctx.getImageData` 时就会得到一个安全错误。

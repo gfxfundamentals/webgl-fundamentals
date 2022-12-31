@@ -59,7 +59,7 @@ has a way to see inside the image. First you draw the image into the canvas
 
 Then you get the data
 
-    var data = ctx.getImageData(0, 0, width, heigh);
+    var data = ctx.getImageData(0, 0, width, height);
 
 But, if the image you drew came from a different domain the browser will mark the canvas as *tainted* and
 you'll get a security error when you call `ctx.getImageData`
