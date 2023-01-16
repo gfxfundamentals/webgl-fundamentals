@@ -5,7 +5,7 @@ TOC: Ramp Textures (Toon Shading)
 
 WebGL 一个重要的实现就是纹理并不仅仅我们在[关于纹理](webgl-3d-textures.html)的文章中提到的应用在三角形上的东西。纹理是随机访问数据的数组，通常是 2D 数据数组。所以，我们可以在所有随机访问数组数据的地方使用纹理。
 
-在[WebGL 三维方向光源](webgl-3d-lighting-directional.html)中，我们提到我们如何使用*点乘*来计算两个向量之间的角度。在那个场景下我们计算光线方向和模型表面法线的*点乘*可以得到两个向量夹角的 consine。consin 的值从 -1 到 1，我们用它作为颜色的直接倍增器。
+在[WebGL 三维方向光源](webgl-3d-lighting-directional.html)中，我们提到我们如何使用*点乘*来计算两个向量之间的角度。在那个场景下我们计算光线方向和模型表面法线的*点乘*可以得到两个向量夹角的 consine。consine 的值从 -1 到 1，我们用它直接作为颜色的倍增器。
 
 ```glsl
 float light = dot(normal, u_reverseLightDirection);
@@ -14,7 +14,7 @@ gl_FragColor = u_color;
 gl_FragColor.rgb *= light;
 ```
 
-这会使得背光的面颜色变暗。
+这会使得背光面颜色变暗。
 
 如果我们不直接使用点乘，而是用它来查找一维纹理的值呢？
 
@@ -52,7 +52,7 @@ void main() {
 }
 ```
 
-我们需要创建一个纹理，让我们从 2x1 的纹理开始。我们将使用 `LUMINANCE` 来格式化每个 texel 只用一个字节的单色纹理。
+我们需要创建一个纹理，让我们从 2x1 的纹理开始。我们将使用 `LUMINANCE` 来格式化每个像素只用一个字节的单色纹理。
 
 ```js
 var tex = gl.createTexture();
@@ -126,9 +126,9 @@ gl.uniform1i(rampLocation, 0);
 <div class="webgl_center"><img src="resources/linear-texture-interpolation.svg" style="width: 500px;"></div>
 <div class="webgl_center">渐变的纹理坐标范围</div>
 
-每边有半个像素没有插值。想象一下，如果我们将纹理的 `TEXTURE_WRAP_S` 设置成 `REPEAT`。我们将会期望红色像素的最左边像绿色过度就好像绿色在左边重复一样。但是左边更红，因为我们使用了 `CLAMP_TO_EDGE`。
+每边有半个像素没有插值。想象一下，如果我们将纹理的 `TEXTURE_WRAP_S` 设置成 `REPEAT`。我们将会期望红色像素的最左边向绿色过度就好像绿色在左边重复一样。但是左边更红，因为我们使用了 `CLAMP_TO_EDGE`。
 
-为了真正得到一个渐变，我们只需要在中心范围中选择值，我们可以在我们的着色器中加入一些数学运算
+为了得到一个真正的渐变，我们需要只在中心范围中选择值，我们可以在我们的着色器中加入一些数学运算
 
 ```glsl
 precision mediump float;
@@ -450,7 +450,7 @@ uniform float threshold;
 [dark, light]
 ```
 
-给你一个 2 个步骤的纹理，他会按照面对光和背对光从过年中间分开，但是一个纹理像
+给你一个 2 个步骤的纹理，他会按照面对光和背对光从中间分开，但是一个纹理像
 
 ```
 [dark, dark, dark, light, light]
@@ -462,4 +462,4 @@ uniform float threshold;
 
 使用纹理不仅仅是为了转换光线的计算，你也可以使用 ramp 纹理为了 [post processing](webgl-post-processing.html) 来实现 [the gradient map in photoshop](https://www.photoshopessentials.com/photo-effects/gradient-map/) 一样的效果。
 
-你也可以使用渐变纹理做基础 GPU 的动画。你可以存储你的关键值在纹理中，然后用时间来移动你的纹理，这种技术很有用。
+你也可以使用渐变纹理做基于 GPU 的动画。你可以存储你的关键值在纹理中，然后通过时间来移动你的纹理，这种技术很有用。
