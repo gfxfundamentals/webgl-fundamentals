@@ -286,7 +286,7 @@ texture units in vertex shaders.
 </div>
 
 <div class="webgl_bottombar">
-<h3>What's with the a_, u_, and v_ prefixes in from of variables in GLSL?</h3>
+<h3>What's with the a_, u_, and v_ prefixes in front of variables in GLSL?</h3>
 <p>
 That's just a naming convention. They are not required but for me it makes it easier to see at a glance
 where the values are coming from. a_ for attributes which is the data provided by buffers. u_ for uniforms which are inputs to the shaders, v_ for varyings which are values passed from a vertex shader to a fragment shader and interpolated (or varied) between the vertices for each pixel drawn.
