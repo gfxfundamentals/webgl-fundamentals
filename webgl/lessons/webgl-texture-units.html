@@ -284,9 +284,17 @@ gl.bindTexture(gl.TEXTURE_2D, ourTexture);
 <p>You then tell the shader which texture unit you bound the texture to by calling </p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">gl.uniform1i(someTextureUniformLocation, indexOfTextureUnit);
 </code></pre>
-<p>If <code class="notranslate" translate="no">activeTexture</code> and <code class="notranslate" translate="no">bindTexture</code> WebGL functions were implemented in JavaScript they&#39;d look
-something like:</p>
+<p>If <code class="notranslate" translate="no">createTexture</code>, <code class="notranslate" translate="no">activeTexture</code> and <code class="notranslate" translate="no">bindTexture</code> WebGL functions were
+implemented in JavaScript they&#39;d look something like:</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">// PSEUDO CODE!!!
+gl.createTexture = function() {
+  return new Texture();
+};
+
+class Texture() {
+  mips = [new Array(6)];  // faces of mip levels
+}
+
 gl.activeTexture = function(unit) {
   gl.activeTextureUnit = unit - gl.TEXTURE0;  // convert to 0 based index
 };
@@ -303,7 +311,8 @@ be implemented something like</p>
 gl.texImage2D = function(target, level, internalFormat, width, height, border, format, type, data) {
   const textureUnit = gl.textureUnits[gl.activeTextureUnit];
   const texture = textureUnit[target];
-  texture.mips[level] = convertDataToInternalFormat(internalFormat, width, height, format, type, data);
+  const face = targetToFace(target)  // 0-5, 0 for 2D texture, 0-5 for cube maps
+  texture.mips[face][level] = convertDataToInternalFormat(internalFormat, width, height, format, type, data);
 }
 
 gl.texParameteri = function(target, pname, value) {
