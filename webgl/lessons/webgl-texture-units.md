@@ -64,11 +64,19 @@ You then tell the shader which texture unit you bound the texture to by calling
 gl.uniform1i(someTextureUniformLocation, indexOfTextureUnit);
 ```
 
-If `activeTexture` and `bindTexture` WebGL functions were implemented in JavaScript they'd look
-something like:
+If `createTexture`, `activeTexture` and `bindTexture` WebGL functions were
+implemented in JavaScript they'd look something like:
 
 ```js
 // PSEUDO CODE!!!
+gl.createTexture = function() {
+  return new Texture();
+};
+
+class Texture() {
+  mips = [new Array(6)];  // faces of mip levels
+}
+
 gl.activeTexture = function(unit) {
   gl.activeTextureUnit = unit - gl.TEXTURE0;  // convert to 0 based index
 };
@@ -88,7 +96,8 @@ be implemented something like
 gl.texImage2D = function(target, level, internalFormat, width, height, border, format, type, data) {
   const textureUnit = gl.textureUnits[gl.activeTextureUnit];
   const texture = textureUnit[target];
-  texture.mips[level] = convertDataToInternalFormat(internalFormat, width, height, format, type, data);
+  const face = targetToFace(target)  // 0-5, 0 for 2D texture, 0-5 for cube maps
+  texture.mips[face][level] = convertDataToInternalFormat(internalFormat, width, height, format, type, data);
 }
 
 gl.texParameteri = function(target, pname, value) {
