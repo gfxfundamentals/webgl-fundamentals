@@ -70,12 +70,8 @@ implemented in JavaScript they'd look something like:
 ```js
 // PSEUDO CODE!!!
 gl.createTexture = function() {
-  return new Texture();
+  return new WebGLTexture();
 };
-
-class Texture() {
-  mips = [new Array(6)];  // faces of mip levels
-}
 
 gl.activeTexture = function(unit) {
   gl.activeTextureUnit = unit - gl.TEXTURE0;  // convert to 0 based index
@@ -96,14 +92,13 @@ be implemented something like
 gl.texImage2D = function(target, level, internalFormat, width, height, border, format, type, data) {
   const textureUnit = gl.textureUnits[gl.activeTextureUnit];
   const texture = textureUnit[target];
-  const face = targetToFace(target)  // 0-5, 0 for 2D texture, 0-5 for cube maps
-  texture.mips[face][level] = convertDataToInternalFormat(internalFormat, width, height, format, type, data);
+  texture.setMipLevel(target, level, convertDataToInternalFormat(internalFormat, width, height, format, type, data));
 }
 
 gl.texParameteri = function(target, pname, value) {
   const textureUnit = gl.textureUnits[gl.activeTextureUnit];
   const texture = textureUnit[target];
-  texture[pname] = value; 
+  texture.setSetting(pname, value); 
 }
 ```
 
