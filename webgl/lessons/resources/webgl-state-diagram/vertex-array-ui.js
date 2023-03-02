@@ -5,6 +5,7 @@ import * as twgl from '/3rdparty/twgl-full.module.js';
 import {
   addElem,
   createTemplate,
+  createTable,
   formatBoolean,
   formatUniformValue,
   getColorForWebGLObject,
@@ -53,9 +54,11 @@ export function createVertexArrayDisplay(parent, name /*, webglObject */) {
         `);
   const attrExpander = createExpander(vaElem.querySelector('.state-table'), 'attributes');
   expand(attrExpander);
-  const table = createTemplate(attrExpander, '#vertex-attributes-template');
-  const attrsElem = table.querySelector('tbody');
-
+  //const table = createTemplate(attrExpander, '#vertex-attributes-template');
+  //const attrsElem = table.querySelector('tbody');
+  const attrsElem = createTable(attrExpander, globals.isWebGL2
+    ? ['enabled', 'size', 'type', 'int', 'normalize', 'stride', 'offset', 'divisor', 'buffer']
+    : ['enabled', 'size', 'type', 'normalize', 'stride', 'offset', 'divisor', 'buffer']);
   for (let i = 0; i < maxAttribs; ++i) {
     const tr = addElem('tr', attrsElem);
 
