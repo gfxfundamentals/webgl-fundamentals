@@ -54,8 +54,6 @@ export function createVertexArrayDisplay(parent, name /*, webglObject */) {
         `);
   const attrExpander = createExpander(vaElem.querySelector('.state-table'), 'attributes');
   expand(attrExpander);
-  //const table = createTemplate(attrExpander, '#vertex-attributes-template');
-  //const attrsElem = table.querySelector('tbody');
   const attrsElem = createTable(attrExpander, globals.isWebGL2
     ? ['enabled', 'size', 'type', 'int', 'normalize', 'stride', 'offset', 'divisor', 'buffer']
     : ['enabled', 'size', 'type', 'normalize', 'stride', 'offset', 'divisor', 'buffer']);
