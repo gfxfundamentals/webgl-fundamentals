@@ -19,7 +19,7 @@ The best documentation I've found for the .OBJ format is
 [here](http://paulbourke.net/dataformats/obj/). Though 
 [this page](https://www.loc.gov/preservation/digital/formats/fdd/fdd000507.shtml)
 links to many other documents including what appears to
-[the original docs](http://www.cs.utah.edu/~boulos/cs3505/obj_spec.pdf).
+[the original docs](https://web.archive.org/web/20200324065233/http://www.cs.utah.edu/~boulos/cs3505/obj_spec.pdf).
 
 Let's look a simple example. Here is a cube.obj file exported from blender's default scene.
 
@@ -544,7 +544,7 @@ or normals are missing and just not include them.
 }
 ```
 
-Continuing with keywords, According to the [*official spec*](http://www.cs.utah.edu/~boulos/cs3505/obj_spec.pdf),
+Continuing with keywords, According to the [*official spec*](https://web.archive.org/web/20200324065233/http://www.cs.utah.edu/~boulos/cs3505/obj_spec.pdf),
 `mtllib` specifies separate file(s) that contains material info. Unfortunately that
 doesn't seem to match reality because filenames can have spaces them and the .OBJ format
 provides no way to escape spaces or quote arguments. Ideally they should have used a well defined format
