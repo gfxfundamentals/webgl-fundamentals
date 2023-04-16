@@ -909,7 +909,9 @@ function runIfNeeded() {
 function run(options) {
   g.setPosition = false;
   const url = getSourceBlobFromEditor(options);
-  g.iframe.src = url;
+  // g.iframe.src = url;
+  // work around firefox bug: https://bugzilla.mozilla.org/show_bug.cgi?id=1828286
+  g.iframe.contentWindow.location.replace(url);
 }
 
 function addClass(elem, className) {
