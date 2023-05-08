@@ -6,10 +6,10 @@ TOC: Dessiner plusieurs choses
 Cet article est la suite de [WebGL Les bases](webgl-fundamentals.html).
 Si vous ne les avez pas lu, je vous suggère de commencer par ceux là.
 
-L'une des questions les plus courrantes après avoir afficher quelque chose
+L'une des questions les plus courantes après avoir affiché quelque chose
 avec WebGL, c'est comment en afficher plusieurs.
 
-L'une des premières chose à réaliser est qu'à part quelques exceptions,
+L'une des premières choses à réaliser est qu'à part quelques exceptions,
 WebGL comme avoir une fonction écrite par une personne qui au lieu de passer tous
 les paramètres à celle-ci, vous aviez une simple fonction qui affiche des choses et
 plus de 70 autres qui initialisent l'état de la première. Par exemple, imaginez que
@@ -46,7 +46,7 @@ WebGL fonction de la seconde manière. Les fonctions comme `gl.createBuffer`,
 les données des buffers (vertex), des textures (couleurs, etc...).
 `gl.createProgram`, `gl.createShader`, `gl.compileShader` et
 `gl.linkProgram` vous permettent de charger les shaders GLSL. Presque tout le reste
-des fonctions WebGL configurent les variables globales or les états qui sont utilisés
+des fonctions WebGL configurent les variables globales ou les états qui sont utilisés
 quand les fonctions `gl.drawArrays` ou `gl.drawElements` sont appelées.
 
 Sachant cela, un programme WebGL typique aura la structure suivante.
@@ -54,8 +54,8 @@ Sachant cela, un programme WebGL typique aura la structure suivante.
 Au moment de l'initialisation
 
 *   Créé tous les shaders et les programmes et récupère leur emplacement
-*   Créé les buffers et charge les données des sommets
-*   Créé les textures et charge les données des textures
+*   Créé les buffers et chargent les données des sommets
+*   Créé les textures et chargent les données des textures
 
 Au moment du rendu
 
@@ -69,26 +69,26 @@ Au moment du rendu
     *   Initialiser les _uniforms_ pour les choses que vous souhaitez dessiner
         *   Appelez `gl.uniformXXX` pour chaque _uniform_
         *   Appelez `gl.activeTexture` et `gl.bindTexture` pour assigner les textures
-            aux _texture unit_
+            aux _textures unit_
     *   Appelez `gl.drawArrays` ou `gl.drawElements`
 
 C'est aussi simple que ça. C'est à vous d'organiser votre code pour
 accomplir cette tâche.
 
-Plusieurs chose comme le chargement des données de texture (et peut être même
-les données des sommets) peuvent être initialisé de manière asynchrone, parce que
+Plusieurs choses comme le chargement des données de texture (et peut-être même
+les données des sommets) peuvent être initialisées de manière asynchrone, parce que
 vous avez besoin d'attendre que ce soit téléchargé sur le net.
 
-Let's make a simple app to draw 3 things. A cube, a sphere, and a cone.
+Essayons de faire une simple application qui dessine 3 choses : un cube, une sphère
+et un cône.
 
-I'm not going to go into the details of how to compute cube, sphere, and
-cone data.  Let's just assume we have functions to create them and they
-return [bufferInfo objects as described in the previous
-article](webgl-less-code-more-fun.html).
+Je ne vais pas rentrer dans les détails de comment faire un cube, une sphère
+ou un cône. Considérons que nous avons des fonctions pour les créer et
+retourner [les buffers comme décrits dans le chapitre précédent](webgl-less-code-more-fun.html).
 
-So here's the code.  Our shader is the same one simple shader from our
-[perspective example](webgl-3d-perspective.html) except we've added a
-`u_colorMult` to multiply the vertex colors by.
+Voici donc le code. Notre shader est le même shader simple de notre
+[exemple de perspective] (webgl-3d-perspective.html) sauf que nous avons ajouté un
+`u_colorMult` pour multiplier les sommets par des couleurs.
 
     // Passed in from the vertex shader.
     varying vec4 v_color;
@@ -100,7 +100,7 @@ So here's the code.  Our shader is the same one simple shader from our
     }
 
 
-At init time
+Au moment de l'initialisation
 
     // Our uniforms for each thing we want to draw
     var sphereUniforms = {
@@ -121,7 +121,7 @@ At init time
     var cubeTranslation   = [-40, 0, 0];
     var coneTranslation   = [ 40, 0, 0];
 
-At draw time
+Au moment du dessin
 
     var sphereXRotation =  time;
     var sphereYRotation =  time;
@@ -180,23 +180,24 @@ At draw time
 
     gl.drawArrays(gl.TRIANGLES, 0, coneBufferInfo.numElements);
 
-And here's that
+Et voilà !
 
 {{{example url="../webgl-multiple-objects-manual.html" }}}
 
-One thing to notice is since we only have a single shader program we only
-called `gl.useProgram` once.  If we had different shader programs you'd
-need to call `gl.useProgram` before um...  using each program.
+Une chose à noter est que puisque nous n'avons qu'un seul programme de shader,
+nous n'avons pas besoin d'appeler `gl.useProgram` plusieurs fois. Si nous avons
+différents programmes de shader, vous aurez besoin d'appeler `gl.useProgram`
+avant euh ... l'utilisation de chaque programme.
 
-This is another place where it's a good idea to simplify.  There are
-effectively 3 main things to combine.
+C'est un endroit où c'est une bonne idée de simplifier. Il y a effectivement 3
+choses principales à combiner :
 
-1.  A shader program (and its uniform and attribute info/setters)
-2.  The buffer and attributes for the thing you want to draw
-3.  The uniforms needed to draw that thing with the given shader.
+1.  Le programme de Shader (les infos/mise à jour des uniform et attributes)
+2.  Le buffer et les attributes pour les choses que vous souhaitez dessiner
+3.  Les uniforms nécessaires pour dessiner les choses liées au shader
 
-So, a simple simplification would be to make an array of things to draw
-and in that array put the 3 things together
+Donc, une simple simplification serait de faire un tableau de choses à dessiner
+et dans ce tableau mettre les 3 choses ensemble
 
     var objectsToDraw = [
       {
@@ -216,7 +217,7 @@ and in that array put the 3 things together
       },
     ];
 
-At draw time we still need to update the matrices
+Au moment de dessiner nous avons encore besoin de mettre à jour les matrices
 
     var sphereXRotation =  time;
     var sphereYRotation =  time;
@@ -244,7 +245,7 @@ At draw time we still need to update the matrices
         coneXRotation,
         coneYRotation);
 
-But the drawing code is now just a simple loop
+Mais maintenant le code permettant de faire le dessin est juste une boucle
 
     // ------ Draw the objects --------
 
@@ -265,19 +266,19 @@ But the drawing code is now just a simple loop
     });
 
 
-And this is arguably the main rendering loop of most 3D engines in
-existence.  Somewhere some code or codes decide what goes into the list of
-`objectsToDraw` but that's basically it.
+Et c'est sans doute la principale boucle de rendu dans la plupart de moteurs 3d
+qui existent. Parfois, un ou plusieurs codes decident de ce qui rentre dans la liste
+de `objectsToDraw`, mais c'est basiquement ça.
 
 {{{example url="../webgl-multiple-objects-list.html" }}}
 
-There are a few basic optimizations.  If the program we're about to draw
-with is the same as the previous program we drew with then there's no need
-to call `gl.useProgram`.  Similarly if we're drawing with the same
-shape/geometry/vertices we previously drew with there's no need to set
-those up again.
+Il existe quelques optimisations de base. Si le programme que nous sommes
+sur le point de dessiner est le même que le programme précédent alors il
+n'y a pas besoin d'appeler `gl.useProgram`. De même, si nous dessinons les
+mêmes shape/geometry/vertices que précédent, nous n'avons pas besoin de les 
+initialiser une nouvelle fois.
 
-So, a very simple optimization might look like this
+Ainsi, une optimisation très simple pourrait ressembler à ceci
 
     var lastUsedProgramInfo = null;
     var lastUsedBufferInfo = null;
@@ -311,8 +312,8 @@ So, a very simple optimization might look like this
       gl.drawArrays(gl.TRIANGLES, 0, bufferInfo.numElements);
     });
 
-This time let's draw a lot more objects. Instead of just 3 like before let's make
-the list of things to draw larger
+C'est le moment de dessiner plus d'objet. Au lieu d'en dessiner 3 comme nous l'avons
+fait jusque-là, nous allons faire une liste qui en contient plus.
 
     // put the shapes in an array so it's easy to pick them at random
     var shapes = [
@@ -351,7 +352,7 @@ the list of things to draw larger
       });
     }
 
-At render time
+Au moment du rendu
 
     // Compute the matrices for each object.
     objects.forEach(function(object) {
@@ -363,53 +364,56 @@ At render time
           object.yRotationSpeed * time);
     });
 
-Then draw the objects using the loop above.
+Le rendu des objets utilisant la boucle ci-dessus
 
 {{{example url="../webgl-multiple-objects-list-optimized.html" }}}
 
-You could also sort the list by `programInfo` and/or `bufferInfo` so that
-the optimization kicks in more often.  Most game engines do this.
-Unfortunately it's not that simple.  If everything you're drawing is
-opaque and then you can just sort.  But, as soon you need to draw
-semi-transparent things you'll need to draw them in a specific order.
-Most 3D engines handle this by having 2 or more lists of objects to draw.
-One list for opaque things.  Another list for transparent things.  The
-opaque list is sorted by program and geometry.  The transparent list is
-sorted by depth.  There might also be separate lists for other things like
-overlays or post processing effects.
+Vous pouvez aussi trier la liste par `programInfo` et/ou `bufferInfo`
+de sorte que l'optimisation démarre plus souvent. La plupart des moteurs
+de jeux le font. Malheureusement ce n'est pas si simple. Si tout ce que
+vous dessinez est opaque, alors vous pouvez garder le tri tel qu'il est.
+Mais à un moment, vous aurez besoin de dessiner des objets semi-transparents,
+et il faudra les dessiner dans un ordre specifique. La plupart des moteurs
+3d resolvent ça en ayant 2 listes ou plus d'objet à dessiner : Une liste pour
+les objets opaques et une autre contenant des objets transparents. La liste des
+objets opaques est triée par programme et par géométrie. La liste des objets
+transparents est triée par profondeur. Il pourrait également y avoir des listes
+distinctes pour d'autres choses comme superpositions ou effets de post-traitement.
 
 <a href="../webgl-multiple-objects-list-optimized-sorted.html"
-target="_blank">Here's a sorted example</a>.  On my machine I get ~31fps
-unsorted and ~37 sorted.  That's nearly a 20% increase.  But, it's worst
-case vs best case and most programs would be doing a lot more so it's
-arguably not worth thinking about for all but the most special cases.
+target="_blank">Un exemple de tri</a>.  Sur ma machine, j'ai 31 fps quand
+ce n'est pas trié, et 37 fps après le tri. C'est une hausse de performance
+d'environ 20%. Mais dans le pire cas ou le meilleur cas, la plupart des programmes
+en feraient beaucoup plus, donc ce n'est sans doute pas la peine d'y penser pour tous
+sauf les cas les plus particuliers.
 
-It's important to notice that you can't draw just any geometry with just
-any shader.  For example a shader that requires normals will not function
-with geometry that has no normals.  Similarly a shader that requires
-textures will not work without textures.
+Il est important de noter que vous ne pouvez pas dessiner n'importe quelle
+géométrie avec n'importe quel programme de shader. Par exemple un programme
+de shader qui requit des normales, ne fonctionnera pas avec une géométrie
+sans shader. Pareillement, un programme de shader qui requit des textures,
+ne fonctionnera pas avec une géométrie sans texture.
 
-This is one of the many reasons it's great to choose a 3D Library like
-[Three.js](https://threejs.org) because it handles all of this for you.
-You create some geometry, you tell three.js how you want it rendered and
-it generates shaders at runtime to handle the things you need.  Pretty
-much all 3D engines do this from Unity3D to Unreal to Source to Crytek.
-Some generate them offline but the important thing to realize is they
-*generate* shaders.
+C'est l'une des raisons pour laquelle il est plus simple de choisir une
+librairie 3D comme [Three.js](https://threejs.org), car il gère ces
+subtilités pour vous. Quand vous créez une géométrie, vous informez three.js
+de comment votre forme doit être rendue, et il génère le programme de shader
+au runtime. À peu près tous les moteurs 3D le font, de Unity3D à Unreal, ou
+encore Source, ou Crytek. Certains les ont déjà pré-génèré, mais le plus
+important à savoir, c'est que les programmes de shader sont *générés*.
 
-Of course the reason you're reading these articles is you want to know
-what's going on deep down.  That's great and it's fun to write everything
-yourself.  It's just important to be aware [WebGL is super low
-level](webgl-2d-vs-3d-library.html) so there's a ton of work for you to do
-if you want to do it yourself and that often includes writing a shader
-generator since different features often require different shaders.
+Bien entendu, la raison que vous avez de lire ces articles est de vouloir
+savoir ce qui se passe à un plus bas niveau. C'est bien et passionnant de
+tout écrire soit-même. Mais il faut être conscient que [WebGL est très bas
+niveau](webgl-2d-vs-3d-library.html). Il faudra donc tout faire soit-même,
+ce qui inclut d'écrire le générateur de shader si les ressources nécessitent
+différentes fonctionnalités.
 
-You'll notice I didn't put `computeMatrix` inside the loop.  That's
-because rendering should arguably be separated from computing matrices.
-It's common to compute matrices from a [scene graph and we'll go over that
-in another article](webgl-scene-graph.html).
+Vous avez peut-être noté que nous n'avons pas mis `computeMatrix` dans la
+boucle. C'est parce que le processus de rendu doit être séparé de celui des
+matrices. Il est commun de calculer les matrices à partir d'un [graphe de scène
+que nous étudierons dans un prochain article](webgl-scene-graph.html).
 
-Now that we have a framework for drawing multiple objects [lets draw some
-text](webgl-text-html.html).
+Maintenant que nous avons un framework pour dessiner plusieurs objets, [essayons de
+dessiner du texte](webgl-text-html.html).
 
 
