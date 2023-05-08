@@ -39,10 +39,6 @@ import {
   globals,
 } from './globals.js';
 
-// ---vvv--- firefox bug workaround: https://bugzilla.mozilla.org/show_bug.cgi?id=1645092
-const useProgram1Fn = WebGLRenderingContext.prototype.useProgram;
-const useProgram2Fn = typeof WebGL2RenderingContext !== undefined ? WebGL2RenderingContext.prototype.useProgram : undefined;
-// --^^^---
 const glEnumToString = twgl.glEnumToString;
 const noop = () => {};
 
@@ -342,14 +338,7 @@ function createProgramUniforms(parent, gl, program) {
     locationInfos.forEach((locationInfo, ndx) => {
       const {location, uniformTypeInfo} = locationInfo;
       const cell = tbody.rows[ndx].cells[1];
-      // -- start firefox bug workaround : https://bugzilla.mozilla.org/show_bug.cgi?id=1645092
-      const currentProgram = gl.getParameter(gl.CURRENT_PROGRAM);
-      (globals.isWebGL2 ? useProgram2Fn : useProgram1Fn).call(gl, program);
-      // -- end firefox bug workaround
       const value = gl.getUniform(program, location);
-      // -- start firefox bug workaround
-      (globals.isWebGL2 ? useProgram2Fn : useProgram1Fn).call(gl, currentProgram);
-      // -- end firefox bug workaround
       updateElemAndFlashExpanderIfClosed(cell, formatUniformValue(value), !initial);
       const bindPoint = uniformTypeInfo.bindPoint;
       if (bindPoint) {
