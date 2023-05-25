@@ -8,13 +8,13 @@ commencé avec les fondamentaux](webgl-fundamentals.html) et le précédent
 concernait [animation](webgl-animation.html).
 
 Comment appliquons-nous les textures en WebGL ? Vous pourriez probablement
-déduire comment par lire [les articles sur le traitement
+déduire comment si vous avez lu [les articles sur le traitement
 d'image](webgl-image-processing.html) mais ce sera probablement plus facile à
 comprendre si nous l'examinons plus en détail détail.
 
 La première chose que nous devons faire est d'ajuster nos shaders pour utiliser
-des textures. Ici sont les modifications apportées au vertex shader. Il faut
-passer en texture coordonnées. Dans ce cas, nous les transmettons directement au
+des textures. Voici les modifications apportées au vertex shader, il faut lui
+passer les coordonnées de la texture. Ensuite, nous les transmettrons directement au
 fragment shader.
 
     attribute vec4 a_position;
@@ -115,7 +115,7 @@ seulement commencer à dessiner. L'autre solution consiste à créer une texture
 à utiliser jusqu'à ce que l'image soit téléchargée. De cette façon, nous pouvons
 commencer le rendu immédiatement. Ensuite, une fois que l'image a été
 téléchargé, nous copions l'image dans la texture. Nous utiliserons cette méthode
-dessous.
+ci-dessous.
 
     *// Create a texture.
     *var texture = gl.createTexture();
@@ -135,13 +135,13 @@ dessous.
     *  gl.generateMipmap(gl.TEXTURE_2D);
     *});
 
-Et le voici
+Et voilà
 
 {{{example url="../webgl-3d-textures.html" }}}
 
 Et si nous voulions simplement utiliser une partie de la texture sur le devant
 du « F » ? Les textures sont référencées avec des "coordonnées de texture" et les
-coordonnées de texture vont de 0.0 à 1.0 de gauche à sur toute la texture, et de
+coordonnées de texture vont de 0.0 à 1.0 de gauche à la largeur de la texture, et de
 0,0 à 1,0 du premier pixel de la première ligne au dernier pixel de la dernière
 ligne. Remarquez que je n'ai pas dit en haut ou en bas. Le haut et le bas
 n'ont aucun sens dans l'espace de texture parce que jusqu'à ce que vous
@@ -231,8 +231,8 @@ Imaginez que nous ayons une texture de 16x16 pixels.
 
 <img class="webgl_center" src="resources/mip-low-res-enlarged.png" style="border: 2px solid black;" />
 
-Imaginez maintenant que nous avons essayé de dessiner cette texture sur un
-polygone de 2x2 pixels de large sur l'écran. De quelles couleurs doit-on faire
+Imaginez maintenant que nous ayons essayé de dessiner cette texture sur un
+polygone de 2x2 pixels de large sur l'écran. De quelles couleurs seront
 ces 4 pixels ? Il y a 256 pixels au choix. Dans Photoshop, si vous avez mis à
 l'échelle une image de 16x16 pixels en 2x2 pixels, il fera la moyenne des 8x8
 pixels de chaque côté de l'image pour calculer les 4 pixels de l'image 2x2.
@@ -321,7 +321,7 @@ effet. Par exemple, si vous voulez que quelque chose ait un effet *rétro* pixé
 peut-être que vous utiliserez `NEAREST`. Les mips prennent
 également de la mémoire. En fait ils prennent 33% de mémoire en plus. Cela peut
 être beaucoup de mémoire, surtout pour un très grande texture comme vous
-pourriez l'utiliser sur un écran de titre d'un jeu. Si tu n'allez jamais
+pourriez l'utiliser sur un écran de titre d'un jeu. Si vous n'allez jamais
 dessiner quelque chose de plus petit que le plus grand mip pourquoi gaspiller
 de la mémoire pour ces mips. Au lieu de cela, utilisez simplement `NEAREST` ou
 `LINEAR` car ils n'utilisent que le premier mip.
@@ -516,7 +516,7 @@ divisions en plans.
 A few other very important things you might want to know about textures.
 One is [how texture unit state works](webgl-texture-units.html).
 One is [how to use 2 or more textures at once](webgl-2-textures.html). Another
-is [how to use images from other domains](webgl-cors-permission.html). And 
+is [how to use images from other domains](webgl-cors-permission.html). And
 one more is [perspective correct texture mapping](webgl-3d-perspective-correct-texturemapping.html) which in some ways
 is trivia but it's good to know.
 Quelques autres choses très importantes que vous voudriez peut-être savoir sur
