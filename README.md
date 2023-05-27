@@ -12,7 +12,7 @@ I would argue that WebGL is actually a very simple API. What makes it
 appear complicated is the way in which it's used. The complications
 are added by the programmer. WebGL itself is simple.
 
-These lessons try to show that simplicity and well as teach the
+These lessons try to show that simplicity as well as teach the
 fundamentals of 2D math and 3D math so readers can hopefully
 have an easier time writing their own WebGL programs and
 understanding the complexity that other programmers pile on
