@@ -270,7 +270,7 @@ for (var ii = 1; ii &lt; positions.length / 3; ++ii)
 {
   lengthSoFar.push(lengthSoFar[ii - 1] + distance(positions, ii - 1, ii));
 }
-</code></pre><p>Now you can make buffers for both <code class="notranslate" translate="no">positions</code> and <code class="notranslate" translate="no">lengthSoFar</code> and pass <code class="notranslate" translate="no">lengthSoFar</code> as an attribute into your vertex shader and from there pass it as a varying to to your fragment shader.</p>
+</code></pre><p>Now you can make buffers for both <code class="notranslate" translate="no">positions</code> and <code class="notranslate" translate="no">lengthSoFar</code> and pass <code class="notranslate" translate="no">lengthSoFar</code> as an attribute into your vertex shader and from there pass it as a varying to your fragment shader.</p>
 <p>Unfortunately it won&#39;t work with indexed geometry (the most common type?). In other words it won&#39;t work with <code class="notranslate" translate="no">gl.drawElements</code>, only with <code class="notranslate" translate="no">gl.drawArrays</code>. Also the dashed line would be dashed in 3D not 2D so a line going into the screen (away from the viewer) would look different than a line going across the screen. Of course if you&#39;re drawing 2D then there&#39;s no problem. </p>
 <p>If those limitations are good for you does this answer you question?</p>
 <p><div class="webgl_example_container">
