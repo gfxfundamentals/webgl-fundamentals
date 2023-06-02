@@ -346,7 +346,7 @@ units as well.  I'll pass in some value similar to `width` for the `depth`
 so our space will be 0 to `width` pixels wide, 0 to `height` pixels tall, but
 for `depth` it will be `-depth / 2` to `+depth / 2`.
 
-Finally we need to to update the code that computes the matrix.
+Finally we need to update the code that computes the matrix.
 
 ```
   // Compute the matrix

@@ -41,7 +41,7 @@ I'm assuming it works like this. You have a buffer of positions. You make a corr
       lengthSoFar.push(lengthSoFar[ii - 1] + distance(positions, ii - 1, ii));
     }
 
-Now you can make buffers for both `positions` and `lengthSoFar` and pass `lengthSoFar` as an attribute into your vertex shader and from there pass it as a varying to to your fragment shader.
+Now you can make buffers for both `positions` and `lengthSoFar` and pass `lengthSoFar` as an attribute into your vertex shader and from there pass it as a varying to your fragment shader.
 
 Unfortunately it won't work with indexed geometry (the most common type?). In other words it won't work with `gl.drawElements`, only with `gl.drawArrays`. Also the dashed line would be dashed in 3D not 2D so a line going into the screen (away from the viewer) would look different than a line going across the screen. Of course if you're drawing 2D then there's no problem. 
 
