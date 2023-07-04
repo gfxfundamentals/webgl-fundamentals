@@ -583,7 +583,7 @@ gl.drawElements(gl.TRIANGLES, 6 * 6, gl.UNSIGNED_SHORT, 0);
 <p>참고할 사항이 있습니다.
 이 코드는 느리고 위치와 텍스처 좌표에 대해 1차원 텍스처를 사용합니다.
 그리고 텍스처는 매우 넓을 수 밖에 없는데요.
-얼마나 넓은지는 <a href="https://webglstats.com/webgl/parameter/MAX_TEXTURE_SIZE">머신 스펙</a>에 따르며 다음과 같이 쿼리할 수 있습니다.</p>
+얼마나 넓은지는 <a href="https://web3dsurvey.com/webgl/parameters/MAX_TEXTURE_SIZE">머신 스펙</a>에 따르며 다음과 같이 쿼리할 수 있습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">const maxSize = gl.getParameter(gl.MAX_TEXTURE_SIZE);
 </code></pre>
 <p>그보다 많은 데이터를 처리하려면 데이터에 맞는 텍스처 크기를 선택하고, 사각형을 만들기 위해 데이터를 여러 행에 분산하여 마지막 행을 채웁니다.</p>
@@ -815,35 +815,6 @@ const settings = {
 <script src="/webgl/lessons/resources/prettify.js"></script>
 <script src="/webgl/lessons/resources/lesson.js" type="module"></script>
 <script>
-(function() {
-  if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
-      return;
-  }
-
-  function addScript(src, type, fn) {
-    const script = document.createElement('script');
-    const firstScript = document.getElementsByTagName('script')[0];
-    script.async = true;
-    script.defer = true;
-    script.type = type || 'javascript';
-    if (fn) {
-      script.addEventListener('load', fn);
-    }
-    script.src = src;
-    firstScript.parentNode.insertBefore(script, firstScript);
-  }
-
-  // can't do this because it would eat contexts
-  //addScript('//gpustats.org/stats.js', 'module');
-
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-59804936-1', 'auto');
-  ga('send', 'pageview');
-}());
 </script>
 
 

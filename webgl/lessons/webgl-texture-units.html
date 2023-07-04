@@ -341,7 +341,7 @@ there are only 6 left to use in your fragment shader since the combined
 maximum is 8.</p>
 <p>One other thing to note is that WebGL allows <code class="notranslate" translate="no">gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS)</code>
 to return 0!!! In other words, <strong>it&#39;s possible some devices don&#39;t support using textures in
-vertex shaders at all</strong>. Fortunately <a href="https://webglstats.com/webgl/parameter/MAX_VERTEX_TEXTURE_IMAGE_UNITS">that situation appears to be rare</a>
+vertex shaders at all</strong>. Fortunately <a href="https://web3dsurvey.com/webgl/parameters/MAX_VERTEX_TEXTURE_IMAGE_UNITS">that situation appears to be rare</a>
 but if you do decide to use some textures in a vertex shader you probably want to
 check <code class="notranslate" translate="no">gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS)</code> actually supports enough
 for your needs and notify the user if not.</p>
@@ -546,35 +546,6 @@ const settings = {
 <script src="/webgl/lessons/resources/prettify.js"></script>
 <script src="/webgl/lessons/resources/lesson.js" type="module"></script>
 <script>
-(function() {
-  if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
-      return;
-  }
-
-  function addScript(src, type, fn) {
-    const script = document.createElement('script');
-    const firstScript = document.getElementsByTagName('script')[0];
-    script.async = true;
-    script.defer = true;
-    script.type = type || 'javascript';
-    if (fn) {
-      script.addEventListener('load', fn);
-    }
-    script.src = src;
-    firstScript.parentNode.insertBefore(script, firstScript);
-  }
-
-  // can't do this because it would eat contexts
-  //addScript('//gpustats.org/stats.js', 'module');
-
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-59804936-1', 'auto');
-  ga('send', 'pageview');
-}());
 </script>
 
 

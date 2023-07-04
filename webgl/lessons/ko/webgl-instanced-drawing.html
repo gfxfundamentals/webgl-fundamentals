@@ -242,7 +242,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <div class="lesson-main">
       <p>WebGL은 <em>색인된 그리기</em>라는 기능을 가지고 있습니다.
 기본적으로 개별적으로 그릴 때보다 빠르게 같은 걸 여러 번 그리는 방법입니다.</p>
-<p>참고로 이 기능은 WebGL1의 선택적 확장이지만 <a href="https://webglstats.com/webgl/extension/ANGLE_instanced_arrays">거의 모든 브라우저와 기기에서 사용 가능</a>합니다.</p>
+<p>참고로 이 기능은 WebGL1의 선택적 확장이지만 <a href="https://web3dsurvey.com/webgl/extensions/ANGLE_instanced_arrays">거의 모든 브라우저와 기기에서 사용 가능</a>합니다.</p>
 <p>먼저 동일한 항목의 여러 인스턴스를 그리는 예제부터 만들어 봅시다.</p>
 <p><a href="webgl-3d-orthographic.html">직교 투영</a>에 관한 글의 마지막 부분과 유사한 코드로 출발하여 다음과 같은 두 셰이더로 시작합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-html">&lt;!-- 정점 셰이더 --&gt;
@@ -811,35 +811,6 @@ const settings = {
 <script src="/webgl/lessons/resources/prettify.js"></script>
 <script src="/webgl/lessons/resources/lesson.js" type="module"></script>
 <script>
-(function() {
-  if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
-      return;
-  }
-
-  function addScript(src, type, fn) {
-    const script = document.createElement('script');
-    const firstScript = document.getElementsByTagName('script')[0];
-    script.async = true;
-    script.defer = true;
-    script.type = type || 'javascript';
-    if (fn) {
-      script.addEventListener('load', fn);
-    }
-    script.src = src;
-    firstScript.parentNode.insertBefore(script, firstScript);
-  }
-
-  // can't do this because it would eat contexts
-  //addScript('//gpustats.org/stats.js', 'module');
-
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-59804936-1', 'auto');
-  ga('send', 'pageview');
-}());
 </script>
 
 

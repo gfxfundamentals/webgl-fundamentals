@@ -489,7 +489,7 @@ The lower limit on WebGL is 64 vec4s which is only 8 mat4s and you probably
 need some of those uniforms for other things like for example we have <code class="notranslate" translate="no">color</code>
 in the fragment shader and we have <code class="notranslate" translate="no">projection</code> and <code class="notranslate" translate="no">view</code> which means if
 we were on a device with a limit of 64 vec4s we could only have 5 bones! Checking
-<a href="https://webglstats.com/webgl/parameter/MAX_VERTEX_UNIFORM_VECTORS">WebGLStats</a>
+<a href="https://web3dsurvey.com/webgl/parameters/MAX_VERTEX_UNIFORM_VECTORS">WebGLStats</a>
 most devices support 128 vec4s and 70% of them support 256 vec4s but with
 are sample above that&#39;s still only 13 bones and 29 bones respectively. 13 is
 not even enough for a early 90s Virtua Fighter 1 style character and 29 is not
@@ -1528,35 +1528,6 @@ const settings = {
 <script src="/webgl/lessons/resources/prettify.js"></script>
 <script src="/webgl/lessons/resources/lesson.js" type="module"></script>
 <script>
-(function() {
-  if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
-      return;
-  }
-
-  function addScript(src, type, fn) {
-    const script = document.createElement('script');
-    const firstScript = document.getElementsByTagName('script')[0];
-    script.async = true;
-    script.defer = true;
-    script.type = type || 'javascript';
-    if (fn) {
-      script.addEventListener('load', fn);
-    }
-    script.src = src;
-    firstScript.parentNode.insertBefore(script, firstScript);
-  }
-
-  // can't do this because it would eat contexts
-  //addScript('//gpustats.org/stats.js', 'module');
-
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-59804936-1', 'auto');
-  ga('send', 'pageview');
-}());
 </script>
 
 

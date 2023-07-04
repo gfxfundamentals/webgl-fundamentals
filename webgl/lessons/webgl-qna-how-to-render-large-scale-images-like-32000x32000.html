@@ -246,7 +246,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <p>Is there any way to get a snapshot from webgl canvas with a high-resolution ? Can I use another solution?</p>
 <h2 id="answer-">Answer:</h2>
 <p>4000x4000 pixel is 4000x4000x4 or 64meg of memory. 8000x8000 is 256meg of memory. Browser&#39;s don&#39;t like allocating that large chunks of memory and often set limits on the page. So for example you have an 8000x8000 WebGL canvas which requires 2 buffers. The drawingbuffer AND the texture being displayed on the page. The drawingbuffer might be anti-aliases. If it&#39;s 4x MSAA then it would require a gig of memory just for that buffer. Then you take a screenshot so another 256meg of memory. So yes, the browser for one reason or another is likely to kill your page.</p>
-<p>On top of that WebGL has it&#39;s own limits in size. You can look up that limit which is effectively <a href="https://webglstats.com/webgl/parameter/MAX_TEXTURE_SIZE"><code class="notranslate" translate="no">MAX_TEXTURE_SIZE</code></a> or <a href="https://webglstats.com/webgl/parameter/MAX_VIEWPORT_DIMS"><code class="notranslate" translate="no">MAX_VIEWPORT_DIMS</code></a>. You can see from those about 40% of machines can&#39;t drawing larger than 4096 (although if you <a href="https://webglstats.com/webgl/parameter/MAX_VIEWPORT_DIMS?platforms=0000ff03c02d20f201">filter to desktop only it&#39;s much better</a>). That number only means what the hardware can do. It&#39;s still limited by memory.</p>
+<p>On top of that WebGL has it&#39;s own limits in size. You can look up that limit which is effectively <a href="https://web3dsurvey.com/webgl/parameters/MAX_TEXTURE_SIZE"><code class="notranslate" translate="no">MAX_TEXTURE_SIZE</code></a> or <a href="https://web3dsurvey.com/webgl/parameters/MAX_VIEWPORT_DIMS"><code class="notranslate" translate="no">MAX_VIEWPORT_DIMS</code></a>. You can see from those about 40% of machines can&#39;t drawing larger than 4096 (although if you <a href="https://web3dsurvey.com/webgl/parameters/MAX_VIEWPORT_DIMS?platforms=0000ff03c02d20f201">filter to desktop only it&#39;s much better</a>). That number only means what the hardware can do. It&#39;s still limited by memory.</p>
 <p>One way to kind of maybe solve this issue is to draw the image in parts. How you do that will depend on your app. If you&#39;re using a fairly standard perspective matrix for all your rendering you can use slightly different math to render any portion of the view. Most 3d math libraries have a <code class="notranslate" translate="no">perspective</code> function and most of them also have a corresponding <code class="notranslate" translate="no">frustum</code> function that is slightly more flexible.</p>
 <p>Here&#39;s a fairly standard style WebGL simple sample that draws a cube using a typical <code class="notranslate" translate="no">perspective</code> function</p>
 <p><div class="webgl_example_container">
@@ -528,35 +528,6 @@ const settings = {
 <script src="/webgl/lessons/resources/prettify.js"></script>
 <script src="/webgl/lessons/resources/lesson.js" type="module"></script>
 <script>
-(function() {
-  if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
-      return;
-  }
-
-  function addScript(src, type, fn) {
-    const script = document.createElement('script');
-    const firstScript = document.getElementsByTagName('script')[0];
-    script.async = true;
-    script.defer = true;
-    script.type = type || 'javascript';
-    if (fn) {
-      script.addEventListener('load', fn);
-    }
-    script.src = src;
-    firstScript.parentNode.insertBefore(script, firstScript);
-  }
-
-  // can't do this because it would eat contexts
-  //addScript('//gpustats.org/stats.js', 'module');
-
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-59804936-1', 'auto');
-  ga('send', 'pageview');
-}());
 </script>
 
 

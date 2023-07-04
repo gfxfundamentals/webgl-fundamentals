@@ -364,7 +364,7 @@ GPU/드라이버마다 사용할 수 있는 최대 점 크기가 다르다는 �
 최대 크기는 다음과 같이 쿼리할 수 있습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">const [minSize, maxSize] = gl.getParameter(gl.ALIASED_POINT_SIZE_RANGE);
 </code></pre><p>WebGL 스펙은 오직 최대 크기 1.0을 필요로 합니다.
-다행히도 <a href="https://webglstats.com/webgl/parameter/ALIASED_POINT_SIZE_RANGE">모든 GPU와 드라이버는 아니지만 대부분이 더 큰 크기를 지원</a>합니다.</p>
+다행히도 <a href="https://web3dsurvey.com/webgl/parameters/ALIASED_POINT_SIZE_RANGE">모든 GPU와 드라이버는 아니지만 대부분이 더 큰 크기를 지원</a>합니다.</p>
 <p><code class="notranslate" translate="no">gl_PointSize</code>를 설정한 다음 정점 셰이더가 종료될 때, <code class="notranslate" translate="no">gl_Position</code>에 설정한 모든 값은 픽셀 단위의 화면/캔버스 공간으로 변환되며, 네 방향 모두에 +/- gl_PointSize / 2인 위치에 정사각형이 생성됩니다.</p>
 <p>누가 점 하나 그리는 걸 원하겠다고 생각하실 수 있습니다.</p>
 <p>점은 자동적으로 비어있는 <a href="webgl-3d-textures.html">텍스처 좌표</a>를 가집니다.
@@ -708,35 +708,6 @@ const settings = {
 <script src="/webgl/lessons/resources/prettify.js"></script>
 <script src="/webgl/lessons/resources/lesson.js" type="module"></script>
 <script>
-(function() {
-  if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
-      return;
-  }
-
-  function addScript(src, type, fn) {
-    const script = document.createElement('script');
-    const firstScript = document.getElementsByTagName('script')[0];
-    script.async = true;
-    script.defer = true;
-    script.type = type || 'javascript';
-    if (fn) {
-      script.addEventListener('load', fn);
-    }
-    script.src = src;
-    firstScript.parentNode.insertBefore(script, firstScript);
-  }
-
-  // can't do this because it would eat contexts
-  //addScript('//gpustats.org/stats.js', 'module');
-
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-59804936-1', 'auto');
-  ga('send', 'pageview');
-}());
 </script>
 
 

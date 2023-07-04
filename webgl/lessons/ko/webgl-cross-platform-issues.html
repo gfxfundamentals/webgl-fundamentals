@@ -254,7 +254,7 @@ WebGL2의 경우, 적어도 2020년 7월 현재, <a href="#safari">사파리</a>
 <ul>
 <li><p>허용되는 최대 텍스처 크기</p>
 <p>2048이나 4096은 합리적인 제한으로 보입니다.
-적어도 2020년 현재 <a href="https://webglstats.com/webgl/parameter/MAX_TEXTURE_SIZE">99%의 기기들이 4096를 지원하지만 50%만이 4096 이상을 지원</a>합니다.</p>
+적어도 2020년 현재 <a href="https://web3dsurvey.com/webgl/parameters/MAX_TEXTURE_SIZE">99%의 기기들이 4096를 지원하지만 50%만이 4096 이상을 지원</a>합니다.</p>
 <p>참고: 최대 텍스처 크기는 GPU가 처리할 수 있는 최대 크기입니다.
 이건 GPU가 해당 크기를 제곱(2D 텍스처용)하거나 세제곱(3D 텍스처용)하는데 충분한 메모리가 있다는 뜻이 아닌데요.
 예를 들어 일부 GPU는 16384의 최대 크기를 가집니다.
@@ -328,7 +328,7 @@ WebGL2는 16입니다.</p>
 
 <p>WebGL1에서 정점 셰이더에 대한 값이 <strong>0</strong>임을 주의해야 합니다.
 참고로 너무 낙담하지 않아도 괜찮은데요.
-<a href="https://webglstats.com/webgl/parameter/MAX_VERTEX_TEXTURE_IMAGE_UNITS">모든 장치의 약 97%가 최소 4개를 지원</a>합니다.
+<a href="https://web3dsurvey.com/webgl/parameters/MAX_VERTEX_TEXTURE_IMAGE_UNITS">모든 장치의 약 97%가 최소 4개를 지원</a>합니다.
 그래도, 앱이 동작하지 않을 수 있다고 사용자에게 알릴 수 있는지 혹은 다른 셰이더로 폴백할 수 있는지 확인하는 게 좋습니다.</p>
 </li>
 </ul>
@@ -669,35 +669,6 @@ const settings = {
 <script src="/webgl/lessons/resources/prettify.js"></script>
 <script src="/webgl/lessons/resources/lesson.js" type="module"></script>
 <script>
-(function() {
-  if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
-      return;
-  }
-
-  function addScript(src, type, fn) {
-    const script = document.createElement('script');
-    const firstScript = document.getElementsByTagName('script')[0];
-    script.async = true;
-    script.defer = true;
-    script.type = type || 'javascript';
-    if (fn) {
-      script.addEventListener('load', fn);
-    }
-    script.src = src;
-    firstScript.parentNode.insertBefore(script, firstScript);
-  }
-
-  // can't do this because it would eat contexts
-  //addScript('//gpustats.org/stats.js', 'module');
-
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-59804936-1', 'auto');
-  ga('send', 'pageview');
-}());
 </script>
 
 

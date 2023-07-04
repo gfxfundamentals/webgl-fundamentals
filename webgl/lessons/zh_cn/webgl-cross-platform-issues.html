@@ -256,7 +256,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <ul>
 <li><p>允许的最大纹理尺寸</p>
 <p>2048 或者 4096 看起来很合理。
-至少在 2020 年 <a href="https://webglstats.com/webgl/parameter/MAX_TEXTURE_SIZE">99% 的设备支持 4096 但只有 50% 的设备支持 &gt; 4096</a>。</p>
+至少在 2020 年 <a href="https://web3dsurvey.com/webgl/parameters/MAX_TEXTURE_SIZE">99% 的设备支持 4096 但只有 50% 的设备支持 &gt; 4096</a>。</p>
 <p>注意：最大纹理尺寸是 GPU 能处理的最大维度。
 它并不意味着 GPU 有足够的内存给该维度的正方形（对于 2D 纹理）或立方体（对于 3D 纹理）。
 比如有些 GPU 有最大内存 16384. 但一个 3D 纹理，每个面 16384，一共就需要 16 TB 的内存！！！</p>
@@ -325,7 +325,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   </tbody>
 </table>
 
-<p>注意在 WebGL1 中，顶点着色器中的 <strong>0</strong>。显然 <a href="https://webglstats.com/webgl/parameter/MAX_VERTEX_TEXTURE_IMAGE_UNITS">~97% 的设备支持的数量至少是 4</a>。
+<p>注意在 WebGL1 中，顶点着色器中的 <strong>0</strong>。显然 <a href="https://web3dsurvey.com/webgl/parameters/MAX_VERTEX_TEXTURE_IMAGE_UNITS">~97% 的设备支持的数量至少是 4</a>。
 所以，你需要对此进行检查，然后告诉用户你的应用不会工作或者回退使用其它着色器。</p>
 </li>
 </ul>
@@ -679,35 +679,6 @@ const settings = {
 <script src="/webgl/lessons/resources/prettify.js"></script>
 <script src="/webgl/lessons/resources/lesson.js" type="module"></script>
 <script>
-(function() {
-  if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
-      return;
-  }
-
-  function addScript(src, type, fn) {
-    const script = document.createElement('script');
-    const firstScript = document.getElementsByTagName('script')[0];
-    script.async = true;
-    script.defer = true;
-    script.type = type || 'javascript';
-    if (fn) {
-      script.addEventListener('load', fn);
-    }
-    script.src = src;
-    firstScript.parentNode.insertBefore(script, firstScript);
-  }
-
-  // can't do this because it would eat contexts
-  //addScript('//gpustats.org/stats.js', 'module');
-
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-59804936-1', 'auto');
-  ga('send', 'pageview');
-}());
 </script>
 
 

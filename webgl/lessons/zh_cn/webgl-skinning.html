@@ -439,7 +439,7 @@ webglUtils.drawBufferInfo(gl, bufferInfo, gl.LINES);
 
 <p>另一个需要注意的小事，上面的例子权重和骨骼下标使用的是浮点数，可以使用<code class="notranslate" translate="no">UNSIGNED_BYTE</code>来节省一些空间。</p>
 <p>不幸的是着色器中可以使用的全局变量的数量是有限制的。对WebGL比较低的限制是64个vec4，即8个mat4 你可能需要一些全局变量用于其他的事情像片段着色器中的<code class="notranslate" translate="no">color</code> 以及<code class="notranslate" translate="no">projection</code>和<code class="notranslate" translate="no">view</code>这意味着如果我们在一个限制为64个vec4的设备上，我们只能有5个骨骼！查看
-<a href="https://webglstats.com/webgl/parameter/MAX_VERTEX_UNIFORM_VECTORS">WebGLStats</a>
+<a href="https://web3dsurvey.com/webgl/parameters/MAX_VERTEX_UNIFORM_VECTORS">WebGLStats</a>
 大多数设备支持128个vec4，其中70%支持256个vec4 但是对于上面的例子，这分别只有13个骨骼和29个骨骼。13对于90年代VR战士1风格的角色尚且不够，29与现代游戏中使用的数字相距甚远。</p>
 <p>关于这个问题有很多方法。一个是离线预处理模型并打破它们为多个部分，每个使用不超过N个骨骼。这很复杂并带来了自身的一系列问题。</p>
 <p>另一种是将骨骼矩阵存储在纹理中。一个重要的启示纹理不仅仅是图片，它们实际上是你可以传递给着色器的随机访问的2D数组数据，你可以使用它们做各种事情，不仅仅是读取图像。</p>
@@ -1342,35 +1342,6 @@ const settings = {
 <script src="/webgl/lessons/resources/prettify.js"></script>
 <script src="/webgl/lessons/resources/lesson.js" type="module"></script>
 <script>
-(function() {
-  if (window.location.hostname.indexOf("webglfundamentals.org") < 0) {
-      return;
-  }
-
-  function addScript(src, type, fn) {
-    const script = document.createElement('script');
-    const firstScript = document.getElementsByTagName('script')[0];
-    script.async = true;
-    script.defer = true;
-    script.type = type || 'javascript';
-    if (fn) {
-      script.addEventListener('load', fn);
-    }
-    script.src = src;
-    firstScript.parentNode.insertBefore(script, firstScript);
-  }
-
-  // can't do this because it would eat contexts
-  //addScript('//gpustats.org/stats.js', 'module');
-
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-59804936-1', 'auto');
-  ga('send', 'pageview');
-}());
 </script>
 
 
