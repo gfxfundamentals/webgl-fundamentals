@@ -118,7 +118,7 @@ if (!ext) {
 }
 ```
 
-根据 WebGLStats [几乎所有设备都支持这个扩展](https://webglstats.com/webgl/extension/OES_element_index_uint)。
+根据 WebGLStats [几乎所有设备都支持这个扩展](https://web3dsurvey.com/webgl/extensions/OES_element_index_uint)。
 
 <div class="webgl-bottombar">
 <p>

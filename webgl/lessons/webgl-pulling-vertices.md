@@ -428,7 +428,7 @@ And we get a textured cube using only 8 positions and
 Some things to note. The code is lazy and uses 1D
 textures for the positions and texture coordinates.
 Textures can only be so wide. [How wide is machine
-specific](https://webglstats.com/webgl/parameter/MAX_TEXTURE_SIZE) which you can query with 
+specific](https://web3dsurvey.com/webgl/parameters/MAX_TEXTURE_SIZE) which you can query with 
 
 ```js
 const maxSize = gl.getParameter(gl.MAX_TEXTURE_SIZE);

@@ -6,7 +6,7 @@ TOC: 색인된 그리기
 WebGL은 *색인된 그리기*라는 기능을 가지고 있습니다.
 기본적으로 개별적으로 그릴 때보다 빠르게 같은 걸 여러 번 그리는 방법입니다.
 
-참고로 이 기능은 WebGL1의 선택적 확장이지만 [거의 모든 브라우저와 기기에서 사용 가능](https://webglstats.com/webgl/extension/ANGLE_instanced_arrays)합니다.
+참고로 이 기능은 WebGL1의 선택적 확장이지만 [거의 모든 브라우저와 기기에서 사용 가능](https://web3dsurvey.com/webgl/extensions/ANGLE_instanced_arrays)합니다.
 
 먼저 동일한 항목의 여러 인스턴스를 그리는 예제부터 만들어 봅시다.
 

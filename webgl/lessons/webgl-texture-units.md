@@ -139,7 +139,7 @@ maximum is 8.
 
 One other thing to note is that WebGL allows `gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS)`
 to return 0!!! In other words, **it's possible some devices don't support using textures in
-vertex shaders at all**. Fortunately [that situation appears to be rare](https://webglstats.com/webgl/parameter/MAX_VERTEX_TEXTURE_IMAGE_UNITS)
+vertex shaders at all**. Fortunately [that situation appears to be rare](https://web3dsurvey.com/webgl/parameters/MAX_VERTEX_TEXTURE_IMAGE_UNITS)
 but if you do decide to use some textures in a vertex shader you probably want to
 check `gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS)` actually supports enough
 for your needs and notify the user if not.

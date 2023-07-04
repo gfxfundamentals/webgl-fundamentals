@@ -158,7 +158,7 @@ gl.drawArrays(gl.POINTS, offset, count);
 const [minSize, maxSize] = gl.getParameter(gl.ALIASED_POINT_SIZE_RANGE);
 ```
 
-WebGL 规范只要求最大值为 1.0。幸运的是，[绝大多数 GPU 和驱动支持更大的值](https://webglstats.com/webgl/parameter/ALIASED_POINT_SIZE_RANGE)。
+WebGL 规范只要求最大值为 1.0。幸运的是，[绝大多数 GPU 和驱动支持更大的值](https://web3dsurvey.com/webgl/parameters/ALIASED_POINT_SIZE_RANGE)。
 
 在你设置 `gl_PointSize` 后，当顶点着色器退出后，无论你给 `gl_Position` 设置了什么值，
 都将被转变成在屏幕/画布中的像素值，然后会以这个位置为中点，

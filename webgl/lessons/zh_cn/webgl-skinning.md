@@ -256,7 +256,7 @@ webglUtils.drawBufferInfo(gl, bufferInfo, gl.LINES);
 另一个需要注意的小事，上面的例子权重和骨骼下标使用的是浮点数，可以使用`UNSIGNED_BYTE`来节省一些空间。
 
 不幸的是着色器中可以使用的全局变量的数量是有限制的。对WebGL比较低的限制是64个vec4，即8个mat4 你可能需要一些全局变量用于其他的事情像片段着色器中的`color` 以及`projection`和`view`这意味着如果我们在一个限制为64个vec4的设备上，我们只能有5个骨骼！查看
-[WebGLStats](https://webglstats.com/webgl/parameter/MAX_VERTEX_UNIFORM_VECTORS)
+[WebGLStats](https://web3dsurvey.com/webgl/parameters/MAX_VERTEX_UNIFORM_VECTORS)
 大多数设备支持128个vec4，其中70%支持256个vec4 但是对于上面的例子，这分别只有13个骨骼和29个骨骼。13对于90年代VR战士1风格的角色尚且不够，29与现代游戏中使用的数字相距甚远。
 
 关于这个问题有很多方法。一个是离线预处理模型并打破它们为多个部分，每个使用不超过N个骨骼。这很复杂并带来了自身的一系列问题。

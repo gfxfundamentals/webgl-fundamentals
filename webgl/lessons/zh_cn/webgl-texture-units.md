@@ -126,6 +126,6 @@ maxFragmentShaderTextureUnits = 8
 
 另一个需要注意的事是，WebGL 允许 `gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS)` 返回 0！！！
 也就是说，**有可能设备不支持在顶点着色器中使用纹理**。
-幸运的是 [这种情况很少见](https://webglstats.com/webgl/parameter/MAX_VERTEX_TEXTURE_IMAGE_UNITS)。
+幸运的是 [这种情况很少见](https://web3dsurvey.com/webgl/parameters/MAX_VERTEX_TEXTURE_IMAGE_UNITS)。
 不过，如果你决定在顶点着色器中使用一些纹理，你需要先检查 `gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS)` 是否支持你的需求，
 如果不支持，通知用户。

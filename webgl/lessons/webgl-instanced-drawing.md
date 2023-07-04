@@ -7,7 +7,7 @@ It is basically a way to draw more than one of the
 same thing faster than drawing each thing individually.
 
 Note that the feature is an optional extension in WebGL1
-but is apparently [available in pretty much all browsers and devices](https://webglstats.com/webgl/extension/ANGLE_instanced_arrays).
+but is apparently [available in pretty much all browsers and devices](https://web3dsurvey.com/webgl/extensions/ANGLE_instanced_arrays).
 
 First let's make an example that draws multiple instances of the
 same thing.

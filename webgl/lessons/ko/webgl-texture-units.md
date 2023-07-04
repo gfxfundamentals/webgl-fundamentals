@@ -129,5 +129,5 @@ maxFragmentShaderTextureUnits = 8
 
 또 하나 주목해야 할 점은 WebGL이 `gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS)`가 0을 반환하는 걸 허용한다는 겁니다.
 다시 말해, **일부 기기는 정점 셰이더에서의 텍스처 사용을 전혀 지원하지 않을 수 있습니다.**
-다행히 [그런 상황](https://webglstats.com/webgl/parameter/MAX_VERTEX_TEXTURE_IMAGE_UNITS)은 드물지만 정점 셰이더에서 텍스처를 사용하기로 결정했다면 실제로 필요한 만큼 충분히 지원하는지 `gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS)`로 확인하고 아니라면 사용자에게 알려야 합니다.
+다행히 [그런 상황](https://web3dsurvey.com/webgl/parameters/MAX_VERTEX_TEXTURE_IMAGE_UNITS)은 드물지만 정점 셰이더에서 텍스처를 사용하기로 결정했다면 실제로 필요한 만큼 충분히 지원하는지 `gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS)`로 확인하고 아니라면 사용자에게 알려야 합니다.
 

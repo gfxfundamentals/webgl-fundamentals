@@ -165,7 +165,7 @@ const [minSize, maxSize] = gl.getParameter(gl.ALIASED_POINT_SIZE_RANGE);
 ```
 
 The WebGL spec only requires a max size of 1.0. Fortunately
-[most if not all GPUs and drivers support a larger size](https://webglstats.com/webgl/parameter/ALIASED_POINT_SIZE_RANGE).
+[most if not all GPUs and drivers support a larger size](https://web3dsurvey.com/webgl/parameters/ALIASED_POINT_SIZE_RANGE).
 
 After you set `gl_PointSize` then when the vertex shader exits, whatever value you set on `gl_Position` is converted
 to screen/canvas space in pixels, then a square is generated around that position that is +/- gl_PointSize / 2 in all 4 directions.

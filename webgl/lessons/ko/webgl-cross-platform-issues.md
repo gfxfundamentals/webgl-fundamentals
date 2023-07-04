@@ -26,7 +26,7 @@ WebGL은 다양한 최소 지원 기능이 있지만 로컬 장치에서는 최�
 * 허용되는 최대 텍스처 크기
 
   2048이나 4096은 합리적인 제한으로 보입니다.
-  적어도 2020년 현재 [99%의 기기들이 4096를 지원하지만 50%만이 4096 이상을 지원](https://webglstats.com/webgl/parameter/MAX_TEXTURE_SIZE)합니다.
+  적어도 2020년 현재 [99%의 기기들이 4096를 지원하지만 50%만이 4096 이상을 지원](https://web3dsurvey.com/webgl/parameters/MAX_TEXTURE_SIZE)합니다.
 
   참고: 최대 텍스처 크기는 GPU가 처리할 수 있는 최대 크기입니다.
   이건 GPU가 해당 크기를 제곱(2D 텍스처용)하거나 세제곱(3D 텍스처용)하는데 충분한 메모리가 있다는 뜻이 아닌데요.
@@ -120,7 +120,7 @@ WebGL은 다양한 최소 지원 기능이 있지만 로컬 장치에서는 최�
 
   WebGL1에서 정점 셰이더에 대한 값이 **0**임을 주의해야 합니다.
   참고로 너무 낙담하지 않아도 괜찮은데요.
-  [모든 장치의 약 97%가 최소 4개를 지원](https://webglstats.com/webgl/parameter/MAX_VERTEX_TEXTURE_IMAGE_UNITS)합니다.
+  [모든 장치의 약 97%가 최소 4개를 지원](https://web3dsurvey.com/webgl/parameters/MAX_VERTEX_TEXTURE_IMAGE_UNITS)합니다.
   그래도, 앱이 동작하지 않을 수 있다고 사용자에게 알릴 수 있는지 혹은 다른 셰이더로 폴백할 수 있는지 확인하는 게 좋습니다.
 
 다른 제한도 있는데요.

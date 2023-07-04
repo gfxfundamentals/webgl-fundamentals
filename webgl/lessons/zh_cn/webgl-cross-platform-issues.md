@@ -28,7 +28,7 @@ WebGL 有很多最低支持的特性，但你的设备可能支持的特性 \> �
 * 允许的最大纹理尺寸
 
   2048 或者 4096 看起来很合理。
-  至少在 2020 年 [99% 的设备支持 4096 但只有 50% 的设备支持 > 4096](https://webglstats.com/webgl/parameter/MAX_TEXTURE_SIZE)。
+  至少在 2020 年 [99% 的设备支持 4096 但只有 50% 的设备支持 > 4096](https://web3dsurvey.com/webgl/parameters/MAX_TEXTURE_SIZE)。
 
   注意：最大纹理尺寸是 GPU 能处理的最大维度。
   它并不意味着 GPU 有足够的内存给该维度的正方形（对于 2D 纹理）或立方体（对于 3D 纹理）。
@@ -117,7 +117,7 @@ WebGL 有很多最低支持的特性，但你的设备可能支持的特性 \> �
     </tbody>
   </table>
 
-  注意在 WebGL1 中，顶点着色器中的 **0**。显然 [~97% 的设备支持的数量至少是 4](https://webglstats.com/webgl/parameter/MAX_VERTEX_TEXTURE_IMAGE_UNITS)。
+  注意在 WebGL1 中，顶点着色器中的 **0**。显然 [~97% 的设备支持的数量至少是 4](https://web3dsurvey.com/webgl/parameters/MAX_VERTEX_TEXTURE_IMAGE_UNITS)。
   所以，你需要对此进行检查，然后告诉用户你的应用不会工作或者回退使用其它着色器。
 
 还有其它限制。使用下面值，调用 `gl.getParameter` 进行查找：

@@ -30,7 +30,7 @@ Examples include:
 * The max texture size allowed
 
   2048 or 4096 seems to be reasonable limits. At least as of 2020 it looks like
-  [99% of devices support 4096 but only 50% support > 4096](https://webglstats.com/webgl/parameter/MAX_TEXTURE_SIZE).
+  [99% of devices support 4096 but only 50% support > 4096](https://web3dsurvey.com/webgl/parameters/MAX_TEXTURE_SIZE).
 
   Note: the max texture size is the maximum dimension the GPU can process. It
   doesn't mean that GPU has enough memory for that dimension squared (for a 2D
@@ -125,7 +125,7 @@ Examples include:
   </table>
 
   It's important to note the **0** for a vertex shader in WebGL1. Note that that's probably not the end of the world.
-  Apparently [~97% of all devices support at least 4](https://webglstats.com/webgl/parameter/MAX_VERTEX_TEXTURE_IMAGE_UNITS).
+  Apparently [~97% of all devices support at least 4](https://web3dsurvey.com/webgl/parameters/MAX_VERTEX_TEXTURE_IMAGE_UNITS).
   Still, you might want to check so you can either tell the user that your app is not going to work for them or
   you can fallback to some other shaders.
 

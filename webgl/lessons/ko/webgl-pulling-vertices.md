@@ -404,7 +404,7 @@ gl.drawElements(gl.TRIANGLES, 6 * 6, gl.UNSIGNED_SHORT, 0);
 참고할 사항이 있습니다.
 이 코드는 느리고 위치와 텍스처 좌표에 대해 1차원 텍스처를 사용합니다.
 그리고 텍스처는 매우 넓을 수 밖에 없는데요.
-얼마나 넓은지는 [머신 스펙](https://webglstats.com/webgl/parameter/MAX_TEXTURE_SIZE)에 따르며 다음과 같이 쿼리할 수 있습니다.
+얼마나 넓은지는 [머신 스펙](https://web3dsurvey.com/webgl/parameters/MAX_TEXTURE_SIZE)에 따르며 다음과 같이 쿼리할 수 있습니다.
 
 ```js
 const maxSize = gl.getParameter(gl.MAX_TEXTURE_SIZE);

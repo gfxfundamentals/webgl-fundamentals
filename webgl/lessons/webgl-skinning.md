@@ -306,7 +306,7 @@ The lower limit on WebGL is 64 vec4s which is only 8 mat4s and you probably
 need some of those uniforms for other things like for example we have `color`
 in the fragment shader and we have `projection` and `view` which means if
 we were on a device with a limit of 64 vec4s we could only have 5 bones! Checking
-[WebGLStats](https://webglstats.com/webgl/parameter/MAX_VERTEX_UNIFORM_VECTORS)
+[WebGLStats](https://web3dsurvey.com/webgl/parameters/MAX_VERTEX_UNIFORM_VECTORS)
 most devices support 128 vec4s and 70% of them support 256 vec4s but with
 are sample above that's still only 13 bones and 29 bones respectively. 13 is
 not even enough for a early 90s Virtua Fighter 1 style character and 29 is not

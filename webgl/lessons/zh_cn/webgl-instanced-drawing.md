@@ -6,7 +6,7 @@ WebGL有一个拓展叫做*实例化绘制*。
 一般来说，使用这种方法绘制多个相同的物体比一个一个绘制要快得多。
 
 注意这项功能对于WebGL 1是一项可选的拓展，但是很明显它可以在
-[几乎所有的设备上使用](https://webglstats.com/webgl/extension/ANGLE_instanced_arrays)。
+[几乎所有的设备上使用](https://web3dsurvey.com/webgl/extensions/ANGLE_instanced_arrays)。
 
 首先让我们来演示一下如何绘制同一物体的多个实例。
 

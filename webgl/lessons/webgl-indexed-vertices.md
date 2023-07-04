@@ -133,7 +133,7 @@ if (!ext) {
 }
 ```
 
-According to WebGLStats [nearly all devices support this extension](https://webglstats.com/webgl/extension/OES_element_index_uint).
+According to WebGLStats [nearly all devices support this extension](https://web3dsurvey.com/webgl/extensions/OES_element_index_uint).
 
 <div class="webgl_bottombar">
 <p>

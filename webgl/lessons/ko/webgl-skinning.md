@@ -280,7 +280,7 @@ webglUtils.drawBufferInfo(gl, bufferInfo, gl.LINES);
 
 안타깝게도 셰이더에서 사용할 수 있는 유니폼 수는 제한되어 있습니다.
 WebGL의 하한선은 vec4 64개로 mat4 8개에 불과하며, 프래그먼트 셰이더의 `color`와 `projection` 그리고 `view`와 같은 다른 작업을 위해 이러한 유니폼이 필요할 수 있는데, vec4 제한이 64개인 기기에서는 5개의 본만 가질 수 있습니다!
-[WebGLStats](https://webglstats.com/webgl/parameter/MAX_VERTEX_UNIFORM_VECTORS)를 확인해보면 대부분의 기기들이 128개의 vec4를 지원하고 그 중 70%는 256개의 vec4를 지원하지만 여전히 각각 13개의 본과 29개의 본에 불과합니다.
+[WebGLStats](https://web3dsurvey.com/webgl/parameters/MAX_VERTEX_UNIFORM_VECTORS)를 확인해보면 대부분의 기기들이 128개의 vec4를 지원하고 그 중 70%는 256개의 vec4를 지원하지만 여전히 각각 13개의 본과 29개의 본에 불과합니다.
 13개는 90년대 초 Virtua Fighter 1 캐릭터에도 충분하지 않으며 29개는 최신 게임에 사용되는 수에 근접하지 않습니다.
 
 이를 해결하기 위한 몇 가지 방법이 있는데요.

@@ -117,7 +117,7 @@ if (!ext) {
 }
 ```
 
-[WebGLStats](https://webglstats.com/webgl/extension/OES_element_index_uint)에 따르면 거의 모든 기기에서 이 확장을 지원합니다.
+[WebGLStats](https://web3dsurvey.com/webgl/extensions/OES_element_index_uint)에 따르면 거의 모든 기기에서 이 확장을 지원합니다.
 
 <div class="webgl_bottombar">
 <p>
