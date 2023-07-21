@@ -243,8 +243,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       <p>이 포스트는 WebGL 관련 시리즈에서 이어집니다.
 첫 번째는 <a href="webgl-fundamentals.html">기초</a>로 시작했고, 이전에는 <a href="webgl-3d-perspective.html">3D 원근 투영</a>에 관한 것이었습니다.
 아직 읽지 않으셨다면 해당 글들을 먼저 읽어주세요.</p>
-<p><code class="notranslate" translate="no">m4.perspective</code> 함수는 F가 원점(0, 0, 0)에 있으리라 생각하고, 절두체의 객체는 원점 앞 <code class="notranslate" translate="no">-zNear</code>에서 <code class="notranslate" translate="no">-zFar</code>까지 있기 때문에, 지난 포스트에서 우리는 F를 절두체 앞으로 옮겨야 했습니다.</p>
-<p>뷰 앞의 물체를 움직이는 것은 그다지 좋은 방법이 아닌 것 같습니다.
+<p>F의 위치가 원점(0, 0, 0)에 있고 절두체의 객체는 <code class="notranslate" translate="no">-zNear</code>에서 <code class="notranslate" translate="no">-zFar</code> 사이에 있기 때문에 지난 포스트에서 우리는 F를 절두체 앞으로 옮겨야 했습니다.</p>
+<p>하지만 뷰 앞의 물체를 움직이는 것은 그다지 좋은 방법이 아닌 것 같습니다.
 현실에서는 보통 건물의 사진을 찍기 위해 카메라를 움직이죠.</p>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/camera-move-camera.html?mode=0"></iframe>
@@ -275,7 +275,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 5로 스케일링하는 행렬의 역은 1/5이나 0.2로 스케일링하는 행렬입니다.
 X축을 중심으로 30&deg; 회전하는 행렬의 역은 X축을 중심으로 -30&deg; 회전하는 행렬이 됩니다.</p>
 <p>지금까지 &#39;F&#39;의 위치와 오리엔테이션에 영향을 주기 위한 평행 이동, 회전, 스케일을 사용했습니다.
-모든 행렬을 곱한 후 &#39;F&#39;를 원점에서 원하는 위치, 크기, 오리엔테이션으로 움직이는 방법을 나타내는 단일 행렬이 생기는데요.
+모든 행렬을 곱하면 &#39;F&#39;를 원점에서 원하는 위치, 크기, 오리엔테이션으로 움직이는 방법을 나타내는 하나의 행렬이 생기는데요.
 카메라에서도 똑같이 할 수 있습니다.
 카메라를 원점에서 원하는 위치로 이동하고 회전하는 방법을 알려주는 행렬이 있으면, 나머지를 정반대의 결과로 이동하고 회전하는 방법을 알려주는 행렬인 역행렬을 계산할 수 있으므로, 카메라는 (0, 0, 0)에 있도록 하고 그 앞에 있는 모든 것을 움직일 겁니다.</p>
 <p>위 다이어그램처럼 &#39;F&#39;가 선회하는 3D 장면을 만들어봅시다.</p>
@@ -288,7 +288,7 @@ var projectionMatrix = m4.perspective(fieldOfViewRadians, aspect, zNear, zFar);
 </code></pre>
 <p>다음으로 카메라 행렬을 계산할 겁니다.
 행렬은 월드에서 카메라의 위치와 오리엔테이션을 나타냅니다.
-아래 코드는 카메라가 원점을 중심으로 radius * 1.5의 거리에서 원점을 바라보며 회전하는 행렬을 만듭니다.</p>
+아래 코드는 카메라가 원점을 중심으로 radius * 1.5 거리에서 원점을 바라보며 회전하는 행렬을 만듭니다.</p>
 <p><div class="webgl_diagram_container">
   <iframe class="webgl_example " style="width: 400px; height: 300px;" src="/webgl/lessons/resources/camera-move-camera.html?mode=3"></iframe>
   <div class="webgl_center">카메라 움직임</div>
@@ -302,20 +302,20 @@ var radius = 200;
 var cameraMatrix = m4.yRotation(cameraAngleRadians);
 cameraMatrix = m4.translate(cameraMatrix, 0, 0, radius * 1.5);
 </code></pre>
-<p>그런 다음 카메라 행렬에서 &quot;뷰 행렬&quot;를 계산합니다.
-&quot;뷰 행렬&quot;는 마치 카메라가 원점(0,0,0)에 있는 것처럼, 모든 걸 카메라와 정반대로 움직여 사실상 카메라를 기준으로 만드는 행렬입니다.
+<p>그런 다음 카메라 행렬에서 &quot;뷰 행렬&quot;을 계산합니다.
+&quot;뷰 행렬&quot;은 마치 카메라가 원점(0,0,0)에 있는 것처럼, 모든 걸 카메라와 정반대로 움직여 사실상 카메라를 기준으로 만드는 행렬입니다.
 역행렬(제공된 행렬의 정반대를 수행하는 행렬)을 계산하는 <code class="notranslate" translate="no">inverse</code> 함수를 사용하여 이를 수행할 수 있습니다.
 이 경우 제공된 행렬은 원점을 기준으로 카메라를 어떤 위치와 오리엔테이션으로 옮깁니다.
 그 반대는 나머지를 움직여서 카메라가 원점에 있도록 하는 행렬입니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 카메라 행렬로 뷰 행렬 만들기
 var viewMatrix = m4.inverse(cameraMatrix);
 </code></pre>
-<p>이제 뷰 행렬와 투영 행렬은 뷰 투영 행렬로 합칩니다.</p>
+<p>이제 뷰 행렬과 투영 행렬을 뷰 투영 행렬로 합칩니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 뷰 투영 행렬 계산
 var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 </code></pre>
 <p>마지막으로 F의 원을 그립니다.
-각 F에 대해 뷰 투영 행렬로 시작한 다음, 반경 단위로 회전하고 이동합니다.</p>
+각 F에 대해 뷰 투영 행렬로 시작한 후 반경 단위로 회전하고 이동합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">for (var ii = 0; ii &lt; numFs; ++ii) {
   var angle = (ii * Math.PI * 2) / numFs;
   var x = Math.cos(angle) * radius;
@@ -343,19 +343,19 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 </div>
 
 </p>
-<p>전부 괜찮아 보이지만 회전과 평행 이동을 사용하여 카메라를 원하는 곳으로 움직여 보고 싶은 방향을 향하게 하기가 쉽지 않은데요.
-예를 들어 카메라가 특정 F를 가리키도록 하려면, &#39;F&#39;의 원이 회전하는 동안 카메라가 해당 &#39;F&#39;를 가리키도록 회전하는 방법을 계산하기 위해 꽤 어려운 수식이 필요합니다.</p>
+<p>전부 괜찮아 보이지만 회전과 평행 이동을 사용하여 카메라를 원하는 곳으로 움직여서 보고 싶은 방향을 향하도록 하기 쉽지 않은데요.
+예를 들어 카메라가 특정 F를 가리키도록 하려면 &#39;F&#39;의 원이 회전하는 동안 카메라가 해당 &#39;F&#39;를 가리키도록 회전하는 방법을 계산하는 복잡한 수식이 필요합니다.</p>
 <p>다행히 더 쉬운 방법이 있는데요.
 원하는 카메라 위치와 가리킬 대상을 결정한 다음, 그곳에 카메라를 배치하는 행렬을 계산할 수 있습니다.
 행렬이 작동하는 방식에 기반한 이 작업은 놀라울 정도로 쉽습니다.</p>
 <p>먼저 원하는 카메라 위치를 알아야 합니다.
 이를 <code class="notranslate" translate="no">cameraPosition</code>이라 부를겁니다.
 그런 다음 보고 싶거나 목표로 하고 싶은 것의 위치를 알아야 합니다.
-이건 <code class="notranslate" translate="no">target</code>이라 부를겁니다.
+이건 <code class="notranslate" translate="no">target</code>이라 부르겠습니다.
 <code class="notranslate" translate="no">cameraPosition</code>에서 <code class="notranslate" translate="no">target</code>을 빼면 대상에 도달하기 위해 카메라가 이동해야 하는 방향을 가리키는 벡터가 생깁니다.
 이걸 <code class="notranslate" translate="no">zAxis</code>라 부릅시다.
-카메라가 -Z 방향을 향한다는 것을 알고 있기 때문에 다른 방법 <code class="notranslate" translate="no">cameraPosition - target</code>으로 뺄 수 있습니다.
-그리고 결과를 정규화한 다음 행렬의 <code class="notranslate" translate="no">z</code>부분으로 직접 복사합니다.</p>
+카메라가 -Z 방향을 향한다는 것을 알고 있기 때문에 다른 방법(<code class="notranslate" translate="no">cameraPosition - target</code>)으로 뺄 수 있습니다.
+그리고 결과를 정규화한 다음 행렬의 <code class="notranslate" translate="no">z</code> 부분으로 복사합니다.</p>
 <div class="webgl_math_center"><pre class="webgl_math">
 +----+----+----+----+
 |    |    |    |    |
@@ -405,8 +405,7 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 
 </p>
 <p>이제 남은 일은 3개의 축을 행렬로 연결하는 겁니다.
-이는 <code class="notranslate" translate="no">cameraPosition</code>에서 <code class="notranslate" translate="no">target</code>을 가리키는 무언가를 향하는 행렬을 제공하는데요.
-<code class="notranslate" translate="no">position</code>만 추가하면 됩니다.</p>
+<code class="notranslate" translate="no">cameraPosition</code>에서 <code class="notranslate" translate="no">target</code>을 가리키는 무언가를 향하는 행렬을 제공하므로 <code class="notranslate" translate="no">position</code>만 추가하면 됩니다.</p>
 <div class="webgl_math_center"><pre class="webgl_math">
 +----+----+----+----+
 | <span class="x-axis">Xx</span> | <span class="x-axis">Xy</span> | <span class="x-axis">Xz</span> |  0 |  <- <span class="x-axis">x축</span>
@@ -499,7 +498,7 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 </p>
 <p>슬라이더를 드래그해서 카메라가 어떻게 &#39;F&#39;를 따라가는지 확인해보세요.</p>
 <p>참고로 카메라 이외에도 &quot;lookAt&quot; 수식을 사용할 수 있습니다.
-일반적인 용도는 누군가를 따라가는 캐릭터의 머리를 만드는 겁니다.
+일반적인 용도는 캐릭터의 머리가 누군가를 바라보도록 만드는 겁니다.
 목표를 겨냥하는 포탑을 만들 수 있고, 개체가 경로를 따라가게 만들 수도 있는데요.
 먼저 경로상에 대상이 있는 위치를 계산합니다.
 그런 다음 잠시 후에 경로상에 대상이 어디에 있는지 계산합니다.
@@ -513,9 +512,9 @@ var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 다시 말해 카메라 자체를 움직이는 행렬이 아니라 카메라 앞에 있는 모든 걸 움직이는 행렬을 만듭니다.
 </p>
 <p>
-저는 이게 덜 유용하다고 생각합니다.
-lookAt 함수는 많은 용도로 사용되는데요.
-뷰 행렬이 필요할 때 <code class="notranslate" translate="no">inverse</code>를 호출하기 쉽긴 하지만, 어떤 캐릭터의 머리가 다른 캐릭터를 따라가게 하거나 어떤 포탑이 목표를 겨냥하게 만들기 위해 <code class="notranslate" translate="no">lookAt</code>을 사용한다면, <code class="notranslate" translate="no">lookAt</code>이 월드 공간에서 개체의 방향과 위치를 지정하는 행렬을 반환하는 경우에 훨씬 더 유용합니다.
+저는 이게 덜 유용하다고 생각하는데요.
+언급했듯이 <code class="notranslate" translate="no">lookAt</code> 함수는 많은 용도를 가지고 있습니다.
+뷰 행렬이 필요할 때 <code class="notranslate" translate="no">inverse</code>를 호출하는 게 쉽긴 하지만, 어떤 캐릭터의 머리가 다른 캐릭터를 따라가게 하거나 어떤 포탑이 목표를 겨냥하게 만들기 위해 <code class="notranslate" translate="no">lookAt</code>을 사용하는 경우와 <code class="notranslate" translate="no">lookAt</code>이 월드 공간에서 개체의 방향과 위치를 지정하는 행렬을 반환하는 경우에 훨씬 더 유용합니다.
 </p>
 <div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-camera-look-at-heads.html"></iframe>
@@ -580,9 +579,9 @@ lookAt 함수는 많은 용도로 사용되는데요.
         </ul>
   <li>지오메트리</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">지오메트리 - 선반 가공</a></li>
-<li><a href="/webgl/lessons/ko/webgl-load-obj.html">.obj 파일 로딩</a></li>
-<li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">.mtl 파일로 .obj 로딩</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">지오메트리 - Lathe</a></li>
+<li><a href="/webgl/lessons/ko/webgl-load-obj.html">.obj 파일 로드</a></li>
+<li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">.mtl 파일이 있는 .obj 로드</a></li>
         </ul>
   <li>텍스처</li>
         <ul>
@@ -644,7 +643,7 @@ lookAt 함수는 많은 용도로 사용되는데요.
   <li>최적화</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-indexed-vertices.html">색인된 정점 (gl.drawElements)</a></li>
-<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">색인된 그리기</a></li>
+<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">인스턴스 드로잉</a></li>
         </ul>
   <li>Misc</li>
         <ul>

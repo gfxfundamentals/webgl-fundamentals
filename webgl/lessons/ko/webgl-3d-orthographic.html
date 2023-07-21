@@ -407,7 +407,7 @@ function setGeometry(gl) {
   },
 };
 </code></pre><p>이제 3가지의 회전 함수를 가진다는 점을 주목하세요.
-2D에서는 Z축을 중심으로만 회전했기 때문에 하나만 필요했는데요.
+2D에서는 Z축을 중심으로만 회전했기 때문에 하나만 필요했습니다.
 3D를 수행하기 위해서는 X축과 Y축을 중심으로도 회전되어야 합니다.
 보면 아시겠지만 모든 게 굉장히 비슷한데요.
 이걸 이해하면 이전처럼 단순화할 수 있습니다.</p>
@@ -432,7 +432,7 @@ function setGeometry(gl) {
 <p>위 수식들을 사용하면 이렇게 회전합니다.</p>
 <iframe class="external_diagram" src="../resources/axis-diagram.html" style="width: 540px; height: 280px;"></iframe>
 
-<p>마찬가지로 단순화된 함수들을 만들어 봅시다.</p>
+<p>마찬가지로 간략화한 함수들을 만들어 봅시다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  translate: function(m, tx, ty, tz) {
     return m4.multiply(m, m4.translation(tx, ty, tz));
   },
@@ -573,7 +573,7 @@ function setGeometry(gl) {
 </p>
 <p>슬라이더를 움직여봐도 이게 3D인지 확인하기 어려운데요.
 각 사각형에 다른 색상을 칠해봅시다.
-이를 위해 정점 셰이더에 또 다른 속성과 이걸 정점 셰이더에서 프래그먼트 셰이더로 전달하기 위한 베링을 추가할 겁니다.</p>
+이를 위해 정점 셰이더에 또 다른 속성과 이걸 정점 셰이더에서 프래그먼트 셰이더로 전달하기 위한 varying을 추가할 겁니다.</p>
 <p>다음은 새로운 정점 셰이더입니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">&lt;script id=&quot;vertex-shader-3d&quot; type=&quot;x-shader/x-vertex&quot;&gt;
 attribute vec4 a_position;
@@ -686,9 +686,9 @@ CULL_FACE를 꺼놨기 때문에 시계 방향(앞면)과 반시계 방향(뒷�
 
 </p>
 <p>삼각형이 전부 어디로 간거죠?
-알고보니 다수가 잘못된 방향을 향하고 있었습니다.
-회전시켜서 다른 방향을 보면 나타나는 것을 볼 수 있는데요.
-다행히 쉽게 고칠 수 있습니다.
+알고보니 다수가 잘못된 방향을 향하고 있었네요.
+회전시켜서 다른 방향을 보면 나타나는 것을 볼 수 있습니다.
+다행히 쉽게 고칠 수 있는데요.
 뒤집혀 있는 부분을 찾아 정점 2개를 교환하면 됩니다.
 예를 들어 뒤집힌 삼각형 하나가 있다면,</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">           1,   2,   3,
@@ -728,7 +728,7 @@ WebGL은 색상 픽셀을 그리기 전에 대응하는 깊이 픽셀을 검사�
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     ...
-</code></pre><p>그리고 이제 우리는 3D를 얻게 됩니다!</p>
+</code></pre><p>그리고 이제 우리는 완벽한 3D를 볼 수 있습니다!</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-3d-step6.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-3d-step6.html" target="_blank">새 창을 열려면 여기를 클릭</a>
@@ -852,9 +852,9 @@ x와 y는 전달했고, z는 1이 필요했지만, z의 기본값은 0이므로,
         </ul>
   <li>지오메트리</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">지오메트리 - 선반 가공</a></li>
-<li><a href="/webgl/lessons/ko/webgl-load-obj.html">.obj 파일 로딩</a></li>
-<li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">.mtl 파일로 .obj 로딩</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">지오메트리 - Lathe</a></li>
+<li><a href="/webgl/lessons/ko/webgl-load-obj.html">.obj 파일 로드</a></li>
+<li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">.mtl 파일이 있는 .obj 로드</a></li>
         </ul>
   <li>텍스처</li>
         <ul>
@@ -916,7 +916,7 @@ x와 y는 전달했고, z는 1이 필요했지만, z의 기본값은 0이므로,
   <li>최적화</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-indexed-vertices.html">색인된 정점 (gl.drawElements)</a></li>
-<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">색인된 그리기</a></li>
+<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">인스턴스 드로잉</a></li>
         </ul>
   <li>Misc</li>
         <ul>

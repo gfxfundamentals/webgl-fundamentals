@@ -250,8 +250,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 렌더링할 때 WebGL이 픽셀 대신 클립 공간 좌표를 유추하는 것과 마찬가지로, 텍스처를 읽을 때 WebGL은 텍스처 좌표를 유추합니다.
 텍스처 좌표는 텍스처 크기에 상관없이 0.0에서 1.0사이가 됩니다.</p>
 <p>단 하나의 사각형(정확히는 2개의 삼각형)만 그리기 때문에 사각형의 각 점이 텍스처의 어느 위치에 해당하는지 WebGL에 알려줘야 합니다.
-&#39;varying&#39;이라고 불리는 특수 변수를 이용해 이 정보를 정점 셰이더에서 프래그먼트 셰이더로 전달해야 하는데요.
-이 변수는 변하기 때문에 베링이라 불립니다.
+Varying이라고 불리는 특수 변수를 이용해 이 정보를 정점 셰이더에서 프래그먼트 셰이더로 전달해야 하는데요.
+이 변수는 변하기 때문에 varying이라 불립니다.
 WebGL은 프래그먼트 셰이더를 사용해서 각 픽셀을 그릴 때 정점 셰이더에 제공한 값을 보간합니다.</p>
 <p><a href="webgl-fundamentals.html">이전 글</a>의 마지막에 있는 정점 셰이더를 사용해서 텍스처 좌표 전달을 위한 속성을 추가한 다음 프래그먼트 셰이더로 전달해야 합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec2 a_texCoord;
@@ -281,7 +281,7 @@ void main() {
 &lt;/script&gt;
 </code></pre><p>마지막으로 이미지를 불러오고, 텍스처를 생성한 다음, 이미지를 텍스처로 복사해야 하는데요.
 브라우저에서 이미지를 비동기적으로 불러오기 때문에 텍스처 로딩을 기다리도록 코드를 약간 변경해야 합니다.
-불러오자마자 그리도록 할 겁니다.</p>
+불러오자마자 바로 그리도록 할 겁니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function main() {
   var image = new Image();
   image.src = &quot;http://someimage/on/our/server&quot;;  // 같은 도메인이여야 합니다!!!
@@ -451,7 +451,7 @@ void main() {
  gl.uniform1f(kernelWeightLocation, computeKernelWeight(edgeDetectKernel));
  ...
 </code></pre><p>그리고 짜잔...
-드롭 다운 목록을 사용하여 다른 커널을 선택해보세요.</p>
+드롭 다운을 사용하여 다른 커널을 선택해보세요.</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-2d-image-3x3-convolution.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-2d-image-3x3-convolution.html" target="_blank">새 창을 열려면 여기를 클릭</a>
@@ -467,7 +467,7 @@ void main() {
 텍스처 유닛 0도 기본 활성 텍스처이기 때문에 <code class="notranslate" translate="no">bindTexture</code>를 호출하면 텍스처 유닛 0에 텍스처가 할당됩니다.
 </p>
 <p>
-WebGL은 텍스처 유닛의 배열을 가지는데요.
+WebGL은 텍스처 유닛 배열을 가지는데요.
 각 샘플러 유니폼이 참조하는 텍스처 유닛을 설정하기 위해, 해당 샘플러 유니폼의 위치를 탐색한 다음, 참조할 텍스처 유닛의 인덱스로 설정합니다.
 </p>
 <p>예제:</p>
@@ -501,7 +501,7 @@ gl.bindTexture(gl.TEXTURE_2D, someTexture);
 <div class="webgl_bottombar">
 <h3>GLSL의 변수에서 a_, u_, v_ 접두사는 뭔가요?</h3>
 <p>
-이는 단순 명명 규칙입니다.
+이는 단순한 명명 규칙입니다.
 필수는 아니지만 값이 어디서 왔는지 한 눈에 보기 쉽게 만들어 줍니다.
 a_는 버퍼에서 제공되는 데이터인 속성입니다.
 u_는 셰이더에 입력하는 유니폼이고, v_는 정점 셰이더에서 프래그먼트 셰이더로 전달되고 그려진 각 픽셀에 대해 정점 사이가 보간(또는 가변)되는 값인 varying입니다.
@@ -564,9 +564,9 @@ u_는 셰이더에 입력하는 유니폼이고, v_는 정점 셰이더에서 �
         </ul>
   <li>지오메트리</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">지오메트리 - 선반 가공</a></li>
-<li><a href="/webgl/lessons/ko/webgl-load-obj.html">.obj 파일 로딩</a></li>
-<li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">.mtl 파일로 .obj 로딩</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">지오메트리 - Lathe</a></li>
+<li><a href="/webgl/lessons/ko/webgl-load-obj.html">.obj 파일 로드</a></li>
+<li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">.mtl 파일이 있는 .obj 로드</a></li>
         </ul>
   <li>텍스처</li>
         <ul>
@@ -628,7 +628,7 @@ u_는 셰이더에 입력하는 유니폼이고, v_는 정점 셰이더에서 �
   <li>최적화</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-indexed-vertices.html">색인된 정점 (gl.drawElements)</a></li>
-<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">색인된 그리기</a></li>
+<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">인스턴스 드로잉</a></li>
         </ul>
   <li>Misc</li>
         <ul>

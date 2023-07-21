@@ -245,8 +245,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <p>어떻게 여러 이미지 처리 효과를 적용할 수 있을까요?</p>
 <p>음, 즉석으로 셰이더를 생성할 수 있긴 합니다.
 사용자가 쓰고자 하는 효과를 선택하는 UI를 제공한 다음 모든 효과를 수행하는 셰이더를 생성하는 겁니다.
-항상 가능한 건 아니지만 이 기술은 종종 <a href="https://www.youtube.com/watch?v=cQUn0Zeh-0Q">실기간 그래픽 효과</a>를 만드는 데 사용됩니다.</p>
-<p>더 유연한 방법은 텍스처 2개를 더 사용하고, 각 텍스처를 차례대로 렌더링하여, 주고 받으면서 매번 다음 효과를 적용하는 겁니다.</p>
+항상 가능한 것은 아니지만 이 기술은 종종 <a href="https://www.youtube.com/watch?v=cQUn0Zeh-0Q">실기간 그래픽 효과</a>를 만드는 데 사용됩니다.</p>
+<p>더 유연한 방법은 텍스처 2개를 더 사용하고, 각 텍스처를 번갈아가며 렌더링하여, 매번 다음 효과를 적용하는 겁니다.</p>
 <div class="webgl_center"><pre>
 원본 이미지 -> [Blur]        -> 텍스처 1
 텍스처 1   -> [Sharpen]     -> 텍스처 2
@@ -255,9 +255,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 텍스처 2   -> [Normal]      -> 캔버스  
 </pre></div>
 
-<p>이렇게 하기 위해 우리는 프레임 버퍼를 만들어야 하는데요.
-사실 WebGL과 OpenGL에서 프레임 버퍼는 좋은 이름이 아닙니다.
-WebGL/OpenGL 프레임 버퍼는 정말로 상태 모음(어태치먼트 목록)일 뿐이며 실제로 어떤 종류의 버퍼도 아닌데요.
+<p>이렇게 하기 위해 우리는 프레임 버퍼를 만들어야 합니다.
+사실 WebGL과 OpenGL에서 프레임 버퍼는 좋은 이름이 아닌데요.
+WebGL/OpenGL 프레임 버퍼는 상태 모음(attachment 목록)일 뿐이며 실제로 어떤 종류의 버퍼도 아닙니다.
 하지만 텍스처를 프레임 버퍼에 첨부해서 해당 텍스처에 렌더링할 수 있습니다.</p>
 <p>먼저 원래 사용하던 <a href="webgl-image-processing.html">텍스처 생성 코드</a>를 함수로 바꿉니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  function createAndSetupTexture(gl) {
@@ -343,7 +343,7 @@ WebGL/OpenGL 프레임 버퍼는 정말로 상태 모음(어태치먼트 목록)
     &quot;gaussianBlur&quot;,
     &quot;unsharpen&quot;
   ];
-</code></pre><p>그리고 마지막으로 각각을 적용하고, 렌더링할 텍스처를 주고 받으면 됩니다.</p>
+</code></pre><p>마지막으로 렌더링할 텍스처에 하나씩 적용하면 됩니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">  // 원본 이미지로 시작
   gl.bindTexture(gl.TEXTURE_2D, originalImageTexture);
 
@@ -357,7 +357,7 @@ WebGL/OpenGL 프레임 버퍼는 정말로 상태 모음(어태치먼트 목록)
 
     drawWithKernel(effectsToApply[ii]);
 
-    // 다음 그리기를 위해, 방금 렌더링한 텍스처를 사용합니다.
+    // 다음 그리기를 위해 방금 렌더링한 텍스처를 사용합니다.
     gl.bindTexture(gl.TEXTURE_2D, textures[ii % 2]);
   }
 
@@ -398,7 +398,7 @@ WebGL/OpenGL 프레임 버퍼는 정말로 상태 모음(어태치먼트 목록)
 <p>WebGL은 <a href="webgl-fundamentals.html">클립 공간</a>에서 다시 픽셀로 변환해야 하는데요.
 이건 <code class="notranslate" translate="no">gl.viewport</code>의 설정에 따라 수행됩니다.
 렌더링할 프레임 버퍼는 캔버스 크기와 다르기 때문에 프레임 버퍼 텍스처를 렌더링할 때 뷰포트를 적절하게 설정하고 마지막으로 캔버스를 렌더링할 때 다시 설정해야 합니다.</p>
-<p>마지막으로 <a href="webgl-fundamentals.html">원본 예제</a>에서 렌더링할 때 Y 좌표를 뒤집었는데, 이는 WebGL이 0,0을 2D에서 더 전통적인 좌측 상단 대신 좌측 하단 모서리로 캔버스에 표시하기 때문입니다.
+<p>마지막으로 <a href="webgl-fundamentals.html">원본 예제</a>에서 렌더링할 때 Y 좌표를 뒤집었는데, 이는 WebGL이 0,0을 캔버스의 좌측 상단 대신 좌측 하단으로 표시하기 때문입니다.
 이건 프레임 버퍼에 렌더링할 때는 필요가 없는데요.
 프레임 버퍼는 표시되지 않기 때문에, 어느 부분이 상단 혹은 하단인지는 관계가 없습니다.
 중요한 건 프레임 버퍼에서 픽셀 0,0이 우리가 계산한 0,0에 해당한다는 겁니다.
@@ -495,9 +495,9 @@ GLSL 프로그램을 변환하고 특정 프로그램에 대한 매개변수를 
         </ul>
   <li>지오메트리</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">지오메트리 - 선반 가공</a></li>
-<li><a href="/webgl/lessons/ko/webgl-load-obj.html">.obj 파일 로딩</a></li>
-<li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">.mtl 파일로 .obj 로딩</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">지오메트리 - Lathe</a></li>
+<li><a href="/webgl/lessons/ko/webgl-load-obj.html">.obj 파일 로드</a></li>
+<li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">.mtl 파일이 있는 .obj 로드</a></li>
         </ul>
   <li>텍스처</li>
         <ul>
@@ -559,7 +559,7 @@ GLSL 프로그램을 변환하고 특정 프로그램에 대한 매개변수를 
   <li>최적화</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-indexed-vertices.html">색인된 정점 (gl.drawElements)</a></li>
-<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">색인된 그리기</a></li>
+<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">인스턴스 드로잉</a></li>
         </ul>
   <li>Misc</li>
         <ul>

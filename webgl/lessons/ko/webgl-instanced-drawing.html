@@ -41,7 +41,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <meta name="keywords" content="webgl graphics">
 <meta name="thumbnail" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-instanced-drawing_ko.jpg">
 
-<meta property="og:title" content="WebGL 최적화 - 색인된 그리기">
+<meta property="og:title" content="WebGL 최적화 - 인스턴스 드로잉">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-instanced-drawing_ko.jpg">
 <meta property="og:description" content="동일한 객체의 여러 인스턴스 그리기">
@@ -51,7 +51,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <meta name="twitter:site" content="@greggman">
 <meta name="twitter:creator" content="@greggman">
 <meta name="twitter:domain" content="webglfundamentals.org">
-<meta name="twitter:title" content="WebGL 최적화 - 색인된 그리기">
+<meta name="twitter:title" content="WebGL 최적화 - 인스턴스 드로잉">
 <meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/ko/webgl-instanced-drawing.html">
 <meta name="twitter:description" content="동일한 객체의 여러 인스턴스 그리기">
 <meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/screenshots/webgl-instanced-drawing_ko.jpg">
@@ -78,7 +78,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       "@id":"https://webglfundamentals.org/webgl/lessons/ko/webgl-instanced-drawing.html#webpage",
       "url":"https://webglfundamentals.org/webgl/lessons/ko/webgl-instanced-drawing.html",
       "inLanguage":"ko",
-      "name":"WebGL 최적화 - 색인된 그리기",
+      "name":"WebGL 최적화 - 인스턴스 드로잉",
       "keywords":"webgl graphics programming",
       "isPartOf":{
         "@id":"https://webglfundamentals.org/#website"
@@ -92,7 +92,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </script>
 
 
-<title>WebGL 최적화 - 색인된 그리기</title>
+<title>WebGL 최적화 - 인스턴스 드로잉</title>
 <link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
 <link rel="stylesheet" href="/webgl/lessons/lang.css">
 <link rel="stylesheet" href="/webgl/lessons/ko/lang.css">
@@ -236,11 +236,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <div class="container">
   <div class="lesson-title">
-    <h1>WebGL 최적화 - 색인된 그리기</h1>
+    <h1>WebGL 최적화 - 인스턴스 드로잉</h1>
   </div>
   <div class="lesson">
     <div class="lesson-main">
-      <p>WebGL은 <em>색인된 그리기</em>라는 기능을 가지고 있습니다.
+      <p>WebGL은 <em>인스턴스 드로잉</em>라는 기능을 가지고 있습니다.
 기본적으로 개별적으로 그릴 때보다 빠르게 같은 걸 여러 번 그리는 방법입니다.</p>
 <p>참고로 이 기능은 WebGL1의 선택적 확장이지만 <a href="https://web3dsurvey.com/webgl/extensions/ANGLE_instanced_arrays">거의 모든 브라우저와 기기에서 사용 가능</a>합니다.</p>
 <p>먼저 동일한 항목의 여러 인스턴스를 그리는 예제부터 만들어 봅시다.</p>
@@ -418,7 +418,7 @@ void main() {
 }
 &lt;/script&gt;
 </code></pre>
-<p>속성은 정점 셰이더에서만 작동하므로 정점 셰이더의 속성에서 색상을 가져와서 베링을 통해 프래그먼트 셰이더로 전달해야 합니다.</p>
+<p>속성은 정점 셰이더에서만 작동하므로 정점 셰이더의 속성에서 색상을 가져와서 varying을 통해 프래그먼트 셰이더로 전달해야 합니다.</p>
 <p>다음으로 해당 속성의 위치를 찾아야 합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">const program = webglUtils.createProgramFromScripts(gl, [&#39;vertex-shader-3d&#39;, &#39;fragment-shader-3d&#39;]);
 
@@ -532,7 +532,7 @@ for (let i = 0; i &lt; 4; ++i) {
   ext.vertexAttribDivisorANGLE(loc, 1);
 }
 </code></pre>
-<p>색인된 그리기와 관련하여 가장 중요한 점은 <code class="notranslate" translate="no">ext.vertexAttribDivisorANGLE</code>에 대한 호출입니다.
+<p>인스턴스 드로잉과 관련하여 가장 중요한 점은 <code class="notranslate" translate="no">ext.vertexAttribDivisorANGLE</code>에 대한 호출입니다.
 인스턴스당 한 번만 다음 값으로 진행하도록 이 속성을 설정하는데요.
 이는 <code class="notranslate" translate="no">matrix</code> 속성이 첫 번째 인스턴스에 대한 모든 정점에 대해 첫 번째 행렬을, 두 번째 인스턴스에 대해 두 번째 행렬을 사용하는 식입니다.</p>
 <p>색상 속성도 설정해야 하는데,</p>
@@ -558,14 +558,14 @@ ext.vertexAttribDivisorANGLE(colorLoc, 1);
 </div>
 
 </p>
-<p>위 예제는 도형당 3번의 WebGL 호출 * 5개의 도형으로 총 15번의 호출이 있었습니다.
+<p>위 예제는 도형당 3번의 WebGL 호출을 하고 도형의 개수는 5개로 총 15번의 호출이 있었습니다.
 하나는 행렬 업로드, 다른 하나는 그리기, 이제 5개의 도형에 대해 2번의 호출만 가집니다.
 그리기 시작하기 위한 색상과 행렬에 대한 몇 가지 설정이 있습니다.
 <a href="webgl-attributes.html#vaos">Vertex array object</a>를 사용하여 해당 설정을 렌더링 시점에서 초기화 시점으로 옮길 수 있습니다.</p>
 <p>말할 필요도 없다고 느껴지지만 하긴 저는 너무 많이 했기 때문에 당연한 것일 수도 있습니다.
 위 코드는 캔버스적인 측면을 고려하지 않았는데요.
 <a href="webgl-3d-orthographic.html">투영 행렬</a>이나 <a href="webgl-3d-camera.html">뷰 행렬</a>을 사용하지 않습니다.
-오로지 색인된 그리기를 보여주기 위한 것입니다.
+오로지 인스턴스 드로잉을 보여주기 위한 것입니다.
 투영 행렬이나 뷰 행렬을 원한다면 자바스크립트에 계산을 추가할 수 있습니다.
 이는 자바스크립트의 작업이 더 많아짐을 의미합니다.
 좀 더 확실한 방법은 1개 혹은 2개 이상의 유니폼을 정점 셰이더에 추가하는 겁니다.</p>
@@ -665,9 +665,9 @@ const matrixLoc = gl.getAttribLocation(program, &#39;matrix&#39;);
         </ul>
   <li>지오메트리</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">지오메트리 - 선반 가공</a></li>
-<li><a href="/webgl/lessons/ko/webgl-load-obj.html">.obj 파일 로딩</a></li>
-<li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">.mtl 파일로 .obj 로딩</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">지오메트리 - Lathe</a></li>
+<li><a href="/webgl/lessons/ko/webgl-load-obj.html">.obj 파일 로드</a></li>
+<li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">.mtl 파일이 있는 .obj 로드</a></li>
         </ul>
   <li>텍스처</li>
         <ul>
@@ -729,7 +729,7 @@ const matrixLoc = gl.getAttribLocation(program, &#39;matrix&#39;);
   <li>최적화</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-indexed-vertices.html">색인된 정점 (gl.drawElements)</a></li>
-<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">색인된 그리기</a></li>
+<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">인스턴스 드로잉</a></li>
         </ul>
   <li>Misc</li>
         <ul>
@@ -780,8 +780,8 @@ const matrixLoc = gl.getAttribLocation(program, &#39;matrix&#39;);
         <script>
             /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
             var disqus_shortname = 'webglfundamentals'; // required: replace example with your forum shortname
-            var disqus_identifier = 'WebGL 최적화 - 색인된 그리기';
-            var disqus_title = 'WebGL 최적화 - 색인된 그리기';
+            var disqus_identifier = 'WebGL 최적화 - 인스턴스 드로잉';
+            var disqus_title = 'WebGL 최적화 - 인스턴스 드로잉';
 
             /* * * DON'T EDIT BELOW THIS LINE * * */
             (function() {

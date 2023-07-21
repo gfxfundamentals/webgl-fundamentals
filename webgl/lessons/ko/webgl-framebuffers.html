@@ -242,13 +242,13 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <div class="lesson-main">
       <p>이 글은 WebGL에서 프레임 버퍼가 무엇인지에 대한 대략적인 이미지를 제공할 겁니다.
 프레임 버퍼는 <a href="webgl-render-to-texture.html">텍스처에 렌더링</a>할 때 언급되는데요.</p>
-<p>프레임 버퍼는 그냥 <em>어태치먼트 모음</em>입니다.
+<p>프레임 버퍼는 그냥 attachment 모음입니다.
 그게 전부에요!
 텍스처와 렌더 버퍼로 렌더링하는데 사용되죠.</p>
 <p>이런식으로 프레임 버퍼 객체를 생각하실 수 있으며,</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">class Framebuffer {
   constructor() {
-    this.attachments = new Map();  // 어태치먼트 포인트별 어태치먼트
+    this.attachments = new Map();  // 첨부 지점별 attachment
   }
 }
 </code></pre>
@@ -271,7 +271,7 @@ gl = {
   }
 }
 </code></pre>
-<p><code class="notranslate" translate="no">framebufferTexture2D</code>, <code class="notranslate" translate="no">framebufferRenderbuffer</code>, 두 함수를 통해 어태치먼트를 프레임 버퍼에 추가할 수 있습니다.</p>
+<p><code class="notranslate" translate="no">framebufferTexture2D</code>, <code class="notranslate" translate="no">framebufferRenderbuffer</code>, 두 함수를 통해 attachment를 프레임 버퍼에 추가할 수 있습니다.</p>
 <p>구현이 이런식으로 되어 있을 것이라 상상할 수 있는데요.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-js">// 의사 코드
 gl._getFramebufferByTarget(target) {
@@ -312,11 +312,11 @@ ext.drawBuffersWebGL(drawBuffers) {
   }
 }
 </code></pre>
-<p>요점은 <em>프레임 버퍼</em>가 단순한 어태치먼트 모음이라는 겁니다.
-문제는 어태치먼트가 될 수 있는 것들과 작동하는 조합에 대한 제한인데요.
-예를 들어 플로팅 포인트 텍스처 어태치먼트는 기본적으로 렌더링될 수 없습니다.
-확장은 <code class="notranslate" translate="no">WEBGL_color_buffer_float</code>같은 걸 활성화할 수 있습니다.
-마찬가지로 2개 이상의 어태치먼트가 있다면 모두 동일한 넓이여야 합니다.</p>
+<p>요점은 <em>프레임 버퍼</em>가 단순한 attachment 모음이란 겁니다.
+문제는 attachment가 될 수 있는 것들과 작동하는 조합에 대한 제한인데요.
+예를 들어 부동 소수점 텍스처 attachment는 기본적으로 렌더링될 수 없습니다.
+<code class="notranslate" translate="no">WEBGL_color_buffer_float</code> 등으로 확장을 활성화할 수 있습니다.
+마찬가지로 2개 이상의 attachment가 있다면 모두 동일한 넓이여야 합니다.</p>
 
     </div>
     <div class="lesson-sidebar">
@@ -372,9 +372,9 @@ ext.drawBuffersWebGL(drawBuffers) {
         </ul>
   <li>지오메트리</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">지오메트리 - 선반 가공</a></li>
-<li><a href="/webgl/lessons/ko/webgl-load-obj.html">.obj 파일 로딩</a></li>
-<li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">.mtl 파일로 .obj 로딩</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">지오메트리 - Lathe</a></li>
+<li><a href="/webgl/lessons/ko/webgl-load-obj.html">.obj 파일 로드</a></li>
+<li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">.mtl 파일이 있는 .obj 로드</a></li>
         </ul>
   <li>텍스처</li>
         <ul>
@@ -436,7 +436,7 @@ ext.drawBuffersWebGL(drawBuffers) {
   <li>최적화</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-indexed-vertices.html">색인된 정점 (gl.drawElements)</a></li>
-<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">색인된 그리기</a></li>
+<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">인스턴스 드로잉</a></li>
         </ul>
   <li>Misc</li>
         <ul>

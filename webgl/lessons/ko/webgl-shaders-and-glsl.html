@@ -241,17 +241,16 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <div class="lesson">
     <div class="lesson-main">
       <p>이 글은 <a href="webgl-fundamentals.html">WebGL 기초</a>에서 이어집니다.
-아직 <a href="webgl-how-it-works.html">WebGL 작동 방식</a>를 읽지 않았다면 먼저 읽어보는 게 좋습니다.</p>
+아직 <a href="webgl-how-it-works.html">WebGL 작동 방식</a>을 읽지 않았다면 먼저 읽어보는 게 좋습니다.</p>
 <p>셰이더와 GLSL에 대해 언급했지만 실제로 구체적인 세부 사항은 다루지 않았는데요.
-예제로 충분하면 좋겠지만 혹시 모르니 좀 더 확실하게 해봅시다.</p>
-<p><a href="webgl-how-it-works.html">작동 원리</a>에서 언급했듯이 WebGL은 뭔가를 그릴 때마다 2개의 셰이더를 필요로 하는데요.
-바로 <em>정점 셰이더</em>와 <em>프래그먼트 셰이더</em>입니다.
-각각의 셰이더는 <em>함수</em>인데요.
+보여드린 예제들로 충분하면 좋겠지만 혹시 모르니 좀 더 확실하게 해봅시다.</p>
+<p><a href="webgl-how-it-works.html">작동 원리</a>에서 언급했듯이 WebGL은 뭔가를 그릴 때마다 2개의 셰이더를 필요로 합니다.
+바로 <em>정점 셰이더</em>와 <em>프래그먼트 셰이더</em>인데요.
+각각의 셰이더는 <em>함수</em>입니다.
 정점 셰이더와 프래그먼트 셰이더는 함께 셰이더 프로그램(또는 그냥 프로그램)으로 연결됩니다.
 일반적인 WebGL 앱은 많은 셰이더 프로그램을 가집니다.</p>
 <h2 id="-">정점 셰이더</h2>
-<p>정점 셰이더의 역할은 클립 공간 좌표를 생성하는 겁니다.
-항상 이런 형식을 취하는데요.</p>
+<p>정점 셰이더의 역할은 클립 공간 좌표를 생성하는 것으로 항상 이런 형식을 취합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">void main() {
   gl_Position = doMathToMakeClipspaceCoordinates
 }
@@ -277,7 +276,7 @@ gl.bufferData(gl.ARRAY_BUFFER, someData, gl.STATIC_DRAW);
 </code></pre><p>만든 셰이더 프로그램을 통해 초기화 시 속성의 위치를 찾고,</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var positionLoc = gl.getAttribLocation(someShaderProgram, &quot;a_position&quot;);
 </code></pre><p>렌더링할 때 해당 버퍼에서 속성으로 데이터를 어떻게 가져올지 WebGL에 지시하는데,</p>
-<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 이 속성의 버퍼에서 데이터 가져오기 활성화
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 이 속성에 대해 버퍼에서 데이터 가져오기 활성화
 gl.enableVertexAttribArray(positionLoc);
 
 var numComponents = 3;  // (x, y, z)
@@ -285,16 +284,16 @@ var type = gl.FLOAT;    // 32비트 부동 소수점 값
 var normalize = false;  // 값 원본 그대로 유지
 var offset = 0;         // 버퍼의 처음부터 시작
 var stride = 0;         // 다음 정점으로 가기 위해 이동하는 바이트 수
-                        // 0 = `type`과 `numComponents`에 맞는 스트라이드 사용
+                        // 0 = type과 numComponents에 맞는 스트라이드 사용
 
 gl.vertexAttribPointer(positionLoc, numComponents, type, false, stride, offset);
-</code></pre><p><a href="webgl-fundamentals.html">WebGL 기초</a>에서 우리는 셰이더에서 수식을 사용하지 않고 데이터를 직접 전달했습니다.</p>
+</code></pre><p><a href="webgl-fundamentals.html">WebGL 기초</a>의 셰이더에서 우리는 수식을 사용하지 않고 데이터를 바로 전달했습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec4 a_position;
 
 void main() {
   gl_Position = a_position;
 }
-</code></pre><p>클립 공간 정점을 버퍼에 넣으면 동작할 겁니다. </p>
+</code></pre><p>클립 공간 정점을 버퍼에 넣으면 동작할 겁니다.</p>
 <p>속성은 타입으로 <code class="notranslate" translate="no">float</code>, <code class="notranslate" translate="no">vec2</code>, <code class="notranslate" translate="no">vec3</code>, <code class="notranslate" translate="no">vec4</code>, <code class="notranslate" translate="no">mat2</code>, <code class="notranslate" translate="no">mat3</code>, <code class="notranslate" translate="no">mat4</code>를 사용할 수 있습니다.</p>
 <div id="uniform"></div>
 
@@ -351,13 +350,13 @@ gl.uniform1iv(samplerCubeUniformLoc, [v]);         // samplerCube 또는 sampler
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 셰이더
 uniform vec2 u_someVec2[3];
 
-// 초기화 시 자바스크립트
+// 초기화 시
 var someVec2Loc = gl.getUniformLocation(someProgram, &quot;u_someVec2&quot;);
 
 // 렌더링할 때
-gl.uniform2fv(someVec2Loc, [1, 2, 3, 4, 5, 6]);  // u_someVec2의 전체 배열 설정
+gl.uniform2fv(someVec2Loc, [1, 2, 3, 4, 5, 6]);  // u_someVec2 전체 배열 설정
 </code></pre><p>하지만 배열의 개별 요소를 설정하고 싶다면 각 요소의 위치를 개별적으로 찾아야 합니다.</p>
-<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 초기화 시 자바스크립트
+<pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 초기화 시
 var someVec2Element0Loc = gl.getUniformLocation(someProgram, &quot;u_someVec2[0]&quot;);
 var someVec2Element1Loc = gl.getUniformLocation(someProgram, &quot;u_someVec2[1]&quot;);
 var someVec2Element2Loc = gl.getUniformLocation(someProgram, &quot;u_someVec2[2]&quot;);
@@ -380,8 +379,7 @@ var someThingSomeVec2Loc = gl.getUniformLocation(someProgram, &quot;u_someThing.
 <h3 id="-">정점 셰이더의 텍스처</h3>
 <p><a href="#fragment-shader-texture">프래그먼트 셰이더의 텍스처</a>를 봐주세요.</p>
 <h2 id="-">프래그먼트 셰이더</h2>
-<p>프래그먼트 셰이더의 역할은 래스터화되는 현재 픽셀의 색상을 제공하는 것입니다.
-항상 이런 형식을 취하는데요.</p>
+<p>프래그먼트 셰이더의 역할은 래스터화되는 현재 픽셀의 색상을 제공하는 것으로 항상 이런 형식을 취합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">precision mediump float;
 
 void main() {
@@ -394,7 +392,7 @@ void main() {
 <ol>
 <li><a href="#uniform">유니폼</a> (단일 그리기 호출의 모든 정점에 대해 동일하게 유지되는 값)</li>
 <li><a href="#fragment-shader-texture">텍스처</a> (픽셀/텍셀 데이터)</li>
-<li><a href="#varying">베링</a> (정점 셰이더에서 전달되고 보간된 데이터)</li>
+<li><a href="#varying">Varying</a> (정점 셰이더에서 전달되고 보간된 데이터)</li>
 </ol>
 <h3 id="-">프래그먼트 셰이더의 유니폼</h3>
 <p><a href="#uniform">셰이더의 유니폼</a>을 봐주세요.</p>
@@ -423,19 +421,19 @@ var data = new Uint8Array([
 ]);
 gl.texImage2D(gl.TEXTURE_2D, level, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, data);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-</code></pre><p>초기화 시 셰이더 프로그램의 유니폼 위치를 찾으며,</p>
+</code></pre><p>초기화 시 셰이더 프로그램의 유니폼 위치를 찾고,</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var someSamplerLoc = gl.getUniformLocation(someProgram, &quot;u_texture&quot;);
-</code></pre><p>렌더링할 때 텍스처 유닛에 텍스처를 할당하고,</p>
+</code></pre><p>렌더링할 때 텍스처 유닛에 텍스처를 할당한 뒤,</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var unit = 5;  // 텍스처 유닛 선택
 gl.activeTexture(gl.TEXTURE0 + unit);
 gl.bindTexture(gl.TEXTURE_2D, tex);
 </code></pre><p>텍스처를 바인딩한 유닛이 무엇인지 셰이더에 알려줍니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">gl.uniform1i(someSamplerLoc, unit);
-</code></pre><h3 id="-">베링</h3>
-<p>베링은 <a href="webgl-how-it-works.html">동작 원리</a>에 다룬 정점 셰이더에서 프래그먼트 셰이더로 값을 전달하는 방법입니다.</p>
-<p>베링을 사용하려면 정점 셰이더와 프래그먼트 셰이더 양쪽에 일치하는 베링을 선언해야 하는데요.
-각 정점마다 정점 셰이더의 베링을 어떤 값으로 설정합니다.
-WebGL이 픽셀을 그릴 때 이 값들 사이를 보간하고 프래그먼트 셰이더에서 대응하는 베링으로 전달할 겁니다.</p>
+</code></pre><h3 id="varying">Varying</h3>
+<p>Varying은 <a href="webgl-how-it-works.html">동작 원리</a>에서 다룬 정점 셰이더에서 프래그먼트 셰이더로 값을 전달하는 방법입니다.</p>
+<p>Varying을 사용하려면 정점 셰이더와 프래그먼트 셰이더 양쪽에 일치하는 varying을 선언해야 하는데요.
+정점 셰이더에 있는 varying을 각 정점마다 어떤 값으로 설정합니다.
+WebGL이 픽셀을 그릴 때 이 값들 사이를 보간하고 프래그먼트 셰이더에서 대응하는 varying으로 전달할 겁니다.</p>
 <p>정점 셰이더:</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">attribute vec4 a_position;
 
@@ -462,11 +460,11 @@ void main() {
 그럼에도 불구하고 이 코드는 작동하며 색상을 만들어냅니다.</p>
 <h2 id="glsl">GLSL</h2>
 <p>GLSL은 Graphics Library Shader Language의 약자로 셰이더가 작성되는 언어입니다.
-이 언어는 자바스크립트에서 흔하지 않은 특별한 준 고유 기능을 가지고 있는데요.
+이 언어는 자바스크립트에서 일반적이지 않은 특별한 준 고유 기능을 가지고 있는데요.
 그래픽 래스터화에 일반적으로 필요한 수학적 계산을 수행하도록 설계되었습니다.
-예를 들어 각각 2개의 값, 3개의 값, 4개의 값을 나타내는 <code class="notranslate" translate="no">vec2</code>, <code class="notranslate" translate="no">vec3</code>, <code class="notranslate" translate="no">vec4</code> 같은 타입들이 내장되어 있는데요.
+예를 들어 각각 2개의 값, 3개의 값, 4개의 값을 나타내는 <code class="notranslate" translate="no">vec2</code>, <code class="notranslate" translate="no">vec3</code>, <code class="notranslate" translate="no">vec4</code> 같은 타입들이 내장되어 있죠.
 마찬가지로 2x2, 3x3, 4x4 행렬을 나타내는 <code class="notranslate" translate="no">mat2</code>, <code class="notranslate" translate="no">mat3</code>, <code class="notranslate" translate="no">mat4</code>가 있습니다.
-<code class="notranslate" translate="no">vec</code>에 스칼라를 곱하는 등의 작업을 수행할 수도 있죠.</p>
+<code class="notranslate" translate="no">vec</code>에 스칼라를 곱하는 등의 작업을 수행할 수도 있습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">vec4 a = vec4(1, 2, 3, 4);
 vec4 b = a * 2.0;
 // 현재 b는 vec4(2, 4, 6, 8);
@@ -486,7 +484,7 @@ vec4를 보면,</p>
 <li><code class="notranslate" translate="no">v.z</code>는 <code class="notranslate" translate="no">v.p</code>와 <code class="notranslate" translate="no">v.b</code>와 <code class="notranslate" translate="no">v[2]</code>와 같습니다.</li>
 <li><code class="notranslate" translate="no">v.w</code>는 <code class="notranslate" translate="no">v.q</code>와 <code class="notranslate" translate="no">v.a</code>와 <code class="notranslate" translate="no">v[3]</code>과 같습니다.</li>
 </ul>
-<p>vec 컴포넌트를 <em>스위즐링</em> 할 수 있는데 이는 컴포넌트를 교환하거나 반복할 수 있다는 걸 뜻합니다.</p>
+<p>컴포넌트를 교환하거나 반복하는 <em>스위즐링</em>도 가능합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">v.yyyy
 </code></pre><p>이건 다음과 같고,</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">vec4(v.y, v.y, v.y, v.y)
@@ -596,9 +594,9 @@ GLSL 셰이더를 컴파일하고 셰이더 프로그램에 연결하는 방법�
         </ul>
   <li>지오메트리</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">지오메트리 - 선반 가공</a></li>
-<li><a href="/webgl/lessons/ko/webgl-load-obj.html">.obj 파일 로딩</a></li>
-<li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">.mtl 파일로 .obj 로딩</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">지오메트리 - Lathe</a></li>
+<li><a href="/webgl/lessons/ko/webgl-load-obj.html">.obj 파일 로드</a></li>
+<li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">.mtl 파일이 있는 .obj 로드</a></li>
         </ul>
   <li>텍스처</li>
         <ul>
@@ -660,7 +658,7 @@ GLSL 셰이더를 컴파일하고 셰이더 프로그램에 연결하는 방법�
   <li>최적화</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-indexed-vertices.html">색인된 정점 (gl.drawElements)</a></li>
-<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">색인된 그리기</a></li>
+<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">인스턴스 드로잉</a></li>
         </ul>
   <li>Misc</li>
         <ul>

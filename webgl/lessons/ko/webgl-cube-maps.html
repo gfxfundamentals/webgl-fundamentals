@@ -323,7 +323,7 @@ void main() {
   v_normal = normalize(a_position.xyz);
 }
 </code></pre>
-<p>셰이더에서 텍스처 좌표를 제거하고 법선을 프래그먼트 셰이더로 전달하는 베링을 추가했는데요.
+<p>셰이더에서 텍스처 좌표를 제거하고 법선을 프래그먼트 셰이더로 전달하는 varying을 추가했는데요.
 큐브의 위치가 원점을 중심으로 완벽하게 중앙에 있기 때문에 법선으로 사용할 수 있습니다.</p>
 <p><a href="webgl-3d-lighting-directional.html">조명에 대한 글</a>을 떠올려보면 법선은 방향이며 일반적으로 일부 정점 표면의 방향을 지정하는데 사용됩니다.
 법선에 대해 정규화된 위치를 사용하기 때문에 이걸 비추면 큐브 전체에 부드러운 조명을 줄 수 있습니다.
@@ -337,7 +337,7 @@ void main() {
 <p>텍스처 좌표를 사용하지 않기 때문에 텍스처 좌표 설정에 관련된 모든 코드를 지울 수 있습니다.</p>
 <p>프래그먼트 셰이더에서 <code class="notranslate" translate="no">sampler2D</code> 대신 <code class="notranslate" translate="no">samplerCube</code>를 사용하고 <code class="notranslate" translate="no">texture2D</code> 대신 <code class="notranslate" translate="no">textureCube</code>를 사용해야 합니다.
 <code class="notranslate" translate="no">textureCube</code>는 vec3 방향을 가지므로 정규화된 법선을 전달하는데요.
-법선은 베링이고 보간될 것이기 때문에 다시 정규화해야 합니다.</p>
+법선은 varying이고 보간될 것이기 때문에 다시 정규화해야 합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">precision mediump float;
 
 // 정점 셰이더에서 전달됩니다.
@@ -469,9 +469,9 @@ gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LI
         </ul>
   <li>지오메트리</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">지오메트리 - 선반 가공</a></li>
-<li><a href="/webgl/lessons/ko/webgl-load-obj.html">.obj 파일 로딩</a></li>
-<li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">.mtl 파일로 .obj 로딩</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">지오메트리 - Lathe</a></li>
+<li><a href="/webgl/lessons/ko/webgl-load-obj.html">.obj 파일 로드</a></li>
+<li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">.mtl 파일이 있는 .obj 로드</a></li>
         </ul>
   <li>텍스처</li>
         <ul>
@@ -533,7 +533,7 @@ gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LI
   <li>최적화</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-indexed-vertices.html">색인된 정점 (gl.drawElements)</a></li>
-<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">색인된 그리기</a></li>
+<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">인스턴스 드로잉</a></li>
         </ul>
   <li>Misc</li>
         <ul>

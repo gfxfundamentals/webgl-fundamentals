@@ -577,7 +577,7 @@ gl.drawElements(gl.TRIANGLES, bufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
 <p>기본적으로 <code class="notranslate" translate="no">createBufferInfoFromArrays</code>는 다음과 같은 객체를 만듭니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">bufferInfo = {
   numElements: 4,        // 또는 요소의 수에 관계없이
-  indices: WebGLBuffer,  // 없는 경우 이 속성은 존재하지 않음
+  indices: WebGLBuffer,  // 인덱스가 없는 경우 이 속성은 존재하지 않음
   attribs: {
     a_position: { buffer: WebGLBuffer, numComponents: 3, },
     a_normal:   { buffer: WebGLBuffer, numComponents: 3, },
@@ -585,7 +585,7 @@ gl.drawElements(gl.TRIANGLES, bufferInfo.numElements, gl.UNSIGNED_SHORT, 0);
   },
 };
 </code></pre><p>그리고 <code class="notranslate" translate="no">webglUtils.setBuffersAndAttributes</code>는 해당 객체를 사용하여 모든 버퍼와 속성을 설정합니다.</p>
-<p>주어진 <code class="notranslate" translate="no">position</code>은 거의 항상 3개의 컴포넌트(x, y, z)를 가지고, <code class="notranslate" translate="no">texcoord</code>는 2개, <code class="notranslate" translate="no">indices</code>는 3개, <code class="notranslate" translate="no">normal</code>는 3개를 가지므로, 시스템이 컴포넌트 수를 추측하도록 할 수 있습니다.</p>
+<p>주어진 <code class="notranslate" translate="no">position</code>은 거의 항상 3개의 컴포넌트(x, y, z)를 가지고, <code class="notranslate" translate="no">texcoord</code>는 2개, <code class="notranslate" translate="no">indices</code>는 3개, <code class="notranslate" translate="no">normal</code>은 3개를 가지므로, 시스템이 컴포넌트 수를 추측하도록 할 수 있습니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">// 인덱싱된 쿼드
 var arrays = {
   position: [0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 10, 0],
@@ -617,7 +617,7 @@ var uniformSetters = webglUtils.createUniformSetters(gl, program);
 var attribSetters  = webglUtils.createAttributeSetters(gl, program);
 </code></pre><p>이것도 단순화해보면,</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var programInfo = webglUtils.createProgramInfo(gl, [&quot;vertexshader&quot;, &quot;fragmentshader&quot;]);
-</code></pre><p>이렇게 반환하는데,</p>
+</code></pre><p>이렇게 반환합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">programInfo = {
    program: WebGLProgram,  // 컴파일한 프로그램
    uniformSetters: ...,    // &quot;webglUtils.createUniformSetters&quot;에서 반환된 설정자
@@ -631,10 +631,10 @@ var attribSetters  = webglUtils.createAttributeSetters(gl, program);
 
 </p>
 <p>아무튼 이건 저의 WebGL 프로그램 작성 스타일입니다.
-처음엔 사람들이 무엇이 WebGL이고 무엇이 저의 스타일인지 혼동하지 않도록 하기 위해서, 이 튜토리얼의 강의에서는 <strong>장황한</strong> 표준 방식을 사용해야 겠다고 생각했었는데요.
+처음엔 사람들이 무엇이 WebGL이고 무엇이 저의 스타일인지 혼동하지 않도록 하기 위해, 이 튜토리얼의 강의에서는 <strong>장황한</strong> 표준 방식을 사용해야 겠다고 생각했었는데요.
 하지만 모든 과정을 보여주는 것이 요점을 흐리는 경우가 있기 때문에 앞으로 일부 강의에서는 이 스타일을 사용할 겁니다.</p>
 <p>이 스타일은 자유롭게 사용하셔도 괜찮습니다.
-<code class="notranslate" translate="no">createUniformSetters</code>, <code class="notranslate" translate="no">createAttributeSetters</code>,  <code class="notranslate" translate="no">createBufferInfoFromArrays</code>, <code class="notranslate" translate="no">setUniforms</code>, <code class="notranslate" translate="no">setBuffersAndAttributes</code> 함수는 모든 샘플에 사용된 <a href="https://github.com/gfxfundamentals/webgl-fundamentals/blob/master/webgl/resources/webgl-utils.js"><code class="notranslate" translate="no">webgl-utils.js</code></a> 파일에 포함되어 있습니다.
+<code class="notranslate" translate="no">createUniformSetters</code>, <code class="notranslate" translate="no">createAttributeSetters</code>, <code class="notranslate" translate="no">createBufferInfoFromArrays</code>, <code class="notranslate" translate="no">setUniforms</code>, <code class="notranslate" translate="no">setBuffersAndAttributes</code> 함수는 모든 샘플에 사용된 <a href="https://github.com/gfxfundamentals/webgl-fundamentals/blob/master/webgl/resources/webgl-utils.js"><code class="notranslate" translate="no">webgl-utils.js</code></a> 파일에 포함되어 있습니다.
 좀 더 체계적인 것을 원한다면 <a href="https://twgljs.org">TWGL.js</a>를 확인하세요.</p>
 <p>다음은 <a href="webgl-drawing-multiple-things.html">여러 물체 그리기</a>입니다.</p>
 <div class="webgl_bottombar">
@@ -774,9 +774,9 @@ TypeError: undefined is not a function
         </ul>
   <li>지오메트리</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">지오메트리 - 선반 가공</a></li>
-<li><a href="/webgl/lessons/ko/webgl-load-obj.html">.obj 파일 로딩</a></li>
-<li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">.mtl 파일로 .obj 로딩</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">지오메트리 - Lathe</a></li>
+<li><a href="/webgl/lessons/ko/webgl-load-obj.html">.obj 파일 로드</a></li>
+<li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">.mtl 파일이 있는 .obj 로드</a></li>
         </ul>
   <li>텍스처</li>
         <ul>
@@ -838,7 +838,7 @@ TypeError: undefined is not a function
   <li>최적화</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-indexed-vertices.html">색인된 정점 (gl.drawElements)</a></li>
-<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">색인된 그리기</a></li>
+<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">인스턴스 드로잉</a></li>
         </ul>
   <li>Misc</li>
         <ul>

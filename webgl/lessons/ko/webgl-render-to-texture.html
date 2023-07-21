@@ -283,8 +283,8 @@ gl.bindTexture(gl.TEXTURE_2D, targetTexture);
 어떤 데이터도 제공할 필요가 없습니다.
 텍스처를 할당하기 위해 WebGL만 있으면 됩니다.</p>
 <p>다음은 프레임 버퍼를 생성합니다.
-<a href="webgl-framebuffers.html">프레임 버퍼</a>는 그냥 어태치먼트 모음입니다.
-어태치먼트는 텍스처나 렌더 버퍼입니다.
+<a href="webgl-framebuffers.html">프레임 버퍼</a>는 그냥 attachment 모음입니다.
+Attachment는 텍스처나 렌더 버퍼입니다.
 이전에 텍스처에 대해 살펴봤는데요.
 렌더 버퍼는 텍스처와 매우 유사하지만 텍스처가 지원하지 않는 포맷과 옵션을 지원합니다.
 또한 텍스처와 달리 셰이더에 대한 입력으로 렌더 버퍼를 직접 사용할 수 없습니다.</p>
@@ -293,7 +293,7 @@ gl.bindTexture(gl.TEXTURE_2D, targetTexture);
 const fb = gl.createFramebuffer();
 gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
 
-// 첫 번째 색상 어태치먼트로 텍스처 첨부
+// 첫 번째 색상 attachment로 텍스처 첨부
 const attachmentPoint = gl.COLOR_ATTACHMENT0;
 gl.framebufferTexture2D(
     gl.FRAMEBUFFER, attachmentPoint, gl.TEXTURE_2D, targetTexture, level);
@@ -303,7 +303,7 @@ gl.framebufferTexture2D(
 <p>이전 렌더링 코드를 가져와서 함수로 만들어 두 번 호출할 수 있도록 해봅시다.
 일단 텍스처에 렌더링하고 다시 캔버스에 렌더링합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">function drawCube(aspect) {
-  // 프로그램(셰이더 쌍) 사용 지시
+  // 프로그램(셰이더 쌍) 사용
   gl.useProgram(program);
 
   // 위치 속성 활성화
@@ -383,7 +383,7 @@ function drawScene(time) {
     // WebGL에 클립 공간에서 픽셀로 변환하는 방법 지시
     gl.viewport(0, 0, targetTextureWidth, targetTextureHeight);
 
-    // 어태치먼트 지우기
+    // Attachment 지우기
     gl.clearColor(0, 0, 1, 1);   // 파란색으로 초기화
     gl.clear(gl.COLOR_BUFFER_BIT| gl.DEPTH_BUFFER_BIT);
 
@@ -462,17 +462,17 @@ gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER,
 </p>
 <p>이제 깊이 버퍼가 프레임 버퍼에 연결되었기 때문에 내부 큐브들이 올바르게 교차합니다.</p>
 <p><img class="webgl_center" src="../resources/cubes-with-depth-buffer.jpg" width="100%" height="100%" /></p>
-<p>WebGL이 3개의 어태치먼트 조합 동작만 보장한다는 점을 유의해야 합니다.
-<a href="https://www.khronos.org/registry/webgl/specs/latest/1.0/#FBO_ATTACHMENTS">명세서</a>에 따르면 보장되는 어태치먼트 조합은 다음과 같습니다.</p>
+<p>WebGL이 3개의 attachment 조합 동작만 보장한다는 점을 유의해야 합니다.
+<a href="https://www.khronos.org/registry/webgl/specs/latest/1.0/#FBO_ATTACHMENTS">명세서</a>에 따르면 보장되는 attachment 조합은 다음과 같습니다.</p>
 <ul>
 <li><code class="notranslate" translate="no">COLOR_ATTACHMENT0</code> = <code class="notranslate" translate="no">RGBA/UNSIGNED_BYTE</code> texture</li>
 <li><code class="notranslate" translate="no">COLOR_ATTACHMENT0</code> = <code class="notranslate" translate="no">RGBA/UNSIGNED_BYTE</code> texture + <code class="notranslate" translate="no">DEPTH_ATTACHMENT</code> = <code class="notranslate" translate="no">DEPTH_COMPONENT16</code> renderbuffer</li>
 <li><code class="notranslate" translate="no">COLOR_ATTACHMENT0</code> = <code class="notranslate" translate="no">RGBA/UNSIGNED_BYTE</code> texture + <code class="notranslate" translate="no">DEPTH_STENCIL_ATTACHMENT</code> = <code class="notranslate" translate="no">DEPTH_STENCIL</code> renderbuffer</li>
 </ul>
 <p>다른 조합의 경우 사용자의 시스템/GPU/드라이버/브라우저가 해당 조합을 지원하는지 확인해야 하는데요.
-프레임 버퍼를 만들었는지 확인하려면, 어태치먼트를 생성하고 첨부한 다음 아래와 같이 호출합니다.</p>
+프레임 버퍼를 만들었는지 확인하려면, attachment를 생성하고 첨부한 다음 아래와 같이 호출합니다.</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no">var status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
-</code></pre><p>상태가 <code class="notranslate" translate="no">FRAMEBUFFER_COMPLETE</code>라면 해당 어태치먼트 조합은 해당 사용자에 대해 작동합니다.
+</code></pre><p>상태가 <code class="notranslate" translate="no">FRAMEBUFFER_COMPLETE</code>라면 해당 attachment 조합은 해당 사용자에 대해 작동합니다.
 그렇지 않으면 작동하지 않으니 사용자에게 알리거나 다른 방법으로 폴백하는 등의 작업을 해야 합니다.</p>
 <p>아직 모르겠다면 <a href="webgl-less-code-more-fun.html">유틸리티 함수에 대한 글</a>을 읽어주세요.</p>
 <div class="webgl_bottombar">
@@ -540,9 +540,9 @@ gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER,
         </ul>
   <li>지오메트리</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">지오메트리 - 선반 가공</a></li>
-<li><a href="/webgl/lessons/ko/webgl-load-obj.html">.obj 파일 로딩</a></li>
-<li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">.mtl 파일로 .obj 로딩</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">지오메트리 - Lathe</a></li>
+<li><a href="/webgl/lessons/ko/webgl-load-obj.html">.obj 파일 로드</a></li>
+<li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">.mtl 파일이 있는 .obj 로드</a></li>
         </ul>
   <li>텍스처</li>
         <ul>
@@ -604,7 +604,7 @@ gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER,
   <li>최적화</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-indexed-vertices.html">색인된 정점 (gl.drawElements)</a></li>
-<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">색인된 그리기</a></li>
+<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">인스턴스 드로잉</a></li>
         </ul>
   <li>Misc</li>
         <ul>

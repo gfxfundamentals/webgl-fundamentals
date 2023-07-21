@@ -326,7 +326,7 @@ uniform vec4 u_color;
 uniform float u_shininess;
 
 void main() {
-  // v_normal이 베링이기 때문에 보간되며 단위 벡터가 아닙니다.
+  // v_normal이 varying이기 때문에 보간되며 단위 벡터가 아닙니다.
   // 정규화하면 다시 단위 벡터가 됩니다.
   vec3 normal = normalize(v_normal);
 
@@ -416,13 +416,13 @@ void main() {
 예를 들어 <code class="notranslate" translate="no">lowp</code>가 10비트여도 명세(10 &gt;= 9)를 충족하고 <code class="notranslate" translate="no">mediump</code>보다 빠르며 여전히 소수점이 있습니다.
 그렇긴 하지만, 제가 아는 한 <code class="notranslate" translate="no">lowp</code>를 지원하는 기기는 9비트를 사용하고 <code class="notranslate" translate="no">mediump</code>를 지원하는 기기는 16비트를 사용합니다.</p>
 <p>2014년 아이폰6+는 <code class="notranslate" translate="no">mediump</code>에 대해 16비트를 사용하지만 <code class="notranslate" translate="no">lowp</code>에도 16비트를 사용합니다.
-<code class="notranslate" translate="no">lowp</code>에 대해 9비트를 사용하는 기기를 사용한 적이 있는지 없어서 어떤 문제가 발생하는지 확실하지 않습니다. </p>
+<code class="notranslate" translate="no">lowp</code>에 대해 9비트를 사용하는 기기를 사용한 적이 있는지 없어서 어떤 문제가 발생하는지 확실하지 않습니다.</p>
 <p>이 글을 통해서 우리는 프래그먼트 셰이더의 기본 정밀도를 지정했습니다.
 또한 어떤 개별 변수의 정밀도라도 지정할 수 있는데요.
 예를 들어,</p>
 <pre class="prettyprint notranslate" translate="no"><code class="lang-glsl">uniform mediump vec4 color;  // 유니폼
 attribute lowp vec4 normal;  // 속성
-varying lowp vec4 texcoord;  // 베링
+varying lowp vec4 texcoord;  // varying
 lowp float foo;              // 변수
 </code></pre>
 <h2 id="-">캔버스 정밀도 문제</h2>
@@ -433,7 +433,7 @@ lowp float foo;              // 변수
     gl.getParameter(gl.GREEN_BITS) +
     gl.getParameter(gl.BLUE_BITS) +
     gl.getParameter(gl.ALPHA_BITS);
-</code></pre><p>이건 실제로 현재 바인딩된 프레임 버퍼 색상 어태치먼트나, 프레임 버퍼가 첨부되지 않았다면 캔버스에서, 채널의 비트 깊이를 반환합니다.</p>
+</code></pre><p>이건 실제로 현재 바인딩된 프레임 버퍼 색상 attachment나, 프레임 버퍼가 첨부되지 않았다면 캔버스에서, 채널의 비트 깊이를 반환합니다.</p>
 <p><div class="webgl_example_container">
   <iframe class="webgl_example" style=" " src="/webgl/resources/editor.html?url=/webgl/lessons/..%2Fwebgl-precision-check-canvas-bits.html"></iframe>
   <a class="webgl_center" href="/webgl/lessons/../webgl-precision-check-canvas-bits.html" target="_blank">새 창을 열려면 여기를 클릭</a>
@@ -542,9 +542,9 @@ lowp float foo;              // 변수
         </ul>
   <li>지오메트리</li>
         <ul>
-          <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">지오메트리 - 선반 가공</a></li>
-<li><a href="/webgl/lessons/ko/webgl-load-obj.html">.obj 파일 로딩</a></li>
-<li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">.mtl 파일로 .obj 로딩</a></li>
+          <li><a href="/webgl/lessons/ko/webgl-3d-geometry-lathe.html">지오메트리 - Lathe</a></li>
+<li><a href="/webgl/lessons/ko/webgl-load-obj.html">.obj 파일 로드</a></li>
+<li><a href="/webgl/lessons/ko/webgl-load-obj-w-mtl.html">.mtl 파일이 있는 .obj 로드</a></li>
         </ul>
   <li>텍스처</li>
         <ul>
@@ -606,7 +606,7 @@ lowp float foo;              // 변수
   <li>최적화</li>
         <ul>
           <li><a href="/webgl/lessons/ko/webgl-indexed-vertices.html">색인된 정점 (gl.drawElements)</a></li>
-<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">색인된 그리기</a></li>
+<li><a href="/webgl/lessons/ko/webgl-instanced-drawing.html">인스턴스 드로잉</a></li>
         </ul>
   <li>Misc</li>
         <ul>
