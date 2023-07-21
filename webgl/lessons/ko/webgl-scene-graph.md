@@ -4,11 +4,10 @@ TOC: 장면 그래프
 
 
 이 글은 WebGL 관련 시리즈에서 이어집니다.
-이전에는 [여러 물체 그리기](webgl-drawing-multiple-things.html)에 관한 것이었습니다. 
+이전 글은 [여러 물체를 그리는 방법](webgl-drawing-multiple-things.html)에 관한 것이었는데요.
 아직 읽지 않았다면 거기부터 시작하는 게 좋습니다.
 
-장면 그래프는 트리의 각 노드가 행렬을 생성하는 트리 구조입니다.
-흠, 이건 쓸모있는 정의가 아니네요.
+CS 구루나 그래픽 구루가 뭐라고 할 수도 있을 것 같지만... 장면 그래프는 보통 트리의 각 노드가 행렬을 생성하는 트리 구조를 말하는데... 흠 이건 그다지 유용한 정의가 아니네요.
 몇 가지 예제가 더 유용할 것 같습니다.
 
 대부분의 3D 엔진은 장면 그래프를 사용합니다.
@@ -26,18 +25,18 @@ TOC: 장면 그래프
 은하를 움직인다면 내부의 모든 별들이 함께 움직입니다.
 위 다이어그램의 이름들을 드래그하면 그들의 관계를 볼 수 있습니다.
 
-[2D 행렬 수학](webgl-2d-matrices.html)으로 돌아가보면 평행 이동, 회전, 스케일링을 하기 위한 많은 행렬을 객체에 곱한 걸 기억하실 겁니다.
-장면 그래프는 객체에 어떤 행렬 수식을 적용할지 도와주는 구조를 제공합니다.
+[2D 행렬 수학](webgl-2d-matrices.html)으로 돌아가보면 객체를 평행 이동, 회전, 크기 조정하기 위해 많은 행렬을 곱했던 것을 기억하실 겁니다.
+장면 그래프는 객체에 적용할 행렬 수식 결정을 결정하는 데에 도움이 되는 구조를 제공합니다.
 
 일반적으로 장면 그래프의 각 `Node`는 *지역 공간*를 나타냅니다.
-올바른 행렬 수식이 주어지면 *지역 공간*에 있는 무엇이든 그 위에 있는 모든 걸 무시할 수 있습니다.
+올바른 행렬 수식이 주어지면 *지역 공간*에 있는 것들은 그 위에 있는 모든 걸 무시할 수 있습니다.
 다시 말해 달은 지구 궤도를 선회하는 것에만 신경쓰면 된다는 겁니다.
 태양 궤도를 선회하는 것에 대해서는 신경쓰지 않아도 되죠.
 장면 그래프 구조가 없다면 달이 태양 궤도를 선회하는 방법을 계산하기 위해 훨씬 더 복잡한 수식을 수행해야 합니다.
 
 {{{diagram url="resources/moon-orbit.html" }}}
 
-장면 그래프로 달을 지구의 자식으로 만들면 지구의 궤도를 선회합니다.
+장면 그래프로 달을 지구의 자식으로 만들면 달이 지구의 궤도를 선회합니다.
 그리고 장면 그래프는 지구가 태양을 선회한다는 사실을 처리하는데요.
 노드를 탐색하다가 행렬을 곱하여 이를 수행합니다.
 
@@ -50,7 +49,7 @@ TOC: 장면 그래프
 재귀 함수로 이를 매우 간단하게 할 수 있습니다.
 
     function computeWorldMatrix(currentNode, parentWorldMatrix) {
-        // 지역 행렬을 부모의 월드 행렬로 곱하여 "worldMatrix"를 계산
+        // 지역 행렬을 부모의 월드 행렬로 곱하여 월드 행렬 계산
         var worldMatrix = m4.multiply(parentWorldMatrix, currentNode.localMatrix);
 
         // 모든 자식에게 동일하게 수행
@@ -91,7 +90,7 @@ TOC: 장면 그래프
       this.worldMatrix = m4.identity();
     };
 
-노드의 부모를 설정하는 방법을 제공합니다.
+노드의 부모를 설정하는 함수를 만듭니다.
 
     Node.prototype.setParent = function(parent) {
       // 부모에서 자식 제거
@@ -115,10 +114,10 @@ TOC: 장면 그래프
 
     Node.prototype.updateWorldMatrix = function(parentWorldMatrix) {
       if (parentWorldMatrix) {
-        // 행렬이 전달되므로 수식을 수행하고 결과를 "this.worldMatrix"에 저장
+        // 행렬이 전달되었으니 수식을 수행하고 결과를 `this.worldMatrix`에 저장
         m4.multiply(this.localMatrix, parentWorldMatrix, this.worldMatrix);
       } else {
-        // 행렬이 전달되지 않았으니 "localMatrix"를 "worldMatrix"로 복사
+        // 행렬이 전달되지 않았으니 localMatrix를 worldMatrix로 복사
         m4.copy(this.localMatrix, this.worldMatrix);
       }
 
@@ -253,7 +252,7 @@ TOC: 장면 그래프
     var earthOrbitNode = new Node();
     earthOrbitNode.localMatrix = m4.translation(100, 0, 0);  // 지구 궤도는 태양으로부터 100유닛
     var moonOrbitNode = new Node();
-    moonOrbitNode.localMatrix = m4.translation(20, 0, 0);  // 달은 지구로부터 100유닛
+    moonOrbitNode.localMatrix = m4.translation(20, 0, 0);  // 달 궤도는 지구 궤도로부터 20유닛
 
 이러한 궤도 거리는 기존 노드에서 제거되었습니다.
 
@@ -289,12 +288,12 @@ TOC: 장면 그래프
     -sunNode.updateWorldMatrix();
     +solarSystemNode.updateWorldMatrix();
 
-이제 지구는 두 배 크기고, 달은 그대로인 것을 볼 수 있습니다.
+이제 지구는 크기가 두 배로 커지고 달은 그렇지 않은 것을 볼 수 있습니다.
 
 {{{example url="../webgl-scene-graph-solar-system-larger-earth-fixed.html" }}}
 
 또한 태양과 지구가 더 이상 제자리에서 회전하지 않는 것을 알 수 있는데요.
-이제 그건 독립적입니다.
+그 부분은 이제 독립적이기 때문입니다.
 
 몇 가지 더 조정해봅시다.
 
@@ -317,8 +316,8 @@ TOC: 장면 그래프
 {{{example url="../webgl-scene-graph-solar-system-adjusted.html" }}}
 
 현재 `localMatrix`를 가지고 있으며 프레임마다 이를 수정하고 있습니다.
-하지만 모든 프레임에서 수식이 약간의 오류를 수집한다는 문제가 있는데요.
-*직교 정규화 행렬*이라 불리는 수식을 고치는 방법이 있지만 항상 작동하지는 않습니다.
+하지만 모든 프레임에서 수식이 약간의 오류를 발생시키는 문제가 있는데요.
+항상 작동하지는 않지만 *행렬 직교 정규화*라고 수식을 고치는 방법이 있습니다.
 예를 들어 크기를 0으로 줄였다가 돌아오게 한다고 가정해 보겠습니다.
 `x`에 대해 그렇게 해봅시다.
 
@@ -400,7 +399,7 @@ TOC: 장면 그래프
 
 {{{diagram url="resources/person-diagram.html" height="400" }}}
 
-손가락과 발가락에 얼마나 많은 관절을 추가할지는 여러분이 정하면 되는데요
+손가락과 발가락에 얼마나 많은 관절을 추가할지는 여러분이 정하면 됩니다.
 관절이 많아질수록 애니메이션을 계산하는데 더 많은 연산이 필요하고, 모든 관절 정보를 제공하기 위해 더 많은 애니메이션 데이터가 필요합니다.
 버추어 파이터처럼 오래된 게임들은 약 15개의 관절을 가졌습니다.
 2000년대 초반부터 중반까지의 게임들은 30~70개의 관절을 가졌죠.
@@ -431,8 +430,8 @@ TOC: 장면 그래프
 대부분의 장면 그래프에서는 불가능합니다.
 두 번째 호출에서 오류가 발생할까요?
 <code>ERROR: Already have parent.</code>
-아니면 <code>someOtherParent</code>에 추가하기 전에 <code>someParent</code>에서 <code>someNode</code>를 제거할까요?
-그렇다면 <code>addChild</code>라는 이름은 명확하지 않습니다.
+아니면 <code>someOtherParent</code>에 추가하기 전에 <code>someParent</code>에서 자동으로 <code>someNode</code>를 제거할까요?
+그렇게 하면 <code>addChild</code>라는 이름은 명확하지 않습니다.
 </p>
 <p>반면에 <code>setParent</code>는 그런 문제가 없습니다.</p>
 <pre class="prettyprint">

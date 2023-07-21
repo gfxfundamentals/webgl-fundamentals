@@ -80,7 +80,7 @@ WebGL 관련 주제에 대한 무작위 질문 및 답변 링크 모음
 
 * [스텐실 버퍼를 사용하는 방법](webgl-qna-how-to-use-the-stencil-buffer.html)
 * [높이 맵 그리기](webgl-qna-drawing-a-heightmap.html)
-* [색인된 그리기으로 텍스처가 있는 스프라이트 그리기](webgl-qna-drawing-textured-sprites-with-instanced-drawing.html)
+* [인스턴스 드로잉으로 텍스처가 있는 스프라이트 그리기](webgl-qna-drawing-textured-sprites-with-instanced-drawing.html)
 * [다량의 큰 이미지 그리기 최적화](webgl-qna-optimize-drawing-lots-of-large-images.html)
 * [시간이 지남에 따라 느리게 렌더링](webgl-qna-rendering-slowly-over-time.html)
 

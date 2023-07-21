@@ -367,7 +367,7 @@ objects.forEach(function(object) {
 
     bufferInfo = {
       numElements: 4,        // 또는 요소의 수에 관계없이
-      indices: WebGLBuffer,  // 없는 경우 이 속성은 존재하지 않음
+      indices: WebGLBuffer,  // 인덱스가 없는 경우 이 속성은 존재하지 않음
       attribs: {
         a_position: { buffer: WebGLBuffer, numComponents: 3, },
         a_normal:   { buffer: WebGLBuffer, numComponents: 3, },
@@ -377,7 +377,7 @@ objects.forEach(function(object) {
 
 그리고 `webglUtils.setBuffersAndAttributes`는 해당 객체를 사용하여 모든 버퍼와 속성을 설정합니다.
 
-주어진 `position`은 거의 항상 3개의 컴포넌트(x, y, z)를 가지고, `texcoord`는 2개, `indices`는 3개, `normal`는 3개를 가지므로, 시스템이 컴포넌트 수를 추측하도록 할 수 있습니다.
+주어진 `position`은 거의 항상 3개의 컴포넌트(x, y, z)를 가지고, `texcoord`는 2개, `indices`는 3개, `normal`은 3개를 가지므로, 시스템이 컴포넌트 수를 추측하도록 할 수 있습니다.
 
     // 인덱싱된 쿼드
     var arrays = {
@@ -414,7 +414,7 @@ WebGL은 속성에 대해 자동으로 `w = 1`을 설정합니다.
 
     var programInfo = webglUtils.createProgramInfo(gl, ["vertexshader", "fragmentshader"]);
 
-이렇게 반환하는데,
+이렇게 반환합니다.
 
     programInfo = {
        program: WebGLProgram,  // 컴파일한 프로그램
@@ -427,11 +427,11 @@ WebGL은 속성에 대해 자동으로 `w = 1`을 설정합니다.
 {{{example url="../webgl-less-code-more-fun-quad-programinfo.html" }}}
 
 아무튼 이건 저의 WebGL 프로그램 작성 스타일입니다.
-처음엔 사람들이 무엇이 WebGL이고 무엇이 저의 스타일인지 혼동하지 않도록 하기 위해서, 이 튜토리얼의 강의에서는 **장황한** 표준 방식을 사용해야 겠다고 생각했었는데요.
+처음엔 사람들이 무엇이 WebGL이고 무엇이 저의 스타일인지 혼동하지 않도록 하기 위해, 이 튜토리얼의 강의에서는 **장황한** 표준 방식을 사용해야 겠다고 생각했었는데요.
 하지만 모든 과정을 보여주는 것이 요점을 흐리는 경우가 있기 때문에 앞으로 일부 강의에서는 이 스타일을 사용할 겁니다.
 
 이 스타일은 자유롭게 사용하셔도 괜찮습니다.
-`createUniformSetters`, `createAttributeSetters`,  `createBufferInfoFromArrays`, `setUniforms`, `setBuffersAndAttributes` 함수는 모든 샘플에 사용된 [`webgl-utils.js`](https://github.com/gfxfundamentals/webgl-fundamentals/blob/master/webgl/resources/webgl-utils.js) 파일에 포함되어 있습니다.
+`createUniformSetters`, `createAttributeSetters`, `createBufferInfoFromArrays`, `setUniforms`, `setBuffersAndAttributes` 함수는 모든 샘플에 사용된 [`webgl-utils.js`](https://github.com/gfxfundamentals/webgl-fundamentals/blob/master/webgl/resources/webgl-utils.js) 파일에 포함되어 있습니다.
 좀 더 체계적인 것을 원한다면 [TWGL.js](https://twgljs.org)를 확인하세요.
 
 다음은 [여러 물체 그리기](webgl-drawing-multiple-things.html)입니다.

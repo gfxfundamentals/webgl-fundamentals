@@ -108,7 +108,7 @@ uniform vec4 u_color;
 uniform float u_shininess;
 
 void main() {
-  // v_normal이 베링이기 때문에 보간되며 단위 벡터가 아닙니다.
+  // v_normal이 varying이기 때문에 보간되며 단위 벡터가 아닙니다.
   // 정규화하면 다시 단위 벡터가 됩니다.
   vec3 normal = normalize(v_normal);
 
@@ -219,7 +219,7 @@ x, y, z 중 하나라도 1000이면 1000*1000은 1000000인데요.
 그렇긴 하지만, 제가 아는 한 `lowp`를 지원하는 기기는 9비트를 사용하고 `mediump`를 지원하는 기기는 16비트를 사용합니다.
 
 2014년 아이폰6+는 `mediump`에 대해 16비트를 사용하지만 `lowp`에도 16비트를 사용합니다.
-`lowp`에 대해 9비트를 사용하는 기기를 사용한 적이 있는지 없어서 어떤 문제가 발생하는지 확실하지 않습니다. 
+`lowp`에 대해 9비트를 사용하는 기기를 사용한 적이 있는지 없어서 어떤 문제가 발생하는지 확실하지 않습니다.
 
 이 글을 통해서 우리는 프래그먼트 셰이더의 기본 정밀도를 지정했습니다.
 또한 어떤 개별 변수의 정밀도라도 지정할 수 있는데요.
@@ -228,7 +228,7 @@ x, y, z 중 하나라도 1000이면 1000*1000은 1000000인데요.
 ```glsl
 uniform mediump vec4 color;  // 유니폼
 attribute lowp vec4 normal;  // 속성
-varying lowp vec4 texcoord;  // 베링
+varying lowp vec4 texcoord;  // varying
 lowp float foo;              // 변수
 ```
 
@@ -246,7 +246,7 @@ const bitsInCanvas =
     gl.getParameter(gl.ALPHA_BITS);
 ```
 
-이건 실제로 현재 바인딩된 프레임 버퍼 색상 어태치먼트나, 프레임 버퍼가 첨부되지 않았다면 캔버스에서, 채널의 비트 깊이를 반환합니다.
+이건 실제로 현재 바인딩된 프레임 버퍼 색상 attachment나, 프레임 버퍼가 첨부되지 않았다면 캔버스에서, 채널의 비트 깊이를 반환합니다.
 
 {{{example url="../webgl-precision-check-canvas-bits.html"}}}
 

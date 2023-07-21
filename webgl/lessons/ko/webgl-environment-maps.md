@@ -168,7 +168,7 @@ gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LI
 
 이제 반사가 어떻게 작동하는지 알고, 큐브맵에서 값을 찾기 위해 사용할 수 있으므로, 셰이더를 변경해봅시다.
 
-먼저 정점 셰이더에서 정점의 월드 위치와 월드를 향하는 법선을 계산하고 이를 프래그먼트 셰이더에 베링으로 전달할 겁니다.
+먼저 정점 셰이더에서 정점의 월드 위치와 월드를 향하는 법선을 계산하고 이를 프래그먼트 셰이더에 varying으로 전달할 겁니다.
 이는 [스포트라이트에 대한 글](webgl-3d-lighting-spot.html)에서 했던 것과 유사합니다.
 
 ```glsl

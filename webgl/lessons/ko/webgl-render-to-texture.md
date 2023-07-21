@@ -51,8 +51,8 @@ TOC: 텍스처 렌더링
 텍스처를 할당하기 위해 WebGL만 있으면 됩니다.
 
 다음은 프레임 버퍼를 생성합니다.
-[프레임 버퍼](webgl-framebuffers.html)는 그냥 어태치먼트 모음입니다.
-어태치먼트는 텍스처나 렌더 버퍼입니다.
+[프레임 버퍼](webgl-framebuffers.html)는 그냥 attachment 모음입니다.
+Attachment는 텍스처나 렌더 버퍼입니다.
 이전에 텍스처에 대해 살펴봤는데요.
 렌더 버퍼는 텍스처와 매우 유사하지만 텍스처가 지원하지 않는 포맷과 옵션을 지원합니다.
 또한 텍스처와 달리 셰이더에 대한 입력으로 렌더 버퍼를 직접 사용할 수 없습니다.
@@ -63,7 +63,7 @@ TOC: 텍스처 렌더링
     const fb = gl.createFramebuffer();
     gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
 
-    // 첫 번째 색상 어태치먼트로 텍스처 첨부
+    // 첫 번째 색상 attachment로 텍스처 첨부
     const attachmentPoint = gl.COLOR_ATTACHMENT0;
     gl.framebufferTexture2D(
         gl.FRAMEBUFFER, attachmentPoint, gl.TEXTURE_2D, targetTexture, level);
@@ -78,7 +78,7 @@ TOC: 텍스처 렌더링
 
 ```
 function drawCube(aspect) {
-  // 프로그램(셰이더 쌍) 사용 지시
+  // 프로그램(셰이더 쌍) 사용
   gl.useProgram(program);
 
   // 위치 속성 활성화
@@ -163,7 +163,7 @@ function drawScene(time) {
     // WebGL에 클립 공간에서 픽셀로 변환하는 방법 지시
     gl.viewport(0, 0, targetTextureWidth, targetTextureHeight);
 
-    // 어태치먼트 지우기
+    // Attachment 지우기
     gl.clearColor(0, 0, 1, 1);   // 파란색으로 초기화
     gl.clear(gl.COLOR_BUFFER_BIT| gl.DEPTH_BUFFER_BIT);
 
@@ -247,19 +247,19 @@ gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER,
 
 <img class="webgl_center" src="resources/cubes-with-depth-buffer.jpg" width="100%" height="100%" />
 
-WebGL이 3개의 어태치먼트 조합 동작만 보장한다는 점을 유의해야 합니다.
-[명세서](https://www.khronos.org/registry/webgl/specs/latest/1.0/#FBO_ATTACHMENTS)에 따르면 보장되는 어태치먼트 조합은 다음과 같습니다.
+WebGL이 3개의 attachment 조합 동작만 보장한다는 점을 유의해야 합니다.
+[명세서](https://www.khronos.org/registry/webgl/specs/latest/1.0/#FBO_ATTACHMENTS)에 따르면 보장되는 attachment 조합은 다음과 같습니다.
 
 * `COLOR_ATTACHMENT0` = `RGBA/UNSIGNED_BYTE` texture
 * `COLOR_ATTACHMENT0` = `RGBA/UNSIGNED_BYTE` texture + `DEPTH_ATTACHMENT` = `DEPTH_COMPONENT16` renderbuffer
 * `COLOR_ATTACHMENT0` = `RGBA/UNSIGNED_BYTE` texture + `DEPTH_STENCIL_ATTACHMENT` = `DEPTH_STENCIL` renderbuffer
 
 다른 조합의 경우 사용자의 시스템/GPU/드라이버/브라우저가 해당 조합을 지원하는지 확인해야 하는데요.
-프레임 버퍼를 만들었는지 확인하려면, 어태치먼트를 생성하고 첨부한 다음 아래와 같이 호출합니다.
+프레임 버퍼를 만들었는지 확인하려면, attachment를 생성하고 첨부한 다음 아래와 같이 호출합니다.
 
     var status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
 
-상태가 `FRAMEBUFFER_COMPLETE`라면 해당 어태치먼트 조합은 해당 사용자에 대해 작동합니다.
+상태가 `FRAMEBUFFER_COMPLETE`라면 해당 attachment 조합은 해당 사용자에 대해 작동합니다.
 그렇지 않으면 작동하지 않으니 사용자에게 알리거나 다른 방법으로 폴백하는 등의 작업을 해야 합니다.
 
 아직 모르겠다면 [유틸리티 함수에 대한 글](webgl-less-code-more-fun.html)을 읽어주세요.

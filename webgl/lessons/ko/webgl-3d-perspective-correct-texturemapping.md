@@ -7,13 +7,13 @@ TOC: 원근 교정 텍스처 매핑
 첫 번째는 [기초](webgl-fundamentals.html)로 시작했습니다.
 이 글은 원근 교정 텍스처 매핑을 다룹니다.
 이걸 이해하기 위해서는 [원근 투영](webgl-3d-perspective.html)과 [텍스처](webgl-3d-textures.html)에 대해 읽어야 할 겁니다.
-또한 [베링과 그 기능](webgl-how-it-works.html)에 대해 알아야 하지만 여기서 간략하게 설명하겠습니다.
+또한 [varying과 그 기능](webgl-how-it-works.html)에 대해 알아야 하지만 여기서 간략하게 설명하겠습니다.
 
-"[동작 원리](webgl-how-it-works.html)"에서 베링이 어떻게 작동하는지 다뤘는데요.
-정점 셰이더는 베링을 선언하고 어떤 값으로 설정할 수 있습니다.
+"[동작 원리](webgl-how-it-works.html)"에서 varying이 어떻게 작동하는지 다뤘는데요.
+정점 셰이더는 varying을 선언하고 어떤 값으로 설정할 수 있습니다.
 정점 셰이더가 3번 호출되면 WebGL은 삼각형을 그립니다.
 해당 삼각형을 그리는 동안 모든 픽셀에 대해 프래그먼트 셰이더를 호출하고 해당 픽셀을 어떤 색상으로 만들지 묻습니다.
-삼각형의 정점 3개 사이에서 3개의 값 사이를 보간한 베링을 전달할 겁니다.
+삼각형의 정점 3개 사이에서 3개의 값 사이를 보간한 varying을 전달할 겁니다.
 
 {{{diagram url="resources/fragment-shader-anim.html" width="600" height="400" caption="v_color는 v0, v1, v2 사이에서 보간" }}}
 
@@ -64,8 +64,8 @@ TOC: 원근 교정 텍스처 매핑
 
 {{{example url="../webgl-clipspace-rectangles.html" }}}
 
-베링 플로트 하나를 추가해봅시다.
-해당 베링을 정점 셰이더에서 프래그먼트 셰이더로 전달할 겁니다.
+Varying float 하나를 추가해봅시다.
+해당 varying을 정점 셰이더에서 프래그먼트 셰이더로 전달할 겁니다.
 
       attribute vec4 a_position;
     +  attribute float a_brightness;
@@ -79,18 +79,18 @@ TOC: 원근 교정 텍스처 매핑
     +    v_brightness = a_brightness;
       }
 
-프래그먼트 셰이더에서는 해당 베링을 사용하여 색상을 설정할 겁니다.
+프래그먼트 셰이더에서는 해당 varying을 사용하여 색상을 설정할 겁니다.
 
       precision mediump float;
 
     +  // 정점 셰이더에서 전달받아 보간
-    +  varying float v_brightness;  
+    +  varying float v_brightness;
 
       void main() {
     *    gl_FragColor = vec4(v_brightness, 0, 0, 1);  // 빨강
       }
 
-베링의 데이터를 제공해야 하므로 버퍼를 만들어 데이터를 넣을 겁니다.
+Varying 데이터를 제공해야 하므로 버퍼를 만들어 데이터를 넣을 겁니다.
 정점 당 하나의 값을 가집니다.
 왼쪽을 0으로 오른쪽은 1로 정점에 대한 밝기 값을 설정합니다.
 
@@ -125,7 +125,7 @@ TOC: 원근 교정 텍스처 매핑
 ```
   // 정점 데이터가 어디로 가야하는지 탐색
   var positionAttributeLocation = gl.getAttribLocation(program, "a_position");
-+  var brightnessAttributeLocation = gl.getAttribLocation(program, "a_brightness");  
++  var brightnessAttributeLocation = gl.getAttribLocation(program, "a_brightness");
 ```
 
 그리고 렌더링할 때 해당 속성을 설정합니다.
@@ -137,7 +137,7 @@ TOC: 원근 교정 텍스처 매핑
   // 위치 버퍼 바인딩
   gl.bindBuffer(gl.ARRAY_BUFFER, brightnessBuffer);
 
-  // brightnessBuffer의 데이터를 가져오는 방법을 속성에 지시 (ARRAY_BUFFER)
+  // brightnessBuffer(ARRAY_BUFFER)의 데이터를 가져오는 방법을 속성에 지시
   var size = 1;          // 반복마다 1개의 컴포넌트
   var type = gl.FLOAT;   // 데이터는 32비트 부동 소수점
   var normalize = false; // 데이터 정규화 안 함
@@ -192,7 +192,7 @@ WebGL이 `W`로 나누기 때문에 똑같은 결과를 얻을 수 있겠죠?
 하지만 색상이 다릅니다.
 무슨 일이 일어난 걸까요?
 
-WebGL은 `W`를 사용하여 원근 교정 텍스처 매핑을 구현하거나 베링의 원근 교정 보간을 수행합니다.
+WebGL은 `W`를 사용하여 원근 교정 텍스처 매핑을 구현하거나 varying의 원근 교정 보간을 수행합니다.
 
 실제로 이걸 더 쉽게 볼 수 있도록 프래그먼트 셰이더를 해킹해봅시다.
 
@@ -212,13 +212,13 @@ WebGL은 `W`를 사용하여 원근 교정 텍스처 매핑을 구현하거나 �
 여기서 `t`는 `a`와 `b`사이의 위치를 나타내는 0에서 1사이의 값입니다.
 `a`가 0이고 `b`가 1입니다.
 
-베링의 경우 WebGL은 이 공식을 사용합니다.
+Varying의 경우 WebGL은 이 공식을 사용합니다.
 
      result = (1 - t) * a / aW + t * b / bW
               -----------------------------
                  (1 - t) / aW + t / bW
 
-여기서 `aW`는 베링이 `a`로 설정된 경우 `gl_Position.w`에 설정된 `W`이며, `bW` 베링이 `b`로 설정된 경우 `gl_Position.w`에 설정된 `W`입니다.
+여기서 `aW`는 varying이 `a`로 설정된 경우 `gl_Position.w`에 설정된 `W`이며, `bW` varying이 `b`로 설정된 경우 `gl_Position.w`에 설정된 `W`입니다.
 
 그게 왜 중요할까요?
 음 여기 [텍스처에 대한 글](webgl-3d-textures.html)에서 만들었던 간단한 텍스처 큐브가 있습니다.
@@ -257,7 +257,7 @@ void main() {
 
 여전히 3D 큐브를 얻게 되지만 텍스처가 뒤틀리고 있습니다.
 이는 이전처럼 `W`를 전달하지 않으면 WebGL이 원근 교정 텍스처 매핑을 할 수 없기 때문입니다.
-좀 더 정확하게는 WebGL이 베링의 원근 교정 보간을 수행할 수 없습니다.
+좀 더 정확하게는 WebGL이 varying의 원근 교정 보간을 수행할 수 없습니다.
 
 [원근 행렬](webgl-3d-perspective.html)에서 `Z`가 `W`였던 걸 떠올려보면, `W`가 `1`인 경우 WebGL은 선형 보간을 수행합니다.
 실제로 위의 방정식을 가져와 봅시다.
@@ -288,7 +288,7 @@ void main() {
 
 이제 왜 WebGL이 4x4 행렬과 `X`, `Y`, `Z`, `W`가 있는 4개의 벡터를 사용하는지 이해가 되셨으면 좋겠습니다.
 `X`와 `Y`는 `W`로 나누어 클립 공간 좌표를 얻습니다.
-`W`로 나누는 `Z`도 클립 공간 좌표를 얻으며, `W`는 베링의 보간 중에 계속 사용되고 원근 교정 텍스처 매핑 기능을 제공합니다.
+`W`로 나누는 `Z`도 클립 공간 좌표를 얻으며, `W`는 varying의 보간 중에 계속 사용되고 원근 교정 텍스처 매핑 기능을 제공합니다.
 
 <div class="webgl_bottombar">
 <h3>1990년대 중반 게임 콘솔</h3>

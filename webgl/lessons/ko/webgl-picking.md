@@ -61,7 +61,7 @@ function setFramebufferAttachmentSizes(width, height) {
 const fb = gl.createFramebuffer();
 gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
 
-// 첫 번째 색상 어태치먼트에 텍스처 첨부
+// 첫 번째 색상 attachment에 텍스처 첨부
 const attachmentPoint = gl.COLOR_ATTACHMENT0;
 const level = 0;
 gl.framebufferTexture2D(gl.FRAMEBUFFER, attachmentPoint, gl.TEXTURE_2D, targetTexture, level);
@@ -80,7 +80,7 @@ function drawScene(time) {
 
 -  webglUtils.resizeCanvasToDisplaySize(gl.canvas);
 +  if (webglUtils.resizeCanvasToDisplaySize(gl.canvas)) {
-+    // 캔버스 크기가 바뀌었으니 프레임 버퍼 어태치먼트와 일치시킵니다.
++    // 캔버스 크기가 바뀌었으니 프레임 버퍼 attachment와 일치시킵니다.
 +    setFramebufferAttachmentSizes(gl.canvas.width, gl.canvas.height);
 +  }
 
@@ -505,7 +505,7 @@ function drawScene(time) {
   ++frameCount;
 
 -  if (webglUtils.resizeCanvasToDisplaySize(gl.canvas)) {
--    // 캔버스 크기가 바뀌었으니 프레임 버퍼 어태치먼트와 일치시킵니다.
+-    // 캔버스 크기가 바뀌었으니 프레임 버퍼 attachment와 일치시킵니다.
 -    setFramebufferAttachmentSizes(gl.canvas.width, gl.canvas.height);
 -  }
 +  webglUtils.resizeCanvasToDisplaySize(gl.canvas);

@@ -118,7 +118,7 @@ void main() {
   // 나누려는 z 조정
   float zToDivideBy = 1.0 + position.z * u_fudgeFactor;
 
-  // x, y, z를 "zToDivideBy"로 나누기
+  // x, y, z를 zToDivideBy로 나누기
 *  gl_Position = vec4(position.xyz, zToDivideBy);
 
   // 프래그먼트 셰이더로 색상 전달
@@ -131,7 +131,7 @@ void main() {
 
 {{{example url="../webgl-3d-perspective-w.html" }}}
 
-WebGL이 자동으로 W로 나눈다는 사실이 유용한 이유는 뭘까요? 
+WebGL이 알아서 W로 나눈다는 사실이 유용한 이유는 뭘까요?
 그 이유는 이제 더 많은 행렬을 사용하여 z를 w에 복사하기 위해 또 다른 행렬을 사용할 수 있기 때문입니다.
 
 이런 행렬이 z를 w에 복사할 겁니다.
@@ -194,13 +194,13 @@ w_out = x_in * 0 +
         w_in * 1 ;
 </pre></div>
 
-`w_in` = 1.0인 것을 알기 때문에,
+`w_in` = 1.0인 것을 알기 때문에 이렇게 변경할 수 있습니다.
 
 <div class="webgl_math_center"><pre class="webgl_math">
 w_out = z_in + 1;
 </pre></div>
 
-마지막으로 행렬이 다음과 같으면 `fudgeFactor`를 다시 사용할 수 있는데,
+마지막으로 행렬이 아래와 같으면 `fudgeFactor`를 다시 사용할 수 있는데,
 
 <div class="webgl_math_center"><pre class="webgl_math">
 1, 0, 0, 0,
@@ -209,7 +209,7 @@ w_out = z_in + 1;
 0, 0, 0, 1,
 </pre></div>
 
-이게 의미하는 것은,
+이게 의미하는 것은 다음과 같습니다.
 
 <div class="webgl_math_center"><pre class="webgl_math">
 w_out = x_in * 0 +
@@ -218,7 +218,7 @@ w_out = x_in * 0 +
         w_in * 1 ;
 </pre></div>
 
-그리고 단순화해서,
+그리고 단순화하면 이렇게 됩니다.
 
 <div class="webgl_math_center"><pre class="webgl_math">
 w_out = z_in * fudgeFactor + 1;
@@ -286,10 +286,10 @@ WebGL은 X와 Y 혹은 +1에서 -1까지 클리핑하는 것처럼 Z도 클리�
 여기서 우리가 보고 있는 건 Z < -1 입니다.
 
 이를 해결하기 위해 수학에 대한 자세한 설명을 할 수도 있지만 [2D 투영을 했던 것과 같은 방법](https://stackoverflow.com/a/28301213/128511)으로 도출할 수도 있습니다.
-Z를 가져오고, 약간을 더하고, 어느정도 크기를 조정해야 하며, 원하는 범위를 -1에서 +1사이로 다시 매핑할 수 있습니다.
+Z를 가져와 어느정도 더하고 크기 조정하여 원하는 범위를 -1에서 +1사이로 다시 매핑할 수 있습니다.
 
 멋진 점은 이 모든 단계를 하나의 행렬로 수행할 수 있다는 겁니다.
-더 좋은 것은 `fudgeFactor` 대신에 `fieldOfView`를 결정하고, 이를 위한 올바른 값을 계산하는 겁니다.
+더 좋은 점은 `fudgeFactor` 대신에 `fieldOfView`를 결정하고 이를 위한 올바른 값을 계산한다는 겁니다.
 
 다음은 행렬을 만드는 함수입니다.
 
@@ -313,7 +313,7 @@ var m4 = {
 이 행렬이 모든 변환을 수행할 겁니다.
 단위가 클립 공간 안에 있도록 조정되며, 각도별로 시야각을 선택할 수 있고, Z-클리핑 공간을 선택할 수 있게 되는데요.
 원점(0, 0, 0)에 *눈*이나 *카메라*가 있다고 가정하고, `zNear`와 `fieldOfView`가 주어지면, `zNear`의 항목이 `Z = -1`이 되는데 필요한 값을 계산하며, `fieldOfView`의 절반인 `zNear`의 위와 아래는 각각 `Y = -1`과 `Y = 1`이 됩니다.
-전달된 `aspect`를 곱하여 X에 사용할 값을 계산하는데요.
+그리고 전달된 `aspect`를 곱하여 X에 사용할 값을 계산하는데요.
 일반적으로 디스플레이 영역의 `width / height`로 설정합니다.
 마지막으로 `zFar`의 항목이 `Z = 1`이 되도록 하기 위해 Z에서 얼마나 크기를 조정할지 알아냅니다.
 
@@ -350,7 +350,7 @@ matrix = m4.zRotate(matrix, rotation[2]);
 matrix = m4.scale(matrix, scale[0], scale[1], scale[2]);
 ```
 
-그리고 여기 있습니다.
+그리고 여기 결과입니다.
 
 {{{example url="../webgl-3d-perspective-matrix.html" }}}
 
@@ -359,20 +359,19 @@ matrix = m4.scale(matrix, scale[0], scale[1], scale[2]);
 다음은 [카메라](webgl-3d-camera.html)입니다.
 
 <div class="webgl_bottombar">
-<h3>지금까지 F를 Z(-360)에서 움직인 이유가 뭔가요?</h3>
+<h3>F를 Z(-360)로 옮긴 이유가 뭔가요?</h3>
 <p>
 다른 샘플에서는 F가 (45, 150, 0)에 있지만 마지막 샘플에서는 (-150, 0, -360)으로 옮겨졌습니다.
 왜 그렇게 멀리 옮겨야 했을까요?
 </p>
 <p>
-그 이유는 마지막 샘플까지 <code>m4.projection</code> 함수가 픽셀에서 클립 공간으로 투영을 만들었기 때문입니다.
-이는 우리가 표시하고 있던 영역이 400x300픽셀을 나타냈다는 것을 의미하는데요.
-3D에서 '픽셀'을 사용하는 건 정말 의미가 없습니다.
+그 이유는 마지막 샘플까지 <code>m4.projection</code> 함수가 픽셀에서 클립 공간으로 투영했기 때문입니다.
+이는 우리가 표시하고 있던 영역이 400x300픽셀로 표현되었다는 의미인데요.
+3D에서 '픽셀'을 사용하는 것은 실제로 의미가 없습니다.
 </p>
-<p>다시말해 0,0,0에서 F를 그리려고 했지만 회전하지 않는다면</p>
 <div class="webgl_center"><img src="resources/f-big-and-wrong-side.svg" style="width: 500px;"></div>
 <p>
-F는 원점의 왼쪽 상단 모서리의 앞쪽에 있게 됩니다.
+다시말해 0,0,0에서 F를 그리려고 했지만 회전하지 않는다면 F는 원점의 왼쪽 상단 모서리의 앞쪽에 있게 됩니다.
 투영은 -Z를 향하지만 F는 +Z로 만들어졌죠.
 투영은 +Y가 위를 향하지만 F는 +Z가 아래를 향합니다.
 </p>
@@ -383,8 +382,8 @@ Z = -2000 (-zFar)에서 높이는 2309입니다.
 F의 크기가 150이고, <code>-zNear</code>에 무언가가 있을 때 뷰는 1.154만 볼 수 있기 때문에, 모든 걸 보려면 원점에서 꽤 멀리 이동해야 합니다.
 </p>
 <p>
-Z단위로 -360 움직이면 절두체의 내부로 이동합니다.
-또한 오른쪽이 위쪽에 오도록 회전했습니다.
+Z에서 -360만큼 움직이면 절두체의 내부로 이동합니다.
+또한 오른쪽이 위쪽을 향하도록 회전시켰습니다.
 </p>
 <div class="webgl_center"><img src="resources/f-right-side.svg" style="width: 500px;"><div>스케일 없음</div></div>
 </div>

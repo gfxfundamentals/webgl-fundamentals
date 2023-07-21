@@ -2,6 +2,7 @@ Title: WebGL 그림자
 Description: 그림자를 계산하는 방법
 TOC: 그림자
 
+
 그림자를 그려봅시다!
 
 ## 사전지식
@@ -14,7 +15,7 @@ TOC: 그림자
 * [스포트라이트 효과](webgl-3d-lighting-spot.html)
 * [텍스처](webgl-3d-textures.html)
 * [텍스처 렌더링](webgl-render-to-texture.html)
-* [투영 맵핑](webgl-planar-projection-mapping.html)
+* [투영 매핑](webgl-planar-projection-mapping.html)
 * [카메라 시각화](webgl-visualizing-the-camera.html)
 
 그러니 위 글들을 아직 읽지 않으셨다면 먼저 읽고 오십시오.
@@ -29,12 +30,12 @@ TOC: 그림자
 
 섀도우 맵은 사전지식에서 언급한 모든 기술을 사용하여 동작합니다.
 
-[투영 맵핑과 관련된 글](webgl-planar-projection-mapping.html)에서 이미지를 물체에 투영하는 방법을 알아 보았습니다.
+[투영 매핑과 관련된 글](webgl-planar-projection-mapping.html)에서 이미지를 물체에 투영하는 방법을 알아 보았습니다.
 
 {{{example url="../webgl-planar-projection-with-projection-matrix.html"}}}
 
 이미지는 장면에 있는 물체에 직접 그려진 것이 아니라, 물체가 렌더링 될 때 각 픽셀에 대해 투영된 텍스처 범위 내에 있는지를 확인하고 범위 내에 있다면 투영된 텍스처로부터 적절한 색상을 샘플링하는 방식이었습니다.
-범위 밖이라면 물체에 맵핑된 다른 텍스처로부터 텍스처 좌표를 기반으로 색상을 샘플링하였습니다.
+범위 밖이라면 물체에 매핑된 다른 텍스처로부터 텍스처 좌표를 기반으로 색상을 샘플링하였습니다.
 
 만일 투영된 텍스처가 조명의 시점에서 얻어진 깊이 데이터라면 어떻게 될까요?
 다시 말해 위 예제에서 조명이 절두체의 끝부분에 존재하는 것처럼 가정하고 투영된 텍스처가 그 조명 위치에서의 깊이값을 가지고 있는겁니다.
@@ -109,7 +110,7 @@ gl.framebufferTexture2D(
     0);                   // 밉 레벨
 ```
 
-[여러 가지 이유](#attachment-combinations)로 실제로 사용하지 않더라도 색상 텍스처를 생성하고 색상 어태치먼트로 첨부해야 합니다.
+[여러 가지 이유](#attachment-combinations)로 실제로 사용하지 않더라도 색상 텍스처를 생성하고 색상 attachment로 첨부해야 합니다.
 
 ```js
 // 깊이 텍스처와 같은 크기로 색상 텍스처 생성
@@ -260,8 +261,8 @@ function render() {
   const up = [0, 1, 0];
   const cameraMatrix = m4.lookAt(cameraPosition, target, up);
 
--  drawScene(projectionMatrix, cameraMatrix, textureMatrix); 
-+  drawScene(projectionMatrix, cameraMatrix, textureMatrix, textureProgramInfo); 
+-  drawScene(projectionMatrix, cameraMatrix, textureMatrix);
++  drawScene(projectionMatrix, cameraMatrix, textureMatrix, textureProgramInfo);
 }
 ```
 
@@ -269,18 +270,18 @@ function render() {
 전에는 텍스처를 임의의 공간으로 투영했지만 지금은 섀도우 맵을 조명에서 투영하고 있습니다.
 계산 방법은 같지만 변수 이름을 바꾸는 것이 적절해 보입니다.
 
-먼저 구와 평면을 절두체 라인을 그리기 위해 만든 색상 셰이더를 사용해 깊이 텍스처에 렌더링했습니다. 
-이 셰이더는 단색을 그리는 셰이더이고 특별히 다른 계산을 하고 있지 않은데 
+먼저 구와 평면을 절두체 라인을 그리기 위해 만든 색상 셰이더를 사용해 깊이 텍스처에 렌더링했습니다.
+이 셰이더는 단색을 그리는 셰이더이고 특별히 다른 계산을 하고 있지 않은데
 깊이 텍스처를 렌더링하는데는 이것이면 충분합니다.
 
 이후에 장면을 캔버스에 다시 그리는데 전과 동일하게 텍스처를 장면에 투영해서 그립니다.
-셰이더에서 깊이 텍스처를 참조할 때 `red` 값만 유효하기 때문에 
+셰이더에서 깊이 텍스처를 참조할 때 `red` 값만 유효하기 때문에
 `red`, `green`, `blue`에 대해 같은 값을 반복하여 할당합니다.
 
 ```glsl
 void main() {
   vec3 projectedTexcoord = v_projectedTexcoord.xyz / v_projectedTexcoord.w;
-  bool inRange = 
+  bool inRange =
       projectedTexcoord.x >= 0.0 &&
       projectedTexcoord.x <= 1.0 &&
       projectedTexcoord.y >= 0.0 &&
@@ -364,7 +365,7 @@ const settings = {
 깊이값은 0.0에서 1.0사이의 값인데 절두체 내에서의 위치를 나타냅니다.
 그러니 0.0(어두움)은 절두체의 뾰족한 점에 가깝고 1.0(밝음)은 반대쪽 끝에 가깝습니다.
 
-이제 남은 것은 투영된 텍스처 색상과 텍스처 맵핑 색상 사이의 선택을 하는 것이 아니라, 깊이 텍스처의 깊이 값에서 얻은 Z값을 사용해 그 값이 우리가 그리려는 픽셀에서 카메라까지의 거리보다 더 먼지 가까운지를 알아내는데 사용하는 것입니다.
+이제 남은 것은 투영된 텍스처 색상과 텍스처 매핑 색상 사이의 선택을 하는 것이 아니라, 깊이 텍스처의 깊이 값에서 얻은 Z값을 사용해 그 값이 우리가 그리려는 픽셀에서 카메라까지의 거리보다 더 먼지 가까운지를 알아내는데 사용하는 것입니다.
 깊이 텍스처의 값이 더 가까우면 무언가가 빛을 가리고 있는 것이고, 따라서 그 픽셀은 그림자 영역 안에 있습니다.
 
 ```glsl
@@ -372,7 +373,7 @@ void main() {
   vec3 projectedTexcoord = v_projectedTexcoord.xyz / v_projectedTexcoord.w;
 +  float currentDepth = projectedTexcoord.z;
 
-  bool inRange = 
+  bool inRange =
       projectedTexcoord.x >= 0.0 &&
       projectedTexcoord.x <= 1.0 &&
       projectedTexcoord.y >= 0.0 &&
@@ -380,7 +381,7 @@ void main() {
 
 -  vec4 projectedTexColor = vec4(texture2D(u_projectedTexture, projectedTexcoord.xy).rrr, 1);
 +  float projectedDepth = texture2D(u_projectedTexture, projectedTexcoord.xy).r;
-+  float shadowLight = (inRange && projectedDepth <= currentDepth) ? 0.0 : 1.0;  
++  float shadowLight = (inRange && projectedDepth <= currentDepth) ? 0.0 : 1.0;
 
   vec4 texColor = texture2D(u_texture, v_texcoord) * u_colorMult;
 -  gl_FragColor = mix(texColor, projectedTexColor, projectedAmount);
@@ -397,7 +398,7 @@ void main() {
 구의 그림자가 바닥면에 나타나는 것을 보니 되는 것 같기는 한데, 그림자가 없어야 하는 곳에 나타나는 이상한 패턴을 뭘까요?
 이 패턴은 *섀도우 애크니*이라고 합니다.
 깊이 텍스처에 저장된 깊이 데이터가 양자화되기 때문입니다.
-이는 텍스처 자체가 픽셀의 그리드이기 때문이기도 하고, 조명의 시점으로 투영되어 생성되었으나 그 값을 카메라 시점에서 비교하고 있기 때문이기도 합니다. 
+이는 텍스처 자체가 픽셀의 그리드이기 때문이기도 하고, 조명의 시점으로 투영되어 생성되었으나 그 값을 카메라 시점에서 비교하고 있기 때문이기도 합니다.
 다시말해 깊이 지도 격자의 값들이 카메라와 정렬되지 않아서 `currentDepth`를 계산할 때 `projectedDepth`보다 약간 작거나 큰 경우가 생기기 때문입니다.
 
 바이어스를 더해 봅시다.
@@ -412,14 +413,14 @@ void main() {
 -  float currentDepth = projectedTexcoord.z;
 +  float currentDepth = projectedTexcoord.z + u_bias;
 
-  bool inRange = 
+  bool inRange =
       projectedTexcoord.x >= 0.0 &&
       projectedTexcoord.x <= 1.0 &&
       projectedTexcoord.y >= 0.0 &&
       projectedTexcoord.y <= 1.0;
 
   float projectedDepth = texture2D(u_projectedTexture, projectedTexcoord.xy).r;
-  float shadowLight = (inRange && projectedDepth <= currentDepth) ? 0.0 : 1.0;  
+  float shadowLight = (inRange && projectedDepth <= currentDepth) ? 0.0 : 1.0;
 
   vec4 texColor = texture2D(u_texture, v_texcoord) * u_colorMult;
   gl_FragColor = vec4(texColor.rgb * shadowLight, texColor.a);
@@ -541,7 +542,7 @@ uniform float u_bias;
 +uniform float u_outerLimit;          // 내적 공간에서의 값
 
 void main() {
-+  // v_normal은 베링이기 때문에 보간되고, 단위 벡터가 아닐 수 있습니다. 
++  // v_normal은 varying이기 때문에 보간되고, 단위 벡터가 아닐 수 있습니다.
 +  // 정규화를 해서 다시 단위 벡터로 만들어줍니다.
 +  vec3 normal = normalize(v_normal);
 +
@@ -578,7 +579,7 @@ void main() {
 }
 ```
 
-`shadowLight`를 `light`와 `specular` 효과의 양을 조절하기 위해 사용한 것에 주목하세요. 
+`shadowLight`를 `light`와 `specular` 효과의 양을 조절하기 위해 사용한 것에 주목하세요.
 물체가 그림자 영역에 있다면 빛이 들지 않는것입니다.
 
 이제 uniform들을 설정해 주기만 하면 됩니다.
@@ -752,7 +753,7 @@ uniform float u_bias;
 +uniform vec3 u_reverseLightDirection;
 
 void main() {
-  // v_normal은 베링이기 때문에 보간되고, 단위 벡터가 아닐 수 있습니다.
+  // v_normal은 varying이기 때문에 보간되고, 단위 벡터가 아닐 수 있습니다.
   // 정규화를 해서 다시 단위 벡터로 만들어줍니다.
   vec3 normal = normalize(v_normal);
 
@@ -827,15 +828,15 @@ void main() {
 <p>여기서 우리는 WebGL 스펙의 세부 사항에 대해 묻습니다.</p>
 <p>WebGL은 OpenGL ES 2.0을 기반으로 하고 기본적으로 <a href="https://www.khronos.org/registry/webgl/specs/latest/1.0/">WebGL 스펙</a>에 나열된 예외를 제외하고는 OpenGL ES 2.0을 따릅니다.</p>
 <p>
-프레임 버퍼를 만들 때 어태치먼트를 추가하는데요.
-모든 종류의 어태치먼트를 추가할 수 있습니다.
-위에선 RGBA/UNSIGNED_BYTE 텍스처 색상 어태치먼트와 깊이 텍스처 어태치먼트를 추가했습니다.
-텍스처 렌더링에 관한 글에서 비슷한 색상 어태치먼트를 첨부했지만 깊이 텍스처가 아닌 깊이 렌더 버퍼를 첨부했습니다.
+프레임 버퍼를 만들 때 attachment를 추가하는데요.
+모든 종류의 attachment를 추가할 수 있습니다.
+위에선 RGBA/UNSIGNED_BYTE 텍스처 색상 attachment와 깊이 텍스처 attachment를 추가했습니다.
+텍스처 렌더링에 관한 글에서 비슷한 색상 attachment를 첨부했지만 깊이 텍스처가 아닌 깊이 렌더 버퍼를 첨부했습니다.
 또한 RGB 텍스처, LUMINANCE 텍스처, 그리고 기타 여러 유형의 텍스처와 렌더 버퍼를 첨부할 수도 있습니다.
 </p>
 <p>
-<a href="">OpenGL ES 2.0 스펙</a>은 어태치먼트의 특정 조합이 함께 작동하는지에 대한 많은 규칙을 제공합니다.
-한 가지 규칙은 적어도 하나의 어태치먼트는 있어야 한다는 겁니다.
+<a href="">OpenGL ES 2.0 스펙</a>은 attachment의 특정 조합이 함께 작동하는지에 대한 많은 규칙을 제공합니다.
+한 가지 규칙은 적어도 하나의 attachment는 있어야 한다는 겁니다.
 또 다른 규칙은 모두 동일한 크기여야 합니다.
 마지막은 규칙은,
 </p>
@@ -843,7 +844,7 @@ void main() {
 <h4>4.4.5 프레임 버퍼 완전성</h4>
 <p>첨부된 이미지의 내부 포맷 조합은 <b>구현 종속</b> 제한을 위반하지 않습니다.</p>
 </blockquote>
-<p>이는 <b>어태치먼트의 조합이 작동에 필요하지 않다</b>는 의미입니다.</p>
+<p>이는 <b>attachment의 조합이 작동에 필요하지 않다</b>는 의미입니다.</p>
 <p>
 WebGL 위원회는 이를 보고 WebGL 구현이 최소 3개의 공통 조합을 지원하도록 요구하기로 결정했습니다.
 <a href="https://www.khronos.org/registry/webgl/specs/latest/1.0/#6.8">WebGL 스펙의 섹션 6.8</a>:
@@ -860,9 +861,9 @@ WebGL 위원회는 이를 보고 WebGL 구현이 최소 3개의 공통 조합을
 이러한 조합 중 어떤 것도 깊이 텍스처를 포함하지 않고 깊이 렌더 버퍼만 포함한다는 것은 깊이 텍스처를 사용을 보장하지 않는다는 겁니다.
 </p>
 <p>
-실제로 대부분의 드라이버는 깊이 텍스처만 첨부하고 다른 어태치먼트 없이 작동하는 것으로 보입니다.
+실제로 대부분의 드라이버는 깊이 텍스처만 첨부하고 다른 attachment 없이 작동하는 것으로 보입니다.
 하지만 2020년 2월 현재 사파리는 해당 조합이 작동하도록 허용하지 않습니다.
-색상 어태치먼트도 필요하며, 아마 <code>RGBA</code>/<code>UNSIGNED_BYTE</code> 색상 어태치먼트가 필요할 겁니다.
+색상 attachment도 필요하며, 아마 <code>RGBA</code>/<code>UNSIGNED_BYTE</code> 색상 attachment가 필요할 겁니다.
 그게 없으면 실패한다는 사실은 위 스펙에 포함되어 있습니다.
 </p>
 <p>

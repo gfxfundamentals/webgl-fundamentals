@@ -8,7 +8,7 @@ TOC: 2D 스케일
 
 스케일은 [평행 이동](webgl-2d-translation.html)만큼이나 쉽습니다.
 
-원하는 스케일로 위치를 곱하면 되는데요.
+위치에 원하는 스케일을 곱하면 되는데요.
 [이전 예제](webgl-2d-rotation.html)에서 변경된 사항들은 다음과 같습니다.
 
 ```
@@ -21,10 +21,10 @@ uniform vec2 u_rotation;
 +uniform vec2 u_scale;
 
 void main() {
-+  // 위치 스케일링
++  // 위치에 스케일 적용
 +  vec2 scaledPosition = a_position * u_scale;
 
-  // 위치 회전
+  // 위치에 회전 적용
   vec2 rotatedPosition = vec2(
 *    scaledPosition.x * u_rotation.y + scaledPosition.y * u_rotation.x,
 *    scaledPosition.y * u_rotation.y - scaledPosition.x * u_rotation.x);
@@ -77,7 +77,7 @@ void main() {
 
 지난 3개의 글이 [평행 이동](webgl-2d-translation.html), [회전](webgl-2d-rotation.html), 스케일을 이해하는데 도움이 되셨기를 바랍니다.
 
-다음에는 이 3가지 모두를 훨씬 간단하고 더 유용한 형태로 결합하는 [행렬](webgl-2d-matrices.html)을 살펴보겠습니다.
+다음에는 이 3가지 모두를 훨씬 간단하고 더 유용한 형태로 결합하는 [행렬](webgl-2d-matrices.html)에 대해 살펴보겠습니다.
 
 <div class="webgl_bottombar">
 <h3>왜 'F'인가요?</h3>

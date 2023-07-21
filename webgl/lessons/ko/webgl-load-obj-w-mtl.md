@@ -1,6 +1,6 @@
-Title: WebGL Mtl로 Obj 로딩
+Title: WebGL Mtl이 있는 Obj 로드
 Description: .MTL 파일을 파싱하는 방법
-TOC: .mtl 파일로 .obj 로딩
+TOC: .mtl 파일이 있는 .obj 로드
 
 
 [이전 글](webgl-load-obj.html)에서 .OBJ 파일을 파싱했었는데요.

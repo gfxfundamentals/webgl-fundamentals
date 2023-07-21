@@ -37,7 +37,7 @@ gl.clear(gl.COLOR_BUFFER_BIT);
 간단한 테스트로서 알려진 색상으로 텍스처를 지우는 셰이더로 텍스처에 렌더링하는 것을 멈춰봅시다.
 
 ```js
-gl.bindFramebuffer(gl.FRAMEBUFFER, framebufferWithTexture)
+gl.bindFramebuffer(gl.FRAMEBUFFER, framebufferWithTexture);
 gl.clearColor(1, 0, 1, 1);  // 자홍색
 gl.clear(gl.COLOR_BUFFER_BIT);
 ```

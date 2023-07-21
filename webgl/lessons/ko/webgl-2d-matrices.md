@@ -27,11 +27,11 @@ TOC: 2D 행렬
 <img src="../resources/f-translation-rotation-scale.svg" class="webgl_center" width="400" />
 
 결과는 완전히 다릅니다.
-심지어 더 안 좋은 점은, 두 번째 예제가 필요하다면 우리가 원하는 새로운 순서로 평행 이동, 회전, 스케일을 적용한 다른 셰이더를 작성해야 한다는 겁니다.
+심지어 더 안 좋은 점은 두 번째 예제가 필요하다면 우리가 원하는 새로운 순서로 평행 이동, 회전, 스케일을 적용한 다른 셰이더를 작성해야 한다는 겁니다.
 
 저보다 훨씬 더 똑똑한 사람들은 행렬 수학으로 동일한 모든 작업을 할 수 있다는 걸 밝혀냈는데요.
 2D의 경우 3x3 행렬을 사용합니다.
-3x3 행렬은 상자 9개가 있는 그리드와 같습니다.
+이는 상자 9개가 있는 그리드와 동일합니다.
 
 <link href="resources/webgl-2d-matrices.css" rel="stylesheet">
 <div class="glocal-center"><table class="glocal-center-content glocal-mat"><tr><td>1.0</td><td>2.0</td><td>3.0</td></tr><tr><td>4.0</td><td>5.0</td><td>6.0</td></tr><tr><td>7.0</td><td>8.0</td><td>9.0</td></tr></table></div>
@@ -123,10 +123,10 @@ newY = y * sy;
 이건 [스케일 샘플](webgl-2d-scale.html)과 동일합니다.
 
 아마 아직 "그래서 뭐요? 요점이 뭔데요?"라고 생각하고 계실 것 같습니다.
-그냥 이미 하고 있던 동일한 것들을 수행하기 위한 여러 작업처럼 보입니다.
+그냥 이미 하고 있던 것들을 수행하기 위한 여러 작업처럼 보이는데요.
 
 여기가 마법이 들어오는 곳입니다.
-행렬을 함께 곱하고 모든 변환을 한 번에 적용하는거죠.
+행렬을 함께 곱해서 모든 변환을 한 번에 적용하는거죠.
 두 행렬을 받아서 곱하고 결과를 반환하는 함수 `m3.multiply`가 있다고 가정해봅시다.
 
 ```js
@@ -166,7 +166,7 @@ var m3 = {
 }
 ```
 
-더 명확하게 하기 위해 평행 이동, 회전, 스케일을 위한 행렬을 만드는 함수를 만들어봅시다.
+더 명확하게 하기 위해 평행 이동, 회전, 스케일을 위한 행렬을 만드는 함수를 만듭니다.
 
 ```js
 var m3 = {
@@ -239,7 +239,7 @@ void main() {
   ...
 ```
 
-그리고 어떻게 사용하냐면,
+그리고 다음과 같이 사용합니다.
 
 ```js
 // 장면 그리기
@@ -289,7 +289,7 @@ matrix = m3.multiply(matrix, translationMatrix);
 {{{example url="../webgl-2d-geometry-matrix-transform-trs.html" }}}
 
 이와 같은 행렬을 적용할 수 있다는 것은 신체의 팔, 태양 주변에 있는 행성의 위성, 나무의 가지같은 계층적 애니메이션에 특히 중요합니다.
-계층적 애니메이션의 간단한 예제로 'F'를 5번 그리지만 매번 이전의 'F' 행렬로 시작해봅시다.
+계층적 애니메이션의 간단한 예제로 'F'를 5번 그리지만 매번 이전의 'F' 행렬을 재사용해봅시다.
 
 ```js
 // 장면 그리기
@@ -343,7 +343,7 @@ var m3 = {
   ...
 ```
 
-다음은 5개의 F입니다.
+그리고 5개의 F를 그리는 예제입니다.
 
 {{{example url="../webgl-2d-geometry-matrix-transform-hierarchical.html" }}}
 
@@ -351,7 +351,7 @@ var m3 = {
 지금까지 모든 샘플에서 'F'는 왼쪽 상단 모서리(예제를 제외하고는 위의 순서를 반대로 했음)를 기준으로 회전했는데요.
 이건 우리가 사용하는 수식이 항상 원점을 기준으로 회전하고 'F'의 왼쪽 상단 모서리(0, 0)가 원점에 있기 때문입니다.
 
-하지만 이제 행렬 수학을 할 수 있고 변환이 적용되는 순서를 선택할 수 있기 때문에 원점을 이동할 수 있습니다.
+하지만 이제 행렬 수학을 할 수 있고 변환이 적용되는 순서를 선택할 수 있기 때문에 원점을 이동시킬 수 있습니다.
 
 ```js
 // 'F'의 원점을 중심으로 이동할 행렬 만들기
@@ -369,7 +369,7 @@ matrix = m3.multiply(matrix, moveOriginMatrix);
 
 {{{example url="../webgl-2d-geometry-matrix-transform-center-f.html" }}}
 
-이 기술을 사용하면 어떤 지점에서든 회전이나 크기를 조정할 수 있는데요.
+이 기술을 사용하면 어떤 지점에서든 회전이나 크기 조정을 할 수 있는데요.
 이제 포토샵이나 플래시에서 어떻게 회전점을 이동시키는지 알게 되었습니다.
 
 더 끝내주는 걸 해봅시다.
@@ -391,15 +391,14 @@ gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
 
 이 단계들을 차례대로 살펴보자면, 첫 단계, "픽셀을 0.0에서 1.0사이로 변환", 이건 실제 스케일링 작업입니다.
 두 번째 역시 스케일링 작업입니다.
-다음은 평행 이동이고 마지막으로 Y를 -1로 스케일링 하는데요.
+세 번째는 평행 이동이고 마지막으로 Y를 -1로 스케일링 하는데요.
 실제로 우리가 셰이더에 전달한 행렬로 모든 걸 수행할 수 있습니다.
 2개의 스케일 행렬을 만들 수 있는데,
 하나는 (1.0/해상도)로 스케일링하는 것이고,
 다른 하나는 2.0으로 스케일링하는 것이며,
 세 번째는 (-1.0,-1.0)으로 평행 이동하고,
 네 번째는 Y를 -1로 스케일링한 뒤 모든 값을 함께 곱하지만,
-대신 수식이 간단하기 때문에,
-직접 주어진 해상도에 대한 '투영 행렬'을 생성하는 함수를 바로 만들어 봅시다.
+수식이 간단하기 때문에 직접 주어진 해상도에 대한 '투영 행렬'을 생성하는 함수를 바로 만들어 봅시다.
 
 ```js
 var m3 = {
@@ -483,7 +482,7 @@ var m3 = {
 };
 ```
 
-위의 행렬 코드 7줄을 이렇게 4줄로 바꿀 수 있으며,
+위의 행렬 코드 7줄을 이렇게 4줄로 바꿀 수 있습니다.
 
 ```js
 // 행렬 계산
@@ -519,15 +518,15 @@ matrix = m3.scale(matrix, scale[0], scale[1]);
 
     scaledPosition = scaleMat * position
 
-그런 다음 `rotatedScaledPosition`을 얻기 위해 `scaledPosition`에 회전 행렬을 곱하며,
+`rotatedScaledPosition`을 얻기 위해 `scaledPosition`에 회전 행렬을 곱한 다음,
 
     rotatedScaledPosition = rotationMat * scaledPosition
 
-다음으로 `translatedRotatedScaledPosition`를 얻기 위해 `rotatedScaledPositon`에 평행 이동 행렬을 곱한 뒤,
+`translatedRotatedScaledPosition`를 얻기 위해 `rotatedScaledPositon`에 평행 이동 행렬을 곱한 뒤,
 
     translatedRotatedScaledPosition = translationMat * rotatedScaledPosition
 
-마지막으로 클립 공간의 위치를 얻기 위해 투영 행렬에 곱하는데,
+마지막으로 클립 공간의 위치를 얻기 위해 투영 행렬을 곱합니다.
 
     clipspacePosition = projectioMatrix * translatedRotatedScaledPosition
 
@@ -543,7 +542,7 @@ matrix = m3.scale(matrix, scale[0], scale[1]);
 > 흰색 영역은 캔버스입니다. 파란색은 캔버스 바깥입니다. 우리는 클립 공간에 있습니다.
 > 전달된 위치는 클립 공간에 있어야 합니다.
 
-2단계:  `matrix = m3.projection(gl.canvas.clientWidth, gl.canvas.clientHeight);`
+2단계: `matrix = m3.projection(gl.canvas.clientWidth, gl.canvas.clientHeight);`
 
 > {{{diagram url="resources/matrix-space-change.html?stage=1" caption="클립 공간에서 픽셀 공간으로" }}}
 >
@@ -551,19 +550,19 @@ matrix = m3.scale(matrix, scale[0], scale[1]);
 > 이 행렬을 사용하여 전달된 위치는 픽셀 공간에 있어야 합니다.
 > 공간이 +Y = 상단에서 -Y = 하단으로 뒤집힐 때의 순간을 보실 수 있습니다.
 
-3단계:  `matrix = m3.translate(matrix, tx, ty);`
+3단계: `matrix = m3.translate(matrix, tx, ty);`
 
 > {{{diagram url="resources/matrix-space-change.html?stage=2" caption="원점을 tx, ty로 이동" }}}
 >
 > 원점은 이제 tx, ty (150, 100)로 이동됐습니다. 공간도 이동했습니다.
 
-4단계:  `matrix = m3.rotate(matrix, rotationInRadians);`
+4단계: `matrix = m3.rotate(matrix, rotationInRadians);`
 
 > {{{diagram url="resources/matrix-space-change.html?stage=3" caption="33도 회전" }}}
 >
-> 공간이 tx, ty를 중심으로 회전됐습니다. 
+> 공간이 tx, ty를 중심으로 회전됐습니다.
 
-5단계:  `matrix = m3.scale(matrix, sx, sy);`
+5단계: `matrix = m3.scale(matrix, sx, sy);`
 
 > {{{diagram url="resources/matrix-space-change.html?stage=4" caption="공간 크기 조정" }}}
 >
@@ -578,7 +577,7 @@ matrix = m3.scale(matrix, scale[0], scale[1]);
 2D를 계속 하고 싶다면 [Canvas 2D의 drawImage 함수 재현](webgl-2d-drawimage.html)과 [Canvas 2D의 행렬 스택 재현](webgl-2d-matrix-stack.html)을 봐주세요.
 
 그게 아니라면 다음은 [3D](webgl-3d-orthographic.html)로 넘어갑니다.
-3D에서 행렬 수학은 동일한 원리과 사용법을 따르는데요.
+3D에서도 행렬 수학은 동일한 원리와 사용법을 따르는데요.
 2D부터 시작해서 이해하기 쉽도록 만들었습니다.
 
 또한 정말로 행렬 수학의 전문가가 되고 싶다면 [이 놀라운 영상](https://www.youtube.com/watch?v=kjBOesZCoqc&list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab)을 확인하세요.
@@ -628,8 +627,7 @@ CSS는 캔버스가 표시되는 크기를 정의합니다.
 여기 캔버스의 CSS 표시 크기를 100%로 설정해서 캔버스가 페이지를 채우도록 늘어나는 두 예제가 있습니다.
 첫 번째는 <code>canvas.width</code>와 <code>canvas.height</code>를 사용하는 겁니다.
 새로운 창을 열고 창 크기를 조절해보세요.
-'F'가 올바른 모양을 가지는지 확인해봅시다.
-왜곡되고 있는데요.
+'F'가 올바른 모양을 가지지 못 하고 왜곡되고 있습니다.
 </p>
 {{{example url="../webgl-canvas-width-height.html" width="500" height="150" }}}
 <p>

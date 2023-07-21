@@ -65,7 +65,7 @@ TOC: 점 조명
     }
 
 표면 -> 빛 벡터는 단위 벡터가 아니기 때문에 프래그먼트 셰이더에서 정규화해야 합니다.
-참고로 정점 셰이더에서 정규화할 수 있었지만 베링이기 때문에 위치 사이를 선형적으로 보간하여 완전한 단위 벡터가 아니게 됩니다.
+참고로 정점 셰이더에서 정규화할 수 있었지만 varying이기 때문에 위치 사이를 선형적으로 보간하여 완전한 단위 벡터가 아니게 됩니다.
 
     precision mediump float;
 
@@ -77,7 +77,7 @@ TOC: 점 조명
     uniform vec4 u_color;
 
     void main() {
-      // v_normal은 베링이기 때문에 보간되므로 단위 벡터가 아닙니다.
+      // v_normal은 varying이기 때문에 보간되므로 단위 벡터가 아닙니다.
       // 정규화하면 다시 단위 벡터가 됩니다.
       vec3 normal = normalize(v_normal);
 
@@ -88,7 +88,7 @@ TOC: 점 조명
 
       gl_FragColor = u_color;
 
-      // 색상 부분(알파 제외)에만 광량 곱하기
+      // 색상 부분(알파 제외)에만 light 곱하기
       gl_FragColor.rgb *= light;
     }
 
@@ -137,7 +137,7 @@ TOC: 점 조명
 <img class="webgl_center" src="resources/specular-highlights.jpg" />
 
 해당 효과는 빛이 눈에 반사되는지 계산하여 시뮬레이션할 수 있습니다.
-다시 *스칼라곱*을 구하게 되는데요.
+이를 위해 다시 *스칼라곱*을 구해야 하는데요.
 
 무엇을 확인해야 할까요?
 생각해봅시다.
@@ -145,7 +145,7 @@ TOC: 점 조명
 
 {{{diagram url="resources/surface-reflection.html" width="500" height="400" className="noborder" }}}
 
-모델의 표면에서 조명을 향하는 방향을 알고, 표면에서 뷰/눈/카메라로 향하는 방향을 안다면, 이 두 벡터를 더하고 정규화해서, 이들 사이 중간에 있는 `halfVector`를 계산할 수 있습니다.
+모델의 표면에서 조명으로 향하는 방향을 알고, 표면에서 뷰/눈/카메라로 향하는 방향을 안다면, 이 두 벡터를 더하고 정규화해서, 이들 사이 중간에 있는 `halfVector`를 계산할 수 있습니다.
 `halfVector`와 표면 법선이 일치한다면 빛을 뷰/눈/카메라로 반사하기에 완벽한 각도입니다.
 그럼 어떻게 일치하는지 알 수 있을까요?
 이전에 했던 것처럼 *스칼라곱*을 구하면 됩니다.
@@ -198,7 +198,7 @@ TOC: 점 조명
     uniform vec4 u_color;
 
     void main() {
-      // v_normal이 베링이기 때문에 보간되므로 단위 벡터가 아닙니다.
+      // v_normal이 varying이기 때문에 보간되므로 단위 벡터가 아닙니다.
       // 정규화하면 다시 단위 벡터가 됩니다.
       vec3 normal = normalize(v_normal);
 
@@ -211,7 +211,7 @@ TOC: 점 조명
 
       gl_FragColor = u_color;
 
-      // 색상 부분(알파 제외)에만 광량 곱하기
+      // 색상 부분(알파 제외)에만 light 곱하기
       gl_FragColor.rgb *= light;
 
     +  // 반사율 더하기
@@ -273,7 +273,7 @@ TOC: 점 조명
 
     ...
 
-    // 광택 설정
+    // 광택도 설정
     gl.uniform1f(shininessLocation, shininess);
 
 그리고 여기 결과입니다.
@@ -292,7 +292,7 @@ TOC: 점 조명
 
     ...
 
-      // 색상 부분(알파 제외)에만 광량 곱하기
+      // 색상 부분(알파 제외)에만 light 곱하기
     *  gl_FragColor.rgb *= light * u_lightColor;
 
       // 반사율 더하기

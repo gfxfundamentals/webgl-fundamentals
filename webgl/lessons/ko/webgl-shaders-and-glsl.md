@@ -4,21 +4,20 @@ TOC: 셰이더와 GLSL
 
 
 이 글은 [WebGL 기초](webgl-fundamentals.html)에서 이어집니다.
-아직 [WebGL 작동 방식](webgl-how-it-works.html)를 읽지 않았다면 먼저 읽어보는 게 좋습니다.
+아직 [WebGL 작동 방식](webgl-how-it-works.html)을 읽지 않았다면 먼저 읽어보는 게 좋습니다.
 
 셰이더와 GLSL에 대해 언급했지만 실제로 구체적인 세부 사항은 다루지 않았는데요.
-예제로 충분하면 좋겠지만 혹시 모르니 좀 더 확실하게 해봅시다.
+보여드린 예제들로 충분하면 좋겠지만 혹시 모르니 좀 더 확실하게 해봅시다.
 
-[작동 원리](webgl-how-it-works.html)에서 언급했듯이 WebGL은 뭔가를 그릴 때마다 2개의 셰이더를 필요로 하는데요.
-바로 *정점 셰이더*와 *프래그먼트 셰이더*입니다.
-각각의 셰이더는 *함수*인데요.
+[작동 원리](webgl-how-it-works.html)에서 언급했듯이 WebGL은 뭔가를 그릴 때마다 2개의 셰이더를 필요로 합니다.
+바로 *정점 셰이더*와 *프래그먼트 셰이더*인데요.
+각각의 셰이더는 *함수*입니다.
 정점 셰이더와 프래그먼트 셰이더는 함께 셰이더 프로그램(또는 그냥 프로그램)으로 연결됩니다.
 일반적인 WebGL 앱은 많은 셰이더 프로그램을 가집니다.
 
 ## 정점 셰이더
 
-정점 셰이더의 역할은 클립 공간 좌표를 생성하는 겁니다.
-항상 이런 형식을 취하는데요.
+정점 셰이더의 역할은 클립 공간 좌표를 생성하는 것으로 항상 이런 형식을 취합니다.
 
     void main() {
       gl_Position = doMathToMakeClipspaceCoordinates
@@ -55,7 +54,7 @@ TOC: 셰이더와 GLSL
 
 렌더링할 때 해당 버퍼에서 속성으로 데이터를 어떻게 가져올지 WebGL에 지시하는데,
 
-    // 이 속성의 버퍼에서 데이터 가져오기 활성화
+    // 이 속성에 대해 버퍼에서 데이터 가져오기 활성화
     gl.enableVertexAttribArray(positionLoc);
 
     var numComponents = 3;  // (x, y, z)
@@ -63,11 +62,11 @@ TOC: 셰이더와 GLSL
     var normalize = false;  // 값 원본 그대로 유지
     var offset = 0;         // 버퍼의 처음부터 시작
     var stride = 0;         // 다음 정점으로 가기 위해 이동하는 바이트 수
-                            // 0 = `type`과 `numComponents`에 맞는 스트라이드 사용
+                            // 0 = type과 numComponents에 맞는 스트라이드 사용
 
     gl.vertexAttribPointer(positionLoc, numComponents, type, false, stride, offset);
 
-[WebGL 기초](webgl-fundamentals.html)에서 우리는 셰이더에서 수식을 사용하지 않고 데이터를 직접 전달했습니다.
+[WebGL 기초](webgl-fundamentals.html)의 셰이더에서 우리는 수식을 사용하지 않고 데이터를 바로 전달했습니다.
 
     attribute vec4 a_position;
 
@@ -75,7 +74,7 @@ TOC: 셰이더와 GLSL
       gl_Position = a_position;
     }
 
-클립 공간 정점을 버퍼에 넣으면 동작할 겁니다. 
+클립 공간 정점을 버퍼에 넣으면 동작할 겁니다.
 
 속성은 타입으로 `float`, `vec2`, `vec3`, `vec4`, `mat2`, `mat3`, `mat4`를 사용할 수 있습니다.
 
@@ -146,15 +145,15 @@ TOC: 셰이더와 GLSL
     // 셰이더
     uniform vec2 u_someVec2[3];
 
-    // 초기화 시 자바스크립트
+    // 초기화 시
     var someVec2Loc = gl.getUniformLocation(someProgram, "u_someVec2");
 
     // 렌더링할 때
-    gl.uniform2fv(someVec2Loc, [1, 2, 3, 4, 5, 6]);  // u_someVec2의 전체 배열 설정
+    gl.uniform2fv(someVec2Loc, [1, 2, 3, 4, 5, 6]);  // u_someVec2 전체 배열 설정
 
 하지만 배열의 개별 요소를 설정하고 싶다면 각 요소의 위치를 개별적으로 찾아야 합니다.
 
-    // 초기화 시 자바스크립트
+    // 초기화 시
     var someVec2Element0Loc = gl.getUniformLocation(someProgram, "u_someVec2[0]");
     var someVec2Element1Loc = gl.getUniformLocation(someProgram, "u_someVec2[1]");
     var someVec2Element2Loc = gl.getUniformLocation(someProgram, "u_someVec2[2]");
@@ -185,8 +184,7 @@ TOC: 셰이더와 GLSL
 
 ## 프래그먼트 셰이더
 
-프래그먼트 셰이더의 역할은 래스터화되는 현재 픽셀의 색상을 제공하는 것입니다.
-항상 이런 형식을 취하는데요.
+프래그먼트 셰이더의 역할은 래스터화되는 현재 픽셀의 색상을 제공하는 것으로 항상 이런 형식을 취합니다.
 
     precision mediump float;
 
@@ -202,7 +200,7 @@ TOC: 셰이더와 GLSL
 
 1.  [유니폼](#uniform) (단일 그리기 호출의 모든 정점에 대해 동일하게 유지되는 값)
 2.  [텍스처](#fragment-shader-texture) (픽셀/텍셀 데이터)
-3.  [베링](#varying) (정점 셰이더에서 전달되고 보간된 데이터)
+3.  [Varying](#varying) (정점 셰이더에서 전달되고 보간된 데이터)
 
 ### 프래그먼트 셰이더의 유니폼
 
@@ -238,11 +236,11 @@ TOC: 셰이더와 GLSL
     gl.texImage2D(gl.TEXTURE_2D, level, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, data);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 
-초기화 시 셰이더 프로그램의 유니폼 위치를 찾으며,
+초기화 시 셰이더 프로그램의 유니폼 위치를 찾고,
 
     var someSamplerLoc = gl.getUniformLocation(someProgram, "u_texture");
 
-렌더링할 때 텍스처 유닛에 텍스처를 할당하고,
+렌더링할 때 텍스처 유닛에 텍스처를 할당한 뒤,
 
     var unit = 5;  // 텍스처 유닛 선택
     gl.activeTexture(gl.TEXTURE0 + unit);
@@ -252,13 +250,13 @@ TOC: 셰이더와 GLSL
 
     gl.uniform1i(someSamplerLoc, unit);
 
-### 베링
+### Varying
 
-베링은 [동작 원리](webgl-how-it-works.html)에 다룬 정점 셰이더에서 프래그먼트 셰이더로 값을 전달하는 방법입니다.
+Varying은 [동작 원리](webgl-how-it-works.html)에서 다룬 정점 셰이더에서 프래그먼트 셰이더로 값을 전달하는 방법입니다.
 
-베링을 사용하려면 정점 셰이더와 프래그먼트 셰이더 양쪽에 일치하는 베링을 선언해야 하는데요.
-각 정점마다 정점 셰이더의 베링을 어떤 값으로 설정합니다.
-WebGL이 픽셀을 그릴 때 이 값들 사이를 보간하고 프래그먼트 셰이더에서 대응하는 베링으로 전달할 겁니다.
+Varying을 사용하려면 정점 셰이더와 프래그먼트 셰이더 양쪽에 일치하는 varying을 선언해야 하는데요.
+정점 셰이더에 있는 varying을 각 정점마다 어떤 값으로 설정합니다.
+WebGL이 픽셀을 그릴 때 이 값들 사이를 보간하고 프래그먼트 셰이더에서 대응하는 varying으로 전달할 겁니다.
 
 정점 셰이더:
 
@@ -292,11 +290,11 @@ WebGL이 픽셀을 그릴 때 이 값들 사이를 보간하고 프래그먼트 
 ## GLSL
 
 GLSL은 Graphics Library Shader Language의 약자로 셰이더가 작성되는 언어입니다.
-이 언어는 자바스크립트에서 흔하지 않은 특별한 준 고유 기능을 가지고 있는데요.
+이 언어는 자바스크립트에서 일반적이지 않은 특별한 준 고유 기능을 가지고 있는데요.
 그래픽 래스터화에 일반적으로 필요한 수학적 계산을 수행하도록 설계되었습니다.
-예를 들어 각각 2개의 값, 3개의 값, 4개의 값을 나타내는 `vec2`, `vec3`, `vec4` 같은 타입들이 내장되어 있는데요.
+예를 들어 각각 2개의 값, 3개의 값, 4개의 값을 나타내는 `vec2`, `vec3`, `vec4` 같은 타입들이 내장되어 있죠.
 마찬가지로 2x2, 3x3, 4x4 행렬을 나타내는 `mat2`, `mat3`, `mat4`가 있습니다.
-`vec`에 스칼라를 곱하는 등의 작업을 수행할 수도 있죠.
+`vec`에 스칼라를 곱하는 등의 작업을 수행할 수도 있습니다.
 
     vec4 a = vec4(1, 2, 3, 4);
     vec4 b = a * 2.0;
@@ -321,7 +319,7 @@ vec4를 보면,
 *   `v.z`는 `v.p`와 `v.b`와 `v[2]`와 같습니다.
 *   `v.w`는 `v.q`와 `v.a`와 `v[3]`과 같습니다.
 
-vec 컴포넌트를 *스위즐링* 할 수 있는데 이는 컴포넌트를 교환하거나 반복할 수 있다는 걸 뜻합니다.
+컴포넌트를 교환하거나 반복하는 *스위즐링*도 가능합니다.
 
     v.yyyy
 
