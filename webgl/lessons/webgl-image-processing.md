@@ -59,7 +59,7 @@ it loads we'll draw it.
 
     function main() {
       var image = new Image();
-      image.src = "http://someimage/on/our/server";  // MUST BE SAME DOMAIN!!!
+      image.src = "http://someimage/on/our/server";
       image.onload = function() {
         render(image);
       }
