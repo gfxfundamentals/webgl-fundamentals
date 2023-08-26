@@ -424,7 +424,7 @@ WebGL会从创建的贴图中找到从之前级别贴图插值出的 2×2 贴图
  <code>TEXTURE_WRAP_S</code> 和 <code>TEXTURE_WRAP_T</code>，
  但是出于某些原因我的图形相关的同事都叫它 Ew-Vees。
 </p>
-<p>所以现在你就知道了如果有人说 UVs 其实就是再说纹理坐标。</p>
+<p>所以现在你就知道了如果有人说 UVs 其实就是在说纹理坐标。</p>
 </div>
 
 
