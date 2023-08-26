@@ -10,7 +10,7 @@ TOC: WebGL 纹理映射的透视纠正
 在"[工作原理](webgl-how-it-works.html)"中我们讲过了可变量的工作原理，
 顶点着色器可以声明可变量并给它赋值，一旦顶点着色器被引用 3 次就会画一个三角形。
 绘制这个三角形的每个像素都会调用片段着色器获得像素颜色，
-在三个顶点之间的点会得到差之后的可变量。
+在三个顶点之间的点会得到插值之后的可变量。
 
 {{{diagram url="resources/fragment-shader-anim.html" width="600" height="400" caption="v_color is interpolated between v0, v1 and v2" }}}
 
