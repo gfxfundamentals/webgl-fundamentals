@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<!-- this file is auto-generated from webgl/lessons/uk/langinfo.hanson. Do not edited directly -->
+<!--
+Copyright 2021 GFXFundamentals.
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+    * Redistributions of source code must retain the above copyright
+notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above
+copyright notice, this list of conditions and the following disclaimer
+in the documentation and/or other materials provided with the
+distribution.
+    * Neither the name of GFXFundamentals. nor the names of his
+contributors may be used to endorse or promote products derived from
+this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<meta property="og:title" content="Sorting and optimizing instanced rendering" />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
+<meta property="og:description" content="Sorting and optimizing instanced rendering" />
+<meta property="og:url" content="https://webglfundamentals.org/webgl/lessons/uk/webgl-qna-sorting-and-optimizing-instanced-rendering.html" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@greggman" />
+<meta name="twitter:creator" content="@greggman" />
+<meta name="twitter:domain" content="webglfundamentals.org" />
+<meta name="twitter:title" content="Sorting and optimizing instanced rendering" />
+<meta name="twitter:url" content="https://webglfundamentals.org/webgl/lessons/uk/webgl-qna-sorting-and-optimizing-instanced-rendering.html" />
+<meta name="twitter:description" content="Sorting and optimizing instanced rendering" />
+<meta name="twitter:image:src" content="https://webglfundamentals.org/webgl/lessons/resources/webglfundamentals.jpg" />
+
+
+<title>Sorting and optimizing instanced rendering</title>
+<link href="/webgl/lessons/resources/webglfundamentals-icon.png" rel="shortcut icon" type="image/png">
+<link rel="stylesheet" href="/webgl/lessons/resources/lesson.css" type="text/css" />
+</head>
+<body>
+<div class="webgl_navbar">
+  <div>
+    <select class="language">
+    <option value="/webgl/lessons/webgl-qna-sorting-and-optimizing-instanced-rendering.html" >English</a>
+    <option value="/webgl/lessons/fr/webgl-qna-sorting-and-optimizing-instanced-rendering.html" >Français</a>
+    <option value="/webgl/lessons/ja/webgl-qna-sorting-and-optimizing-instanced-rendering.html" >日本語</a>
+    <option value="/webgl/lessons/ko/webgl-qna-sorting-and-optimizing-instanced-rendering.html" >한국어</a>
+    <option value="/webgl/lessons/pl/webgl-qna-sorting-and-optimizing-instanced-rendering.html" >Polski</a>
+    <option value="/webgl/lessons/pt-br/webgl-qna-sorting-and-optimizing-instanced-rendering.html" >Portuguese</a>
+    <option value="/webgl/lessons/ru/webgl-qna-sorting-and-optimizing-instanced-rendering.html" >Русский</a>
+    <option value="/webgl/lessons/uk/webgl-qna-sorting-and-optimizing-instanced-rendering.html" selected>Українська</a>
+    <option value="/webgl/lessons/zh_cn/webgl-qna-sorting-and-optimizing-instanced-rendering.html" >简体中文</a>
+</select>
+
+
+    <a href="#toc">Зміст</a>
+  </div>
+</div>
+<div class="webgl_header">
+  <h1><a href="/webgl/lessons/uk/">WebGLFundamentals.org</a></h1>
+<style>
+#forkongithub>div {
+    background: #000;
+    color: #fff;
+    font-family: arial,sans-serif;
+    text-align: center;
+    font-weight: bold;
+    padding: 5px 40px;
+    font-size: 0.9rem;
+    line-height: 1.3rem;
+    position: relative;
+    transition: 0.5s;
+    display: block;
+    width: 400px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translateX(200px) rotate(45deg) translate(10px,70px);
+    box-shadow: 4px 4px 10px rgba(0,0,0,0.8);
+    pointer-events: auto;
+}
+#forkongithub a {
+  text-decoration: none;
+  color: #fff;
+}
+#forkongithub>div:hover {
+    background: #c11;
+    color: #fff;
+}
+#forkongithub .contributors {
+  font-size: 0.75rem;
+  background: rgba(255,255,255,0.2);
+  line-height: 1.2;
+  padding: 0.1em;
+}
+#forkongithub>div::before,#forkongithub>div::after {
+    content: "";
+    width: 100%;
+    display: block;
+    position: absolute;
+    top: 1px;
+    left: 0;
+    height: 1px;
+    background: #fff;
+}
+#forkongithub>div::after {
+    bottom: 1px;
+    top: auto;
+}
+
+#forkongithub{
+    z-index: 9999;
+    /* needed for firefox */
+    overflow: hidden;
+    width: 300px;
+    height: 300px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    pointer-events: none;
+}
+#forkongithub svg{
+  width: 1em;
+  height: 1em;
+  vertical-align: middle;
+}
+#forkongithub img {
+  width: 1em;
+  height: 1em;
+  border-radius: 100%;
+  vertical-align: middle;
+}
+
+@media (max-width: 900px) {
+    #forkongithub>div {
+        line-height: 1.2rem;
+    }
+}
+@media (max-width: 700px) {
+  #forkongithub {
+    display: none;
+  }
+}
+@media (max-width: 410px) {
+    #forkongithub>div {
+        font-size: 0.7rem;
+        transform: translateX(150px) rotate(45deg) translate(20px,40px);
+    }
+}
+
+</style>
+<div id="forkongithub"><div><div><a href="https://github.com/gfxfundamentals/webgl-fundamentals">Fix, Fork, Contribute <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 136 133" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="matrix(3.92891,0,0,3.92891,67.867,129.125)">
+        <path d="M0,-31.904C-8.995,-31.904 -16.288,-24.611 -16.288,-15.614C-16.288,-8.417 -11.621,-2.312 -5.148,-0.157C-4.333,-0.008 -4.036,-0.511 -4.036,-0.943C-4.036,-1.329 -4.05,-2.354 -4.058,-3.713C-8.589,-2.729 -9.545,-5.897 -9.545,-5.897C-10.286,-7.779 -11.354,-8.28 -11.354,-8.28C-12.833,-9.29 -11.242,-9.27 -11.242,-9.27C-9.607,-9.155 -8.747,-7.591 -8.747,-7.591C-7.294,-5.102 -4.934,-5.821 -4.006,-6.238C-3.858,-7.29 -3.438,-8.008 -2.972,-8.415C-6.589,-8.826 -10.392,-10.224 -10.392,-16.466C-10.392,-18.244 -9.757,-19.698 -8.715,-20.837C-8.883,-21.249 -9.442,-22.905 -8.556,-25.148C-8.556,-25.148 -7.188,-25.586 -4.076,-23.478C-2.777,-23.84 -1.383,-24.02 0.002,-24.026C1.385,-24.02 2.779,-23.84 4.08,-23.478C7.19,-25.586 8.555,-25.148 8.555,-25.148C9.444,-22.905 8.885,-21.249 8.717,-20.837C9.761,-19.698 10.392,-18.244 10.392,-16.466C10.392,-10.208 6.583,-8.831 2.954,-8.428C3.539,-7.925 4.06,-6.931 4.06,-5.411C4.06,-3.234 4.04,-1.477 4.04,-0.943C4.04,-0.507 4.333,0 5.16,-0.159C11.628,-2.318 16.291,-8.419 16.291,-15.614C16.291,-24.611 8.997,-31.904 0,-31.904" style="fill:white;"/>
+    </g>
+</svg>
+</a></div></div></div>
+
+</div>
+
+
+<div class="container">
+  <div class="lesson-title">
+    <h1>Sorting and optimizing instanced rendering</h1>
+  </div>
+  <div class="lesson">
+    <div class="lesson-main">
+      <p>Вибачте, ця стаття ще не була перекладена.</p>
+<p><a href="https://github.com/gfxfundamentals/webgl-fundamentals">Допомога в парекладі вітається</a>! 😄</p>
+<p><a href="/webgl/lessons/webgl-qna-sorting-and-optimizing-instanced-rendering.html">Тут ви знайдете оригінальну англійську версію статті на цю тему.</a>.</p>
+
+    </div>
+    <div class="lesson-sidebar">
+        <select class="language">
+    <option value="/webgl/lessons/webgl-qna-sorting-and-optimizing-instanced-rendering.html" >English</a>
+    <option value="/webgl/lessons/fr/webgl-qna-sorting-and-optimizing-instanced-rendering.html" >Français</a>
+    <option value="/webgl/lessons/ja/webgl-qna-sorting-and-optimizing-instanced-rendering.html" >日本語</a>
+    <option value="/webgl/lessons/ko/webgl-qna-sorting-and-optimizing-instanced-rendering.html" >한국어</a>
+    <option value="/webgl/lessons/pl/webgl-qna-sorting-and-optimizing-instanced-rendering.html" >Polski</a>
+    <option value="/webgl/lessons/pt-br/webgl-qna-sorting-and-optimizing-instanced-rendering.html" >Portuguese</a>
+    <option value="/webgl/lessons/ru/webgl-qna-sorting-and-optimizing-instanced-rendering.html" >Русский</a>
+    <option value="/webgl/lessons/uk/webgl-qna-sorting-and-optimizing-instanced-rendering.html" selected>Українська</a>
+    <option value="/webgl/lessons/zh_cn/webgl-qna-sorting-and-optimizing-instanced-rendering.html" >简体中文</a>
+</select>
+
+
+        <ul>  <li>Основи</li>
+        <ul>
+          <li><a href="/webgl/lessons/uk/webgl-fundamentals.html">Fundamentals</a></li>
+<li><a href="/webgl/lessons/uk/webgl-how-it-works.html">How It Works</a></li>
+<li><a href="/webgl/lessons/uk/webgl-shaders-and-glsl.html">Shaders and GLSL</a></li>
+<li><a href="/webgl/lessons/resources/webgl-state-diagram.html">WebGL State Diagram</a></li>
+        </ul>
+  <li>Обробка зображень</li>
+        <ul>
+          <li><a href="/webgl/lessons/uk/webgl-image-processing.html">Image Processing</a></li>
+<li><a href="/webgl/lessons/uk/webgl-image-processing-continued.html">Image Processing Continued</a></li>
+        </ul>
+  <li>Переміщення, обертання та масштабування в 2D просторі</li>
+        <ul>
+          <li><a href="/webgl/lessons/uk/webgl-2d-translation.html">2D Translation</a></li>
+<li><a href="/webgl/lessons/uk/webgl-2d-rotation.html">2D Rotation</a></li>
+<li><a href="/webgl/lessons/uk/webgl-2d-scale.html">2D Scale</a></li>
+<li><a href="/webgl/lessons/uk/webgl-2d-matrices.html">2D Matrices</a></li>
+        </ul>
+  <li>3D</li>
+        <ul>
+          <li><a href="/webgl/lessons/uk/webgl-3d-orthographic.html">Orthographic 3D</a></li>
+<li><a href="/webgl/lessons/uk/webgl-3d-perspective.html">3D Perspective</a></li>
+<li><a href="/webgl/lessons/uk/webgl-3d-camera.html">3D Cameras</a></li>
+        </ul>
+  <li>Освітлення</li>
+        <ul>
+          <li><a href="/webgl/lessons/uk/webgl-3d-lighting-directional.html">Directional Lighting</a></li>
+<li><a href="/webgl/lessons/uk/webgl-3d-lighting-point.html">Point Lighting</a></li>
+<li><a href="/webgl/lessons/uk/webgl-3d-lighting-spot.html">Spot Lighting</a></li>
+        </ul>
+  <li>Структура та організація</li>
+        <ul>
+          <li><a href="/webgl/lessons/uk/webgl-less-code-more-fun.html">Less Code, More Fun</a></li>
+<li><a href="/webgl/lessons/uk/webgl-drawing-multiple-things.html">Drawing Multiple Things</a></li>
+<li><a href="/webgl/lessons/uk/webgl-scene-graph.html">Scene Graphs</a></li>
+        </ul>
+  <li>Геометрія</li>
+        <ul>
+          <li><a href="/webgl/lessons/uk/webgl-3d-geometry-lathe.html">Geometry - Lathe</a></li>
+<li><a href="/webgl/lessons/uk/webgl-load-obj.html">Loading .obj files</a></li>
+<li><a href="/webgl/lessons/uk/webgl-load-obj-w-mtl.html">Loading .obj w .mtl files</a></li>
+        </ul>
+  <li>Текстури</li>
+        <ul>
+          <li><a href="/webgl/lessons/uk/webgl-3d-textures.html">Textures</a></li>
+<li><a href="/webgl/lessons/uk/webgl-data-textures.html">Data Textures</a></li>
+<li><a href="/webgl/lessons/uk/webgl-2-textures.html">Using 2 or More Textures</a></li>
+<li><a href="/webgl/lessons/uk/webgl-cors-permission.html">Cross Origin Images</a></li>
+<li><a href="/webgl/lessons/uk/webgl-3d-perspective-correct-texturemapping.html">Perspective Correct Texture Mapping</a></li>
+<li><a href="/webgl/lessons/uk/webgl-planar-projection-mapping.html">Planar and Perspective Projection Mapping</a></li>
+        </ul>
+  <li>Рендеринг в текстуру</li>
+        <ul>
+          <li><a href="/webgl/lessons/uk/webgl-render-to-texture.html">Render to Texture</a></li>
+        </ul>
+  <li>Тіні</li>
+        <ul>
+          <li><a href="/webgl/lessons/uk/webgl-shadows.html">Shadows</a></li>
+        </ul>
+  <li>Прийоми</li>
+        <ul>
+            <li>2D</li>
+        <ul>
+          <li><a href="/webgl/lessons/uk/webgl-2d-drawimage.html">2D - DrawImage</a></li>
+<li><a href="/webgl/lessons/uk/webgl-2d-matrix-stack.html">2D - Matrix Stack</a></li>
+<li><a href="/webgl/lessons/uk/webgl-sprites.html">Sprites</a></li>
+        </ul>
+  <li>3D</li>
+        <ul>
+          <li><a href="/webgl/lessons/uk/webgl-cube-maps.html">Cubemaps</a></li>
+<li><a href="/webgl/lessons/uk/webgl-environment-maps.html">Environment maps</a></li>
+<li><a href="/webgl/lessons/uk/webgl-skybox.html">Skyboxes</a></li>
+<li><a href="/webgl/lessons/uk/webgl-skinning.html">Skinning</a></li>
+<li><a href="/webgl/lessons/uk/webgl-fog.html">Fog</a></li>
+<li><a href="/webgl/lessons/uk/webgl-picking.html">Picking (clicking on stuff)</a></li>
+        </ul>
+  <li>Текст</li>
+        <ul>
+          <li><a href="/webgl/lessons/uk/webgl-text-html.html">Text - HTML</a></li>
+<li><a href="/webgl/lessons/uk/webgl-text-canvas2d.html">Text - Canvas 2D</a></li>
+<li><a href="/webgl/lessons/uk/webgl-text-texture.html">Text - Using a Texture</a></li>
+<li><a href="/webgl/lessons/uk/webgl-text-glyphs.html">Text - Using a Glyph Texture</a></li>
+        </ul>
+  <li>Текстури</li>
+        <ul>
+          <li><a href="/webgl/lessons/uk/webgl-ramp-textures.html">Ramp Textures (Toon Shading)</a></li>
+        </ul>
+  <li>GPGPU</li>
+        <ul>
+          <li><a href="/webgl/lessons/uk/webgl-gpgpu.html">GPGPU</a></li>
+        </ul>
+        </ul>
+  <li>Поради</li>
+        <ul>
+          <li><a href="/webgl/lessons/uk/webgl-smallest-programs.html">Smallest Programs</a></li>
+<li><a href="/webgl/lessons/uk/webgl-drawing-without-data.html">Drawing Without Data</a></li>
+<li><a href="/webgl/lessons/uk/webgl-shadertoy.html">Shadertoy</a></li>
+<li><a href="/webgl/lessons/uk/webgl-pulling-vertices.html">Pulling Vertices</a></li>
+        </ul>
+  <li>Оптимізація</li>
+        <ul>
+          <li><a href="/webgl/lessons/uk/webgl-indexed-vertices.html">Indexed Vertices (gl.drawElements)</a></li>
+<li><a href="/webgl/lessons/uk/webgl-instanced-drawing.html">Instanced Drawing</a></li>
+        </ul>
+  <li>Різне</li>
+        <ul>
+          <li><a href="/webgl/lessons/uk/webgl-setup-and-installation.html">Setup And Installation</a></li>
+<li><a href="/webgl/lessons/uk/webgl-boilerplate.html">Boilerplate</a></li>
+<li><a href="/webgl/lessons/uk/webgl-resizing-the-canvas.html">Resizing the Canvas</a></li>
+<li><a href="/webgl/lessons/uk/webgl-animation.html">Animation</a></li>
+<li><a href="/webgl/lessons/uk/webgl-points-lines-triangles.html">Points, Lines, and Triangles</a></li>
+<li><a href="/webgl/lessons/uk/webgl-multiple-views.html">Multiple Views, Multiple Canvases</a></li>
+<li><a href="/webgl/lessons/uk/webgl-visualizing-the-camera.html">Visualizing the Camera</a></li>
+<li><a href="/webgl/lessons/uk/webgl-and-alpha.html">WebGL and Alpha</a></li>
+<li><a href="/webgl/lessons/uk/webgl-2d-vs-3d-library.html">2D vs 3D libraries</a></li>
+<li><a href="/webgl/lessons/uk/webgl-anti-patterns.html">Anti-Patterns</a></li>
+<li><a href="/webgl/lessons/uk/webgl-matrix-vs-math.html">WebGL Matrices vs Math Matrices</a></li>
+<li><a href="/webgl/lessons/uk/webgl-precision-issues.html">Precision Issues</a></li>
+<li><a href="/webgl/lessons/uk/webgl-tips.html#screenshot">Taking a screenshot</a></li>
+<li><a href="/webgl/lessons/uk/webgl-tips.html#preservedrawingbuffer">Prevent the Canvas Being Cleared</a></li>
+<li><a href="/webgl/lessons/uk/webgl-tips.html#tabindex">Get Keyboard Input From a Canvas</a></li>
+<li><a href="/webgl/lessons/uk/webgl-tips.html#html-background">Use WebGL as Background in HTML</a></li>
+<li><a href="/webgl/lessons/uk/webgl-cross-platform-issues.html">Cross Platform Issues</a></li>
+<li><a href="/webgl/lessons/uk/webgl-qna.html">Questions and Answers</a></li>
+        </ul>
+  <li>Довідка</li>
+        <ul>
+          <li><a href="/webgl/lessons/uk/webgl-attributes.html">Attributes</a></li>
+<li><a href="/webgl/lessons/uk/webgl-texture-units.html">Texture Units</a></li>
+<li><a href="/webgl/lessons/uk/webgl-framebuffers.html">Framebuffers</a></li>
+<li><a href="/webgl/lessons/uk/webgl-readpixels.html">readPixels</a></li>
+<li><a href="/webgl/lessons/uk/webgl-references.html">References</a></li>
+        </ul></ul>
+<ul>
+  <li><a href="/docs/">Допоміжна документація по API</a></li>
+  <li><a href="https://twgljs.org">TWGL, A tiny WebGL helper library</a></li>
+  <li><a href="https://github.com/gfxfundamentals/webgl-fundamentals">github</a></li>
+</ul>
+    </div>
+  </div>
+</div>
+</body>
+<script src="/3rdparty/jquery-1.11.2.min.js"></script>
+<script src="/webgl/lessons/resources/prettify.js"></script>
+<script src="/webgl/lessons/resources/lesson.js"></script>
+<script>
+</script>
+
+
+</html>
+
+
+
