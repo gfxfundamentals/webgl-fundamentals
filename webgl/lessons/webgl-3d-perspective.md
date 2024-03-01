@@ -294,7 +294,15 @@ But there are still some problems.  For example if you set Z to around
 
 What's going on?  Why is the F disappearing early?  Just like WebGL clips
 X and Y or +1 to -1 it also clips Z.  What we're seeing here is where Z <
--1.
+-1. If we have a point [0,0,0.75,1.75] (W is 1.75, a result of Z+1 with a fudgeFactor
+of 1), then when Z is divided by W (0.75/1.75), the final Z becomes smaller (o.43),
+so for positive values of Z (in clip space) those points can move further
+away from the camera without getting clipped. Now let's look at the point
+[0,0,-0.75,0.25] (W is 0.25, a result of Z+1 with fudgeFactor of 1). If we divide
+Z by W (-0.75/0.25) we get a number outside of clipspace (-3). If we had not
+applied perspective, -0.75 wouldn't have been clipped, but after perspective it
+changed to -3. This explains why the F gets clipped so early when it moves towards
+the screen.
 
 I could go into detail about the math to fix it but [you can derive
 it](https://stackoverflow.com/a/28301213/128511) the same way we did 2D
