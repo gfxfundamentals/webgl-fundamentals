@@ -28,8 +28,8 @@ a shader can receive data.
 
 1. Attributes and Buffers
 
-   Buffers are arrays of binary data you upload to the GPU. Usually buffers contain
-   things like positions, normals, texture coordinates, vertex colors, etc although
+   Buffers are arrays of binary data you upload to the GPU. Usually, buffers contain
+   things like positions, normals, texture coordinates, vertex colors, etc., but
    you're free to put anything you want in them.
 
    Attributes are used to specify how to
@@ -56,7 +56,7 @@ a shader can receive data.
 4. Varyings
 
    Varyings are a way for a vertex shader to pass data to a fragment shader. Depending
-   on what is being rendered, points, lines, or triangles, the values set on a varying
+   on what is being rendered (points, lines, or triangles), the values set on a varying
    by a vertex shader will be interpolated while executing the fragment shader.
 
 ## WebGL Hello World
