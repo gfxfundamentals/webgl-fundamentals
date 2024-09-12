@@ -181,8 +181,8 @@ straight up.  Given that, if we know which way is up, in this case
 (0,1,0), We can use that and something called a "cross product" to compute
 the X axis and Y axis for the matrix.
 
-I have no idea what a cross product means in mathematical terms.  What I
-do know is that if you have 2 unit vectors and you compute the cross
+A cross product is a way of multiplying vectors that produces a third vector
+normal, or perpendicular, to their common plane. If you have 2 unit vectors and you compute the cross
 product of them you'll get a vector that is perpendicular to those 2
 vectors.  In other words, if you have a vector pointing south east, and a
 vector pointing up, and you compute the cross product you'll get a vector
