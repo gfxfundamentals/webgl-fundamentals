@@ -140,7 +140,7 @@ and setup that attribute at render time
   // Turn on the attribute
   gl.enableVertexAttribArray(brightnessAttributeLocation);
 
-  // Bind the position buffer.
+  // Bind the brightness buffer.
   gl.bindBuffer(gl.ARRAY_BUFFER, brightnessBuffer);
 
   // Tell the attribute how to get data out of brightnessBuffer (ARRAY_BUFFER)
