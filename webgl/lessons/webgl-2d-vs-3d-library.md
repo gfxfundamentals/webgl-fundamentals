@@ -191,11 +191,11 @@ supply 3D data, the libraries take care of calculating clip space points from 3D
 
 To give a few more points of reference, [emscripten](https://emscripten.org/)
 provides old OpenGL emulation on top of WebGL. That code is
-[here](https://github.com/emscripten-core/emscripten/blob/master/src/library_glemu.js).
+[here](https://github.com/emscripten-core/emscripten/blob/main/src/lib/libglemu.js).
 If you browse through the code you'll see much of it is generating shaders to
 emulate the old 3D parts of OpenGL that were removed in OpenGL ES 2.0. You can
 see the same in
-[Regal](https://github.com/p3/regal/blob/184c62b7d7761481609ef1c1484ada659ae181b9/src/regal/RegalIff.cpp),
+[Regal](https://chromium.googlesource.com/external/p3/regal/+/refs/heads/master/src/regal/RegalIff.cpp),
 a project NVidia started to emulate old OpenGL with 3D included in modern OpenGL
 without 3D included. Yet one more example, [here are the shaders three.js
 uses](https://gist.github.com/greggman/41d93c00649cba78abdbfc1231c9158c) to
