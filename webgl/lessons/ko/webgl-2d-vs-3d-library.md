@@ -176,9 +176,9 @@ WebGL에는 깊이 정렬을 훨씬 더 쉽게 만드는 깊이 버퍼가 있습
 3D 라이브러리에 3D 데이터를 제공하면 라이브러리는 3D에서 클립 공간 포인트를 계산합니다.
 
 몇 가지 참고할만한 사항들을 더 드리자면, [emscripten](https://emscripten.org/)은 WebGL 위에서 돌아가는 OpenGL 에뮬레이션을 제공합니다.
-해당 코드는 [여기](https://github.com/emscripten-core/emscripten/blob/master/src/library_glemu.js)에 있는데요.
+해당 코드는 [여기](https://github.com/emscripten-core/emscripten/blob/main/src/lib/libglemu.js)에 있는데요.
 코드를 살펴보면 OpenGL ES 2.0에서 제거된 OpenGL의 오래된 3D 부분을 에뮬레이트하기 위해 셰이더를 생성하는 경우가 많습니다.
-3D가 포함되지 않은 최신 OpenGL에서 3D가 포함된 오래된 OpenGL을 에뮬레이트하기 위해 NVidia가 시작한 프로젝트, [Regal](https://github.com/p3/regal/blob/184c62b7d7761481609ef1c1484ada659ae181b9/src/regal/RegalIff.cpp)에서 동일한 걸 볼 수 있습니다.
+3D가 포함되지 않은 최신 OpenGL에서 3D가 포함된 오래된 OpenGL을 에뮬레이트하기 위해 NVidia가 시작한 프로젝트, [Regal](https://chromium.googlesource.com/external/p3/regal/+/refs/heads/master/src/regal/RegalIff.cpp)에서 동일한 걸 볼 수 있습니다.
 또 하나의 예로, [여기](https://gist.github.com/greggman/41d93c00649cba78abdbfc1231c9158c) three.js가 3D를 제공하기 위해 사용하는 셰이더가 있습니다.
 많은 것들이 진행되고 있음을 알 수 있는데요.
 이 모든 것들 뿐만이 아니라 이를 지원하는 코드는 WebGL이 아닌 라이브러리에서 제공합니다.
