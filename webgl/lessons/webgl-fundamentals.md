@@ -141,6 +141,27 @@ Then in JavaScript we can look that up
 
      var canvas = document.querySelector("#c");
 
+> Note: These lessons were started in 2011, long before modern
+> JavaScript. Back then, there was
+> no [`import`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import),
+> no [`async`/`await`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function), 
+> no [`Promise`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise),
+> no [spread syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax),
+> no [rest parameters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/rest_parameters),
+> no [optional chaining](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining),
+> no [nullish coalescing operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing),
+> no [destructuring assignment](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment),
+> no [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)
+> and no [Set](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set).
+> In in particular, `var` was all there was and
+> [`let`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let) and 
+> [`const`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const)
+> did not exist.
+>
+> So, please forgive the oldskool JavaScript. The lessons are still valid
+> but you'll have to translate them to more modern JavaScript on your own.
+> For more info [see this issue](https://github.com/gfxfundamentals/webgl-fundamentals/issues/450).
+
 Now we can create a WebGLRenderingContext
 
      var gl = canvas.getContext("webgl");
