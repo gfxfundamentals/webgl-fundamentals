@@ -153,7 +153,7 @@ Then in JavaScript we can look that up
 > no [destructuring assignment](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment),
 > no [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)
 > and no [Set](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set).
-> In in particular, `var` was all there was and
+> In particular, `var` was all there was and
 > [`let`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let) and 
 > [`const`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const)
 > did not exist.
