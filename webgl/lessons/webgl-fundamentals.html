@@ -353,7 +353,28 @@ void main() {
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no"> &lt;canvas id=&quot;c&quot;&gt;&lt;/canvas&gt;
 </code></pre><p>Then in JavaScript we can look that up</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no"> var canvas = document.querySelector(&quot;#c&quot;);
-</code></pre><p>Now we can create a WebGLRenderingContext</p>
+</code></pre><blockquote>
+<p>Note: These lessons were started in 2011, long before modern
+JavaScript. Back then, there was
+no <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import"><code class="notranslate" translate="no">import</code></a>,
+no <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function"><code class="notranslate" translate="no">async</code>/<code class="notranslate" translate="no">await</code></a>, 
+no <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code class="notranslate" translate="no">Promise</code></a>,
+no <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax">spread syntax</a>,
+no <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/rest_parameters">rest parameters</a>,
+no <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining">optional chaining</a>,
+no <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing">nullish coalescing operator</a>,
+no <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment">destructuring assignment</a>,
+no <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map">Map</a>
+and no <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set">Set</a>.
+In in particular, <code class="notranslate" translate="no">var</code> was all there was and
+<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let"><code class="notranslate" translate="no">let</code></a> and 
+<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const"><code class="notranslate" translate="no">const</code></a>
+did not exist.</p>
+<p>So, please forgive the oldskool JavaScript. The lessons are still valid
+but you&#39;ll have to translate them to more modern JavaScript on your own.
+For more info <a href="https://github.com/gfxfundamentals/webgl-fundamentals/issues/450">see this issue</a>.</p>
+</blockquote>
+<p>Now we can create a WebGLRenderingContext</p>
 <pre class="prettyprint notranslate" translate="no"><code class="notranslate" translate="no"> var gl = canvas.getContext(&quot;webgl&quot;);
  if (!gl) {
     // no webgl for you!
