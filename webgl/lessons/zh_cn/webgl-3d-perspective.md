@@ -48,8 +48,8 @@ abs(3.333 - 6.666) = 3.333
 是一个较小的值(-1 到 +1)。但是我们可以提供一个
 fudgeFactor 因子和 Z 相乘，这样就可以调整缩放的程度。
 
-让我们来试试，首先修改顶点着色器，除以 Z 再乘以我们的
-"fudgeFactor" 因子。
+让我们来试试，首先修改顶点着色器，除以与 "fudgeFactor" 因子
+相乘之后的 Z。
 
 ```
 <script id="vertex-shader-3d" type="x-shader/x-vertex">
