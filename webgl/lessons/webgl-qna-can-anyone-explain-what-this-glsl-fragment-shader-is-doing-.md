@@ -4,7 +4,7 @@ TOC: Can anyone explain what this GLSL fragment shader is doing?
 
 ## Question:
 
-I realise this is a math-centric question but... if you look at this webpage (and have a good graphics card) http://mrdoob.github.com/three.js/examples/webgl_shader.html
+I realise this is a math-centric question but... if you look at [this webpage](https://threejs.org/examples/?q=shader#webgl_shader). (and have a good graphics card)
 
 If you look at the source, you'll notice a scary looking fragment shader.
 
